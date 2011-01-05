@@ -24,6 +24,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.Util
 {
+    [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
     [TestFixture]
     public class TestSerialisationUtilities
     {

@@ -19,9 +19,8 @@
 using System;
 using System.Data;
 using System.Security;
-//TODO andrew 03 Jan 2011: Need to find an alternative to System.Security.Principal
-//using System.Security.Principal;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using OpenNETCF;
 
@@ -213,8 +212,7 @@ namespace Habanero.DB.ConcurrencyControl
             if ((_boPropMachineLocked == null)) return;
             try
             {
-                // Andrew CF: Changed to use OpenNetCF.Environment2
-                _boPropMachineLocked.Value = Environment2.MachineName;
+                _boPropMachineLocked.Value = HabaneroEnvironmentCF.MachineName();
             }
             catch (InvalidOperationException)
             {
@@ -222,9 +220,8 @@ namespace Habanero.DB.ConcurrencyControl
         }
         private static string GetOperatinSystemUser()
         {
-            throw new NotImplementedException("CF: WindowsIdentity is not supported");
-            //WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
-            //return currentUser == null ? "" : currentUser.Name;
+            return HabaneroEnvironmentCF.GetCurrentUser();
+
         }
         private void SetUserName()
         {

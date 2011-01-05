@@ -18,9 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Security;
-//TODO andrew 04 Jan 2011: CF: System.Security.Principal not supported on CF
-//using System.Security.Principal;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -108,7 +107,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
         {
             try
             {
-                return Environment2.MachineName;
+                return HabaneroEnvironmentCF.MachineName();
             }
             catch (InvalidOperationException)
             {
@@ -118,16 +117,8 @@ namespace Habanero.Test.DB.ConcurrencyControl
 
         private static string GetOperatinSystemUser()
         {
-            throw new NotImplementedException("CF: Does not support WindowsIdentity");
-            //try
-            //{
-            //    WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
-            //    return currentUser == null ? "" : currentUser.Name;
-            //}
-            //catch (SecurityException)
-            //{
-            //}
-            //return "";
+            return HabaneroEnvironmentCF.GetCurrentUser();
+
         }
 
         [Test]
@@ -386,17 +377,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             AssertIsNotLocked(cp);
         }
 
-//        private static string GetUserName()
-//        {
-//            try
-//            {
-//                return WindowsIdentity.GetCurrent() == null? "": WindowsIdentity.GetCurrent().Name;
-//            }
-//            catch (SecurityException)
-//            {
-//            }
-//            return "";
-//        }
+
     }
 
     internal class ContactPersonPessimisticLockingDB : BusinessObject

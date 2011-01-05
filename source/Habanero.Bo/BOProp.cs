@@ -17,12 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using System.Security;
-using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.Util;
+using Habanero.Base.Util;
 using log4net;
 
 namespace Habanero.BO
@@ -471,8 +468,8 @@ namespace Habanero.BO
 
         private static string FormatForXML(string text)
         {
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            
+            //TODO andrew 05 Jan 2011: CF: SecurityElement.Escape is not supported in CF
+            return XmlHelpersCF.Escape(text);
             //return SecurityElement.Escape(text);
         }
 

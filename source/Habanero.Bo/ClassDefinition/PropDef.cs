@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Util;
@@ -814,8 +815,9 @@ namespace Habanero.BO.ClassDefinition
             object newValue;
             try
             {
-                throw new NotImplementedException("CF: Code commented out to get CF to compile");
-                //newValue = Convert.ChangeType(value, this.PropertyType);
+                //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                //Convert.ChangeType()
+                newValue = Convert.ChangeType(value, this.PropertyType, CultureInfo.CurrentCulture);
             }
             catch (InvalidCastException)
             {

@@ -85,6 +85,7 @@ namespace Habanero.Test.Util
             Assert.IsTrue(longText1.Equals(longText2));
         }
 
+        [Ignore("CF: Not relevant at this point")] //TODO Andrew Russell 05 Jan 2011: Ignored Test - CF: Not relevant at this point
         [Test]
         public void TestHashCode()
         {

@@ -19,6 +19,7 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using Habanero.Base.Util;
 
 namespace Habanero.Base
 {
@@ -28,7 +29,7 @@ namespace Habanero.Base
     /// </summary>
     public class RSAPasswordCrypter : ICrypter
     {
-        private readonly RSA _rsa;
+        private readonly RSAExtenderCF _rsa;
 
         ///<summary>
         /// Constructor
@@ -36,7 +37,7 @@ namespace Habanero.Base
         ///<param name="rsa"></param>
         public RSAPasswordCrypter(RSA rsa)
         {
-            _rsa = rsa;
+            _rsa = new RSAExtenderCF(rsa);
         }
 
         /// <summary>
@@ -47,15 +48,17 @@ namespace Habanero.Base
         public string DecryptString(string value)
         {
 
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            //provider.FromXmlString(_rsa.ToXmlString(true));
-            // byte[] passwordBytes = new byte[value.Length/2];
-            //        for (int i = 0; i < passwordBytes.Length; i++) {
-            //            passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
-            //        }
-            //        byte[] encryptedByes = provider.Decrypt(passwordBytes, false);
-            //       return ASCIIEncoding.ASCII.GetString(encryptedByes);
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            var extendedProvider = new RSAExtenderCF(provider);
+            extendedProvider.FromXmlString(_rsa.ToXmlString(true));
+            byte[] passwordBytes = new byte[value.Length / 2];
+            for (int i = 0; i < passwordBytes.Length; i++)
+            {
+                passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
+            }
+            byte[] encryptedBytes = provider.Decrypt(passwordBytes, false);
+            return ASCIIEncoding.ASCII.GetString(encryptedBytes,0, encryptedBytes.Length);
         }
 
         /// <summary>
@@ -66,17 +69,18 @@ namespace Habanero.Base
         public string EncryptString(string value)
         {
 
-            throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            //provider.FromXmlString(_rsa.ToXmlString(false));
-            //byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(value);
-            //byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
-            //string text = "";
-            //foreach (byte bye in encryptedByes)
-            //{
-            //    text += String.Format("{0:x2}", bye);
-            //}
-            //return text;
+            //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+            RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
+            var extendedProvider = new RSAExtenderCF(provider);
+            extendedProvider.FromXmlString(_rsa.ToXmlString(false));
+            byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(value);
+            byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
+            string text = "";
+            foreach (byte bye in encryptedByes)
+            {
+                text += String.Format("{0:x2}", bye);
+            }
+            return text;
         }
     }
 }

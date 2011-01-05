@@ -229,12 +229,14 @@
     <Compile Include="Util\File\CSVFileWriter.cs" />
     <Compile Include="Util\File\TextFileLoader.cs" />
     <Compile Include="Util\File\TypeLoader.cs" />
+    <Compile Include="Util\HabaneroEnvironmentCF.cs" />
     <Compile Include="Util\IdNumberUtilities.cs" />
     <Compile Include="Util\ImageThumbnailCreator.cs" />
     <Compile Include="Util\LongText.cs" />
     <Compile Include="Util\MathHelpersCF.cs" />
     <Compile Include="Util\ReflectionUtilities.cs" />
     <Compile Include="Util\ReflectionUtilitiesCF.cs" />
+    <Compile Include="Util\RSAExtenderCF.cs" />
     <Compile Include="Util\SerialisationUtilities.cs" />
     <Compile Include="Util\SortedStringCollection.cs" />
     <Compile Include="Util\StringUtilities.cs" />
