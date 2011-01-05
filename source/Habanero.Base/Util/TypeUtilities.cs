@@ -55,6 +55,7 @@ namespace Habanero.Util
         ///<param name="obj">The value to convert</param>
         ///<typeparam name="TDestinationType">The type to convert the value to.</typeparam>
         ///<returns>The converted value</returns>
+        [Obsolete("V2.6.0 This is no longer used anywhere within Habanero or in Habanero.Faces and will be removed")]
         public static TDestinationType ConvertTo<TDestinationType>(this object obj)
         {
             return (TDestinationType)ConvertTo(typeof(TDestinationType), obj);
@@ -66,6 +67,7 @@ namespace Habanero.Util
         ///<param name="type">The type to convert the value to.</param>
         ///<param name="obj">The value to convert</param>
         ///<returns>The converted value</returns>
+        [Obsolete("V2.6.0 This is no longer used anywhere within Habanero or in Habanero.Faces and will be removed")]
         public static object ConvertTo(Type type, object obj)
         {
             
@@ -90,28 +92,5 @@ namespace Habanero.Util
             }
             return returnValue;
         }
-        /*//TODO brett 08 Jun 2010: For 2_0 
-  ///<summary>
-        ///</summary>
-        ///<param name="type"></param>
-        ///<exception cref="UnknownTypeNameException"></exception>
-        public static void CheckTypeCanBeCreated(this Type type)
-        {
-            //Check that the type can be created and raise appropriate error 
-            try
-            {
-                Activator.CreateInstance(type, true);
-            }
-            catch (Exception ex)
-            {
-                throw new UnknownTypeNameException
-                    (String.Format
-                         ("An error occurred while attempting to load a related "
-                          + "business object collection, with the type given as '{0}'. "
-                          + "Check that the given type exists and has been correctly "
-                          + "defined in the relationship and class definitions for the classes " + "involved.", type),
-                     ex);
-            }
-        }*/
     }
 }
