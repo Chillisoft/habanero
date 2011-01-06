@@ -1715,7 +1715,7 @@ namespace Habanero.BO
     /// A Generic version of BusinessObject.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class BusinessObject<T> : BusinessObject where T : BusinessObject
+    public class BusinessObject<T> : BusinessObject
     {
         public BusinessObject() : base() { }
         protected internal BusinessObject(IClassDef def) : base(def) { }
