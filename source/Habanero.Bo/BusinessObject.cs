@@ -1700,44 +1700,22 @@ namespace Habanero.BO
         {
             return false;
         }
-
-        ///// <summary>
-        ///// Returns a copy of this business object, but with different values
-        ///// for the ID properties, since the BusinessObjectManager cannot store
-        ///// two BO's with identical ID values.
-        ///// </summary>
-        ///// <returns>Returns a clone of this BusinessObject</returns>
-        //public IBusinessObject Clone()
-        //{
-        //    BusinessObjectManager.Instance.Remove(this);
-
-        //    //_deserialisationKeepsSameIDValues = false;
-
-        //    XmlSerializer xs = new XmlSerializer(this.GetType());
-        //    MemoryStream memoryStream = new MemoryStream();
-        //    xs.Serialize(memoryStream, this);
-        //    memoryStream.Seek(0, SeekOrigin.Begin);
-
-        //    //_deserialisationKeepsSameIDValues = true;
-
-        //    IBusinessObject clonedBO = (IBusinessObject)xs.Deserialize(memoryStream);
-
-        //    BusinessObjectManager.Instance.Remove(clonedBO);
-
-        //    foreach (IBOProp prop in clonedBO.ID)
-        //    {
-        //        prop.Value = Guid.NewGuid();  //does this update the bomanager?
-        //    }
-
-        //    BusinessObjectManager.Instance.Remove(this);
-
-        //    //BusinessObjectManager.Instance.Add(clonedBO);
-        //    BusinessObjectManager.Instance.Add(this);
-        //    return clonedBO;
-        //}
+        /// <summary>
+        /// Commits to the database any changes made to the object
+        /// </summary>
+        public IBusinessObject Save()
+        {
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(this);
+            committer.CommitTransaction();
+            return this;
+        }
     }
-
-    public class BusinessObject<T> : BusinessObject
+    /// <summary>
+    /// A Generic version of BusinessObject.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class BusinessObject<T> : BusinessObject where T : BusinessObject
     {
         public BusinessObject() : base() { }
         protected internal BusinessObject(IClassDef def) : base(def) { }
@@ -1806,19 +1784,33 @@ namespace Habanero.BO
             }
             return (TOut) GetPropertyValue(memberExpression.Member.Name);
         }
+        /// <summary>
+        /// Commits to the database any changes made to the object
+        /// </summary>
+        public new BusinessObject<T> Save()
+        {
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(this);
+            committer.CommitTransaction();
+            return this;
+        }
     }
-
+/*    /// <summary>
+    /// Adds convenience extension methods to the <see cref="IBusinessObject"/>
+    /// e.g. the <see cref="Save{T}"/> method
+    /// </summary>
     public static class BusinessObjectExtensions
     {
         /// <summary>
         /// Commits to the database any changes made to the object
         /// </summary>
-        public static IBusinessObject Save<T>(this T businessObject) where T: IBusinessObject
+        public static T Save<T>(this T businessObject) where T: IBusinessObject
         {
-            ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            if(businessObject.IsNull()) throw new HabaneroApplicationException("There is an application error a business object that is null was saved via the Save{T} extension Method"); 
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
             committer.AddBusinessObject(businessObject);
             committer.CommitTransaction();
             return businessObject;
         }
-    }
+    }*/
 }

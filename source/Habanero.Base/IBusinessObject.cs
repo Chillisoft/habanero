@@ -198,5 +198,12 @@ namespace Habanero.Base
         /// <param name="propName">The property name</param>
         /// <returns>Returns the property value as a string</returns>
         string GetPropertyValueString(string propName);
+
+        /// <summary>
+        /// Saves the Business Object.
+        /// This is really just a convenience method since it simply wraps the transaction committer.
+        /// </summary>
+        /// <returns></returns>
+        IBusinessObject Save();
     }
 }
