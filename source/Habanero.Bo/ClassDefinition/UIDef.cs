@@ -100,7 +100,7 @@ namespace Habanero.BO.ClassDefinition
             set
             {
                 _classDef = value;
-                this.UIForm.ClassDef = value;
+                if (this.UIForm != null) this.UIForm.ClassDef = value;
             }
         }
 

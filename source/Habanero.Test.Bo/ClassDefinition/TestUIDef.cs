@@ -366,6 +366,19 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Test Result -----------------------
             Assert.AreSame(classDef, uiForm.ClassDef);
         }
+        [Test]
+        public void Test_SetClassDef_WhenNoUIFormDef_ShouldNotRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            var uiDef = new UIDef("test", null, null);
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDef.UIForm);
+            //---------------Execute Test ----------------------
+            uiDef.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiDef.ClassDef);
+        }
     }
     // Grants access to protected methods
     internal class UIDefStub : UIDef
