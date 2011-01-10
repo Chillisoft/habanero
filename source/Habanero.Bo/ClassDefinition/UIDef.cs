@@ -31,7 +31,6 @@ namespace Habanero.BO.ClassDefinition
         private string _name;
         private IUIForm _uiForm;
         private IUIGrid _uiGrid;
-//        private ClassDef _classDef;
 
         /// <summary>
         /// Constructor to initialise a new definition with the name, form
@@ -91,10 +90,19 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public UIDefCol UIDefCol { get; set; }
 
+        private IClassDef _classDef;
         /// <summary>
-        /// The Class Definition that this UIDef belongs to.
+        /// Gets and sets the ClassDef that is used to define this UIForm
         /// </summary>
-        public IClassDef ClassDef { get; set; }
+        public IClassDef ClassDef
+        {
+            get { return _classDef; }
+            set
+            {
+                _classDef = value;
+                this.UIForm.ClassDef = value;
+            }
+        }
 
         /// <summary>
         /// Returns the ClassName of the Class tha this UIDef is for.
@@ -108,7 +116,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the form property definitions
         /// </summary>
         /// <returns>Returns a UIForm object</returns>
-        [Obsolete("Please use the UIForm property instead as it returns the same UIForm. This method will be removed in later versions of Habanero")]
+        [Obsolete("V 2.5 Please use the UIForm property instead as it returns the same UIForm. This method will be removed in later versions of Habanero")]
         public IUIForm GetUIFormProperties()
         {
             return this.UIForm;
@@ -118,7 +126,7 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the grid property definitions
         /// </summary>
         /// <returns>Returns a UIGridDef object</returns>
-        [Obsolete("Please use the UIGrid property instead as it returns the same UIGrid. This method will be removed in later versions of Habanero")]
+        [Obsolete("V 2.5 Please use the UIGrid property instead as it returns the same UIGrid. This method will be removed in later versions of Habanero")]
         public IUIGrid GetUIGridProperties()
         {
             return this.UIGrid;

@@ -22,6 +22,7 @@ using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
@@ -337,7 +338,34 @@ namespace Habanero.Test.BO.ClassDefinition
             return TestUtil.GetRandomString();
         }
 
+        [Test]
+        public void Test_SetClassDef_ShouldSetClassDef()
+        {
+            //---------------Set up test pack-------------------
+            var uiDef = new UIDef("test", null, null);
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiDef.ClassDef);
+            //---------------Execute Test ----------------------
+            uiDef.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiDef.ClassDef);
+        }
 
+        [Test]
+        public void Test_SetClassDef_ShouldSetClassDefOnRelatedFormDef()
+        {
+            //---------------Set up test pack-------------------
+            var uiForm = new UIForm();
+            var uiDef = new UIDef("test", null, null) {UIForm = uiForm};
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiForm.ClassDef);
+            //---------------Execute Test ----------------------
+            uiDef.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiForm.ClassDef);
+        }
     }
     // Grants access to protected methods
     internal class UIDefStub : UIDef
@@ -363,3 +391,4 @@ namespace Habanero.Test.BO.ClassDefinition
         }
     }
 }
+// ReSharper restore InconsistentNaming

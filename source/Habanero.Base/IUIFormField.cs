@@ -103,6 +103,11 @@ namespace Habanero.Base
         /// </summary>
         string Label { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        IClassDef ClassDef { get; set; }
+
 
         ///<summary>
         /// Gets the label for this form field.

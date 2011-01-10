@@ -24,7 +24,9 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
@@ -945,6 +947,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(LayoutStyle.Label, uiFormField1.Layout);
         }
 
+        [Test]
+        public void Test_SetClassDef_ShouldSet()
+        {
+            //---------------Set up test pack-------------------
+            UIFormField uiFormField = CreateFormField();
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiFormField.ClassDef);
+            //---------------Execute Test ----------------------
+            uiFormField.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiFormField.ClassDef);
+        }
+
         private static UIFormField CreateFormField() { return new UIFormField("L", "L", "", "", "", "", true, null, "", null, LayoutStyle.Label); }
         private static UIFormField CreateFormField(string propName) { return new UIFormField("L", propName, "", "", "", "", true, null, "", null, LayoutStyle.Label); }
 
@@ -1008,3 +1024,4 @@ namespace Habanero.Test.BO.ClassDefinition
         }
     }
 }
+// ReSharper restore InconsistentNaming

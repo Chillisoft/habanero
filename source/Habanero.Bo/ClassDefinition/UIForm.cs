@@ -30,7 +30,7 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class UIForm : IEquatable<UIForm>, IUIForm
     {
-        private readonly IList _list;
+        private readonly IList _tabList;
         private int _width;
         private int _height;
         private string _title;
@@ -40,7 +40,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public UIForm()
         {
-            _list = new ArrayList();
+            _tabList = new ArrayList();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Habanero.BO.ClassDefinition
         {
             if (tab == null) return;
             tab.UIForm = this;
-            _list.Add(tab);
+            _tabList.Add(tab);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Habanero.BO.ClassDefinition
         public void Remove(IUIFormTab tab)
         {
             if (tab == null) return;
-            _list.Remove(tab);
+            _tabList.Remove(tab);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Habanero.BO.ClassDefinition
         public bool Contains(IUIFormTab tab)
         {
             if (tab == null) return false;
-            return _list.Contains(tab);
+            return _tabList.Contains(tab);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace Habanero.BO.ClassDefinition
         /// specified</returns>
         public IUIFormTab this[int index]
         {
-            get { return (UIFormTab)_list[index]; }
+            get { return (UIFormTab) _tabList[index]; }
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns an IEnumerator-type object</returns>
         public IEnumerator GetEnumerator()
         {
-            return _list.GetEnumerator();
+            return _tabList.GetEnumerator();
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public int Count
         {
-            get { return _list.Count; }
+            get { return _tabList.Count; }
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Habanero.BO.ClassDefinition
         /// copying from</param>
         public void CopyTo(Array array, int index)
         {
-            _list.CopyTo(array, index);
+            _tabList.CopyTo(array, index);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public object SyncRoot
         {
-            get { return _list.SyncRoot; }
+            get { return _tabList.SyncRoot; }
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public bool IsSynchronized
         {
-            get { return _list.IsSynchronized; }
+            get { return _tabList.IsSynchronized; }
         }
 
 
@@ -176,6 +176,29 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IUIDef UIDef { get; set; }
 
+        private IClassDef _classDef;
+        /// <summary>
+        /// Gets and sets the ClassDef that is used to define this UIForm
+        /// </summary>
+        public IClassDef ClassDef
+        {
+            get { return _classDef; }
+            set
+            {
+                _classDef = value;
+                foreach (IUIFormTab tab in this)
+                {
+                    foreach (IUIFormColumn column in tab)
+                    {
+                        foreach (IUIFormField formField in column)
+                        {
+                            formField.ClassDef = value;
+                        }
+                    }
+                }
+            }
+        }
+
         ///<summary>
         /// overloads the operator == 
         ///</summary>
@@ -191,7 +214,7 @@ namespace Habanero.BO.ClassDefinition
             }
 
             // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
+            if (((object) a == null) || ((object) b == null))
             {
                 return false;
             }
@@ -223,7 +246,7 @@ namespace Habanero.BO.ClassDefinition
             newUIForm.Width = this.Width;
             foreach (IUIFormTab tab in this)
             {
-                newUIForm.Add(((UIFormTab)tab).Clone());
+                newUIForm.Add(((UIFormTab) tab).Clone());
             }
             return newUIForm;
         }
@@ -265,7 +288,7 @@ namespace Habanero.BO.ClassDefinition
 
         IEnumerator<IUIFormTab> IEnumerable<IUIFormTab>.GetEnumerator()
         {
-            return _list.Cast<IUIFormTab>().GetEnumerator();
+            return _tabList.Cast<IUIFormTab>().GetEnumerator();
         }
 
         ///<summary>
@@ -292,7 +315,7 @@ namespace Habanero.BO.ClassDefinition
         ///<filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
-            int result = _list.GetHashCode();
+            int result = _tabList.GetHashCode();
             result = 29*result + _width;
             result = 29*result + _height;
             result = 29*result + _title.GetHashCode();
