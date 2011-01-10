@@ -227,7 +227,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <returns> The text that will be used for the tool tip for this control. </returns>
 		public string GetToolTipText()
 		{
-			return GetToolTipText(GetClassDef());
+			return GetToolTipText(this.ClassDef);
 		}
 
 		///<summary>
@@ -260,7 +260,7 @@ namespace Habanero.BO.ClassDefinition
 		///<returns> The label for this form field </returns>
 		public string GetLabel()
 		{
-			return GetLabel(GetClassDef());
+			return GetLabel(this.ClassDef);
 		}
 
 		///<summary>
@@ -459,7 +459,7 @@ namespace Habanero.BO.ClassDefinition
 				{
 					return true;
 				}
-				IClassDef def = GetClassDef();
+				IClassDef def = this.ClassDef;
 				if (def == null) return false;
 				IPropDef propDef = this.GetPropDefIfExists(def);
 				if (propDef != null)
@@ -477,7 +477,7 @@ namespace Habanero.BO.ClassDefinition
 		{
 			get
 			{
-				IClassDef def = GetClassDef();
+				IClassDef def = this.ClassDef;
 				if (def == null) return false;
 				IPropDef propDef = this.GetPropDefIfExists(def);
 				return propDef != null && propDef.KeepValuePrivate;
