@@ -91,7 +91,7 @@ namespace Habanero.BO
                             else
                             {
                                 DateTimeUtilities.ParseToDate(valueExpression);
-                                    //The output from this is not used but if the valueExpression
+                                //The output from this is not used but if the valueExpression
                                 // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
                                 // is raised early
                                 MinValueExpression = valueExpression;
@@ -103,7 +103,7 @@ namespace Habanero.BO
                             else
                             {
                                 DateTimeUtilities.ParseToDate(valueExpression);
-                                    //The output from this is not used but if the valueExpression
+                                //The output from this is not used but if the valueExpression
                                 // cannot be parsed to any valid datetime then an error will be raised. It is preferable that the error 
                                 // is raised early
                                 MaxValueExpression = valueExpression;
