@@ -103,7 +103,35 @@ namespace Habanero.Test.Base
             }
         }
 
+        [Test]
+        public void Test_Construct_HabaneroApplicationException_WithDeveloperMessage_ShouldHaveDevMessage()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDevMessage = "DeveloperMessage";
+            const string expectedUserMessage = "IserMessage";
+            //---------------Assert Precondition----------------
 
+            //---------------Execute Test ----------------------
+            var habaneroApplicationException = new HabaneroApplicationException(expectedUserMessage, expectedDevMessage);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedUserMessage, habaneroApplicationException.Message);
+            Assert.AreEqual(expectedDevMessage, habaneroApplicationException.DeveloperMessage);
+        }
+
+        [Test]
+        public void Test_Construct_HabaneroApplicationException_WithDeveloperMessage_WithInnerException_ShouldHaveDevMessage()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedDevMessage = "DeveloperMessage";
+            const string expectedUserMessage = "IserMessage";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var habaneroApplicationException = new HabaneroApplicationException(expectedUserMessage, expectedDevMessage, new Exception());
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedUserMessage, habaneroApplicationException.Message);
+            Assert.AreEqual(expectedDevMessage, habaneroApplicationException.DeveloperMessage);
+        }
 
 
         [Test]
