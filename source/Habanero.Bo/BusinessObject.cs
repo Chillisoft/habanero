@@ -502,6 +502,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the collection of relationships
         /// </summary>
+        [TypeDescriptorIgnore]
         public RelationshipCol Relationships
         {
             get { return (RelationshipCol) _relationshipCol; }
@@ -512,6 +513,8 @@ namespace Habanero.BO
         /// <summary>
         /// Returns or sets the class definition. Setting the classdef is not recommended
         /// </summary>
+
+        [TypeDescriptorIgnore]
         public ClassDef ClassDef
         {
             get { return (ClassDef) _classDef; }
@@ -528,6 +531,8 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the collection of relationships
         /// </summary>
+
+        [TypeDescriptorIgnore]
         IRelationshipCol IBusinessObject.Relationships
         {
             get { return _relationshipCol; }
@@ -537,6 +542,8 @@ namespace Habanero.BO
         /// <summary>
         /// Returns or sets the class definition. Setting the classdef is not recommended
         /// </summary>
+
+        [TypeDescriptorIgnore]
         IClassDef IBusinessObject.ClassDef
         {
             get { return _classDef; }
@@ -649,7 +656,8 @@ namespace Habanero.BO
         /// <summary>
         /// The primary key for this business object 
         /// </summary>
-        [Obsolete ("Please use ID")]
+        [Obsolete ("V2.5 Please use ID")]
+        [TypeDescriptorIgnore]
         protected IPrimaryKey PrimaryKey
         {
             get { return _primaryKey; }
@@ -799,6 +807,7 @@ namespace Habanero.BO
         /// <summary>
         /// The BOProps in this business object
         /// </summary>
+        [TypeDescriptorIgnore]
         public IBOPropCol Props
         {
             get { return _boPropCol; }
@@ -829,6 +838,7 @@ namespace Habanero.BO
         /// <summary>
         /// The IBOState <see cref="IBOStatus"/> object for this BusinessObject, which records the status information of the object
         /// </summary>
+        [TypeDescriptorIgnore]
         public virtual IBOStatus Status
         {
             get { return _boStatus; }
@@ -977,7 +987,7 @@ namespace Habanero.BO
             object val = GetPropertyValueToDisplay(propName);
             return val != null ? val.ToString() : "";
         }
-        [Obsolete("2010/10/11 This internal method no longer appears to be used anywhere")]
+        [Obsolete("2010/10/11 V2.5 This internal method no longer appears to be used anywhere")]
         internal static bool PropValueHasChanged(object currentPropValue, object newPropValue)
         {
             if (currentPropValue == newPropValue) return false;
@@ -1000,7 +1010,7 @@ namespace Habanero.BO
 
         #region Persistance
 
-        [Obsolete("Use Props.HasAutoIncrementingField")]
+        [Obsolete("V 2.5 Use Props.HasAutoIncrementingField")]
         internal bool HasAutoIncrementingField
         {
             get { return _boPropCol.HasAutoIncrementingField; }
@@ -1711,6 +1721,14 @@ namespace Habanero.BO
             return this;
         }
     }
+    /// <summary>
+    /// This is an attribute that is placed on properties such as <see cref="Relationship"/>
+    /// which should not be part of the TypeDescriptor.GetProperties when binding.
+    /// </summary>
+    public class TypeDescriptorIgnoreAttribute : Attribute
+    {
+    }
+
     /// <summary>
     /// A Generic version of BusinessObject.
     /// </summary>
