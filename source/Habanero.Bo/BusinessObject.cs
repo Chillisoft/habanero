@@ -490,6 +490,7 @@ namespace Habanero.BO
         /// Returns an XML string that contains the changes in the object
         /// since the last persistance to the database
         /// </summary>
+        [TypeDescriptorIgnore]
         public string DirtyXML
         {
             get
@@ -557,6 +558,7 @@ namespace Habanero.BO
         /// with the values held for that key in this object.  This is a possible situation
         /// in some forms of inheritance.
         /// </summary>
+        [TypeDescriptorIgnoreAttribute]
         public IPrimaryKey ID
         {
             get
@@ -1019,6 +1021,7 @@ namespace Habanero.BO
         /// <summary>
         /// This returns the Transaction Log object set up for this BusinessObject.
         /// </summary>
+        [TypeDescriptorIgnoreAttribute]
         public ITransactionLog TransactionLog { get; private set; }
 
         /// <summary>
@@ -1705,7 +1708,7 @@ namespace Habanero.BO
         /// specific business object to implement required behaviour.
         /// </summary>
         /// <returns></returns>
-        [Obsolete("This is no longer used")]
+        [Obsolete("V 2.5.0 This is no longer used")]
         protected internal virtual bool IsArchived()
         {
             return false;
@@ -1725,6 +1728,7 @@ namespace Habanero.BO
     /// This is an attribute that is placed on properties such as <see cref="Relationship"/>
     /// which should not be part of the TypeDescriptor.GetProperties when binding.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Property)]  
     public class TypeDescriptorIgnoreAttribute : Attribute
     {
     }
