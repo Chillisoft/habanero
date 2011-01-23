@@ -22,7 +22,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
@@ -131,8 +131,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEquals_ComparedToNull()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.GetRandomString();
-            Source source = new Source(sourceName);
+            var sourceName = TestUtil.GetRandomString();
+            var source = new Source(sourceName);
             //---------------Execute Test ----------------------
             bool success = source.Equals(null);
             //---------------Test Result -----------------------
@@ -144,8 +144,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestName()
         {
             //---------------Set up test pack-------------------
-            string sourceName = TestUtil.GetRandomString();
-            Source source = new Source(TestUtil.GetRandomString());
+            var sourceName = TestUtil.GetRandomString();
+            var source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             source.Name = sourceName;
             //---------------Test Result -----------------------
@@ -157,8 +157,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestEntityName()
         {
             //---------------Set up test pack-------------------
-            string entityName = TestUtil.GetRandomString();
-            Source source = new Source(TestUtil.GetRandomString());
+            var entityName = TestUtil.GetRandomString();
+            var source = new Source(TestUtil.GetRandomString());
             //---------------Execute Test ----------------------
             source.EntityName = entityName;
             //---------------Test Result -----------------------
@@ -170,8 +170,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestJoinToSource()
         {
             //---------------Set up test pack-------------------
-            Source fromSource = new Source("FromSource", "FromSourceEntity");
-            Source toSource = new Source("ToSource", "ToSourceEntity");
+            var fromSource = new Source("FromSource", "FromSourceEntity");
+            var toSource = new Source("ToSource", "ToSourceEntity");
 
             //---------------Execute Test ----------------------
             fromSource.JoinToSource(toSource);
@@ -336,10 +336,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestFromString_SimpleCase()
         {
             //---------------Set up test pack-------------------
-            string sourcename = "SourceName";
+            const string sourcename = "SourceName";
             
             //---------------Execute Test ----------------------
-            Source source = Source.FromString(sourcename);
+            var source = Source.FromString(sourcename);
             //---------------Test Result -----------------------
 
             Assert.AreEqual(sourcename, source.Name);
@@ -351,10 +351,10 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestFromString_EmptySourceName()
         {
             //---------------Set up test pack-------------------
-            string sourcename = "";
+            const string sourcename = "";
 
             //---------------Execute Test ----------------------
-            Source source = Source.FromString(sourcename);
+            var source = Source.FromString(sourcename);
             //---------------Test Result -----------------------
 
             Assert.IsNull(source);
