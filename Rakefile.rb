@@ -10,8 +10,9 @@ require 'albacore'
 bs = File.dirname(__FILE__)
 bs = File.join(bs, "..") if bs.index("branches") != nil
 bs = File.join(bs, "../../HabaneroCommunity/BuildScripts")
-$:.unshift(File.expand_path(bs)) unless
-    $:.include?(bs) || $:.include?(File.expand_path(bs))
+$buildscriptpath = File.expand_path(bs)
+$:.unshift($buildscriptpath) unless
+    $:.include?(bs) || $:.include?($buildscriptpath)
 
 #------------------------build settings--------------------------
 require 'rake-settings.rb'
