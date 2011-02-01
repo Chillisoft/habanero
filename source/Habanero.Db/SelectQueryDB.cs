@@ -352,13 +352,11 @@ namespace Habanero.DB
                 Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
                 classIDCriteria.Field.Source = this.Source;
                 fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);
-
             }
 
             if (fullCriteria == null) return;
             builder.Append(" WHERE ");
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
-            
 
             string whereClause = criteriaDB.ToString(_sqlFormatter, value => AddParameter(value, statement),Aliases);
 
