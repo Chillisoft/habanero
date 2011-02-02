@@ -27,7 +27,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectCollection
 {
     /// <summary>
@@ -92,13 +92,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             }
         }*/
 
-        private static void AssertNotContains(ContactPersonTestBO cp1, IEnumerable<ContactPersonTestBO> col)
-        {
-            foreach (ContactPersonTestBO bo in col)
-            {
-                if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");             
-            }
-        }
 
         //Load a collection from the database.
         // Create a new business object.
@@ -437,42 +430,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Test Result -----------------------
             Assert.AreEqual(newSurname, cp1.Surname);
             Assert.IsTrue(cp1.Status.IsDirty);
-        }
-
-        [Test]
-        public void Test_RefreshCollectionRefreshesNonDirtyObjects()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
-            OrganisationTestBO.DeleteAllOrganisations();
-            ContactPersonTestBO.DeleteAllContactPeople();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col 
-                    = new BusinessObjectCollection<ContactPersonTestBO>();
-
-            ContactPersonTestBO cp1 = CreateContactPersonTestBO();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-
-            CreateContactPersonTestBO();
-            CreateContactPersonTestBO();
-            col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
-            cp1.Surname = newSurname;
-            cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
-
-            //--------------------Assert Preconditions----------
-            AssertNotContains(cp1, col);
-            Assert.AreEqual(newSurname, cp1.Surname);
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreNotEqual(newSurname, secondInstanceOfCP1.Surname);
-            Assert.IsFalse(cp1.Status.IsDirty);
-            //---------------Execute Test ----------------------
-            col.Refresh();
-
-            //---------------Test Result -----------------------
-            Assert.AreNotSame(secondInstanceOfCP1, cp1);
-            Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
         }
 
         [Test]

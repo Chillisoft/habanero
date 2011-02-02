@@ -297,10 +297,10 @@ namespace Habanero.BO
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
                 _isDirty = !PersistedValueEquals(newValue);
-                if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
+/*                if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
                 {
                     _businessObject.SetDirty(true);
-                }
+                }*/
                 FireBOPropValueUpdated();
             }
         }

@@ -27,7 +27,7 @@ using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
 
@@ -259,7 +259,7 @@ namespace Habanero.Test.BO
             string testPropDefault = TestUtil.GetRandomString();
             MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
             MyBO bo = new MyBO();
-            Guid id = bo.MyBoID.Value;
+            Guid id = bo.MyBoID.GetValueOrDefault();
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
             bo.CancelEdits();
@@ -367,7 +367,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -1096,7 +1096,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             Assert.IsTrue(markForDeleteEventFired);
         }
@@ -1248,8 +1248,6 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(isDeletable);
         }
-        //TODO: Cascade relationships
-        //TODO: MarkForDelete when CascadeDelete
         [Test]
         public void Test_MarkForDelete_NewObjectDoesNotRaiseError()
         {
@@ -1273,7 +1271,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             Assert.IsTrue(markForDeleteEventFired);
         }
@@ -1290,14 +1288,14 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             //---------------Execute Test ----------------------
             bo.Save();
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
         }
 
@@ -1582,13 +1580,13 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOStatus boStatus1 = new BOStatus(new Car());
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
-            boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            //boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isNew, false);
 
             BOStatus boStatus2 = new BOStatus(new Car());
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
-            boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            //boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isNew, false);
             //---------------Execute Test ----------------------
@@ -1878,28 +1876,6 @@ namespace Habanero.Test.BO
                 Assert.IsInstanceOf<ArgumentException>(ex);
                 StringAssert.Contains("testBo => (testBo.FirstName + \"123\") is not a valid property on ContactPersonTestBO", ex.Message);
             }
-        }
-
-        [Test]
-        public void Test_UpdateDirtyStatusFromProperties()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            BOStatus status = (BOStatus) contactPerson.Status;
-            status.SetBOFlagValue(BOStatus.Statuses.isDirty, true);
-
-            //-------------Assert Preconditions -------------
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-
-            contactPerson.UpdateDirtyStatusFromProperties();
-            //---------------Test Result -----------------------
-
-            Assert.IsFalse(contactPerson.Status.IsDirty);
-            //---------------Tear Down -------------------------          
         }
 
 

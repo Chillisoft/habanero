@@ -26,7 +26,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]
@@ -297,7 +297,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-------Assert Preconditions
             Assert.AreEqual(3, cpCol.Count, "Three objects should be in the cpCollection");
 
-            ///---------------Execute Test ----------------------
+            //---------------Execute Test ----------------------
             RelatedBusinessObjectCollection<ContactPersonTestBO> cpColCopied =
                 new RelatedBusinessObjectCollection<ContactPersonTestBO>(GetContactPersonRelationship());
             cpColCopied.Add(cpCol);
@@ -330,7 +330,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-------Assert Preconditions
             Assert.AreEqual(0, cpCol.Count, "Three objects should be in the cpCollection");
 
-            ///---------------Execute Test ----------------------
+            //---------------Execute Test ----------------------
             cpCol.Add(myBO, myBO2, myBO3);
 
             //---------------Test Result ----------------------- - Result
@@ -363,7 +363,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.IsNotNull(myBO.OrganisationID);
             Assert.IsTrue(myBO.Status.IsDirty);
 
-            ///---------------Execute Test ----------------------
+            //---------------Execute Test ----------------------
             cpCol.CancelEdits();
 
             //---------------Test Result ----------------------- - Result
@@ -744,7 +744,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             util.AssertAllCollectionsHaveNoItems(cpCol);
             util.AssertRemovedEventFired();
             util.AssertAddedEventNotFired();
-            Assert.IsTrue(myBO.Status.IsDirty);
+            Assert.IsFalse(myBO.Status.IsDirty, "The BO is no longer dirty since its FK Prop has been reverted by the remove");
         }
 
         [Test]

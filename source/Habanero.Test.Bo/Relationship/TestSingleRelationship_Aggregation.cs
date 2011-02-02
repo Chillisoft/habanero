@@ -25,7 +25,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
@@ -466,7 +466,6 @@ namespace Habanero.Test.BO.Relationship
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
             ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
-            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDirty", true);
             //---------------Execute Test ----------------------
 
             IList<ContactPersonTestBO> dirtyChildren = relationship.GetDirtyChildren();

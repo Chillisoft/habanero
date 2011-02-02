@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -56,13 +57,12 @@ namespace Habanero.BO
             if (_boProps.ContainsKey(propNameUpper))
             {
                 throw new InvalidPropertyException(String.Format(
-                                                       "The BOProp with the name '{0}' is being added to the " +
-                                                       "prop collection, but already exists in the collection.",
-                                                       boProp.PropertyName));
+                    "The BOProp with the name '{0}' is being added to the " +
+                    "prop collection, but already exists in the collection.",
+                    boProp.PropertyName));
             }
             _boProps.Add(propNameUpper, boProp);
         }
-
 
 
         /// <summary>
@@ -109,13 +109,13 @@ namespace Habanero.BO
                 IBOProp prop;
                 try
                 {
-                     prop = _boProps[propName.ToUpper()];
+                    prop = _boProps[propName.ToUpper()];
                 }
                 catch (Exception)
                 {
                     throw new InvalidPropertyNameException(String.Format(
-                                                               "A BOProp with the name '{0}' does not exist in the " +
-                                                               "prop collection.", propName));
+                        "A BOProp with the name '{0}' does not exist in the " +
+                        "prop collection.", propName));
                 }
                 return prop;
             }
@@ -140,6 +140,15 @@ namespace Habanero.BO
                 dirtlyXml += "</Properties>";
                 return dirtlyXml;
             }
+        }
+
+        /// <summary>
+        /// Returns an xml string containing the properties whose values
+        /// have changed, along with their old and new values
+        /// </summary>
+        public bool IsDirty
+        {
+            get { return this._boProps.Values.Any(prop => prop.IsDirty); }
         }
 
         /// <summary>
@@ -265,10 +274,7 @@ namespace Habanero.BO
         ///</summary>
         public int Count
         {
-            get
-            {
-                return _boProps.Count;
-            }
+            get { return _boProps.Count; }
         }
 
         /// <summary>
@@ -287,7 +293,6 @@ namespace Habanero.BO
                     if (keyValuePair.Value.PropDef.AutoIncrementing) return true;
                 }
                 return false;
-
             }
         }
     }

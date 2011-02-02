@@ -95,6 +95,12 @@ namespace Habanero.Base
         bool HasAutoIncrementingField { get; }
 
         /// <summary>
+        /// Returns an xml string containing the properties whose values
+        /// have changed, along with their old and new values
+        /// </summary>
+        bool IsDirty { get; }
+
+        /// <summary>
         /// Restores each of the property values to their PersistedValue
         /// </summary>
         void RestorePropertyValues();

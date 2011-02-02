@@ -27,6 +27,7 @@ using Habanero.Test.BO;
 using NMock;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     [TestFixture]
@@ -169,7 +170,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         public void TestUpdateWhenOnlyOneLevelUpdates()
         {
             IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
-            IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
+           // IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
             //connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
             //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
             //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());

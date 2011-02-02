@@ -25,6 +25,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
@@ -65,12 +66,23 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         {
             Assert.AreEqual(ORMapping.ClassTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
         }
-
+        /// <summary>
+        /// This is actually an anomaly resulting from the way in which the 
+        /// CircleID is being set. The CircleID is therefore seen as dirty 
+        /// despite the fact that it is really not dirty. 
+        /// The result is that hte circle is seen as dirty since its id prop 
+        /// has been changed.
+        /// This is an anomoly of class table inheritance only other inheritance is fine.
+        /// NNB_ This reference ID must be kept as dirty since any update statements must 
+        /// correclty update this prop to the DB.
+        /// </summary>
         [Test]
-        public void TestCircleIsNotDirty()
+        public void TestNewCircle_ShouldbeDirty()
         {
-            Circle circle = new Circle();
-            Assert.IsFalse(circle.Status.IsDirty);
+            //---------------Execute Test ----------------------
+            var circle = new Circle();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(circle.Status.IsDirty);
         }
 
         [Test]

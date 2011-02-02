@@ -22,7 +22,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectCollection
 {
     [TestFixture]

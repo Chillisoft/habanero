@@ -81,7 +81,7 @@ namespace Habanero.BO
             }
             UpdateCollections();
             ((Relationship)Relationship).UpdateRelationshipAsPersisted();
-            businessObject.UpdateDirtyStatusFromProperties();
+            //businessObject.UpdateDirtyStatusFromProperties();
         }
         /// <summary>
         /// Update the Underlying relationship collection e.g. The added or removed Business Object Collections are updated.
