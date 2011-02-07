@@ -59,7 +59,7 @@ namespace Habanero.BO
         /// The Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
         /// </summary>
         protected static IBusinessObjectManager _businessObjectManager = new BusinessObjectManager();
-
+         
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
         /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
