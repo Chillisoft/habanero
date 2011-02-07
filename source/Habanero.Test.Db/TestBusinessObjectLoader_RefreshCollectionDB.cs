@@ -76,7 +76,7 @@ namespace Habanero.Test.DB
             string newSurname = Guid.NewGuid().ToString();
             cp1.Surname = newSurname;
             cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
+            var secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
 
             //--------------------Assert Preconditions----------
             Assert.IsFalse(col.Contains(cp1));
