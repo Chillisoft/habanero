@@ -20,6 +20,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using Habanero.Base;
+using Habanero.Base.Logging;
 using Habanero.Util;
 using log4net;
 
@@ -32,7 +33,7 @@ namespace Habanero.BO.ClassDefinition
     public class BOPropGeneralDataMapper : BOPropDataMapper
     {
         private readonly PropDef _propDef;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOPropGeneralDataMapper");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BOPropGeneralDataMapper));
 
         ///<summary>
         /// Creates the Generalised Data Mapper with the appropriate propDef.
@@ -115,12 +116,12 @@ namespace Habanero.BO.ClassDefinition
                 }
                 catch (InvalidCastException)
                 {
-                    log.Error
+                    _logger.Log
                         (string.Format
                              ("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
                               valueToParse.GetType().FullName, _propDef.PropertyType.FullName));
                     string tableName = this._propDef.ClassDef == null ? "" : this._propDef.ClassDef.GetTableName(_propDef);
-                    log.Error
+                    _logger.Log
                         (string.Format
                              ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
                               this._propDef.PropertyName, this._propDef.DatabaseFieldName, tableName));

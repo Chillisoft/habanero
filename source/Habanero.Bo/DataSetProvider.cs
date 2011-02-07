@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using Habanero.Base;
+using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using log4net;
@@ -34,7 +35,7 @@ namespace Habanero.BO
     public abstract class DataSetProvider : IDataSetProvider
     {
         private const string _idColumnName = "HABANERO_OBJECTID";
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.DataSetProvider");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(DataSetProvider));
 
         /// <summary>
         /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
@@ -441,7 +442,7 @@ namespace Habanero.BO
             }
             catch (IndexOutOfRangeException ex)
             {
-                log.Error(ex.Message, ex);
+                _logger.Log(ex);
                 throw;
 
             }

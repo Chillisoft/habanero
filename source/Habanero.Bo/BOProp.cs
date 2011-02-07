@@ -21,6 +21,7 @@ using System.Security;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using log4net;
@@ -38,7 +39,7 @@ namespace Habanero.BO
     public class BOProp : IBOProp
     {
         /// <summary> The Logger </summary>
-        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BOProp));
         /// <summary> The current value of the BOProp </summary>
 // ReSharper disable InconsistentNaming
         protected object _currentValue;

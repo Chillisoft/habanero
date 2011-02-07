@@ -219,7 +219,7 @@ namespace Habanero.BO
             }
             catch (BusObjDeleteConcurrencyControlException ex)
             {
-                log.Error(ex.Message);
+                _logger.Log(ex);
                 return null;
             }
             return businessObject;

@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using log4net;
 
 namespace Habanero.BO
@@ -53,7 +54,7 @@ namespace Habanero.BO
     ///</summary>
     public class BusinessObjectManager : IBusinessObjectManager
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObjectManager");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObjectManager));
         /// <summary>
         /// The Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
         /// </summary>
@@ -582,7 +583,7 @@ namespace Habanero.BO
         /// so this method is far faster than the other FindFirst methods for finding objects with composite keys.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="boType"></param>
+        /// <param name="classDef"></param>
         /// <returns></returns>
         public IBusinessObject FindFirst(BOPrimaryKey key, IClassDef classDef)
         {
@@ -725,9 +726,8 @@ namespace Habanero.BO
                         return this[id];
                     } catch (HabaneroDeveloperException ex)
                     {
-                        _log.Debug(
-                            "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: " +
-                            ex.Message + Environment.NewLine + ex.StackTrace);
+                        _logger.Log(
+                            "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: ", ex, LogCategory.Warn);
                         return null;
                     }
                 }

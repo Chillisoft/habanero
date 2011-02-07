@@ -151,17 +151,17 @@
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
-    <Compile Include="IHabaneroLogger.cs" />
-    <Compile Include="IHabaneroLoggerFactory.cs" />
+    <Compile Include="Logging\IHabaneroLogger.cs" />
+    <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />
     <Compile Include="InvalidOrderCriteriaException.cs" />
     <Compile Include="IResolvableToValue.cs" />
     <Compile Include="ISimpleLookupList.cs" />
     <Compile Include="ISingleRelationshipDef.cs" />
     <Compile Include="ISingleValueDef.cs" />
-    <Compile Include="Log4NetLogger.cs" />
-    <Compile Include="Log4NetLoggerFactory.cs" />
-    <Compile Include="LogCategory.cs" />
+    <Compile Include="Logging\Log4NetLogger.cs" />
+    <Compile Include="Logging\Log4NetLoggerFactory.cs" />
+    <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="OrderCriteriaField.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
@@ -393,9 +393,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Logging\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

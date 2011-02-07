@@ -28,6 +28,7 @@ using System.Xml;
 using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using log4net;
@@ -54,7 +55,7 @@ namespace Habanero.BO
     /// </summary>
     public class BusinessObject : IBusinessObject, ISerializable
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObject");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObject));
 
         #region IBusinessObject Members
 
@@ -355,7 +356,8 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                _log.Error("Error disposing BusinessObject.", ex);
+                _logger.Log("Error disposing BusinessObject.", ex);
+                //_log.Error("Error disposing BusinessObject.", ex);
             }
             finally
             {
