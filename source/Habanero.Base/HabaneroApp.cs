@@ -56,7 +56,8 @@ namespace Habanero.Base
         /// <summary>
         /// Sets the version upgrader, which carries
         /// out upgrades on an installed application to upgrade it to newer
-        /// versions.
+        /// versions. Typically this will consist of running scripts against a Db to 
+        /// add/remove columns or migrate DB to new structure.
         /// </summary>
         public IApplicationVersionUpgrader ApplicationVersionUpgrader
         {
@@ -77,9 +78,9 @@ namespace Habanero.Base
         {
             IHabaneroLogger log = null;
             try {
-                SetupExceptionNotifier();
                 SetupApplicationNameAndVersion();
                 SetupLogging();
+                SetupExceptionNotifier();
 
                 log = GlobalRegistry.LoggerFactory.GetLogger("HabaneroApp");
                 LogAppStartingInfo(log);
