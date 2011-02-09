@@ -325,7 +325,7 @@ namespace Habanero.BO
         /// <returns>Returns a collection of string-value pairs</returns>
         public Dictionary<string, string> GetLookupList(bool ignoreTimeout)
         {
-            if (!ignoreTimeout && DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout)
+            if (!ignoreTimeout && CacheHasNotTimedOut())
             {
                 _lastCallTime = DateTime.Now;
                 return DisplayValueDictionary;
@@ -345,6 +345,11 @@ namespace Habanero.BO
             FillKeyValueDictionary();
             _lastCallTime = DateTime.Now;
             return DisplayValueDictionary;
+        }
+
+        private bool CacheHasNotTimedOut()
+        {
+            return DateTime.Now.Subtract(_lastCallTime).TotalMilliseconds < _timeout;
         }
 
         ///<summary>
