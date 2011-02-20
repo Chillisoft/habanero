@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
@@ -804,10 +805,18 @@ namespace Habanero.BO
         /// <param name="newPropValue">The new value to set to</param>
         public void SetPropertyValue(string propName, object newPropValue)
         {
-            IBOProp prop = GetProperty(propName);
+            var prop = GetProperty(propName);
+            _logger.Log("SetPropertyValue BO (" + this + ") prop (" + propName + ") previousValue (" + prop.Value + ") new value (" + newPropValue + ")", LogCategory.Debug);
+            _logger.Log(GetStackTrace(), LogCategory.Debug);
             prop.Value = newPropValue;
         }
 
+        private static string GetStackTrace()
+        {
+            var stack = new StackTrace();
+            return stack.ToString();
+            // var frame = stack.GetFrame(1);
+        }
         /// <summary>
         /// The BOProps in this business object
         /// </summary>
