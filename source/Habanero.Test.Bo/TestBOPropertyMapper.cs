@@ -9,10 +9,11 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
+// ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestBOPropertyMapper
     {
-        private string _RelationshipPathSeperator = ".";
+        private const string _relationshipPathSeperator = ".";
 
         [SetUp]
         public void SetupTest()
@@ -418,7 +419,7 @@ namespace Habanero.Test.BO
             contactPersonTestBO.Organisation = new OrganisationTestBO();
             const string outerRelationshipName = "NonExistingRelationship";
             const string innerPropertyName = "Name";
-            string propertyName = outerRelationshipName + _RelationshipPathSeperator + innerPropertyName;
+            string propertyName = outerRelationshipName + _relationshipPathSeperator + innerPropertyName;
             BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
             //---------------Assert Precondition----------------
             Assert.IsNull(boPropertyMapper.BusinessObject);
@@ -452,7 +453,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string outerRelationshipName = "Addresses";
             const string innerPropertyName = "ContactPersonTestBO";
-            string propertyName = outerRelationshipName + _RelationshipPathSeperator + innerPropertyName;
+            string propertyName = outerRelationshipName + _relationshipPathSeperator + innerPropertyName;
             BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName);
             //---------------Assert Precondition----------------
             Assert.IsNull(boPropertyMapper.BusinessObject);
@@ -641,6 +642,28 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedMessage, invalidMessage);
         }
 
+        [Test]
+        public void Test_SetPropertyDisplayValue_WithIntString_ShouldBeAbleGetString()
+        {
+            //---------------Set up test pack-------------------
+
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadDefaultClassDef();
+            const string propName = "TestProp";
+            var testBo = new MyBO();
+            var boMapper = new BOPropertyMapper(propName) { BusinessObject = testBo };
+            boMapper.SetPropertyValue("7");
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("7", boMapper.GetPropertyValue().ToString());
+            //---------------Execute Test ----------------------
+            boMapper.SetPropertyValue("3");
+            //---------------Test Result -----------------------
+            Assert.AreEqual("3", boMapper.GetPropertyValue().ToString());
+            Assert.AreEqual("3", testBo.TestProp);
+        }
+        /*
+                            var propertyMapper = BOPropMapperFactory.CreateMapper(this._businessObject, propertyName);
+                     propertyMapper.SetPropertyValue(value);*/
     }
 
     class BOPropertyMapperSpy : BOPropertyMapper

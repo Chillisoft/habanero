@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+// ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestBOPropertyMapperFactory
     {

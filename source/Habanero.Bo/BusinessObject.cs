@@ -388,13 +388,15 @@ namespace Habanero.BO
             if (_classDef == null)
             {
                 throw new HabaneroDeveloperException
-                    ("There is an error constructing a business object. Please refer to the system administrator",
+                    ("There is an error constructing a business object. Please refer to the system administrator"
+                    + "The Class could not be constructed since no classdef could be loaded",
                      "The Class could not be constructed since no classdef could be loaded");
             }
             if (ID == null)
             {
                 throw new HabaneroDeveloperException
-                    ("There is an error constructing a business object. Please refer to the system administrator",
+                    ("There is an error constructing a business object. Please refer to the system administrator" 
+                    + "The Class could not be constructed since no _primaryKey has been created",
                      "The Class could not be constructed since no _primaryKey has been created");
             }
             BackupObjectIdPropValues();

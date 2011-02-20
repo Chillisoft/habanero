@@ -40,6 +40,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+// ReSharper disable InconsistentNaming
         public void Test_InitialiseProp_NullValue()
         {
             //---------------Set up test pack-------------------
