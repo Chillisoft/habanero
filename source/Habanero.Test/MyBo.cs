@@ -83,7 +83,7 @@ namespace Habanero.Test
 		{
 			get
 			{
-				return (string) this.GetPropertyValue("TestProp");
+				return Convert.ToString(this.GetPropertyValue("TestProp"));
 			}
 			set
 			{
@@ -128,7 +128,7 @@ namespace Habanero.Test
 		{
 			get
 			{
-				return (string)this.GetPropertyValue("TestProp2");
+				return Convert.ToString(this.GetPropertyValue("TestProp2"));
 			}
 			set
 			{
@@ -2118,7 +2118,7 @@ namespace Habanero.Test
 		{
 			get
 			{
-				return (string)this.GetPropertyValue("TestProp");
+				return Convert.ToString(this.GetPropertyValue("TestProp"));
 			}
 			set
 			{
