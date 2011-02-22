@@ -106,7 +106,7 @@ namespace Habanero.Test.BO
 			MyBO bo1 = (MyBO)_itsClassDef.CreateNewBusinessObject();
 			BOMapper boMapper = new BOMapper(bo1);
 			//---------------Assert Precondition----------------
-			Assert.IsNull(bo1.TestProp2);
+			Assert.IsNullOrEmpty(bo1.TestProp2);
 			//---------------Execute Test ----------------------
 			boMapper.SetDisplayPropertyValue(propertyName, expectedLookupDisplayValue);
 			//---------------Test Result -----------------------

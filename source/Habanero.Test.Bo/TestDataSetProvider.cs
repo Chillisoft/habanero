@@ -569,7 +569,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             DataRow row1 = table.Rows[0];
-            Assert.AreEqual(null, myBO.TestProp);
+            Assert.IsNullOrEmpty( myBO.TestProp);
             Assert.AreEqual(DBNull.Value, row1["TestProp"]);
             Assert.AreEqual(errMessage, row1.RowError);
         }
@@ -623,7 +623,7 @@ namespace Habanero.Test.BO
             myBO.TestProp = null;
             _dataSetProvider.UpdateBusinessObjectRowValues(myBO);
             //---------------Test Result -----------------------
-            Assert.IsNull( myBO.TestProp);
+            Assert.IsNullOrEmpty( myBO.TestProp);
             Assert.AreEqual(DBNull.Value, row1["TestProp"]);
         }
 
