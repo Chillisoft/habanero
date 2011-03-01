@@ -73,6 +73,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
@@ -104,6 +107,8 @@
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Asset.cs" />
+    <Compile Include="Base\Logging\TestLog4NetLogger.cs" />
+    <Compile Include="Base\Logging\TestLog4NetLoggerFactory.cs" />
     <Compile Include="Base\TestDateRange.cs" />
     <Compile Include="Base\TestDateRangeOptionsConverter.cs" />
     <Compile Include="Base\TestDateTimeNow.cs" />

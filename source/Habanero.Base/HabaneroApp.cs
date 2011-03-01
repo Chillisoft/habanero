@@ -34,9 +34,7 @@ namespace Habanero.Base
     /// </summary>
     public abstract class HabaneroApp
     {
-        private static ILog _log;
         protected IApplicationVersionUpgrader _applicationVersionUpgrader;
-        private string _classDefsXml;
 
         //private ISynchronisationController _synchronisationController;
 
@@ -76,14 +74,14 @@ namespace Habanero.Base
         /// with further information about the failure.</returns>
         public virtual bool Startup()
         {
+            IHabaneroLogger log = null;
             try {
                 SetupExceptionNotifier();
                 SetupApplicationNameAndVersion();
                 SetupLogging();
 
-                _log.Debug("---------------------------------------------------------------------");
-                _log.Debug(string.Format("{0} v{1} starting", AppName, AppVersion));
-                _log.Debug("---------------------------------------------------------------------");
+                log = GlobalRegistry.LoggerFactory.GetLogger("HabaneroApp");
+                LogAppStartingInfo(log);
 
                 SetupDatabaseConnection();
                 SetupSettings();
@@ -92,10 +90,10 @@ namespace Habanero.Base
             }
             catch (Exception ex) {
                 string errorMessage = "There was a problem starting the application.";
-                if (_log != null && _log.Logger.IsEnabledFor(Level.Error))
+                if (log != null)
                 {
-                    _log.Error("---------------------------------------------" +
-                              Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true));
+                    log.Log("---------------------------------------------" +
+                              Environment.NewLine + ExceptionUtilities.GetExceptionString(ex, 0, true), LogCategory.Exception);
                     errorMessage += " Please look at the log file for details of the problem.";
                 }
                 if (GlobalRegistry.UIExceptionNotifier != null)
@@ -109,11 +107,18 @@ namespace Habanero.Base
             return true;
         }
 
-        protected static void SetupLogging()
+        private void LogAppStartingInfo(IHabaneroLogger log)
         {
-            try {
-                XmlConfigurator.Configure();
-               
+            log.Log("---------------------------------------------------------------------", LogCategory.Debug);
+            log.Log(string.Format("{0} v{1} starting", AppName, AppVersion), LogCategory.Debug);
+            log.Log("---------------------------------------------------------------------", LogCategory.Debug);
+        }
+
+        protected virtual void SetupLogging()
+        {
+            try
+            {
+                GlobalRegistry.LoggerFactory = new Log4NetLoggerFactory();
             }
             catch (Exception ex) {
                 throw new XmlException("There was an error reading the XML configuration file. " +
@@ -122,8 +127,8 @@ namespace Habanero.Base
                                        "Habanero tutorial for example usage or see official " +
                                        "documentation on configuration files if the error is not resolved.", ex);
             }
-            _log = LogManager.GetLogger("HabaneroApp");
         }
+
 
         protected void SetupApplicationNameAndVersion()
         {
@@ -211,11 +216,7 @@ namespace Habanero.Base
         /// <summary>
         /// Gets and sets the class definition Xml. You can load the xml any way and set it here.
         /// </summary>
-        public string ClassDefsXml
-        {
-            get { return _classDefsXml; }
-            set { _classDefsXml = value; }
-        }
+        public string ClassDefsXml { get; set; }
 
         /// <summary>
         /// Gets and sets the exception notifier, which is used to inform the

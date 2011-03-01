@@ -20,6 +20,7 @@ using Habanero.Base;
 using Habanero.Console;
 using Habanero.Util;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Habanero.Test.Base
 {
@@ -149,5 +150,19 @@ namespace Habanero.Test.Base
             //---------------Test Result -----------------------
             Assert.AreEqual(databaseVersion, GlobalRegistry.DatabaseVersion);
         }
+
+
+        [Test]
+        public void Test_LoggerFactory_SetAndGet()
+        {
+            //---------------Set up test pack-------------------
+            IHabaneroLoggerFactory habaneroLoggerFactory = MockRepository.GenerateStub<IHabaneroLoggerFactory>();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            GlobalRegistry.LoggerFactory = habaneroLoggerFactory;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(habaneroLoggerFactory, GlobalRegistry.LoggerFactory);
+        }
+
     }
 }
