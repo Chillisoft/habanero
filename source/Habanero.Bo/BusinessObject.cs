@@ -808,7 +808,7 @@ namespace Habanero.BO
         public void SetPropertyValue(string propName, object newPropValue)
         {
             var prop = GetProperty(propName);
-            _logger.Log("SetPropertyValue BO (" + this + ") prop (" + propName + ") previousValue (" + prop.Value + ") new value (" + newPropValue + ")", LogCategory.Debug);
+            //_logger.Log("SetPropertyValue BO (" + this + ") prop (" + propName + ") previousValue (" + prop.Value + ") new value (" + newPropValue + ")", LogCategory.Debug);
             _logger.Log(GetStackTrace(), LogCategory.Debug);
             prop.Value = newPropValue;
         }
