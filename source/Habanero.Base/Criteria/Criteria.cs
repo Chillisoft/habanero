@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -145,7 +146,9 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, ComparisonOp comparisonOp, object value)
             : this(QueryField.FromString(propName), comparisonOp, value)
-        {}
+        {
+            InitFieldCriteria(propName, comparisonOp, value);
+        }
 
         /// <summary>
         /// Creates a composite criteria by logically joining two other criteria.
@@ -168,11 +171,22 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(QueryField field, ComparisonOp comparisonOp, object value)
         {
+            InitFieldCriteria(field, comparisonOp, value);
+        }
+
+        protected void InitFieldCriteria(string propName, ComparisonOp comparisonOp, object value)
+        {
+            InitFieldCriteria(QueryField.FromString(propName), comparisonOp, value);
+        }
+
+        protected void InitFieldCriteria(QueryField field, ComparisonOp comparisonOp, object value)
+        {
             Field = field;
             ComparisonOperator = comparisonOp;
             FieldValue = value;
             if (FieldValue is IEnumerable && !(FieldValue is string)) FieldValue = new CriteriaValues((IEnumerable)FieldValue);
         }
+
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         /// <summary>
@@ -768,6 +782,23 @@ namespace Habanero.Base
             {
                 return _values.GetEnumerator();
             }
+        }
+    }
+
+    public class Criteria<T, TProp> : Criteria
+    {
+        public Criteria(Expression<Func<T, TProp>> propNameExpression, ComparisonOp comparisonOp, object value)
+        {
+            MemberExpression memberExpression;
+            try
+            {
+                memberExpression = (MemberExpression)propNameExpression.Body; 
+            }
+            catch (InvalidCastException)
+            {
+                throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
+            }
+            InitFieldCriteria(memberExpression.Member.Name, comparisonOp, value);
         }
     }
 }

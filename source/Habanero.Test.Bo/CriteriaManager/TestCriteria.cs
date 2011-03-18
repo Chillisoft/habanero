@@ -741,7 +741,19 @@ namespace Habanero.Test.BO
             }
         }
 
-
+        [Test]
+        public void Construct_UsingLambdas()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.Equals;
+            var val = "hello";
+            var expectedCriteria = new Criteria("TestProp", op, val);
+            //---------------Execute Test ----------------------
+            var criteria = new Criteria<MyBO, string>(bo => bo.TestProp, op, val);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
 
         #region Test Comparison operators
 
