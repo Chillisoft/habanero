@@ -159,7 +159,7 @@
     <Compile Include="Loaders\TestXmlKeyLoader.cs" />
     <Compile Include="Loaders\TestXmlPrimaryKeyLoader.cs" />
     <Compile Include="Loaders\TestXmlPropertyLoader.cs" />
-    <Compile Include="Loaders\TestXmlPropertyRuleLoader.cs" />
+    <Compile Include="Loaders\TestXmlRuleLoader.cs" />
     <Compile Include="Loaders\TestXmlPropertyRuleLoader_ClassDefOnly.cs" />
     <Compile Include="Loaders\TestXmlRelationshipLoader.cs" />
     <Compile Include="Loaders\TestXmlSimpleLookupListLoader.cs" />

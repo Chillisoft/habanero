@@ -289,5 +289,13 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="message"></param>
         /// <returns></returns>
         IPropRule CreatePropRuleDouble(string name, string message);
+
+        ///<summary>
+        /// Constructs a <see cref="PropRuleLong"/>
+        ///</summary>
+        ///<param name="name"></param>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        IPropRule CreatePropRuleLong(string name, string message);
 	}
 }

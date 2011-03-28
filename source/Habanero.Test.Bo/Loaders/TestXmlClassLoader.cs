@@ -35,6 +35,7 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlClassLoader
     {
+        // ReSharper disable InconsistentNaming
         private XmlClassLoader _loader;
 
         [SetUp]

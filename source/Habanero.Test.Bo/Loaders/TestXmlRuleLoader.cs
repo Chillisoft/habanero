@@ -29,11 +29,12 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
-    /// Summary description for TestXmlPropertyRuleLoader.
+    /// Summary description for TestXmlRuleLoader.
     /// </summary>
     [TestFixture]
-    public class TestXmlPropertyRuleLoader
+    public class TestXmlRuleLoader
     {
+        // ReSharper disable InconsistentNaming
         private XmlRuleLoader _loader;
 
         [SetUp]
@@ -337,6 +338,103 @@ namespace Habanero.Test.BO.Loaders
                 StringAssert.Contains("The prop rule 'TestCustom' must inherit from PropRuleBase", ex.Message);
             }
         }
+
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsInt32_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Int32", expectedRuleName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleInteger>(createdPropRule);
+            Assert.AreEqual(expectedRuleName,createdPropRule.Name);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsString_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.String", expectedRuleName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleString>(createdPropRule);
+            Assert.AreEqual(expectedRuleName, createdPropRule.Name);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDateTime_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.DateTime");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDate>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDecimalShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Decimal");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDecimal>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDouble_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Double");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDouble>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsSingle_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Single");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleSingle>(createdPropRule);
+        }
+
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsInt64_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Int64");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleLong>(createdPropRule);
+        }
     }
 
 // ReSharper disable UnusedMember.Global
@@ -372,6 +470,26 @@ namespace Habanero.Test.BO.Loaders
                 parameters.Add("bob");
                 return parameters;
             }
+        }
+    }
+    public class XmlRuleLoaderSpy : XmlRuleLoader
+    {
+        public XmlRuleLoaderSpy()
+            : base(new DtdLoader(), new DefClassFactory())
+        {
+        }
+        public IPropRule CallCreatePropRule(string propTypeName, string name, string message)
+        {
+            return this.CreatePropRule(propTypeName, name, message);
+        }
+
+        public IPropRule CallCreatePropRule(string propTypeName, string name)
+        {
+            return CallCreatePropRule(propTypeName, name, "SomeMessage");
+        }
+        public IPropRule CallCreatePropRule(string propTypeName)
+        {
+            return CallCreatePropRule(propTypeName, "SomeRuleName", "SomeMessage");
         }
     }
     // ReSharper restore UnusedMember.Global

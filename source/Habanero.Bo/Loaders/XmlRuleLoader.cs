@@ -213,30 +213,53 @@ namespace Habanero.BO.Loaders
 				}
 			    throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 			}
-            if (_propTypeName == typeof(int).Name) {
-				return _defClassFactory.CreatePropRuleInteger(_name, _message);
-            }
-    	    if (_propTypeName == typeof(string).Name ) {
-    	        return _defClassFactory.CreatePropRuleString(_name, _message);
-    	    }
-    	    if (_propTypeName == typeof(DateTime).Name ) {
-    	        return _defClassFactory.CreatePropRuleDate(_name, _message);
-    	    }
-    	    if (_propTypeName == typeof(Decimal).Name) {
-    	        return _defClassFactory.CreatePropRuleDecimal(_name, _message);
-    	    }
-            if (_propTypeName == typeof(Single).Name) {
-    	        return _defClassFactory.CreatePropRuleSingle(_name, _message);
-    	    }
-            if (_propTypeName == typeof(Double).Name) {
-    	        return _defClassFactory.CreatePropRuleDouble(_name, _message);
-    	    }
-            if (_propTypeName == typeof(Int64).Name)
-            {
-                return _defClassFactory.CreatePropRuleInteger(_name, _message);
-            }
-    	    throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
+            var propRule =  CreatePropRule(_propTypeName, _name, _message);
+            if (propRule != null) return propRule;
+            throw new InvalidXmlDefinitionException("Could not load the Property Rule " +
 				"for this type('" + _propTypeName + "').");
         }
+
+        protected IPropRule CreatePropRule(string propTypeName, string name, string message)
+        {
+            var type = typeof(int);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleInteger(name, message);
+            }
+            type = typeof(string);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleString(name, message);
+            }
+
+            type = typeof(DateTime);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleDate(name, message);
+            }
+            type = typeof(Decimal);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleDecimal(name, message);
+            }
+            type = typeof(Single);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleSingle(name, message);
+            }
+            type = typeof(Double);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleDouble(name, message);
+            }
+            type = typeof(Int64);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleLong(name, message);
+            }
+            return null;
+        }
     }
+
+
 }

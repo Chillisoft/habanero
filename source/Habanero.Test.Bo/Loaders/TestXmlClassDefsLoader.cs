@@ -24,6 +24,7 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using System.Collections.Generic;
@@ -39,6 +40,7 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlClassDefsLoader
     {
+        // ReSharper disable InconsistentNaming
         [SetUp]
         public virtual void SetupTest()
         {
@@ -775,6 +777,43 @@ namespace Habanero.Test.BO.Loaders
             IUIGridColumn gridColumn = FirstOrDefault(uiDef.UIGrid);
             Assert.IsNotNull(gridColumn.UIGrid);
             Assert.AreSame(classDef, gridColumn.ClassDef);
+        }
+
+        [Test]
+        public void Test_Load_WhenHasIntPropRule_ShouldLoadIntPropRule()
+        {
+            //---------------Set up test pack-------------------
+            const string classDefXML = @"<classes>
+                                 <class name=""Item"" assembly=""Stargate.Handheld.Domain"" >
+                                    <property name=""ItemID"" type=""System.Guid""/>
+                                    <property name=""Quantity"" type=""System.Int32"">
+                                      <rule>
+                                        <add key=""min"" value=""3"" />
+                                        <add key=""max"" value=""100000"" />
+                                      </rule>
+                                    </property>
+                                    <primaryKey>
+                                      <prop name=""ItemID"" />
+                                    </primaryKey>
+                                  </class>
+                              </classes>";
+
+            var loader = new XmlClassDefsLoader("", new DtdLoader(), new DefClassFactory());
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var classDefs = loader.LoadClassDefs(classDefXML);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, classDefs.Count);
+            var classDef = classDefs["Stargate.Handheld.Domain", "Item"];
+            Assert.IsNotNull(classDef);
+            var quantityDef = classDef.GetPropDef("Quantity");
+            Assert.IsNotNull(quantityDef);
+            Assert.AreEqual(1, quantityDef.PropRules.Count);
+            var quantityPropRule = quantityDef.PropRules[0] as PropRuleInteger;
+            Assert.IsNotNull(quantityPropRule);
+            Assert.AreEqual(3, quantityPropRule.MinValue);
+            Assert.AreEqual(100000, quantityPropRule.MaxValue);
         }
 
         //TODO andrew 22 Dec 2010: No linq support so need methods to simulate linq 

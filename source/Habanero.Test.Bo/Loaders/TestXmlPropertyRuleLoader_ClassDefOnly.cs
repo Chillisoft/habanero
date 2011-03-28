@@ -27,7 +27,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Loaders
 {
     /// <summary>
-    /// Summary description for TestXmlPropertyRuleLoader.
+    /// Summary description for TestXmlRuleLoader.
     /// </summary>
     [TestFixture]
     public class TestXmlPropertyRuleLoader_ClassDefOnly

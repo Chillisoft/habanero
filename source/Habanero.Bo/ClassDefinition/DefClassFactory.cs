@@ -160,7 +160,16 @@ namespace Habanero.BO.ClassDefinition
 		{
 			return new PropRuleInteger(name, message);
 		}
-
+        ///<summary>
+        /// Constructs a <see cref="PropRuleLong"/>
+        ///</summary>
+        ///<param name="name"></param>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        public IPropRule CreatePropRuleLong(string name, string message)
+        {
+            return new PropRuleLong(name, message);
+        }
         ///<summary>
         ///</summary>
         ///<param name="name"></param>
