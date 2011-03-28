@@ -53,8 +53,8 @@ namespace Habanero.Base
                     for (int i = 0; i < passwordBytes.Length; i++) {
                         passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
                     }
-                    byte[] encryptedByes = provider.Decrypt(passwordBytes, false);
-                   return ASCIIEncoding.ASCII.GetString(encryptedByes);
+                    byte[] decryptedBytes = provider.Decrypt(passwordBytes, false);
+                   return Encoding.ASCII.GetString(decryptedBytes);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Habanero.Base
         {
             RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
             provider.FromXmlString(_rsa.ToXmlString(false));
-            byte[] passwordBytes = ASCIIEncoding.ASCII.GetBytes(value);
+            byte[] passwordBytes = Encoding.ASCII.GetBytes(value);
             byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
             string text = "";
             foreach (byte bye in encryptedByes)

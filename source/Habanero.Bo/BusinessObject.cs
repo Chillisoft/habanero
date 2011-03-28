@@ -1437,6 +1437,7 @@ namespace Habanero.BO
         /// Method implemented for legacy purposes only. Returns null.
         /// </summary>
         /// <returns></returns>
+        [Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
         public XmlSchema GetSchema()
         {
             return null;
@@ -1446,6 +1447,7 @@ namespace Habanero.BO
         /// Defines how to read Business Objects from serialized xml
         /// </summary>
         /// <param name="reader">The XmlReader</param>
+        [Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
         public void ReadXml(XmlReader reader)
         {
             while (reader.MoveToNextAttribute())
@@ -1498,6 +1500,7 @@ namespace Habanero.BO
         /// Defines how to write Business Objects to serialized xml 
         /// </summary>
         /// <param name="writer">The XmlWriter</param>
+        [Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
         public void WriteXml(XmlWriter writer)
         {
             foreach (IBOProp prop in _boPropCol)
@@ -1517,6 +1520,7 @@ namespace Habanero.BO
             }
         }
 
+        [Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
         private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
         {
             IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
@@ -1534,6 +1538,7 @@ namespace Habanero.BO
         /// Writes related objects that are in composite and aggregate relationships
         /// as nested xml.
         /// </summary>
+        [Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
         private static void WriteXmlNestedRelationship(XmlWriter writer, IRelationship relationship)
         {
             if (relationship is ISingleRelationship)

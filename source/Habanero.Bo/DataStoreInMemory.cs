@@ -251,6 +251,7 @@ namespace Habanero.BO
         /// Saves all the objects from the data store to the file defined in fullFileName
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
+        [Obsolete("v2.6.0: Please use DataStoreInMemoryXmlWriter")]
         public void SaveToXml(string fullFileName)
         {
 
@@ -285,6 +286,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.xml </param>
         /// <param name="typeToLoad">The type to load that is the top of the heirarchy in the xml file</param>
+        [Obsolete("v2.6.0: Please use DataStoreInMemoryXmlReader")]
         public void LoadFromXml(string fullFileName, Type typeToLoad)
         {
             if (!File.Exists(fullFileName)) return;

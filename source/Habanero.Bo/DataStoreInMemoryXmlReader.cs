@@ -34,21 +34,31 @@ namespace Habanero.BO
         private List<string> _propertyReadExceptions = new List<string>();
         public Result ReadResult { get; private set; }
 
-
+        public DataStoreInMemoryXmlReader( )
+        {
+        }
         public DataStoreInMemoryXmlReader(Stream stream)
         {
             _stream = stream;
         }
 
+        public Dictionary<Guid, IBusinessObject> ReadFromString(string xml)
+        {
+            var reader = XmlReader.Create(new StringReader(xml), GetSettings());
+            return ReadFromReader(reader);
+        }
+
         public Dictionary<Guid, IBusinessObject> Read()
+        {
+            if (_stream == null) throw new ArgumentException("'stream' cannot be null");
+            var reader = XmlReader.Create(_stream, GetSettings());
+            return ReadFromReader(reader);
+        }
+
+        private Dictionary<Guid, IBusinessObject> ReadFromReader(XmlReader reader)
         {
             BOSequenceNumber.LoadNumberGenClassDef();
             Dictionary<Guid, IBusinessObject> objects = new Dictionary<Guid, IBusinessObject>();
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.IgnoreComments = true;
-            settings.IgnoreProcessingInstructions = true;
-            settings.IgnoreWhitespace = true;
-            XmlReader reader = XmlReader.Create(_stream, settings);
             reader.Read();
             reader.Read();
             while (reader.Name == "BusinessObjects") reader.Read();
@@ -97,6 +107,15 @@ namespace Habanero.BO
             return objects;
         }
 
+        private XmlReaderSettings GetSettings()
+        {
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreComments = true;
+            settings.IgnoreProcessingInstructions = true;
+            settings.IgnoreWhitespace = true;
+            return settings;
+        }
+
         private static string BuildExceptionMessage(IEnumerable<string> propertyReadExceptions)
         {
             const string crlf = @"\r\n";
@@ -113,6 +132,8 @@ namespace Habanero.BO
         {
             bo.Props[propertyName].InitialiseProp(propertyValue);
         }
+
+     
     }
 
 
