@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
@@ -131,6 +132,23 @@ namespace Habanero.Test.BO
             writer.Write(dictionary);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
+        }
+
+        [Test]
+        public void Test_WriteToString()
+        {
+            //---------------Set up test pack-------------------
+            var dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            var writer = new DataStoreInMemoryXmlWriter();
+            var sb = new StringBuilder();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, sb.Length);
+            //---------------Execute Test ----------------------
+            writer.WriteToString(dataStore, sb);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(0, sb.Length);
         }
 
         [Test]
@@ -365,6 +383,27 @@ namespace Habanero.Test.BO
             StringAssert.Contains("An error occured when attempting to set property 'MyBO.MyBoID'.", reader.ReadResult.Message);
             StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp'.", reader.ReadResult.Message);
             StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp2'.", reader.ReadResult.Message);
+        }
+
+        [Test]
+        public void ReadFromString()
+        {
+            //---------------Set up test pack-------------------
+            var dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            var writer = new DataStoreInMemoryXmlWriter();
+            var sb = new StringBuilder();
+            writer.WriteToString(dataStore, sb);
+            string xml = sb.ToString();
+
+            var reader = new DataStoreInMemoryXmlReader();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.Greater(xml.Length, 100);
+            //---------------Execute Test ----------------------
+            var businessObjects = reader.ReadFromString(xml);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, businessObjects.Count);
         }
 
         private static MemoryStream WriteBoToStream(MyBO bo)

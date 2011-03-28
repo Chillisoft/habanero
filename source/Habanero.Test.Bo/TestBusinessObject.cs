@@ -1523,62 +1523,6 @@ namespace Habanero.Test.BO
         }
 
 
-        // ANDREW -> Tests commented out as they are not relevant in .Net Framework 2.0
-        //[Test]
-        //public void Test_GetPropertyValue_WithExpression()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-        //    var originalFirstName = TestUtil.GetRandomString();
-        //    contactPersonTestBO.SetPropertyValue(bo => bo.FirstName, originalFirstName);
-        //    //---------------Assert Precondition----------------
-            
-        //    //---------------Execute Test ----------------------
-        //    var firstName = contactPersonTestBO.GetPropertyValue(testBo => testBo.FirstName);
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(originalFirstName, firstName);
-        //}
-
-
-        //[Test]
-        //public void Test_GetPropertyValue_WithExpression_ValueType()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-        //    var originalDateTime = DateTime.Today.AddDays(-TestUtil.GetRandomInt(365));
-        //    contactPersonTestBO.SetPropertyValue(bo => bo.DateOfBirth, originalDateTime);
-        //    //---------------Assert Precondition----------------
-
-        //    //---------------Execute Test ----------------------
-        //    var dateOfBirth = contactPersonTestBO.GetPropertyValue(testBo => testBo.DateOfBirth);
-        //    //---------------Test Result -----------------------
-        //    Assert.AreEqual(originalDateTime, dateOfBirth);
-        //}
-
-        //[Test]
-        //public void Test_GetPropertyValue_WithExpression_WhenInvalidProperty()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    ContactPersonTestBO.LoadDefaultClassDef();
-        //    ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
-        //    //---------------Assert Precondition----------------
-
-        //    //---------------Execute Test ----------------------
-        //    try
-        //    {
-        //        var firstName = contactPersonTestBO.GetPropertyValue(testBo => testBo.FirstName + "123");
-        //    }
-        //    //---------------Test Result -----------------------
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOf<ArgumentException>(ex);
-        //        StringAssert.Contains("testBo => (testBo.FirstName + \"123\") is not a valid property on ContactPersonTestBO", ex.Message);
-        //    }
-        //}
-
-
         [Test]
         public void TestBoStatusEqual()
         {

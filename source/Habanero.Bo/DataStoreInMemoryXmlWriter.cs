@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Habanero.Base;
 
@@ -29,7 +30,18 @@ namespace Habanero.BO
         private readonly Stream _stream;
         private XmlWriterSettings _settings;
 
-        public DataStoreInMemoryXmlWriter(Stream stream): this(stream, new XmlWriterSettings {ConformanceLevel = ConformanceLevel.Auto})
+        public DataStoreInMemoryXmlWriter()
+            : this(new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Auto })
+        {
+        }
+
+        public DataStoreInMemoryXmlWriter(XmlWriterSettings xmlWriterSettings)
+        {
+            _settings = xmlWriterSettings;
+        }
+
+        public DataStoreInMemoryXmlWriter(Stream stream)
+            : this(stream, new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Auto })
         {
         }
 
@@ -44,9 +56,21 @@ namespace Habanero.BO
             Write(dataStore.AllObjects);
         }
 
+        public void WriteToString(DataStoreInMemory dataStore, StringBuilder s)
+        {
+            XmlWriter writer = XmlWriter.Create(s, _settings);
+            WriteObjects(writer, dataStore.AllObjects);
+        }
+
         public void Write(Dictionary<Guid, IBusinessObject> businessObjects)
         {
+            if (_stream == null) throw new ArgumentException("'stream' cannot be null");
             XmlWriter writer = XmlWriter.Create(_stream, _settings);
+            WriteObjects(writer, businessObjects);
+        }
+
+        private void WriteObjects(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects)
+        {
             writer.WriteStartDocument();
             writer.WriteStartElement("BusinessObjects");
             foreach (var o in businessObjects)
