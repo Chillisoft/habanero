@@ -188,36 +188,37 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
-        [Test]
-        public void TestAcceptance_LockNumberGenerator_ClearsAfter15Minutes()
-        {
+//        [Ignore] Test Removed on request of Brett
+//        [Test]
+//        public void TestAcceptance_LockNumberGenerator_ClearsAfter15Minutes()
+//        {
             //---------------Set up test pack-------------------
             //Create an entry in the number generator table for entry type to seed with seed = 0 and lockduration = 15 minutes.
-
-            const string numberType = "tmp";
-            BOSequenceNumberLocking.LoadNumberGenClassDef();
-            BOSequenceNumberLocking.DeleteAllNumbers();
-            INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
-            numGen.SetSequenceNumber(0);
+//
+//            const string numberType = "tmp";
+//            BOSequenceNumberLocking.LoadNumberGenClassDef();
+//            BOSequenceNumberLocking.DeleteAllNumbers();
+//            INumberGenerator numGen = new NumberGeneratorPessimisticLocking(numberType);
+//            numGen.SetSequenceNumber(0);
             //get the next number for invoice number
-            int num = numGen.NextNumber();
-            Assert.AreEqual(1, num,"The first generated number should be 1");
+//            int num = numGen.NextNumber();
+//            Assert.AreEqual(1, num,"The first generated number should be 1");
             // set the datetime locked to > 15 minutes ago.
-            UpdateDatabaseLockAsExpired(15);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+//            UpdateDatabaseLockAsExpired(15);
+//            BusinessObjectManager.Instance.ClearLoadedObjects();
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
-            INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
+//            INumberGenerator numGen2 = new NumberGeneratorPessimisticLocking(numberType);
             //try Get second number
-            num = numGen2.NextNumber();
+//            num = numGen2.NextNumber();
             //---------------Test Result -----------------------
-            Assert.AreNotSame(numGen, numGen2);
+//            Assert.AreNotSame(numGen, numGen2);
             //should not get locking error
             //assert nextnumber = 1
-            Assert.AreEqual(1, num, "The second generated number should be 1");
+//            Assert.AreEqual(1, num, "The second generated number should be 1");
             //---------------Tear Down -------------------------          
-        }
+//        }
 
         [Test]
         public void TestAcceptance_NumberGeneratorCreatedInBeforeUpdateForAnObject()
