@@ -773,66 +773,20 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(0, addresses.Count);
         }
 
-        //[Test]
-        //public void TestGetReverseRelationship_NotSpecified_SearchByKeys_Addresses()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new Engine();
-        //    new Car();
-        //    ContactPerson person = new ContactPerson();
-        //    Address address = new Address();
-        //    SingleRelationship<ContactPerson> relationship = address.Relationships.GetSingle<ContactPerson>("ContactPerson");
-        //    IRelationship expectedRelationship = person.Relationships["Addresses"];
-
-        //    //---------------Execute Test ----------------------
-        //    IRelationship reverseRelationship = relationship.GetReverseRelationship(person);
-
-        //    //---------------Test Result -----------------------
-        //    Assert.AreSame(expectedRelationship, reverseRelationship);
-        //}
-
-        //[Test]
-        //public void TestGetReverseRelationship_NotSpecified_SearchByKeys_Cars()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    new Engine();
-        //    new Car();
-        //    ContactPerson person = new ContactPerson();
-        //    Car car = new Car();
-        //    SingleRelationship<ContactPerson> relationship = car.Relationships.GetSingle<ContactPerson>("Owner");
-        //    IRelationship expectedRelationship = person.Relationships["Cars"];
-
-        //    //---------------Execute Test ----------------------
-        //    IRelationship reverseRelationship = relationship.GetReverseRelationship(person);
-
-        //    //---------------Test Result -----------------------
-        //    Assert.AreSame(expectedRelationship, reverseRelationship);
-        //}
-
-
-        //[Test]
-        //public void TestGetReverseRelationship_NotSpecified_MultipleMatches()
-        //{
-        //    //---------------Set up test pack-------------------
-        //    OrganisationTestBO.LoadDefaultClassDef_WithTwoRelationshipsToContactPerson();
-        //    ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-
-        //    OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
-        //    ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-
-        //    SingleRelationship<OrganisationTestBO> organisationRel = contactPerson.Relationships.GetSingle<OrganisationTestBO>("Organisation");
-
-        //    //---------------Execute Test ----------------------
-        //    try
-        //    {
-        //        organisationRel.GetReverseRelationship(organisation);
-        //        Assert.Fail("Should have failed when more than one reverse relationship match was found");
-
-        //    //---------------Test Result -----------------------
-        //    } catch (HabaneroDeveloperException ex)
-        //    {
-        //        StringAssert.Contains("'Organisation' on an object of type 'ContactPersonTestBO', more than one match was found", ex.Message);
-        //    }
-        //}
+        [Test]
+        public void RelationshipType_ShouldBeSameAsRelationshipDefRelationshipType()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyBO();
+            var relationship = bo.Relationships["MyRelationship"];
+            var expectedRelationshipType = relationship.RelationshipDef.RelationshipType;
+            //---------------Execute Test ----------------------
+            RelationshipType relationshipType = relationship.RelationshipType;
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedRelationshipType, relationshipType);
+        }
+       
     }
 }
