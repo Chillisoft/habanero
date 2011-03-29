@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Security.Permissions;
 
 namespace Habanero.Base
@@ -370,6 +371,12 @@ namespace Habanero.Base
         //[ReflectionPermission(SecurityAction.Demand)]
         void Refresh();
 
+        /// <summary>
+        /// Gives you a strongly typed enumrable of these objects for iterating over. 
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable" /> which is a shallow copy of the objects in this collection. 
+        /// If the objects are not of type T this enumerable will be full of nulls.</returns>
+        IEnumerable<T> AsEnumerable<T>();
     }
 
 }

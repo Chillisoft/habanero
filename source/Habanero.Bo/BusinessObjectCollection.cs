@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 //TODO andrew 22 Dec 2010: CF: Serialization is not available in compact framework
 //using System.Runtime.Serialization;
+using System.Linq;
 using System.Security.Permissions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -2381,6 +2382,16 @@ namespace Habanero.BO
         public void AddRange(IEnumerable<TBusinessObject> collection)
         {
             _boCol.AddRange(collection);
+        }
+
+        /// <summary>
+        /// Gives you a strongly typed enumrable of these objects for iterating over. 
+        /// If the objects are not of type T this with throw an <see cref="InvalidCastException"/>
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}" /> which is a shallow copy of the objects in this collection. </returns>
+        IEnumerable<T> IBusinessObjectCollection.AsEnumerable<T>()
+        {
+            return this.Select(bo => (T)(object)bo);
         }
     }
 }

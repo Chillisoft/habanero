@@ -20,6 +20,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -1694,6 +1695,28 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             Assert.AreEqual(3, colOrig.Count);
             Assert.AreEqual(3, list.Count);
             Assert.AreEqual(3, col.Count);
+        }
+
+        [Test]
+        public void IBusinessObjectCollection_AsEnumerable_T()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObjectCollection col = CreateCollectionWith_OneBO();
+            //---------------Execute Test ----------------------
+            var list = col.AsEnumerable<ContactPersonTestBO>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, list.Count());
+        }
+
+        [Test]
+        public void IBusinessObjectCollection_AsEnumerable_IBusinessObject()
+        {
+            //---------------Set up test pack-------------------
+            IBusinessObjectCollection col = CreateCollectionWith_OneBO();
+            //---------------Execute Test ----------------------
+            var list = col.AsEnumerable<IBusinessObject>();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, list.Count());
         }
 
         /// <summary>

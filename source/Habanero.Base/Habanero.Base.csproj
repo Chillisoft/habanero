@@ -57,6 +57,7 @@
       <HintPath>..\..\lib\OpenNETCF.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
@@ -86,6 +87,7 @@
     <Compile Include="DelegatedBusinessObjectEditor.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
     <Compile Include="Encryption.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
     <Compile Include="Exceptions\CannotSaveException.cs" />

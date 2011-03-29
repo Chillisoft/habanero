@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 //TODO andrew 04 Jan 2011: CF: Windows.Forms not supported
 //using System.Windows.Forms;
@@ -1198,6 +1199,12 @@ namespace Habanero.Test.BO
        {
            throw new NotImplementedException();
        }
+
+       public IEnumerable<T> AsEnumerable<T>()
+       {
+           throw new NotImplementedException();
+       }
+
        // ReSharper disable UnusedMember.Local
        //This is being used so as to prevent Compiler warnings which I do not seem to be able to suppress with pragma's
        private void RaiseEvents()
