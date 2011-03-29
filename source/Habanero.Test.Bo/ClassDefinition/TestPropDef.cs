@@ -750,8 +750,8 @@ namespace Habanero.Test.BO.ClassDefinition
         {
             PropDef propDef = new PropDef("EnumProp", typeof (ContactPersonTestBO.ContactType),
                                           PropReadWriteRule.ReadWrite, ContactPersonTestBO.ContactType.Family);
-            Assert.AreEqual("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
-            Assert.AreEqual("Habanero.Test.BO.ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
+            StringAssert.AreEqualIgnoringCase("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
+            StringAssert.AreEqualIgnoringCase("Habanero.Test.BO.ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
             Assert.AreEqual("Family", propDef.DefaultValueString);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
@@ -762,8 +762,8 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef("EnumProp", "Habanero.Test.BO", "ContactPersonTestBO+ContactType",
                                           PropReadWriteRule.ReadWrite, "EnumProp", "Family", false, false);
             Assert.AreEqual(typeof (ContactPersonTestBO.ContactType), propDef.PropertyType);
-            Assert.AreEqual("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
-            Assert.AreEqual("Habanero.Test.BO.ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
+            StringAssert.AreEqualIgnoringCase("Habanero.Test.BO", propDef.PropertyTypeAssemblyName);
+            StringAssert.AreEqualIgnoringCase("Habanero.Test.BO.ContactPersonTestBO+ContactType", propDef.PropertyTypeName);
             Assert.AreEqual("Family", propDef.DefaultValueString);
             Assert.AreEqual(ContactPersonTestBO.ContactType.Family, propDef.DefaultValue);
         }
