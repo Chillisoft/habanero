@@ -2364,5 +2364,17 @@ namespace Habanero.BO
         {
             _boCol.AddRange(collection);
         }
+
+        /// <summary>
+        /// Gives you a strongly typed enumrable of these objects for iterating over. 
+        /// If the objects are not of type T this with throw an <see cref="InvalidCastException"/>
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}" /> which is a shallow copy of the objects in this collection. </returns>
+        IEnumerable<T> IBusinessObjectCollection.AsEnumerable<T>()
+        {
+            return this.Select(bo => (T) (object) bo);
+        }
+
+
     }
 }

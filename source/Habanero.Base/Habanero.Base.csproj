@@ -147,6 +147,7 @@
     <Compile Include="DateTimeNowConverter.cs" />
     <Compile Include="DateTimeTodayConverter.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Exceptions\InvalidDefinitionException.cs" />
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
