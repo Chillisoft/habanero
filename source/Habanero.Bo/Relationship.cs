@@ -178,6 +178,15 @@ namespace Habanero.BO
         public abstract IBusinessObject OwningBO { get; }
 
         /// <summary>
+        /// Returns the <see cref="IRelationship.RelationshipType"/> of this relationship. 
+        /// This comes from the <see cref="IRelationship.RelationshipDef"/>
+        /// </summary>
+        public RelationshipType RelationshipType
+        {
+            get { return this.RelationshipDef.RelationshipType; }
+        }
+
+        /// <summary>
         /// Is there anything in this relationship to prevent the business object from being deleted.
         /// e.g. if there are related business objects that are not marked as mark for delete.
         /// </summary>

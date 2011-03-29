@@ -73,15 +73,11 @@ namespace Habanero.Base
         ///</summary>
         IBusinessObject OwningBO { get; }
 
-        /////<summary>
-        ///// Returns a list of all the related objects that are dirty.
-        ///// In the case of a composition or aggregation this will be a list of all 
-        /////   dirty related objects (child objects). 
-        ///// In the case of association
-        /////   this will only be a list of related objects that are added, removed, marked4deletion or created
-        /////   as part of the relationship.
-        /////</summary>
-        //IList<IBusinessObject> GetDirtyChildren();
+        /// <summary>
+        /// Returns the <see cref="IRelationship.RelationshipType"/> of this relationship. 
+        /// This comes from the <see cref="IRelationship.RelationshipDef"/>
+        /// </summary>
+        RelationshipType RelationshipType { get; }
 
         /// <summary>
         /// Is there anything in this relationship to prevent the business object from being deleted.
