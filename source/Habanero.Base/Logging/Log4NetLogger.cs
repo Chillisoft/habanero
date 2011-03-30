@@ -41,15 +41,6 @@ namespace Habanero.Base.Logging
         }
 
         ///<summary>
-        /// Logs the message to the configured Log4Net Logger
-        ///</summary>
-        ///<param name="message"></param>
-        public void Log(string message)
-        {
-            Log(message, LogCategory.Exception);
-        }
-
-        ///<summary>
         /// Logs the message to the configured loLog4Netgger with the 
         /// appropriate <see cref="LogCategory"/>
         ///</summary>

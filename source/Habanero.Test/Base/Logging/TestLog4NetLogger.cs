@@ -38,7 +38,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Error(message));
             //---------------Execute Test ----------------------
-            logger.Log(message);
+            logger.Log(message, LogCategory.Exception);
             //---------------Test Result -----------------------
             log.AssertWasCalled(log1 => log1.Error(message));
         }

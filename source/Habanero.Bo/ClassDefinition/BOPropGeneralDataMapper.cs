@@ -119,12 +119,12 @@ namespace Habanero.BO.ClassDefinition
                     _logger.Log
                         (string.Format
                              ("Problem in InitialiseProp(): Can't convert value of type {0} to {1}",
-                              valueToParse.GetType().FullName, _propDef.PropertyType.FullName));
+                              valueToParse.GetType().FullName, _propDef.PropertyType.FullName), LogCategory.Exception);
                     string tableName = this._propDef.ClassDef == null ? "" : this._propDef.ClassDef.GetTableName(_propDef);
                     _logger.Log
                         (string.Format
                              ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
-                              this._propDef.PropertyName, this._propDef.DatabaseFieldName, tableName));
+                              this._propDef.PropertyName, this._propDef.DatabaseFieldName, tableName), LogCategory.Exception);
                     throw;
                 }
             }

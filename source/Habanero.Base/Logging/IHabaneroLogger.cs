@@ -19,14 +19,7 @@ namespace Habanero.Base.Logging
         /// but can be anything else.
         ///</summary>
         string ContextName { get; }
-        /// <summary>
-        /// Creates a single log entry for with the message.
-        /// The <see cref="LogCategory"/> defaults to whatever your 
-        /// logger default to.
-        /// In the <see cref="Log4NetLogger"/> we default to <see cref="LogCategory.Exception"/>
-        /// </summary>
-        /// <param name="message">Message being logged</param>
-        void Log(string message);
+
         /// <summary>
         /// Creates a single log entry for with the message with the appropriate message
         /// </summary>
