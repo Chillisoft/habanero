@@ -97,7 +97,7 @@ namespace Habanero.UI.Base
             FlowLayoutManager flowLayoutManager = new FlowLayoutManager(panel, _controlFactory);
             flowLayoutManager.AddControl(label);
             flowLayoutManager.AddControl(_textBox);
-            panel.Height = _textBox.Height + label.Height;
+            panel.Height = _textBox.Height + label.Height + 10;
             panel.Width = _controlFactory.CreateLabel(_message, true).PreferredWidth + 20;
             _textBox.Width = panel.Width - 30;
             return panel;
