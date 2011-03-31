@@ -27,13 +27,11 @@ namespace Habanero.Util
     /// </summary>
     public static class TypeUtilities
     {
-        //TODO brett 08 Jun 2010: For 2_0 Removed this from IsInteger and IsDecimal
         /// <summary>
         /// Indicates if type is an integer type.
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an integer type.</returns>
-        [Obsolete("V2.6.0 This is no longer used anywhere within Habanero or in Habanero.Faces and will be removed")]
         public static bool IsInteger(this Type type)
         {
             return type == typeof(int) || type ==typeof(uint) || type == typeof(ushort) || type ==typeof(ulong) || 
@@ -45,7 +43,6 @@ namespace Habanero.Util
         /// </summary>
         /// <param name="type">Type to check.</param>
         /// <returns>true if type is an decimal type.</returns>
-        [Obsolete("V2.6.0 This is no longer used anywhere within Habanero or in Habanero.Faces and will be removed")]
         public static bool IsDecimal(this Type type)
         {
             return type == typeof(decimal) || type==typeof(float) || type==typeof(double);
