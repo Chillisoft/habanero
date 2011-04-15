@@ -192,6 +192,7 @@
     <Compile Include="TestBOStatus.cs" />
     <Compile Include="TestDataAccessorMultiSource.cs" />
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
+    <Compile Include="TestDataStoreInMemoryXmlReader.cs" />
     <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />

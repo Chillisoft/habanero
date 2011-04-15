@@ -58,36 +58,51 @@ namespace Habanero.BO
         private Dictionary<Guid, IBusinessObject> ReadFromReader(XmlReader reader)
         {
             BOSequenceNumber.LoadNumberGenClassDef();
-            Dictionary<Guid, IBusinessObject> objects = new Dictionary<Guid, IBusinessObject>();
+            var objects = new Dictionary<Guid, IBusinessObject>();
             reader.Read();
             reader.Read();
             while (reader.Name == "BusinessObjects") reader.Read();
             while (reader.Name == "bo")
             {
-                string typeName = reader.GetAttribute("__tn");
-                string assemblyName = reader.GetAttribute("__an");
-                Type boType = ClassDef.ClassDefs[assemblyName, typeName].ClassType;
-                IBusinessObject bo = (IBusinessObject)Activator.CreateInstance(boType);
+                var typeName = reader.GetAttribute("__tn");
+                var assemblyName = reader.GetAttribute("__an");
+                var classDef = ClassDef.ClassDefs[assemblyName, typeName];
+                var boType = classDef.ClassType;
+                var bo = (IBusinessObject)Activator.CreateInstance(boType);
+                BusinessObjectManager.Instance.Remove(bo);
                 while (reader.MoveToNextAttribute())
                 {
-                    string propertyName = reader.Name;
+                    var propertyName = reader.Name;
                     if (reader.Name == "__tn" || reader.Name == "__an") continue;
-                    string propertyValue = reader.Value;
-                    try
+                    var propertyValue = reader.Value;
+                    try 
                     {
                         SetupProperty(bo, propertyName, propertyValue);
                     }
                     catch (Exception ex)
                     {
-
                         // Log the exception and continue
                         _propertyReadExceptions.Add(string.Format("An error occured when attempting to set property '{0}.{1}'. {2}", bo.ClassDef.ClassName , propertyName, ex.Message));
                         continue;
                     }
                 }
-                BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
-                BusinessObjectLoaderBase.CallAfterLoad(bo);
-                objects.Add(bo.ID.GetAsGuid(), bo);
+
+                var existingBo = GetExistingBo(classDef, bo);
+                if (existingBo != null)
+                {
+                    foreach (var prop in existingBo.Props)
+                    {
+                        existingBo.SetPropertyValue(prop.PropertyName, bo.GetPropertyValue(prop.PropertyName));
+                    }
+                    objects.Add(existingBo.ID.GetAsGuid(), existingBo);
+                }
+                else
+                {
+                    BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
+                    BusinessObjectLoaderBase.CallAfterLoad(bo);
+                    objects.Add(bo.ID.GetAsGuid(), bo);
+                }
+                
                 reader.Read();
             }
 
@@ -105,6 +120,21 @@ namespace Habanero.BO
                 ReadResult = new Result(false, BuildExceptionMessage(_propertyReadExceptions));
             }
             return objects;
+        }
+
+        private IBusinessObject GetExistingBo(IClassDef classDef, IBusinessObject bo)
+        {
+            if (BORegistry.DataAccessor != null)
+            {
+                try
+                {
+                    return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, bo.ID);
+                } catch (BusObjDeleteConcurrencyControlException ex)
+                {
+                    return null;
+                }
+            }
+            return null;
         }
 
         private XmlReaderSettings GetSettings()
