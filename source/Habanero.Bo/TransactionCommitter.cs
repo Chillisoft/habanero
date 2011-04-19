@@ -129,6 +129,22 @@ namespace Habanero.BO
             }
         }
 
+        public void InsertBusinessObject(IBusinessObject businessObject)
+        {
+            if (businessObject == null) return;
+            //Do not add objects that are new and deleted to the transaction committer.
+            if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
+            {
+                return;
+            }
+            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
+            bool added = InsertTransactionInternal(transaction);
+            if (added && _runningUpdatingBeforePersisting)
+            {
+                transaction.UpdateObjectBeforePersisting(this);
+            }
+        }
+
         ///<summary>
         /// This method adds an <see cref="ITransactional"/> to the list of transactions.
         ///</summary>
@@ -152,6 +168,16 @@ namespace Habanero.BO
             if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
             _originalTransactionsByKey.Add(transactionID, transaction);
             _originalTransactions.Add(transaction);
+            return true;
+        }
+        private bool InsertTransactionInternal(ITransactional transaction)
+        {
+            var transactionID = transaction.TransactionID();
+            // NOTE: The sole purpose of the dictionary is to optimise the performance of a this check on TransactionID.
+            // The original transactions list is still maintained because the transactions must be in the order they were added.
+            if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
+            _originalTransactionsByKey.Add(transactionID, transaction);
+            _originalTransactions.Insert(0, transaction);
             return true;
         }
 
@@ -535,5 +561,7 @@ namespace Habanero.BO
         /// <param name="relationship"></param>
         /// <param name="businessObject"></param>
         protected internal abstract void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
+
+      
     }
 }

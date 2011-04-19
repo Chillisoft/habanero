@@ -576,7 +576,10 @@ namespace Habanero.BO
         {
             foreach (TBusinessObject businessObject in GetDirtyChildren())
             {
-                transactionCommitter.AddBusinessObject(businessObject);
+                if (this.OwningBOHasForeignKey)
+                    transactionCommitter.InsertBusinessObject(businessObject);
+                else
+                    transactionCommitter.AddBusinessObject(businessObject);
             }
             if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
             {
