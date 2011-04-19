@@ -93,6 +93,7 @@
     <Compile Include="ClassDefinition\BOPropDateTimeDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropGeneralDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropGuidDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropImageDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropLongDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />

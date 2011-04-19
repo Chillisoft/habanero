@@ -80,7 +80,7 @@ namespace Habanero.BO
                 writer.WriteAttributeString("__an", o.Value.ClassDef.AssemblyName);
                 foreach (IBOProp prop in o.Value.Props)
                 {
-                    writer.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
+                    writer.WriteAttributeString(prop.PropertyName, prop.PropertyValueString);
                 }
                 writer.WriteEndElement();
             }

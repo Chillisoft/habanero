@@ -147,6 +147,7 @@
     <Compile Include="DataMappers\TestDataMapper_Bool.cs" />
     <Compile Include="DataMappers\TestDataMapper_DateTime.cs" />
     <Compile Include="DataMappers\TestDataMapper_Guid.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Image.cs" />
     <Compile Include="DataMappers\TestDataMapper_Int.cs" />
     <Compile Include="DataMappers\TestDataMapper_String.cs" />
     <Compile Include="Loaders\TestClassDefsXmlValidator.cs" />
