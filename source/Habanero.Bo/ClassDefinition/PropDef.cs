@@ -981,7 +981,7 @@ namespace Habanero.BO.ClassDefinition
 
         private bool TryParseValue(object valueToChange, out object value)
         {
-            _propDataMapper = GetDataMapper();
+            _propDataMapper = GetBOPropDataMapper();
             return _propDataMapper.TryParsePropValue(valueToChange, out value);
         }
 
@@ -1153,7 +1153,7 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>An object of the correct type.</returns>
         public bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            _propDataMapper = GetDataMapper();
+            _propDataMapper = GetBOPropDataMapper();
             return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
         }
 
@@ -1165,39 +1165,49 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The converted string.</returns>
         public string ConvertValueToString(object value)
         {
-            _propDataMapper = GetDataMapper();
+            _propDataMapper = GetBOPropDataMapper();
             return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
         }
 
-        private BOPropDataMapper GetDataMapper()
+        private BOPropDataMapper GetBOPropDataMapper()
         {
             if (_propDataMapper != null) return _propDataMapper;
+            _propDataMapper = GetDataMapper(this.PropertyType, this);
+            return _propDataMapper;
+        }
 
-            if (this.PropertyType == typeof(Guid))
+        private static BOPropDataMapper GetDataMapper(Type propertyType, IPropDef propDef)
+        {
+            if (propertyType == typeof(Guid))
             {
-                _propDataMapper = new BOPropGuidDataMapper();
+                return new BOPropGuidDataMapper();
             }
-            else if (this.PropertyType == typeof(DateTime))
+            else if (propertyType == typeof(DateTime))
             {
-                _propDataMapper = new BOPropDateTimeDataMapper();
+                return new BOPropDateTimeDataMapper();
             }
-            else if (this.PropertyType == typeof(string))
+            else if (propertyType == typeof(string))
             {
-                _propDataMapper = new BOPropStringDataMapper();
+                return new BOPropStringDataMapper();
             }
-            else if (this.PropertyType == typeof(bool))
+            else if (propertyType == typeof(bool))
             {
-                _propDataMapper = new BOPropBoolDataMapper();
+                return new BOPropBoolDataMapper();
             }
-            else if (this.PropertyType == typeof(int))
+            else if (propertyType == typeof(int))
             {
-                _propDataMapper = new BOPropIntDataMapper();
+                return new BOPropIntDataMapper();
             }
-            else if (this.PropertyType == typeof(long))
+            else if (propertyType == typeof(long))
             {
-                _propDataMapper = new BOPropLongDataMapper();
+                return new BOPropLongDataMapper();
             }
-            return _propDataMapper ?? (_propDataMapper = new BOPropGeneralDataMapper(this));
+            else if (propertyType == typeof(System.Drawing.Image) || propertyType == typeof(System.Drawing.Bitmap))
+            {
+                return new BOPropImageDataMapper();
+            }
+            return new BOPropGeneralDataMapper(propDef);
+
         }
 
     }

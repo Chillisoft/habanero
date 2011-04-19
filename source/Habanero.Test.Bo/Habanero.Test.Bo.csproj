@@ -161,6 +161,7 @@
     <Compile Include="ClassDefinition\TestSingleRelationshipDef.cs" />
     <Compile Include="CriteriaManager\TestCriteriaValues.cs" />
     <Compile Include="DataMappers\TestBOPropDataMapper_long.cs" />
+    <Compile Include="DataMappers\TestDataMapper_Image.cs" />
     <Compile Include="Loaders\TestClassDefsXmlValidator.cs" />
     <Compile Include="ClassDefinition\TestClassDefValidator.cs" />
     <Compile Include="Loaders\TestXmlBusinessObjectLookupListLoader.cs" />
