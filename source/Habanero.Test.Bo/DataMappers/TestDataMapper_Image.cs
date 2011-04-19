@@ -1,7 +1,10 @@
 using System;
+using System.Drawing.Imaging;
+using System.IO;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -52,6 +55,23 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOf(typeof(System.Drawing.Bitmap), parsedValue);
             Assert.AreEqual(img.Width, ((System.Drawing.Bitmap) parsedValue).Width);
             Assert.AreEqual(img.Height, ((System.Drawing.Bitmap) parsedValue).Height);
+        }
+
+        [Test]
+        public void TryParsePropValue_ConvertsByteArrayToImage()
+        {
+            //---------------Set up test pack-------------------
+            var dataMapper = new BOPropImageDataMapper();
+            var img = new System.Drawing.Bitmap(100, 100);
+            var valueToParse = SerialisationUtilities.ObjectToByteArray(img);
+            object parsedValue;
+            //---------------Execute Test ----------------------
+            var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.IsInstanceOf(typeof(System.Drawing.Bitmap), parsedValue);
+            Assert.AreEqual(img.Width, ((System.Drawing.Bitmap)parsedValue).Width);
+            Assert.AreEqual(img.Height, ((System.Drawing.Bitmap)parsedValue).Height);
         }
 
         [Test]

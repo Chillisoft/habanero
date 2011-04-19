@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -19,6 +20,11 @@ namespace Habanero.BO.ClassDefinition
                 returnValue = valueToParse;
                 return true;
             } 
+            if (valueToParse is byte[])
+            {
+                returnValue = SerialisationUtilities.ByteArrayToObject((byte[])valueToParse);
+                return true;
+            }
             if (valueToParse is String)
             {
                 var bytes = Convert.FromBase64String((string) valueToParse);
