@@ -59,6 +59,14 @@ namespace Habanero.BO
         public void WriteToString(DataStoreInMemory dataStore, StringBuilder s)
         {
             XmlWriter writer = XmlWriter.Create(s, _settings);
+            writer.WriteStartDocument();
+            WriteObjects(writer, dataStore.AllObjects);
+            writer.WriteEndDocument();
+            writer.Close();
+        }
+
+        public void WriteToWriter(DataStoreInMemory dataStore, XmlWriter writer)
+        {
             WriteObjects(writer, dataStore.AllObjects);
         }
 
@@ -66,12 +74,14 @@ namespace Habanero.BO
         {
             if (_stream == null) throw new ArgumentException("'stream' cannot be null");
             XmlWriter writer = XmlWriter.Create(_stream, _settings);
+            writer.WriteStartDocument();
             WriteObjects(writer, businessObjects);
+            writer.WriteEndDocument();
+            writer.Close();
         }
 
         private void WriteObjects(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects)
         {
-            writer.WriteStartDocument();
             writer.WriteStartElement("BusinessObjects");
             foreach (var o in businessObjects)
             {
@@ -85,8 +95,6 @@ namespace Habanero.BO
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Close();
         }
     }
 }
