@@ -19,6 +19,7 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             new Address();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TearDown]

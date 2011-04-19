@@ -69,7 +69,7 @@ namespace Habanero.BO
                 var classDef = ClassDef.ClassDefs[assemblyName, typeName];
                 var boType = classDef.ClassType;
                 var bo = (IBusinessObject)Activator.CreateInstance(boType);
-                BusinessObjectManager.Instance.Remove(bo);
+                
                 while (reader.MoveToNextAttribute())
                 {
                     var propertyName = reader.Name;
@@ -86,7 +86,7 @@ namespace Habanero.BO
                         continue;
                     }
                 }
-
+                BusinessObjectManager.Instance.Remove(bo);
                 var existingBo = GetExistingBo(classDef, bo);
                 if (existingBo != null)
                 {
@@ -101,15 +101,26 @@ namespace Habanero.BO
                     BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
                     BusinessObjectLoaderBase.CallAfterLoad(bo);
                     objects.Add(bo.ID.GetAsGuid(), bo);
+                    try
+                    {
+                        BusinessObjectManager.Instance.Add(bo);
+                    } catch (HabaneroDeveloperException ex)
+                    {
+                        // object already exists - this is a possible circumstance so we can let it go
+                        if (!ex.DeveloperMessage.Contains("Two copies of the business object"))
+                            throw;
+                        
+                    }
+                    bo.Props.BackupPropertyValues();
                 }
                 
                 reader.Read();
             }
 
-            foreach (IBusinessObject businessObject in objects.Values)
-            {
-                businessObject.Props.BackupPropertyValues();
-            }
+            //foreach (IBusinessObject businessObject in objects.Values)
+            //{
+            //    businessObject.Props.BackupPropertyValues();
+            //}
 
             if (_propertyReadExceptions.Count == 0)
             {
