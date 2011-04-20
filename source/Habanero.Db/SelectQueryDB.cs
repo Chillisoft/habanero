@@ -426,14 +426,14 @@ namespace Habanero.DB
         /// <summary>
         /// Sets up the aliases to use for each of the sources in this select query.
         /// </summary>
-        private void SetupAliases()
+		private void SetupAliases()
         {
-            aliasCount = 0;
-            AddAliasForSource(this.Source);
- }
+        	aliasCount = 0;
+        	AddAliasForSource(this.Source);
+        }
 
 
-        private void AddAliasForSource(Source source)
+    	private void AddAliasForSource(Source source)
         {
             if (source == null) return;
             var sourceName = source.ToString();

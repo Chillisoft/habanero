@@ -40,12 +40,19 @@ namespace Habanero.BO
 //        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            return criteria;
+			return CriteriaParser.CreateCriteria(criteriaString);
         }
 
-        #region GetBusinessObjectCollection
+		private static void PrepareForRefresh(IBusinessObjectCollection col)
+		{
+			var classDef = col.ClassDef;
+			Criteria criteria = col.SelectQuery.Criteria;
+    		QueryBuilder.PrepareCriteria(classDef, criteria);
+			//Ensure that all the criteria field sources are merged correctly
+			col.SelectQuery.Criteria = criteria;
+    	}
+
+    	#region GetBusinessObjectCollection
 
         private static void CheckNotTypedAsBusinessObject<T>() where T : class, IBusinessObject, new()
         {
@@ -65,12 +72,13 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T> {SelectQuery = {Criteria = criteria}};
-            Refresh(col);
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+        	col.SelectQuery.Criteria = criteria;
+        	Refresh(col);
             return col;
         }
 
-        /// <summary>
+    	/// <summary>
         /// Loads a BusinessObjectCollection using the criteria given. 
         /// </summary>
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
@@ -81,8 +89,6 @@ namespace Habanero.BO
         {
             CheckNotTypedAsBusinessObject<T>();
             Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
-            //            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
-            //            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
             return GetBusinessObjectCollection<T>(criteria);
         }
 
@@ -96,8 +102,8 @@ namespace Habanero.BO
         {
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             col.ClassDef = classDef;
-            col.SelectQuery.Criteria = criteria;
-            Refresh(col);
+        	col.SelectQuery.Criteria = criteria;
+        	Refresh(col);
             return col;
         }
 
@@ -112,7 +118,8 @@ namespace Habanero.BO
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
             boColInternal.Loading = true;
-//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);PrepareForRefresh
+        	PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
  //           ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
@@ -128,7 +135,8 @@ namespace Habanero.BO
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
-            boColInternal.Loading = true;
+			boColInternal.Loading = true; 
+			PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
@@ -353,9 +361,8 @@ namespace Habanero.BO
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             if (orderCriteria == null) orderCriteria = new OrderCriteria();
             col.ClassDef = classDef;
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            col.SelectQuery.Criteria = criteria;
-            col.SelectQuery.OrderCriteria = orderCriteria;
+        	col.SelectQuery.Criteria = criteria;
+        	col.SelectQuery.OrderCriteria = orderCriteria;
             Refresh(col);
             return col;
         }

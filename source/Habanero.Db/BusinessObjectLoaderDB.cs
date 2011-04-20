@@ -337,10 +337,9 @@ namespace Habanero.DB
             where T : IBusinessObject
         {
             IClassDef classDef = collection.ClassDef;
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
-            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
+        	SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
 
-            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
+        	int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
             if (IsLoadNecessary(selectQuery, totalNoOfRecords))
             {
                 ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
