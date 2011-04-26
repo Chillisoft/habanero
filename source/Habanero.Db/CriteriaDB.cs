@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Base
 {
@@ -185,7 +186,17 @@ namespace Habanero.Base
             string separator = "";
             if (Field.Source != null)
             {
-                sourceEntityName = aliases[Field.Source.ChildSourceLeaf.ToString()];
+            	var fieldSourceName = Field.Source.ChildSourceLeaf.ToString();
+            	if (!aliases.ContainsKey(fieldSourceName))
+				{
+					var userMessage = string.Format("The source '{0}' for the property '{1}' " 
+						+ "in the given criteria does not have an alias provided for it.",
+						Field.Source, Field.PropertyName);
+					var developerMessage = userMessage
+						+ " The criteria object may have not been prepared correctly before the aliases were set up.";
+					throw new HabaneroDeveloperException(userMessage, developerMessage);
+				}
+				sourceEntityName = aliases[fieldSourceName];
                 separator = ".";
             }
             string fieldNameString = formatter.DelimitField(Field.FieldName);

@@ -95,7 +95,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_CriteriaSetUponLoadingCollection()
+		public void Test_CollectionLoad_Load_CriteriaObject_ShouldSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -113,7 +113,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_CollectionLoad_CriteriaStringSetUponLoadingCollection()
+		public void Test_CollectionLoad_Load_CriteriaString_ShouldSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -131,7 +131,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_CriteriaObject()
+        public void Test_CollectionLoad_Load_CriteriaObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -153,7 +153,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_CriteriaString()
+        public void Test_CollectionLoad_Load_CriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -176,7 +176,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_CriteriaString_WithOrder_Untyped()
+        public void Test_CollectionLoad_Load_CriteriaString_WithOrder_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -199,7 +199,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_NullCriteriaObject()
+        public void Test_CollectionLoad_Load_NullCriteriaObject()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -218,7 +218,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_NullCriteriaString()
+        public void Test_CollectionLoad_Load_NullCriteriaString()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -236,7 +236,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_GuidCriteria()
+        public void Test_CollectionLoad_Load_GuidCriteria()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -254,7 +254,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_StringCriteriaObject_Untyped()
+		public void Test_CollectionLoad_Load_CriteriaString_Untyped()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -278,7 +278,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_StringCriteriaObject_Untyped_DateOfBirth()
+		public void Test_CollectionLoad_Load_CriteriaString_Untyped_DateOfBirth()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -299,7 +299,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CollectionLoad_GetBusinessObjectCollection_StringCriteriaObject_WithOrder_Untyped_DateOfBirth()
+		public void Test_CollectionLoad_Load_CriteriaString_WithOrder_Untyped_DateOfBirth()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -340,7 +340,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef()
+		public void Test_GetBusinessObjectCollection_LoadedCollectionHasSuppliedClassDef()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
@@ -356,7 +356,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithOrder()
+		public void Test_GetBusinessObjectCollection_LoadedCollectionHasSuppliedClassDef_WithOrder()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
@@ -372,7 +372,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
 
         [Test]
-        public void Test_CollectionLoad_LoadedCollectionHasSuppliedClassDef_WithSelectQuery()
+		public void Test_GetBusinessObjectCollection_LoadedCollectionHasSuppliedClassDef_WithSelectQuery()
         {
             //---------------Set up test pack-------------------
             ClassDef classDef = (ClassDef) ContactPersonTestBO.LoadDefaultClassDef();
@@ -2418,7 +2418,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection()
+		public void Test_GetBusinessObjectCollection_Criteria_ShouldSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadDefaultClassDef();
@@ -2433,7 +2433,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection_Untyped()
+		public void Test_GetBusinessObjectCollection_Criteria_ShouldSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2448,7 +2448,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaSetUponLoadingCollection_Untyped_Date()
+		public void Test_GetBusinessObjectCollection_Criteria_ShouldSetUponLoadingCollection_Untyped_Date()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2467,7 +2467,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaStringSetUponLoadingCollection()
+		public void Test_GetBusinessObjectCollection_CriteriaString_ShouldSetUponLoadingCollection()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2483,7 +2483,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public void Test_CriteriaStringSetUponLoadingCollection_Untyped()
+		public void Test_GetBusinessObjectCollection_CriteriaString_ShouldSetUponLoadingCollection_Untyped()
         {
             //---------------Set up test pack-------------------
             IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
@@ -2661,7 +2661,31 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public virtual void Test_CriteriaString_ThroughRelationship_TwoLevels()
+		public void Test_GetBusinessObjectCollection_CriteriaObject_ThroughRelationship()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship
+        {
+            //---------------Set up test pack-------------------
+			OrganisationTestBO.LoadDefaultClassDef();
+			ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+			const string surname = "TestSurname";
+			ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(surname);
+			OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation();
+			cp1.Organisation = organisation;
+			cp1.Save();
+			ContactPersonTestBO.CreateSavedContactPerson(surname);
+			ContactPersonTestBO.CreateSavedContactPerson();
+			Criteria criteria = new Criteria("Organisation.OrganisationID", Criteria.ComparisonOp.Equals, organisation.OrganisationID);
+			//---------------Execute Test ----------------------
+			BusinessObjectCollection<ContactPersonTestBO> col =
+				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>(criteria);
+
+			//---------------Test Result -----------------------
+			Assert.AreEqual(1, col.Count);
+			Assert.Contains(cp1, col);
+		}
+
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -2684,7 +2708,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public virtual void Test_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
+		public virtual void Test_GetBusinessObjectCollection_CriteriaObject_ThroughRelationship_TwoLevels()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
+        {
+            //---------------Set up test pack-------------------
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            //            DateTime now = DateTime.Now;
+            string surname;
+            string regno;
+            string engineNo;
+            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            CreateEngineWithCarWithContact();
+			Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Engine> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+        }
+
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL()
         {
             //---------------Set up test pack-------------------
             Engine.DeleteAllEngines();
@@ -2703,7 +2749,26 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public virtual void Test_LoadThroughSelfReferencingRelationship_OneLevel()
+		public virtual void Test_GetBusinessObjectCollection_CriteriaObject_ThroughRelationship_TwoLevels_SearchOnNULL()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels_SearchOnNULL
+        {
+            //---------------Set up test pack-------------------
+            Engine.DeleteAllEngines();
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            string engineNo = TestUtil.GetRandomString();
+			Engine engine = Engine.CreateSavedEngine(engineNo);
+			Criteria criteria = new Criteria("Car.OwnerID", Criteria.ComparisonOp.Is, null);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Engine> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Engine>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+        }
+
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_OneLevel()
         {
             //---------------Set up test pack-------------------
             Asset.LoadClassDef();
@@ -2723,7 +2788,28 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public virtual void Test_LoadThroughSelfReferencingRelationship_TwoLevels()
+		public virtual void Test_GetBusinessObjectCollection_CriteriaObject_LoadThroughSelfReferencingRelationship_OneLevel()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_OneLevel
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset parentAsset = new Asset();
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+			asset.Save();
+			Criteria criteria = new Criteria("Parent.AssetID", Criteria.ComparisonOp.Equals, parentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
+
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Asset.LoadClassDef();
@@ -2746,7 +2832,31 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
-        public virtual void Test_LoadThroughSelfReferencingRelationship_ThreeLevels()
+		public virtual void Test_GetBusinessObjectCollection_CriteriaObject_LoadThroughSelfReferencingRelationship_TwoLevels()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_TwoLevels
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset grandparentAsset = new Asset();
+            grandparentAsset.Save();
+            Asset parentAsset = new Asset();
+            parentAsset.Parent = grandparentAsset;
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+			Criteria criteria = new Criteria("Parent.Parent.AssetID", Criteria.ComparisonOp.Equals, grandparentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
+
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_ThreeLevels()
         {
             //---------------Set up test pack-------------------
             Asset.LoadClassDef();
@@ -2771,9 +2881,35 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(asset, col);
         }
 
+        [Test]
+		public virtual void Test_GetBusinessObjectCollection_CriteriaObject_LoadThroughSelfReferencingRelationship_ThreeLevels()
+		//Modified from Test_GetBusinessObjectCollection_CriteriaString_LoadThroughSelfReferencingRelationship_ThreeLevels
+        {
+            //---------------Set up test pack-------------------
+            Asset.LoadClassDef();
+            Asset greatgrandparentAsset = new Asset();
+            greatgrandparentAsset.Save();
+            Asset grandparentAsset = new Asset();
+            grandparentAsset.Parent = greatgrandparentAsset;
+            grandparentAsset.Save();
+            Asset parentAsset = new Asset();
+            parentAsset.Parent = grandparentAsset;
+            parentAsset.Save();
+            Asset asset = new Asset();
+            asset.Parent = parentAsset;
+            asset.Save();
+			Criteria criteria = new Criteria("Parent.Parent.Parent.AssetID", Criteria.ComparisonOp.Equals, greatgrandparentAsset.AssetID);
+            //---------------Execute Test ----------------------
+            BusinessObjectCollection<Asset> col =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<Asset>(criteria);
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(asset, col);
+        }
 
         [Test]
-        public virtual void Test_Load_CriteriaString_ThroughRelationship_TwoLevels()
+		public virtual void Test_CollectionLoad_Load_CriteriaString_ThroughRelationship_TwoLevels()
         {
             //---------------Set up test pack-------------------
             Engine.LoadClassDef_IncludingCarAndOwner();
@@ -2785,6 +2921,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             CreateEngineWithCarWithContact();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
+            BusinessObjectCollection<Engine> col = new BusinessObjectCollection<Engine>();
+
+            //---------------Execute Test ----------------------
+            col.Load(criteria, "");
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, col.Count);
+            Assert.Contains(engine, col);
+        }
+
+        [Test]
+		public virtual void Test_CollectionLoad_Load_CriteriaObject_ThroughRelationship_TwoLevels()
+		//Modified from Test_CollectionLoad_Load_CriteriaString_ThroughRelationship_TwoLevels
+        {
+            //---------------Set up test pack-------------------
+            Engine.LoadClassDef_IncludingCarAndOwner();
+            //            DateTime now = DateTime.Now;
+            string surname;
+            string regno;
+            string engineNo;
+            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            CreateEngineWithCarWithContact();
+			Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
             BusinessObjectCollection<Engine> col = new BusinessObjectCollection<Engine>();
 
             //---------------Execute Test ----------------------
@@ -3242,7 +3401,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IBusinessObjectCollection engines =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                     (car1engine1.ClassDef, null, "Car.CarRegNo, EngineNo");
-
             //---------------Test Result -----------------------
             Assert.AreEqual(3, engines.Count);
             Assert.AreSame(car2engine1, engines[0]);
@@ -3263,10 +3421,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                 (cp1.ClassDef, criteria);
-            col.Sort("Surname", true, true);
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
-
+            col.Sort("Surname", true, true);
             Assert.AreSame(cp2, col[0]);
             Assert.AreSame(cp1, col[1]);
         }
@@ -3286,10 +3443,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
                 (cp1.ClassDef, criteria);
-            col.Sort("Surname", true, true);
-
             //---------------Test Result -----------------------
             Assert.AreEqual(2, col.Count);
+            col.Sort("Surname", true, true);
             Assert.AreSame(cp2, col[0]);
             Assert.AreSame(cp1, col[1]);
         }
