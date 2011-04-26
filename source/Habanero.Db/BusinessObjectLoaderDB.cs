@@ -511,6 +511,39 @@ namespace Habanero.DB
             return totalNoOfRecords;
         }
 
+        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        {
+            var classDef = selectQuery.ClassDef;
+            var criteria = selectQuery.Criteria;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            //Ensure that all the criteria field sources are merged correctly
+            selectQuery.Criteria = criteria;
+            selectQuery.Fields.ForEach(pair =>
+                                           {
+                                               var field = pair.Value;
+                                               var fieldSource = field.Source;
+                                               QueryBuilder.PrepareField(fieldSource, classDef, field);
+                                               selectQuery.Source.MergeWith(field.Source);
+                                               field.Source = field.Source.ChildSourceLeaf;
+                                           });
+            var queryDb = new SelectQueryDB(selectQuery, _databaseConnection);
+            var statement = queryDb.CreateSqlStatement();
+            var resultSet = new ResultSet();
+            var propNames = selectQuery.Fields.Keys;
+            propNames.ForEach(propName => resultSet.Fields.Add(new ResultSet.Field(propName)));
+
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                while (dr.Read())
+                {
+                    var rawValues = new object[dr.FieldCount];
+                    dr.GetValues(rawValues);
+                    resultSet.AddResult(rawValues);
+                }
+            }
+            return resultSet;
+        }
+
         /// <summary>
         /// loads an object of the correct sub type (for single table inheritance)
         /// </summary>

@@ -334,6 +334,7 @@
     <Compile Include="PropReadWriteRule.cs" />
     <Compile Include="QueryField.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="ResultSet.cs" />
     <Compile Include="RethrowingExceptionNotifier.cs" />
     <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />

@@ -18,9 +18,11 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using System.Linq;
 
 namespace Habanero.BO
 {
@@ -195,6 +197,25 @@ namespace Habanero.BO
             return collection.Count;
         }
 
+        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        {
+            QueryBuilder.PrepareCriteria(selectQuery.ClassDef, selectQuery.Criteria);
+            var collection = _dataStore.FindAll(selectQuery.ClassDef, selectQuery.Criteria);
+            var resultSet = new ResultSet();
+            var propNames = selectQuery.Fields.Keys;
+            propNames.ForEach(propName => resultSet.Fields.Add(new ResultSet.Field(propName)));
+
+            foreach (IBusinessObject bo in collection)
+            {
+                var bo1 = bo;
+                resultSet.AddResult(
+                    propNames.Select(s => new BOMapper(bo1).GetPropertyValueToDisplay(s))
+                        .ToArray()
+                    );
+            }
+            return resultSet;
+        }
+
         #endregion //GetBusinessObject Members
 
         #region GetBusinessObjectCollection Members
@@ -340,4 +361,6 @@ namespace Habanero.BO
 
         #endregion
     }
+
+   
 }

@@ -124,6 +124,7 @@
     <Compile Include="Base\TestNullCrypter.cs" />
     <Compile Include="Base\TestProgressIndicators.cs" />
     <Compile Include="Base\TestResult.cs" />
+    <Compile Include="Base\TestResultSet.cs" />
     <Compile Include="Base\TestRSAPasswordCrypter.cs" />
     <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />

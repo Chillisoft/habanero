@@ -82,15 +82,24 @@ namespace Habanero.BO
                     IClassDef fieldClassDef = classDef;
                     if (!((ClassDef)classDef).IsUsingConcreteTableInheritance())
                         fieldClassDef = propDef.ClassDef;
-                    QueryField queryField = GetQueryField(fieldClassDef, propDef);
+                    QueryField queryField = CreateQueryField(fieldClassDef, propDef);
                     selectQuery.Fields.Add(propDef.PropertyName, queryField);
                 }
             }
         }
 
-        private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
+        private static QueryField CreateQueryField(IClassDef classDef, IPropDef propDef)
         {
             Source propSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName(propDef));
+            return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
+        }
+
+        public static QueryField CreateQueryField(IClassDef classDef, string propertyName)
+        {
+            var propDef = classDef.GetPropDef(propertyName);
+            var propClassDef = (ClassDef)propDef.ClassDef;
+            var classNameExcludingTypeParameter = propClassDef.GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter;
+            var propSource = new Source(classNameExcludingTypeParameter, propClassDef.GetTableName(propDef));
             return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
@@ -184,28 +193,34 @@ namespace Habanero.BO
             else
             {
                 QueryField field = criteria.Field;
-                Source currentSource = field.Source;
-                IClassDef classDefOfField = classDef;
-                if (classDef.IsUsingClassTableInheritance())
-                    classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
-                IClassDef propParentClassDef;
-                PrepareSource(classDefOfField, ref currentSource, out propParentClassDef);
-                field.Source = currentSource;
-                if (propParentClassDef != null)
+                IPropDef fieldPropDef = PrepareField(field.Source, classDef, field);
+                if (fieldPropDef != null)
                 {
-                    IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
-                    field.FieldName = propDef.DatabaseFieldName;
-                    field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
+                    field.FieldName = fieldPropDef.DatabaseFieldName;
+                    field.Source.ChildSourceLeaf.EntityName = fieldPropDef.ClassDef.GetTableName(fieldPropDef);
                     if (criteria.CanBeParametrised()
                             && (criteria.ComparisonOperator != Criteria.ComparisonOp.In 
                             && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
                     {
                         object returnedValue;
-                        propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );
+                        fieldPropDef.TryParsePropValue(criteria.FieldValue, out returnedValue);
                         criteria.FieldValue = returnedValue;
                     }
                 }
             }
+        }
+
+        public static IPropDef PrepareField(Source currentSource, IClassDef classDef, QueryField field)
+        {
+            IClassDef classDefOfField = classDef;
+            if (classDef.IsUsingClassTableInheritance())
+                classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
+            IClassDef fieldClassDef;
+            PrepareSource(classDefOfField, ref currentSource, out fieldClassDef);
+            field.Source = currentSource;
+            if (fieldClassDef != null)
+                return fieldClassDef.GetPropDef(field.PropertyName);
+            return null;
         }
 
         ///<summary>
@@ -219,7 +234,7 @@ namespace Habanero.BO
             PrepareSource(classDef, ref source, out relatedClassDef);
         }
 
-        private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
+        public static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
             relatedClassDef = null;

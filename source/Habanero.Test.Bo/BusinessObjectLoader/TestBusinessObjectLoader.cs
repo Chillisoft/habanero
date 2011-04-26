@@ -909,28 +909,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(3, count);
         }
-
-
-        #region Nested type: TestBusinessObjectLoaderInMemory
-
-        #endregion
-
-
        
     }
 
-
-    //Test persistable properties.
-
-//        [Test, Ignore("This functionality has been removed. Need to determine how to handle BO's loading from diff databases in future")]
-//        public void TestSetDatabaseConnection()
-//        {
-//            ClassDef.ClassDefs.Clear();
-//            ContactPersonTestBO.LoadDefaultClassDef();
-
-//            ContactPersonTestBO cp = BOLoader.Instance.GetBusinessObject<ContactPersonTestBO>("Surname = abc");
-////            Assert.IsNotNull(cp.GetDatabaseConnection());
-////            BOLoader.Instance.SetDatabaseConnection(cp, null);
-////            Assert.IsNull(cp.GetDatabaseConnection());
-//        }
 }

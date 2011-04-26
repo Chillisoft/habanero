@@ -425,5 +425,7 @@ namespace Habanero.BO
         /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
         int GetCount(IClassDef classDef, Criteria criteria);
+
+        ResultSet GetResultSet(ISelectQuery selectQuery);
     }
 }
