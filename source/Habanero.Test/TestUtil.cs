@@ -31,9 +31,9 @@ namespace Habanero.Test
 
         public static string GetRandomString()
         {
-            return Guid.NewGuid().ToString("N");
+            return "Rnd" + GetRandomInt(); 
         }
-
+        
         public static void WaitForGC()
         {
             GC.Collect();

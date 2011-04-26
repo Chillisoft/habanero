@@ -108,6 +108,17 @@
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Asset.cs" />
+    <Compile Include="Base\DataMappers\TestGeneralDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDataMapperFactory.cs" />
+    <Compile Include="Base\DataMappers\TestLongDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestBoolDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDateTimeDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestGuidDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestImageDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestIntDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestStringDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestTimeSpanDataMapper.cs" />
     <Compile Include="Base\Logging\TestLog4NetLogger.cs" />
     <Compile Include="Base\Logging\TestLog4NetLoggerFactory.cs" />
     <Compile Include="Base\TestDateRange.cs" />
@@ -136,6 +147,8 @@
     <Compile Include="ColContactPeople.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="ContactPersonCompositeKey.cs" />
+    <Compile Include="EmailAddressAsCustomProperty.cs" />
+    <Compile Include="EmailAddressConverter.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
     <Compile Include="OrderItem.cs" />

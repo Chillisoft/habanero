@@ -1,13 +1,13 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
     ///<summary>
     /// Implements a data mapper for a long Property
-    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="BOPropDataMapper"/>.
+    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="DataMapper"/>.
     ///</summary>
-    public class BOPropLongDataMapper : BOPropDataMapper
+    public class LongDataMapper : DataMapper
     {
         /// <summary>
         /// This mapper method will convert any valid guid object to an 
@@ -47,7 +47,7 @@ namespace Habanero.BO.ClassDefinition
             {
                 if (valueToParse is IBusinessObject)
                 {
-                    IBusinessObject bo = (IBusinessObject) valueToParse;
+                    var bo = (IBusinessObject) valueToParse;
                     if (bo.ID.GetAsValue() is long)
                     {
                         returnValue = bo.ID.GetAsValue();

@@ -2,21 +2,22 @@ using System;
 using System.Drawing.Imaging;
 using System.IO;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.Base.DataMappers
 {
     [TestFixture]
-    public class TestDataMapper_Image
+    public class TestImageDataMapper
     {
         [Test]
         public void TryParsePropValue_WorksForNull()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(null, out parsedValue);
@@ -29,7 +30,7 @@ namespace Habanero.Test.BO
         public void TryParsePropValue_WorksForImage()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             var valueToParse = new System.Drawing.Bitmap(100, 100);
             object parsedValue;
             //---------------Execute Test ----------------------
@@ -44,7 +45,7 @@ namespace Habanero.Test.BO
         public void TryParsePropValue_ConvertsStringToImage()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             var img = new System.Drawing.Bitmap(100, 100);
             var valueToParse = dataMapper.ConvertValueToString(img);
             object parsedValue;
@@ -61,7 +62,7 @@ namespace Habanero.Test.BO
         public void TryParsePropValue_ConvertsByteArrayToImage()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             var img = new System.Drawing.Bitmap(100, 100);
             var valueToParse = SerialisationUtilities.ObjectToByteArray(img);
             object parsedValue;
@@ -78,7 +79,7 @@ namespace Habanero.Test.BO
         public void TryParsePropValue_FailsForOtherTypes()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             object parsedValue;
             //---------------Execute Test ----------------------
             var parsedSucceed = dataMapper.TryParsePropValue(3, out parsedValue);
@@ -90,7 +91,7 @@ namespace Habanero.Test.BO
         public void ConvertValueToString_FromBitmap()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new BOPropImageDataMapper();
+            var dataMapper = new ImageDataMapper();
             var img = new System.Drawing.Bitmap(100, 100);
             //---------------Execute Test ----------------------
             string strValue = dataMapper.ConvertValueToString(img);

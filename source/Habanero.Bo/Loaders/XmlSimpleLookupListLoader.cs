@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
@@ -76,7 +77,7 @@ namespace Habanero.BO.Loaders
                         "is missing a 'value' attribute that specifies the " +
                         "value to store for the given property.");
                 }
-                BOPropGuidDataMapper guidDataMapper = new BOPropGuidDataMapper();
+                var guidDataMapper = new GuidDataMapper();
                 Guid newGuid;
             	if (StringUtilities.GuidTryParse(valuePart, out newGuid))
             	{

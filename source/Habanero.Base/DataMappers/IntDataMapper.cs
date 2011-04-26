@@ -19,13 +19,13 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
     ///<summary>
     /// Implements a data mapper for a int Property
-    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="BOPropDataMapper"/>.
+    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="DataMapper"/>.
     ///</summary>
-    public class BOPropIntDataMapper : BOPropDataMapper
+    public class IntDataMapper : DataMapper
     {
         /// <summary>
         /// This mapper method will convert any valid guid object to an 

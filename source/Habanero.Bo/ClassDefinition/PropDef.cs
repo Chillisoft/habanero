@@ -19,11 +19,11 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.BO.Comparer;
 using Habanero.Util;
-
-//using log4net;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -48,7 +48,7 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class PropDef : IPropDef
     {
-//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
+        public static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(PropDef));
         private string _propertyName;
         private string _description;
         private Type _propType;
@@ -69,7 +69,7 @@ namespace Habanero.BO.ClassDefinition
         private ILookupList _lookupList = new NullLookupList();
 
         private string _displayName;
-        private BOPropDataMapper _propDataMapper;
+        private IDataMapper _propDataMapper;
 
         ///<summary>
         /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
@@ -806,39 +806,7 @@ namespace Habanero.BO.ClassDefinition
             return businessObject;
         }
 
-        internal object GetNewValue(object value)
-        {
-            if (value == null) return value;
-
-            object newValue;
-            try
-            {
-                newValue = Convert.ChangeType(value, this.PropertyType);
-            }
-            catch (InvalidCastException)
-            {
-                newValue = GetNewValueOnError(value);
-            }
-            catch (FormatException)
-            {
-                newValue = GetNewValueOnError(value);
-            }
-            return newValue;
-        }
-
-        private static object GetNewValueOnError(object value)
-        {
-            object newValue;
-            if (value is string && String.IsNullOrEmpty((string) value))
-            {
-                newValue = null;
-            }
-            else
-            {
-                newValue = value;
-            }
-            return newValue;
-        }
+       
 
         private bool IsValueValidType(object propValue, ref string errorMessage)
         {
@@ -851,7 +819,7 @@ namespace Habanero.BO.ClassDefinition
 
             //If you can parse the value then it is of a valid type.
             object value;
-            if (TryParseValue(propValue, out value)) return true;
+            if (TryParsePropValue(propValue, out value)) return true;
 
             errorMessage = GetErrorMessage(propValue);
             return false;
@@ -973,16 +941,10 @@ namespace Habanero.BO.ClassDefinition
         private object ChangeType(object valueToChange)
         {
             object value;
-            if (TryParseValue(valueToChange, out value)) return value;
+            if (TryParsePropValue(valueToChange, out value)) return value;
 
             //If you cannot Change the Type then throw an exception
             throw new InvalidCastException(GetErrorMessage(valueToChange));
-        }
-
-        private bool TryParseValue(object valueToChange, out object value)
-        {
-            _propDataMapper = GetBOPropDataMapper();
-            return _propDataMapper.TryParsePropValue(valueToChange, out value);
         }
 
 
@@ -1153,8 +1115,26 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>An object of the correct type.</returns>
         public bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            _propDataMapper = GetBOPropDataMapper();
-            return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
+            try
+            {
+                _propDataMapper = GetBOPropDataMapper();
+                return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
+            }
+            catch (Exception ex)
+            {
+                string tableName = this.ClassDef == null ? "" : this.ClassDef.GetTableName(this);
+                _logger.Log
+                    (string.Format
+                         ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
+                          this.PropertyName, this.DatabaseFieldName, tableName), LogCategory.Exception);
+                          
+                throw new InvalidPropertyValueException
+                    (String.Format
+                         ("An error occurred while attempting to convert "
+                          + "the loaded property value of '{0}' to its specified "
+                          + "type of '{1}'. The property value is '{2}'. See log for details", this.PropertyName,
+                          this.PropertyType, valueToParse), ex);
+            }
         }
 
         /// <summary>
@@ -1169,48 +1149,11 @@ namespace Habanero.BO.ClassDefinition
             return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
         }
 
-        private BOPropDataMapper GetBOPropDataMapper()
+        private IDataMapper GetBOPropDataMapper()
         {
             if (_propDataMapper != null) return _propDataMapper;
-            _propDataMapper = GetDataMapper(this.PropertyType, this);
+            _propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType);
             return _propDataMapper;
         }
-
-        private static BOPropDataMapper GetDataMapper(Type propertyType, IPropDef propDef)
-        {
-            if (propertyType == typeof(Guid))
-            {
-                return new BOPropGuidDataMapper();
-            }
-            else if (propertyType == typeof(DateTime))
-            {
-                return new BOPropDateTimeDataMapper();
-            }
-            else if (propertyType == typeof(string))
-            {
-                return new BOPropStringDataMapper();
-            }
-            else if (propertyType == typeof(bool))
-            {
-                return new BOPropBoolDataMapper();
-            }
-            else if (propertyType == typeof(int))
-            {
-                return new BOPropIntDataMapper();
-            }
-            else if (propertyType == typeof(long))
-            {
-                return new BOPropLongDataMapper();
-            }
-            else if (propertyType == typeof(System.Drawing.Image) || propertyType == typeof(System.Drawing.Bitmap))
-            {
-                return new BOPropImageDataMapper();
-            }
-            return new BOPropGeneralDataMapper(propDef);
-
-        }
-
     }
-
-
 }

@@ -1,17 +1,19 @@
 using System;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using NUnit.Framework;
+using Rhino.Mocks;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.Base.DataMappers
 {
     [TestFixture]
-    public class TestBOPropDataMapper_long
+    public class TestLongDataMapper
     {
         private PropDef _propDef;
-        private BOPropDataMapper _dataMapper;
+        private DataMapper _dataMapper;
 
         [SetUp]
         public void Setup()
@@ -28,7 +30,7 @@ namespace Habanero.Test.BO
             
             _propDef = new PropDef("PropName", typeof (long), PropReadWriteRule.ReadWrite, null);
 
-            _dataMapper = new BOPropLongDataMapper();
+            _dataMapper = new LongDataMapper();
         }
 
         [Test]
@@ -141,18 +143,21 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedLongeger, parsedValue);
             Assert.IsTrue(parsedSucceed);
         }
+
         [Test]
         public void Test_PropDef_ParsePropValue_ValidBusinessObject()
         {
             //---------------Set up test pack-------------------
             FakeBOWithLongObjectIDProp.LoadNumberGenClassDef();
             const long validLongID = 3;
-            var numberGenerator = new FakeBOWithLongObjectIDProp { LongProp = validLongID };
+            var primaryKey = MockRepository.GenerateStub<IPrimaryKey>();
+            primaryKey.Stub(key => key.GetAsValue()).Return(validLongID);
+            var bo = MockRepository.GenerateStub<IBusinessObject>();
+            bo.Stub(o => o.ID).Return(primaryKey);
             //---------------Assert Precondition----------------
-            //Assert.AreEqual(validvalue, validBusinessObject.ToString());
             //---------------Execute Test ----------------------
             object parsedValue;
-            bool parsedSucceed = _propDef.TryParsePropValue(numberGenerator, out parsedValue);
+            bool parsedSucceed = _propDef.TryParsePropValue(bo, out parsedValue);
             //---------------Test Result -----------------------
             Assert.IsNotNull(parsedValue);
             Assert.IsTrue(parsedSucceed);
@@ -203,31 +208,13 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             FakeBOWithLongObjectIDProp.LoadNumberGenClassDef();
             const long validLongID = 3;
-            var numberGenerator = new FakeBOWithLongObjectIDProp { LongProp = validLongID };
-            //---------------Assert Precondition----------------
-            //Assert.AreEqual(validvalue, numberGenerator.ToString());
+            var primaryKey = MockRepository.GenerateStub<IPrimaryKey>();
+            primaryKey.Stub(key => key.GetAsValue()).Return(validLongID);
+            var bo = MockRepository.GenerateStub<IBusinessObject>();
+            bo.Stub(o => o.ID).Return(primaryKey);
             //---------------Execute Test ----------------------
             object parsedValue;
-            bool parsedSucceed = _dataMapper.TryParsePropValue(numberGenerator, out parsedValue);
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(parsedValue);
-            Assert.IsTrue(parsedSucceed);
-            Assert.AreEqual(validLongID, parsedValue);
-        }
-
-        [Test]
-        public void Test_DataMapper_ParsePropValue_ValidBusinessObject_WithObjectIdPropLong()
-        {
-            //---------------Set up test pack-------------------
-            FakeBOWithLongObjectIDProp.LoadNumberGenClassDef();
-            const long validLongID = 3;
-            var numberGenerator = new FakeBOWithLongObjectIDProp { LongProp = validLongID };
-            //---------------Assert Precondition----------------
-/*            Assert.AreEqual(zeroLengthString, validBusinessObject.ToString());
-            Assert.AreEqual("", zeroLengthString);*/
-            //---------------Execute Test ----------------------
-            object parsedValue;
-            bool parsedSucceed = _dataMapper.TryParsePropValue(numberGenerator, out parsedValue);
+            bool parsedSucceed = _dataMapper.TryParsePropValue(bo, out parsedValue);
             //---------------Test Result -----------------------
             Assert.IsNotNull(parsedValue);
             Assert.IsTrue(parsedSucceed);
@@ -452,7 +439,7 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            string parsedValue = _dataMapper.ConvertValueToString(expectedlong.ToString());
+            string parsedValue = _dataMapper.ConvertValueToString(expectedlong);
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedlong.ToString().ToUpperInvariant(), parsedValue);
@@ -498,20 +485,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual("", parsedValue);
         }
 
-        [Test]
-        public void Test_DataMapper_ConvertValueToString_ValidBusinessObject_WithLongIDProp()
-        {
-            //---------------Set up test pack-------------------
-            FakeBOWithLongObjectIDProp.LoadNumberGenClassDef();
-            const long validLongID = 3;
-            var numberGenerator = new FakeBOWithLongObjectIDProp { LongProp = validLongID };
-            //---------------Assert Precondition----------------
-            //Assert.AreEqual(validvalue, validBusinessObject.ToString());
-            //---------------Execute Test ----------------------
-            string parsedValue = _dataMapper.ConvertValueToString(numberGenerator);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(validLongID.ToString(), parsedValue);
-        }
     }
     ///<summary>
     /// A simple sequential number generator business object

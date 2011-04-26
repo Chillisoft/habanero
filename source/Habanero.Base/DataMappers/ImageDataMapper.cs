@@ -4,17 +4,13 @@ using System.Drawing.Imaging;
 using System.IO;
 using Habanero.Util;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
-    public class BOPropImageDataMapper : BOPropDataMapper
+    public class ImageDataMapper : DataMapper
     {
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            if (valueToParse == null)
-            {
-                returnValue = null;
-                return true;
-            }
+            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
             if (valueToParse is Image)
             {
                 returnValue = valueToParse;

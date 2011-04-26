@@ -19,10 +19,10 @@
 using System;
 using Habanero.Base;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
     ///<summary>
-    /// Provides an interface for property data mappers.
+    /// Provides a base class for property data mappers.
     /// The property data mapper conforms to the GOF strategy pattern.
     /// This allows the developer to apply the data mapper that is relevant to the particular situation.
     /// E.g. Code to read data from a database (or other datasource) and convert it to the appropriate type.
@@ -32,11 +32,12 @@ namespace Habanero.BO.ClassDefinition
     /// 
     /// The mapper has two methods 
     /// <li>the <see cref="ConvertValueToString"/> method will convert any object of the correct type/format to 
-    /// a string value.</li>
-    /// <li> the <see cref="TryParsePropValue"/> method will convert any object of the appropriate type or a string 
-    ///   with the correct format to a valid object </li>
+    /// a string value. The default implementation just uses the ToString() method on the value (or returns the 
+    /// empty string if the value is null)</li>
+    /// <li> the <see cref="TryParsePropValue"/> method will try to convert any object to an object of the output type.
+    /// The output type is determined by the mapper - the default in this base class if object.</li>
     ///</summary>
-    public abstract class BOPropDataMapper
+    public abstract class DataMapper : IDataMapper
     {
         /// <summary>
         /// The standard date Time Format to use.
@@ -53,11 +54,15 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        ///  This method provides a the functionality to convert any object to the appropriate
-        ///    type for the particular BOProp Type. e.g it will convert a valid guid string to 
-        ///    a valid Guid Object.
-        ///  </summary><param name="valueToParse">The value to be converted</param><returns>An object of the correct type.</returns>
-        ///<param name="returnValue">the parsed value</param>
+        ///  This method provides the functionality to convert any object to the appropriate
+        ///    type for this mapper. The default behaviour only handles null values, empty
+        ///    strings and DBNull.Value and parses all three to null. This method should be
+        ///    overridden in subtypes to parse values to the type you want.
+        ///  </summary>
+        /// <param name="valueToParse">The value to be attempted to parse</param>
+        /// <param name="returnValue">the parsed value, if parsing was successful</param>
+        /// <returns>True if the parsing was succesful, false if this mapper was unable to 
+        /// parse the valueToParse.</returns>
         public virtual bool TryParsePropValue(object valueToParse, out object returnValue)
         {
             returnValue = null;
@@ -66,14 +71,5 @@ namespace Habanero.BO.ClassDefinition
             return valueToParse == null || valueToParse == DBNull.Value;
         }
 
-        ///<summary>
-        /// This returns the property value that should be displayed
-        ///</summary>
-        ///<param name="propValue"></param>
-        ///<returns></returns>
-        public virtual object GetDisplayPropValue(object propValue)
-        {
-            return propValue;
-        }
     }
 }

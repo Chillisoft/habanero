@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base.DataMappers;
 using Habanero.Base.Logging;
 using log4net;
 
@@ -28,6 +29,8 @@ namespace Habanero.Base
     public class GlobalRegistry
     {
         private static IExceptionNotifier _exceptionNotifier;
+        private static IHabaneroLoggerFactory _loggerFactory;
+        private static IDataMapperFactory _dataMapperFactory;
         //private static ISynchronisationController _synchronisationController;
 
         /// <summary>
@@ -97,7 +100,6 @@ namespace Habanero.Base
         ///</summary>
         public static ISecurityController SecurityController { get; set; }
 
-        private static IHabaneroLoggerFactory _loggerFactory;
 
         ///<summary>
         /// Gets and sets the <see cref="IHabaneroLoggerFactory"/> that is used to create the <see cref="IHabaneroLogger"/>
@@ -105,12 +107,20 @@ namespace Habanero.Base
         ///</summary>
         public static IHabaneroLoggerFactory LoggerFactory
         {
-            get
-            {
-                if (_loggerFactory == null) return new Log4NetLoggerFactory();
-                return _loggerFactory;
-            }
+            get { return _loggerFactory ?? (_loggerFactory = new Log4NetLoggerFactory()); }
             set { _loggerFactory = value; }
+        }
+
+        /// <summary>
+        /// The <see cref="IDataMapperFactory"/> is used to create mappers that map from one type to another
+        /// These are used, for instance, when populating business objects when loading from a data source.
+        /// If you wish to override how certain types are loaded from the database (for example, converted from a
+        /// string value), then replace that type's mapper with your own class that implements from <see cref="IDataMapper"/>
+        /// </summary>
+        public static IDataMapperFactory DataMapperFactory
+        {
+            get { return _dataMapperFactory ?? (_dataMapperFactory = new DataMapperFactory()); }
+            set { _dataMapperFactory = value; }
         }
     }
 }

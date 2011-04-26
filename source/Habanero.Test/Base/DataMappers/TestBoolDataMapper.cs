@@ -19,16 +19,17 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.Base.DataMappers
 {
     [TestFixture]
-    public class TestDataMapper_Bool
+    public class TestBoolDataMapper
     {
         private PropDef _propDef;
-        private BOPropBoolDataMapper _dataMapper;
+        private BoolDataMapper _dataMapper;
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -36,7 +37,7 @@ namespace Habanero.Test.BO
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
             _propDef = new PropDef("PropName", typeof (bool), PropReadWriteRule.ReadWrite, null);
-            _dataMapper = new BOPropBoolDataMapper();
+            _dataMapper = new BoolDataMapper();
         }
 
         [Test]

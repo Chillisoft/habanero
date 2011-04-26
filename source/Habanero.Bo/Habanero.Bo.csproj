@@ -150,15 +150,6 @@
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoaderMultiSource.cs" />
-    <Compile Include="ClassDefinition\BOPropBoolDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropDateTimeDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropGeneralDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropGuidDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropImageDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropLongDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\ClassDefValidator.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />

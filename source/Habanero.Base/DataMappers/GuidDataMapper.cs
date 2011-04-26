@@ -17,18 +17,20 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Base;
+using Habanero.Util;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
     ///<summary>
     /// Implements a data mapper for a Guid Property
-    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="BOPropDataMapper"/>.
+    /// The property data mapper conforms to the GOF strategy pattern <seealso cref="DataMapper"/>.
     ///</summary>
-    public  class BOPropStringDataMapper : BOPropDataMapper
+    public class GuidDataMapper : DataMapper
     {
         /// <summary>
-        /// This mapper method <see cref="TryParsePropValue"/> will convert any valid Guid string to a valid Guid object 
-        ///   (ParsePropValue) and will convert a DBNull to a null value to null.
+        /// This mapper method will convert any valid guid object to an 
+        ///   Invariant Guid string of format .ToString("B").ToUpperInvariant().
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -37,7 +39,7 @@ namespace Habanero.BO.ClassDefinition
             if (value == null) return "";
             if (value is Guid)
             {
-                Guid guidValue = ((Guid)value);
+                Guid guidValue = ((Guid) value);
                 //return guidValue == Guid.Empty ? "" : ToUpperInvariant(guidValue);
                 return guidValue == Guid.Empty ? "" : guidValue.ToString();
             }
@@ -45,14 +47,14 @@ namespace Habanero.BO.ClassDefinition
             TryParsePropValue(value, out parsedPropValue);
             if (parsedPropValue is Guid)
             {
-                return (ToUpperInvariant((Guid)parsedPropValue));
+                return (ToUpperInvariant((Guid) parsedPropValue));
             }
             return parsedPropValue == null ? "" : parsedPropValue.ToString();
         }
 
         /// <summary>
-        /// This mapper method <see cref="ConvertValueToString"/> will convert any valid guid object to an 
-        ///   Invariant Guid string of format .ToString("B").ToUpperInvariant().
+        /// This mapper method will convert any valid Guid string to a valid Guid object 
+        ///   (ParsePropValue) and will convert a DBNull to a null value to null.
         /// </summary>
         /// <param name="valueToParse">value to convert.</param>
         /// <param name="returnValue"></param>
@@ -61,23 +63,39 @@ namespace Habanero.BO.ClassDefinition
         {
             if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
 
-            if (valueToParse is Guid)
+            if (!(valueToParse is Guid))
             {
-                Guid guid = ((Guid) valueToParse);
-                if (guid == Guid.Empty)
+                if (valueToParse is IBusinessObject)
                 {
+                    IBusinessObject bo = (IBusinessObject) valueToParse;
+                    if (bo.ID.IsGuidObjectID)
+                    {
+                        returnValue = bo.ID.GetAsGuid();
+                        return true;
+                    }
                     returnValue = null;
+                    return false;
+                }
+                Guid guidValue;
+                if (StringUtilities.GuidTryParse(valueToParse.ToString(), out guidValue))
+                {
+                    if (guidValue == Guid.Empty)
+                    {
+                        returnValue = null;
+                        return true;
+                    }
+                    returnValue = guidValue;
                     return true;
                 }
-                returnValue = guid.ToString("B").ToUpperInvariant();
-                return true;
+                returnValue = null;
+                return false;
             }
-            if (valueToParse is DateTime)
+            if (valueToParse is Guid && (Guid) valueToParse == Guid.Empty)
             {
-                returnValue = ((DateTime) valueToParse).ToString(_standardDateTimeFormat);
+                returnValue = null;
                 return true;
             }
-            returnValue = valueToParse.ToString();
+            returnValue = valueToParse;
             return true;
         }
 

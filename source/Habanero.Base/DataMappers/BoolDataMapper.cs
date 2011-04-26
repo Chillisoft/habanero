@@ -16,30 +16,30 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System;
-using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 
-namespace Habanero.BO.ClassDefinition
+namespace Habanero.Base.DataMappers
 {
-    /// <summary>
-    /// Used to implement custom type conversions specifically for DateTime objects.
-    /// </summary>
-    public class BOPropDateTimeDataMapper : BOPropDataMapper
+    public class BoolDataMapper : DataMapper
     {
-        public override string ConvertValueToString(object value)
-        {
-            if (value == null) return "";
-            object parsedPropValue;
-            TryParsePropValue(value, out parsedPropValue);
-            if (parsedPropValue is DateTime) return ((DateTime) parsedPropValue).ToString(_standardDateTimeFormat);
-
-            return parsedPropValue == null ? "" : parsedPropValue.ToString();
-        }
-
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            return DateTimeUtilities.TryParseValue(valueToParse, out returnValue);
+            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
+
+            bool result;
+            bool success;
+            try
+            {
+                success = StringUtilities.BoolTryParse(valueToParse, out result);
+            }
+            catch (HabaneroDeveloperException)
+            {
+                returnValue = null;
+                return false;
+            }
+            returnValue = result;
+            return success;
         }
     }
 }

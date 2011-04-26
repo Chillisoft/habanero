@@ -1028,19 +1028,6 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void Test_GetNewValue_WhenValueNull_ShouldReturnNull()
-        {
-            //---------------Set up test pack-------------------
-            PropDefStub propDef = new PropDefStub("PropName", typeof(int), PropReadWriteRule.ReadWrite, null, 99);
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            var newValue = propDef.GetNewValue(null);
-            //---------------Test Result -----------------------
-            Assert.IsNull(newValue);
-        }
-
-        [Test]
         public void Test_SetLookupList_ToNull_ShouldNotCauseError()
         {
             //---------------Set up test pack-------------------
@@ -1100,7 +1087,7 @@ namespace Habanero.Test.BO.ClassDefinition
             const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var propDef = new PropDef("Name", typeof (EMailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD",
+            var propDef = new PropDef("Name", typeof (EmailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD",
                                       expectedValue, false, false);
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());

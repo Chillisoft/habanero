@@ -3,6 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
@@ -66,7 +67,6 @@ namespace Habanero.Test.Util
 				</class>
 			");
             ClassDef.ClassDefs.Add(_itsClassDef);
-
         }
 
         [Test]
@@ -75,7 +75,6 @@ namespace Habanero.Test.Util
             var valueObject = new SimpleValueObjectStub("test");
             Assert.IsTrue(valueObject.ToString().Equals("test"));
         }
-
 
         [Test]
         public void TestToString()
@@ -95,9 +94,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty()
         {
             //---------------Set up test pack-------------------
-            var propDef = new PropDef("Name", typeof(SimpleValueObjectStub), PropReadWriteRule.ReadWrite, null);
             var valueObject = new SimpleValueObjectStub("test");
-            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            GeneralDataMapper generalDataMapper = new GeneralDataMapper(typeof(SimpleValueObjectStub));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -112,9 +110,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_InheritedCustomProperty()
         {
             //---------------Set up test pack-------------------
-            var propDef = new PropDef("Name", typeof(CustomProperty), PropReadWriteRule.ReadWrite, null);
             var valueObject = new SimpleValueObjectStub("test");
-            var generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            var generalDataMapper = new GeneralDataMapper(typeof(CustomProperty));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -129,9 +126,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_StringValue()
         {
             //---------------Set up test pack-------------------
-            var propDef = new PropDef("Name", typeof(SimpleValueObjectStub), PropReadWriteRule.ReadWrite, null);
             const string test = "test";
-            var generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            var generalDataMapper = new GeneralDataMapper(typeof(SimpleValueObjectStub));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------

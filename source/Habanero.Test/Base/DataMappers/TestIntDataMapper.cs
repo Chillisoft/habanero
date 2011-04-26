@@ -19,17 +19,18 @@
 
 using System;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.Base.DataMappers
 {
     [TestFixture]
-    public class TestDataMapper_Int
+    public class TestIntDataMapper
     {
         private PropDef _propDef;
-        private BOPropIntDataMapper _dataMapper;
+        private IntDataMapper _dataMapper;
 
         [SetUp]
         public void Setup()
@@ -46,7 +47,7 @@ namespace Habanero.Test.BO
             
             _propDef = new PropDef("PropName", typeof (int), PropReadWriteRule.ReadWrite, null);
 
-            _dataMapper = new BOPropIntDataMapper();
+            _dataMapper = new IntDataMapper();
         }
 
         [Test]
