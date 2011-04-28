@@ -31,9 +31,19 @@ namespace Habanero.Test
 
         public static string GetRandomString()
         {
-            return "Rnd" + GetRandomInt(); 
+            return GetRandomString(10);
         }
-        
+
+        public static string GetRandomString(int length)
+        {
+            var str = "Rnd" + GetRandomInt();
+            while (str.Length < length)
+            {
+                str += GetRandomInt();
+            }
+            return str.Substring(0, length);
+        }
+
         public static void WaitForGC()
         {
             GC.Collect();
