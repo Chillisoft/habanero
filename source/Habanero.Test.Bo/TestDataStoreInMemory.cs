@@ -29,6 +29,7 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestDataStoreInMemory
     {
+        // ReSharper disable InconsistentNaming
         private string _testFolderName;
 
         public string GetTestPath(string folderName)
