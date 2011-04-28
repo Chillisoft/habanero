@@ -129,8 +129,8 @@ namespace Habanero.DB
 
 		internal static void LoadNumberGenClassDef()
 		{
-			XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-			IClassDef itsClassDef =
+			var itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+			var itsClassDef =
 				itsLoader.LoadClass(
 					@"
 			   <class name=""BOSequenceNumberLocking"" assembly=""Habanero.DB"" table=""NumberGenerator"">
