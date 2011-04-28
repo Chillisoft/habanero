@@ -159,10 +159,10 @@ namespace Habanero.DB.ConcurrencyControl
         }
         private ISqlStatement GetSQLStatement()
         {
-            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
+            var boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
+            var selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
             return selectQueryDB.CreateSqlStatement();
         }
         private bool LockDurationValid(DateTime dateLocked)
@@ -241,7 +241,7 @@ namespace Habanero.DB.ConcurrencyControl
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
+            var gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
 
