@@ -107,8 +107,8 @@ namespace Habanero.BO
             {
                 BOSequenceNumber.LoadNumberGenClassDef(_tableName);
             }
-            Criteria criteria = new Criteria("NumberType", Criteria.ComparisonOp.Equals, numberType);
-            BOSequenceNumber sequenceBOSequenceNumber =
+            var criteria = new Criteria("NumberType", Criteria.ComparisonOp.Equals, numberType);
+            var sequenceBOSequenceNumber =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumber>(criteria);
 
             if (sequenceBOSequenceNumber != null) return sequenceBOSequenceNumber;
@@ -118,7 +118,7 @@ namespace Habanero.BO
 
         private static BOSequenceNumber CreateSequenceForType(string numberType)
         {
-            BOSequenceNumber sequenceBOSequenceNumber = new BOSequenceNumber();
+            var sequenceBOSequenceNumber = new BOSequenceNumber();
             sequenceBOSequenceNumber.NumberType = numberType;
             sequenceBOSequenceNumber.SequenceNumber = 0;
             sequenceBOSequenceNumber.Save();
@@ -198,7 +198,7 @@ namespace Habanero.BO
                 tableName = "NumberGenerator";
             }
             _tableName = tableName;
-            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            var itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
                               "<property  name=\"SequenceNumber\" type=\"Int64\" />" +
                               "<property  name=\"NumberType\"/>" +
@@ -206,7 +206,7 @@ namespace Habanero.BO
                               "<prop name=\"NumberType\" />" +
                               "</primaryKey>" +
                               "</class>";
-            IClassDef itsClassDef = itsLoader.LoadClass(classDef);
+            var itsClassDef = itsLoader.LoadClass(classDef);
             ClassDef.ClassDefs.Add(itsClassDef);
             return;
         }

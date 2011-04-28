@@ -29,6 +29,7 @@ namespace Habanero.Test.BO
 	[TestFixture]
 	public class TestNumberGenerator : TestUsingDatabase
 	{
+// ReSharper disable InconsistentNaming
 		[SetUp]
 		public void SetupTest()
 		{

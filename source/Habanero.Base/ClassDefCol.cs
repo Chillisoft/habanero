@@ -146,7 +146,7 @@ namespace Habanero.Base
         public void Add(IClassDef value)
         {
             if (_classDefs.ContainsValue(value)) return;
-            string typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
+            var typeId = GetTypeId(value.AssemblyName, value.ClassName, true);
             if (_classDefs.ContainsKey(typeId))
             {
                 throw new InvalidXmlDefinitionException(String.Format(

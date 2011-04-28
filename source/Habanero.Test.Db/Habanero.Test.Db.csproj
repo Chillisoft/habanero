@@ -245,6 +245,7 @@
     <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
     <Compile Include="TestMySqlDatabaseConnection.cs" />
     <Compile Include="TestNumberGeneratorDB.cs" />
+    <Compile Include="TestNumberGeneratorPessimisticLocking.cs" />
     <Compile Include="TestParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>

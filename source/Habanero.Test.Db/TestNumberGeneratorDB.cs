@@ -31,6 +31,7 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestNumberGeneratorDB : TestUsingDatabase
     {
+// ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
         {
@@ -101,7 +102,7 @@ namespace Habanero.Test.DB
             string numberType = RandomValueGen.GetRandomString();
             BOSequenceNumberLocking.LoadNumberGenClassDef();
             //DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From numbergenerator");
-            NumberGeneratorPessimisticLocking numGen = new NumberGeneratorPessimisticLocking(numberType);
+            var numGen = new NumberGeneratorPessimisticLocking(numberType);
             numGen.SetSequenceNumber(0);
 
             //get the next number for invoice number
@@ -114,7 +115,7 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             //Create a seperate instance of the number generator.
             //try Get  number
-            NumberGeneratorPessimisticLocking numGen2 = new NumberGeneratorPessimisticLocking(numberType);
+            var numGen2 = new NumberGeneratorPessimisticLocking(numberType);
             Assert.AreNotSame(numGen, numGen2);
             //try Get second number
             num = numGen2.NextNumber();
@@ -140,9 +141,9 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             //Create an objects that sets the number generator for it.
             //Edit the objects.
-            ContactPersonWithNumberGenerator cp = new ContactPersonWithNumberGenerator();
+            var cp = new ContactPersonWithNumberGenerator();
             cp.Surname = Guid.NewGuid().ToString();
-            ContactPersonWithNumberGenerator cp2 = new ContactPersonWithNumberGenerator();
+            var cp2 = new ContactPersonWithNumberGenerator();
             cp2.Surname = Guid.NewGuid().ToString();
             //---------------Execute Test ----------------------
             //Add the objects 
@@ -161,7 +162,7 @@ namespace Habanero.Test.DB
 
         private static void UpdateDatabaseLockAsExpired(string numberType, int lockDuration)
         {
-            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            var sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
             sqlStatement.Statement.Append("UPDATE `numbergenerator` SET ");
             sqlStatement.Statement.Append(DatabaseConnection.CurrentConnection.SqlFormatter.DelimitField("DateTimeLocked"));
             sqlStatement.Statement.Append(" = ");
