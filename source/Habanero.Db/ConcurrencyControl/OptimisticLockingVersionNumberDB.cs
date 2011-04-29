@@ -180,34 +180,34 @@ namespace Habanero.DB.ConcurrencyControl
 
             if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
 
-            ISqlStatement statement = GetSQLStatement();
+            var statement = GetSelectSQLStatement();
 
             using (IDataReader dr = connection.LoadDataReader(statement))
             {
                 // If this object no longer exists in the database
                 // then we have a concurrency conflict since it has been deleted by another process.
                 // If our objective was to delete it as well then no worries else throw error.
-                bool drHasData = dr.Read();
+                var drHasData = dr.Read();
                 if (!(drHasData) && !_busObj.Status.IsDeleted)
                 {
                     //The object you are trying to update has been deleted by another user.
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, _busObj.ID.ToString(),
                                                                       _busObj);
                 }
-                int versionNumberBusinessObject = (int) _versionNumber.Value;
-                int versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
+                var versionNumberBusinessObject = (int) _versionNumber.Value;
+                var versionNumberDB = (int) dr[_versionNumber.DatabaseFieldName];
 
                 if (versionNumberDB == versionNumberBusinessObject) return;
 
-                string dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
-                string userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
-                string machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
+                var dateLastUpdatedInDB = dr[_dateLastUpdated.DatabaseFieldName].ToString();
+                var userNameLastUpdated = (string) dr[_userLastUpdated.DatabaseFieldName];
+                var machineLastUpdated = (string) dr[_machineLastUpdated.DatabaseFieldName];
                 ThrowConcurrencyException(verificationStage, userNameLastUpdated, machineLastUpdated,
                                           dateLastUpdatedInDB);
             }
         }
 
-        private ISqlStatement GetSQLStatement()
+        private ISqlStatement GetSelectSQLStatement()
         {
             BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB) BORegistry.DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);

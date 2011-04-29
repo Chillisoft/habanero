@@ -137,8 +137,8 @@ namespace Habanero.DB.ConcurrencyControl
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, 
                                                                       _busObj.ID.ToString(), _busObj);
                 }
-                bool locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
-                DateTime dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
+                var locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
+                var dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
                 if (locked && (LockDurationValid(dateLocked)))
                 {
                     string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
