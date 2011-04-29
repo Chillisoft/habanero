@@ -114,6 +114,14 @@ namespace Habanero.DB
 			BusinessObject busObject = this.GetTransactionalBO();
 			transactionCommitter.AddBusinessObject(busObject);
 		}
+		/// <summary>
+		/// This method is only used for testing purposes.
+		/// </summary>
+		protected void ReleaseLocks()
+		{
+			var concurrencyControl = this._boSequenceNumber.ConcurrencyControl();
+			concurrencyControl.ReleaseWriteLocks();;
+		}
 	}
 
 	/// <summary>
@@ -171,6 +179,10 @@ namespace Habanero.DB
 		{
 			get { return ((long?) (base.GetPropertyValue("SequenceNumber"))); }
 			set { base.SetPropertyValue("SequenceNumber", value); }
+		}
+		internal IConcurrencyControl ConcurrencyControl()
+		{
+			return _concurrencyControl;
 		}
 	}
 }
