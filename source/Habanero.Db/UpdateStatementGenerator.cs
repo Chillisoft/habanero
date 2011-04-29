@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -127,7 +128,7 @@ namespace Habanero.DB
         /// Builds a collection of properties to include in the update,
         /// depending on the inheritance type
         /// </summary>
-        private static IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
+        protected virtual IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
         {
             IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
@@ -173,4 +174,5 @@ namespace Habanero.DB
             return _statementCollection;
         }
     }
+
 }

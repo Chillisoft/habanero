@@ -235,13 +235,14 @@ namespace Habanero.DB.ConcurrencyControl
             {
             }
         }
+
         /// <summary>
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
-            var gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
+            var gen = new UpdateStatementGeneratorLocking(_busObj, _boPropLocked, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
 
@@ -276,14 +277,27 @@ namespace Habanero.DB.ConcurrencyControl
         ///</summary>
         public void UpdateAsTransactionRolledBack()
         {
-            //if (_versionNumber.Value == null)
-            //{
-            //    _versionNumber.Value = 0;
-            //    return;
-            //}
-            //_versionNumber.Value = (int)_versionNumber.Value - 1;
+            ReleaseWriteLocks();
         }
 
         #endregion
+
+
+        private class UpdateStatementGeneratorLocking : UpdateStatementGenerator
+        {
+            private readonly IBOProp _boPropLocked;
+
+            internal UpdateStatementGeneratorLocking(BusinessObject bo, IBOProp boPropLocked, IDatabaseConnection connection)
+                : base(bo, connection)
+            {
+                if (boPropLocked == null) throw new ArgumentNullException("boPropLocked");
+                _boPropLocked = boPropLocked;
+            }
+
+            protected override IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
+            {
+                return new BOPropCol {_boPropLocked};
+            }
+        }
     }
 }
