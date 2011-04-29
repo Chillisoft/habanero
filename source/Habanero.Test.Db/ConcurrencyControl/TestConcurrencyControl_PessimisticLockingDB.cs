@@ -32,6 +32,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
     [TestFixture]
     public class TestConcurrencyControl_PessimisticLockingDB : TestUsingDatabase
     {
+        // ReSharper disable InconsistentNaming
         #region Setup/Teardown
 
         [SetUp]
@@ -169,10 +170,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
         public void Test_Locking_InCheckConcurrencyControlBeforeBeginEditing()
         {
             //---------------Set up test pack-------------------
-            ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+            var cp = CreateSavedContactPersonPessimisticLocking();
             //---------------Execute Test ----------------------
             //execute CheckConcurrencyControl Begin Edit.
-            IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+            var concurrCntrl = cp.concurrencyControl();
             concurrCntrl.CheckConcurrencyBeforeBeginEditing();
             //---------------Test Result -----------------------
             //Test that locked.

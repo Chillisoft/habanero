@@ -118,9 +118,7 @@ namespace Habanero.BO
 
         private static BOSequenceNumber CreateSequenceForType(string numberType)
         {
-            var sequenceBOSequenceNumber = new BOSequenceNumber();
-            sequenceBOSequenceNumber.NumberType = numberType;
-            sequenceBOSequenceNumber.SequenceNumber = 0;
+            var sequenceBOSequenceNumber = new BOSequenceNumber {NumberType = numberType, SequenceNumber = 0};
             sequenceBOSequenceNumber.Save();
             return sequenceBOSequenceNumber;
         }

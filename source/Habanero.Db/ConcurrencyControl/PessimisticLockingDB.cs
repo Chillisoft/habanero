@@ -185,6 +185,12 @@ namespace Habanero.DB.ConcurrencyControl
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
         }
+        private void ReleaseLockingToDB()
+        {
+            ISqlStatementCollection sql = GetReleaseLockSql();
+            if (sql == null) return;
+            DatabaseConnection.CurrentConnection.ExecuteSql(sql);
+        }
 
         private void SetDateTimeLocked()
         {
@@ -242,6 +248,15 @@ namespace Habanero.DB.ConcurrencyControl
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetUpdateSql()
         {
+            var gen = new UpdateStatementGenerator(_busObj,  DatabaseConnection.CurrentConnection);
+            return gen.Generate();
+        }
+        /// <summary>
+        /// Returns an "update" sql statement list for updating this object
+        /// </summary>
+        /// <returns>Returns a collection of sql statements</returns>
+        private SqlStatementCollection GetReleaseLockSql()
+        {
             var gen = new UpdateStatementGeneratorLocking(_busObj, _boPropLocked, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
@@ -266,7 +281,7 @@ namespace Habanero.DB.ConcurrencyControl
                 if ((bool)_boPropLocked.Value)
                 {
                     _boPropLocked.Value = false;
-                    UpdateLockingToDB();               
+                    ReleaseLockingToDB();               
                 }
         }
 
@@ -278,6 +293,7 @@ namespace Habanero.DB.ConcurrencyControl
         public void UpdateAsTransactionRolledBack()
         {
             ReleaseWriteLocks();
+            _boPropDateLocked.Value = DateTime.Now.AddMinutes(-1*_lockDurationInMinutes);
         }
 
         #endregion
