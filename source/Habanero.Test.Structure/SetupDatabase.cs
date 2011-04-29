@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -78,12 +79,10 @@ namespace Habanero.Test.Structure
 
         private void Apply()
         {
-            SqlStatementCollection sqlStatementCollection = new SqlStatementCollection();
-            foreach (string statement in _statements)
-            {
-                sqlStatementCollection.Add(new SqlStatement(_databaseConnection, statement));
-            }
-            _databaseConnection.ExecuteSql(sqlStatementCollection);
+            _databaseConnection.ExecuteSql(
+                from statement in _statements
+                select new SqlStatement(_databaseConnection, statement)
+            );
         }
 
         private void CreateTable(ClassDef classDef)

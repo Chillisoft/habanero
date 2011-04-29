@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -42,8 +44,8 @@ namespace Habanero.Test.DB.SqlGeneration
             ClassDef.ClassDefs[typeof (TestAutoInc)].TableName = "test autoinc";
 
             DeleteStatementGenerator gen = new DeleteStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            ISqlStatement statement = statementCol[0];
+            var statementCol = gen.Generate();
+            ISqlStatement statement = statementCol.First();
             StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
         }
     }

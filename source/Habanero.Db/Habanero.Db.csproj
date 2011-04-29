@@ -228,9 +228,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlStatementBuilder.cs" />
-    <Compile Include="SqlStatementCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SqlStatementException.cs" />
     <Compile Include="StatementGeneratorUtils.cs" />
     <Compile Include="TransactionalBusinessObjectDB.cs" />

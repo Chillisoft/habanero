@@ -35,7 +35,6 @@ namespace Habanero.DB
     {
 
         private StringBuilder _statement;
-        private readonly IDatabaseConnection _connection;
         private readonly List<IDbDataParameter> _parameters;
         private readonly IDbCommand _sampleCommand;
         private readonly IParameterNameGenerator _gen;
@@ -48,11 +47,12 @@ namespace Habanero.DB
         /// <param name="connection">A database connection</param>
         public SqlStatement(IDatabaseConnection connection)
         {
+            if (connection == null) throw new ArgumentNullException("connection");
             _parameters = new List<IDbDataParameter>();
-            _connection = connection;
-            if (_connection != null)
-            {
-                _idbConnection = _connection.GetConnection();
+            DatabaseConnection = connection;
+            //if (_connection != null)
+            //{
+                _idbConnection = DatabaseConnection.GetConnection();
                 if (_idbConnection != null)
                 {
                     _sampleCommand = _idbConnection.CreateCommand();
@@ -63,15 +63,17 @@ namespace Habanero.DB
                 {
                     _gen = new ParameterNameGenerator(null);
                 }
-            }
-            else
-            {
-                _idbConnection = null;
-                _gen = new ParameterNameGenerator(null);
-            }
+            //}
+            //else
+            //{
+                //_idbConnection = null;
+                //_gen = new ParameterNameGenerator(null);
+            //}
             _statement = new StringBuilder(100);
             
         }
+
+        public IDatabaseConnection DatabaseConnection { get; private set; }
 
         /// <summary>
         /// Constructor to initialise a new sql statement using the existing
@@ -108,7 +110,7 @@ namespace Habanero.DB
             }
             IDbDataParameter newParameter = _sampleCommand.CreateParameter();
             newParameter.ParameterName = paramName;
-            ISqlFormatter sqlFormatter = _connection.SqlFormatter;
+            ISqlFormatter sqlFormatter = DatabaseConnection.SqlFormatter;
             object preparedValue = sqlFormatter.PrepareValue(paramValue);
             newParameter.Value = preparedValue;
             if (preparedValue is DateTime)
@@ -246,7 +248,7 @@ namespace Habanero.DB
         /// </summary>
         public IDatabaseConnection Connection
         {
-            get { return _connection; }
+            get { return DatabaseConnection; }
         }
 
         /// <summary>

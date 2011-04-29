@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.DB;
@@ -82,22 +83,24 @@ namespace Habanero.Test.DB
         [Test]
         public void TestGetMigrateSql()
         {
-            SqlStatementCollection  sqlCol = itsDbMigrator.GetMigrationSql(0, 3);
-            Assert.AreEqual(3, sqlCol.Count);
-            Assert.AreEqual(new SqlStatement(itsConn, "migration1;"), sqlCol[0]);
+            var sqlCol = itsDbMigrator.GetMigrationSql(0, 3);
+            var sqlStatements = sqlCol.ToList();
+            Assert.AreEqual(3, sqlStatements.Count);
+            Assert.AreEqual(new SqlStatement(itsConn, "migration1;"), sqlStatements[0]);
         }
         
         [Test]
         public void TestGetMigrateSqlBoundaries() {
-            SqlStatementCollection sqlCol = itsDbMigrator.GetMigrationSql(1, 2);
-            Assert.AreEqual(1, sqlCol.Count);
-            Assert.AreEqual(new SqlStatement(itsConn, "migration2;"), sqlCol[0]);
+            var sqlCol = itsDbMigrator.GetMigrationSql(1, 2);
+            var sqlStatements = sqlCol.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            Assert.AreEqual(new SqlStatement(itsConn, "migration2;"), sqlStatements[0]);
         }
         
         [Test]
         public void TestMigrate() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new SqlStatementCollection(new SqlStatement(itsConn, "migration2;")) });
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new [] { new SqlStatement(itsConn, "migration2;") }});
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
             itsConnMock.Verify();
@@ -152,10 +155,10 @@ namespace Habanero.Test.DB
             itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
-            SqlStatementCollection sqlStatementCollection = new SqlStatementCollection {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
-            sqlStatementCollection = new SqlStatementCollection {new SqlStatement(itsConn, "migration3;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { sqlStatementCollection  });
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            statements = new [] {new SqlStatement(itsConn, "migration3;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
           
             itsDbMigrator.MigrateTo(3);
             

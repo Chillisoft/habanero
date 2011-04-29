@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO;
@@ -34,7 +35,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             TransactionalBusinessObjectDB transactional = new TransactionalBusinessObjectDB(bo, _databaseConnection);
-            SqlStatement sqlStatement = (SqlStatement) transactional.GetPersistSql()[0];
+            SqlStatement sqlStatement = (SqlStatement) transactional.GetPersistSql().FirstOrDefault();
 
             //---------------Test Result -----------------------
             Assert.AreSame(_databaseConnection, sqlStatement.Connection);
@@ -57,7 +58,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             TransactionalBusinessObjectDB transactional = new TransactionalBusinessObjectDB(bo, _databaseConnection);
-            SqlStatement sqlStatement = (SqlStatement) transactional.GetPersistSql()[0];
+            SqlStatement sqlStatement = (SqlStatement) transactional.GetPersistSql().FirstOrDefault();
 
             //---------------Test Result -----------------------
             Assert.AreSame(_databaseConnection, sqlStatement.Connection);
@@ -79,7 +80,7 @@ namespace Habanero.Test.DB
             Assert.AreNotSame(_databaseConnection, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
             TransactionalBusinessObjectDB transactional = new TransactionalBusinessObjectDB(bo, _databaseConnection);
-            SqlStatement sqlStatement = (SqlStatement) transactional.GetPersistSql()[0];
+            SqlStatement sqlStatement = (SqlStatement)transactional.GetPersistSql().FirstOrDefault();
 
             //---------------Test Result -----------------------
             Assert.AreSame(_databaseConnection, sqlStatement.Connection);

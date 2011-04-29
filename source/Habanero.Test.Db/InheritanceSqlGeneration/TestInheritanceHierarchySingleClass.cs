@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Globalization;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -108,17 +109,18 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleDeleteSql()
         {
-            Assert.AreEqual(2, _deleteSql.Count,
+            var sqlStatements = _deleteSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 delete sql statements.");
             Assert.AreEqual("DELETE FROM `FilledCircle_table` WHERE `FilledCircleID_field` = ?Param0",
-                            _deleteSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "First delete sql statement is incorrect.");
-            Assert.AreEqual(_filledCircleId, (_deleteSql[0].Parameters[0]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[0]).Value,
                             "Parameter FilledCircleID has incorrect value.");
             Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0",
-                            _deleteSql[1].Statement.ToString(),
+                            sqlStatements[1].Statement.ToString(),
                             "Second delete sql statement is incorrect.");
-            Assert.AreEqual(_filledCircleId, (_deleteSql[1].Parameters[0]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[1].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value.");
         }
 
@@ -136,57 +138,59 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleInsertSql()
         {
-            Assert.AreEqual(2, _insertSql.Count,
+            var sqlStatements = _insertSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 insert sql statements.");
             Assert.AreEqual(
                 "INSERT INTO `Shape_table` (`ShapeType_field`, `Radius`, `ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2, ?Param3)",
-                _insertSql[0].Statement.ToString(),
+                sqlStatements[0].Statement.ToString(),
                 "First insert Sql statement is incorrect.");
-            Assert.AreEqual("FilledCircleInheritsCircleNoPK", (_insertSql[0].Parameters[0]).Value,
+            Assert.AreEqual("FilledCircleInheritsCircleNoPK", (sqlStatements[0].Parameters[0]).Value,
                             "Discriminator ('ShapeType') has incorrect value.");
-            Assert.AreEqual(10, (_insertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, (sqlStatements[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_insertSql[0].Parameters[2]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value.");
-            Assert.AreEqual("MyFilledCircle", (_insertSql[0].Parameters[3]).Value,
+            Assert.AreEqual("MyFilledCircle", (sqlStatements[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value.");
 
             Assert.AreEqual(
                 "INSERT INTO `FilledCircle_table` (`Colour`, `FilledCircleID_field`, `ShapeID_field`) VALUES (?Param0, ?Param1, ?Param2)",
-                _insertSql[1].Statement.ToString(), "Sql statement is incorrect.");
-            Assert.AreEqual(3, (_insertSql[1].Parameters[0]).Value,
+                sqlStatements[1].Statement.ToString(), "Sql statement is incorrect.");
+            Assert.AreEqual(3, (sqlStatements[1].Parameters[0]).Value,
                             "Parameter Colour has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_insertSql[1].Parameters[1]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[1].Parameters[1]).Value,
                             "Parameter FilledCircleID has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_insertSql[1].Parameters[2]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[1].Parameters[2]).Value,
                             "Parameter ShapeID  has incorrect value.");
         }
 
         [Test]
         public void TestCircleUpdateSql()
         {
-            Assert.AreEqual(2, _updateSql.Count,
+            var sqlStatements = _updateSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 update sql statements.");
 
             Assert.AreEqual(
                 "UPDATE `Shape_table` SET `Radius` = ?Param0, `ShapeID_field` = ?Param1, `ShapeName` = ?Param2 WHERE `ShapeID_field` = ?Param3",
-                _updateSql[0].Statement.ToString(),
+                sqlStatements[0].Statement.ToString(),
                 "Update sql statement is incorrect.");
-            Assert.AreEqual(10, (_updateSql[0].Parameters[0]).Value,
+            Assert.AreEqual(10, (sqlStatements[0].Parameters[0]).Value,
                             "Parameter Radius has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_updateSql[0].Parameters[1]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[1]).Value,
                             "Parameter ShapeID has incorrect value.");
-            Assert.AreEqual("MyFilledCircle", (_updateSql[0].Parameters[2]).Value,
+            Assert.AreEqual("MyFilledCircle", (sqlStatements[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_updateSql[0].Parameters[3]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[3]).Value,
                             "Parameter ShapeID in where clause has incorrect value.");
 
             Assert.AreEqual("UPDATE `FilledCircle_table` SET `Colour` = ?Param0 WHERE `FilledCircleID_field` = ?Param1",
-                            _updateSql[1].Statement.ToString(),
+                            sqlStatements[1].Statement.ToString(),
                             "Update sql statement is incorrect.");
-            Assert.AreEqual(3, (_updateSql[1].Parameters[0]).Value,
+            Assert.AreEqual(3, (sqlStatements[1].Parameters[0]).Value,
                             "Parameter Colour has incorrect value.");
-            Assert.AreEqual(_filledCircleId, (_updateSql[1].Parameters[1]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[1].Parameters[1]).Value,
                             "Parameter FilledCircleID has incorrect value.");
         }
 
@@ -442,9 +446,9 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             committer.CommitTransaction();
             myCircle.SetPropertyValue("Colour", 4);
 
-            SqlStatementCollection myUpdateSql =
+            var myUpdateSql =
                 new UpdateStatementGenerator(myCircle, DatabaseConnection.CurrentConnection).Generate();
-            Assert.AreEqual(1, myUpdateSql.Count);
+            Assert.AreEqual(1, myUpdateSql.Count());
             connectionControl.Verify();
         }
 

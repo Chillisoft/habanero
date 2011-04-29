@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
 using System.Data;
 
 namespace Habanero.Base
@@ -105,22 +106,22 @@ namespace Habanero.Base
         /// sql must be executed, or null</param>
         /// <returns>Returns the number of rows affected</returns>
         int ExecuteRawSql(string sql, IDbTransaction transaction);
+     
+        /// <summary>
+        /// Executes a set of sql statements
+        /// </summary>
+        /// <param name="statements">The set of sql statements</param>
+        /// <returns>Returns the number of rows affected</returns>
+        int ExecuteSql(IEnumerable<ISqlStatement> statements);
         
         /// <summary>
-        /// Executes a collection of sql statements
+        /// Executes a set of sql statements
         /// </summary>
-        /// <param name="sql">The collection of sql statements</param>
-        /// <returns>Returns the number of rows affected</returns>
-        int ExecuteSql(ISqlStatementCollection sql);
-
-        /// <summary>
-        /// Executes a collection of sql statements
-        /// </summary>
-        /// <param name="sql">The collection of sql statements</param>
+        /// <param name="statements">The set of sql statements</param>
         /// <param name="transaction">A valid transaction object in which the 
         /// sql must be executed, or null</param>
         /// <returns>Returns the number of rows affected</returns>
-        int ExecuteSql(ISqlStatementCollection sql, IDbTransaction transaction);
+        int ExecuteSql(IEnumerable<ISqlStatement> statements, IDbTransaction transaction);
 
         /// <summary>
         /// Executes a single sql statement object
@@ -163,6 +164,12 @@ namespace Habanero.Base
         /// </summary>
         /// <returns>The <see cref="IParameterNameGenerator"/> valid for this <see cref="IDatabaseConnection"/></returns>
         IParameterNameGenerator CreateParameterNameGenerator();
+
+        /// <summary>
+        /// Creates a <see cref="ISqlStatement"/> initialised with this <see cref="IDatabaseConnection"/>
+        /// </summary>
+        /// <returns></returns>
+        ISqlStatement CreateSqlStatement();
 
         /// <summary>
         /// Creates a transaction on the given connection.

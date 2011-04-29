@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Security;
 using System.Security.Principal;
@@ -181,14 +182,14 @@ namespace Habanero.DB.ConcurrencyControl
 
         private void UpdateLockingToDB()
         {
-            ISqlStatementCollection sql = GetUpdateSql();
+            var sql = GetUpdateSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
         }
 
         private void ReleaseLockingFromDB()
         {
-            ISqlStatementCollection sql = GetReleaseLockSql();
+            IEnumerable<ISqlStatement> sql = GetReleaseLockSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
         }
@@ -247,7 +248,7 @@ namespace Habanero.DB.ConcurrencyControl
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetUpdateSql()
+        private IEnumerable<ISqlStatement> GetUpdateSql()
         {
             var gen = new UpdateStatementGenerator(_busObj,  DatabaseConnection.CurrentConnection);
             return gen.Generate();
@@ -257,7 +258,7 @@ namespace Habanero.DB.ConcurrencyControl
         /// Returns an "update" sql statement that will release the lock on this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetReleaseLockSql()
+        private IEnumerable<ISqlStatement> GetReleaseLockSql()
         {
             var gen = new UpdateStatementGeneratorLocking(_busObj, _boPropLocked, DatabaseConnection.CurrentConnection);
             return gen.Generate();

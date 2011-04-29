@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 
@@ -168,15 +169,15 @@ namespace Habanero.DB
             /// </summary>
             /// <returns>Returns an ISqlStatementCollection containing
             /// the statement</returns>
-            public ISqlStatementCollection GetPersistSql()
+            public IEnumerable<ISqlStatement> GetPersistSql()
             {
-                SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection,
+                var statement = new SqlStatement(DatabaseConnection.CurrentConnection,
                                                           " update " + _tableName + " set SettingValue = ");
                 statement.AddParameterToStatement(_newNumber.ToString());
                 statement.Statement.Append(" where SettingName = ");
                 statement.AddParameterToStatement(_settingName);
 
-                return new SqlStatementCollection(statement);
+                return new [] {statement};
             }
 
             #endregion

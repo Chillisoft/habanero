@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.DataMappers;
@@ -229,8 +230,8 @@ namespace Habanero.Test.Util
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();
             bo.SetPropertyValue("TestProp", value);
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
-            ISqlStatement sqlStatement = sqlCol[0];
+            var  sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
+            ISqlStatement sqlStatement = sqlCol.First();
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];
             string oracleTypeEnumString = ReflectionUtilities.GetEnumPropertyValue(longTextParam, "OracleType");

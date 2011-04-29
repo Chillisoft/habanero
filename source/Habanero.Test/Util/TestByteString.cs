@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -174,8 +175,8 @@ namespace Habanero.Test.Util
             TestUsingDatabase.SetupDBOracleConnection();
             IBusinessObject bo = itsClassDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp", "test");
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
-            ISqlStatement sqlStatement = sqlCol[0];
+            var  sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
+            ISqlStatement sqlStatement = sqlCol.First();
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter byteStringParam = (IDbDataParameter)parameters[1];
             Assert.IsTrue(byteStringParam.Value is byte[]);

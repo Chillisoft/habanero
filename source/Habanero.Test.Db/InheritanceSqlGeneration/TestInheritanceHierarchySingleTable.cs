@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Globalization;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -102,32 +103,34 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleDeleteSql()
         {
-            Assert.AreEqual(1, _deleteSql.Count,
+            var sqlStatements = _deleteSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one delete sql statement when using single table inheritance.");
             Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0",
-                            _deleteSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "Delete Sql for single table inheritance is incorrect.");
-            Assert.AreEqual(_filledCircleId, (_deleteSql[0].Parameters[0]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[0]).Value,
                             "Parameter ShapeID has incorrect value for delete sql when using Single Table inheritance.");
         }
 
         [Test]
         public void TestCircleInsertSql()
         {
-            Assert.AreEqual(1, _insertSql.Count,
+            var sqlStatements = _insertSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one insert Sql statement when using Single Table Inheritance.");
             Assert.AreEqual(
                 "INSERT INTO `Shape_table` (`Colour`, `Radius`, `ShapeID_field`, `ShapeName`, `ShapeType_field`) VALUES (?Param0, ?Param1, ?Param2, ?Param3, ?Param4)",
-                _insertSql[0].Statement.ToString(), "Single Table Inheritance insert Sql seems to be incorrect.");
-            Assert.AreEqual(3, _insertSql[0].Parameters[0].Value,
+                sqlStatements[0].Statement.ToString(), "Single Table Inheritance insert Sql seems to be incorrect.");
+            Assert.AreEqual(3, sqlStatements[0].Parameters[0].Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual(10, (_insertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, (sqlStatements[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual(_filledCircleId, (_insertSql[0].Parameters[2]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[2]).Value,
                             "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("MyFilledCircle", (_insertSql[0].Parameters[3]).Value,
+            Assert.AreEqual("MyFilledCircle", (sqlStatements[0].Parameters[3]).Value,
                             "Parameter ShapeName has incorrect value");
-            Assert.AreEqual("FilledCircleNoPrimaryKey", _insertSql[0].Parameters[4].Value,
+            Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatements[0].Parameters[4].Value,
                 "Discriminator has incorrect value");
 
         }
@@ -135,22 +138,23 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleUpdateSql()
         {
-            Assert.AreEqual(1, _updateSql.Count,
+            var sqlStatements = _updateSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one update sql statement when using single table inheritance.");
             Assert.AreEqual(
                 "UPDATE `Shape_table` SET `Colour` = ?Param0, `Radius` = ?Param1, `ShapeName` = ?Param2, `ShapeType_field` = ?Param3 WHERE `ShapeID_field` = ?Param4",
-                _updateSql[0].Statement.ToString());
-            Assert.AreEqual(3, (_updateSql[0].Parameters[0]).Value,
+                sqlStatements[0].Statement.ToString());
+            Assert.AreEqual(3, (sqlStatements[0].Parameters[0]).Value,
                             "Parameter Colour has incorrect value");
-            Assert.AreEqual(10, (_updateSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, (sqlStatements[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual("MyFilledCircle", (_updateSql[0].Parameters[2]).Value,
+            Assert.AreEqual("MyFilledCircle", (sqlStatements[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value");
             //Assert.AreEqual(_filledCircleId, ((IDbDataParameter) _updateSql[0].Parameters[2]).Value,
             //                "Parameter ShapeID has incorrect value");
-            Assert.AreEqual("FilledCircleNoPrimaryKey", _updateSql[0].Parameters[3].Value,
+            Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatements[0].Parameters[3].Value,
                             "Discriminator has incorrect value");
-            Assert.AreEqual(_filledCircleId, (_updateSql[0].Parameters[4]).Value,
+            Assert.AreEqual(_filledCircleId, (sqlStatements[0].Parameters[4]).Value,
                             "Parameter ShapeID has incorrect value");
         }
 

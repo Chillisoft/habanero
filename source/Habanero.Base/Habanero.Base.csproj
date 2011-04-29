@@ -328,9 +328,6 @@
     <Compile Include="ISqlStatement.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ISqlStatementCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ITextFileLoader.cs">
       <SubType>Code</SubType>
     </Compile>

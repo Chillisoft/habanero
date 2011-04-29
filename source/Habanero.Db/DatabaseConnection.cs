@@ -492,7 +492,7 @@ namespace Habanero.DB
         /// Executes a sql command that returns no result set and takes no 
         /// parameters, using the provided connection
         /// </summary>
-        /// <param name="sql">A valid sql statement (typically "insert",
+        /// <param name="statements">A valid sql statement (typically "insert",
         /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <returns>Returns the number of rows affected</returns>
@@ -500,9 +500,9 @@ namespace Habanero.DB
         /// In future override this method with others that allow you to 
         /// pass in stored procedures and parameters.
         /// </future>
-        public int ExecuteSql(ISqlStatementCollection sql)
+        public int ExecuteSql(IEnumerable<ISqlStatement> statements)
         {
-            return ExecuteSql(sql, null);
+            return ExecuteSql(statements, null);
         }
 
         /// <summary>
@@ -615,7 +615,7 @@ namespace Habanero.DB
         /// Access and MySql, the sql statements will need to be split up
         /// and executed as separate transactions.
         /// </summary>
-        /// <param name="sql">A valid sql statement object (typically "insert",
+        /// <param name="statements">A valid sql statement object (typically "insert",
         /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <param name="transaction">A valid transaction object in which the 
@@ -628,10 +628,10 @@ namespace Habanero.DB
         /// In future override this method with methods that allow you to 
         /// pass in stored procedures and parameters.
         /// </future>
-        public virtual int ExecuteSql(ISqlStatementCollection sql, IDbTransaction transaction)
+        public virtual int ExecuteSql(IEnumerable<ISqlStatement> statements, IDbTransaction transaction)
         {
             bool inTransaction = false;
-            ArgumentValidationHelper.CheckArgumentNotNull(sql, "sql");
+            ArgumentValidationHelper.CheckArgumentNotNull(statements, "statements");
             IDbConnection con = null;
             try
             {
@@ -656,7 +656,7 @@ namespace Habanero.DB
                     cmd.Transaction = transaction;
                 }
                 int totalRowsAffected = 0;
-                foreach (SqlStatement statement in sql)
+                foreach (SqlStatement statement in statements)
                 {
                     statement.SetupCommand(cmd);
                     //cmd.CommandText = sql;
@@ -682,15 +682,15 @@ namespace Habanero.DB
                 log.Error
                     ("Error writing to database : " + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql);
+                log.Error("Sql: " + statements);
                 if (transaction != null)
                 {
                     transaction.Rollback();
                 }
                 throw new DatabaseWriteException
                     ("There was an error writing to the database. Please contact your system administrator."
-                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + sql.ToString(),
-                     "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
+                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + statements.ToString(),
+                     "The command executeNonQuery could not be completed.", ex, statements.ToString(), ErrorSafeConnectString());
             }
             finally
             {
@@ -712,7 +712,7 @@ namespace Habanero.DB
         public int ExecuteSql(ISqlStatement sql)
         {
             if (sql == null) throw new ArgumentNullException("sql");
-            return ExecuteSql(new SqlStatementCollection(sql));
+            return ExecuteSql(new[] { sql });
         }
 
         /// <summary>
@@ -790,6 +790,15 @@ namespace Habanero.DB
         /// </summary>
         /// <returns>The <see cref="IParameterNameGenerator"/> valid for this <see cref="IDatabaseConnection"/></returns>
         public abstract IParameterNameGenerator CreateParameterNameGenerator();
+
+        /// <summary>
+        /// Creates a <see cref="ISqlStatement"/> initialised with this <see cref="IDatabaseConnection"/>
+        /// </summary>
+        /// <returns></returns>
+        public ISqlStatement CreateSqlStatement()
+        {
+            return new SqlStatement(this);
+        }
 
         /// <summary>
         /// Loads data from the database into a DataTable object, using the

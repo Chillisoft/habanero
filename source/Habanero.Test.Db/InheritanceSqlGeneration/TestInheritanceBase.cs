@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -25,9 +27,9 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
     public abstract class TestInheritanceBase : TestUsingDatabase
     {
         protected BusinessObject objCircle;
-        protected SqlStatementCollection itsInsertSql;
-        protected SqlStatementCollection itsUpdateSql;
-        protected SqlStatementCollection itsDeleteSql;
+        protected IEnumerable<ISqlStatement> itsInsertSql;
+        protected IEnumerable<ISqlStatement> itsUpdateSql;
+        protected IEnumerable<ISqlStatement> itsDeleteSql;
         protected string strID;
 
         public void SetupTest()

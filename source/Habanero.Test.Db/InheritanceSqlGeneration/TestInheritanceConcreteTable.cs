@@ -19,6 +19,7 @@
 using System;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -62,43 +63,46 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleInsertSql()
         {
-            Assert.AreEqual(1, itsInsertSql.Count,
+            var sqlStatements = itsInsertSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one insert statement for concrete table inheritance.");
             Assert.AreEqual("INSERT INTO `circle_table` (`CircleID_field`, `Radius`, `ShapeName`) VALUES (?Param0, ?Param1, ?Param2)",
-                            itsInsertSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "Concrete Table Inheritance insert Sql seems to be incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsInsertSql[0].Parameters[0]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) sqlStatements[0].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter) itsInsertSql[0].Parameters[2]).Value,
+            Assert.AreEqual("MyShape", ((IDbDataParameter) sqlStatements[0].Parameters[2]).Value,
                             "Parameter ShapeName has incorrect value");
-            Assert.AreEqual(10, ((IDbDataParameter) itsInsertSql[0].Parameters[1]).Value,
+            Assert.AreEqual(10, ((IDbDataParameter) sqlStatements[0].Parameters[1]).Value,
                             "Parameter Radius has incorrect value");
         }
 
         [Test]
         public void TestCircleUpdateSql()
         {
-            Assert.AreEqual(1, itsUpdateSql.Count,
+            var sqlStatements = itsUpdateSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one update statement for concrete table inheritance.");
             Assert.AreEqual("UPDATE `circle_table` SET `Radius` = ?Param0, `ShapeName` = ?Param1 WHERE `CircleID_field` = ?Param2",
-                            itsUpdateSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "Concrete Table Inheritance update Sql seems to be incorrect.");
-            Assert.AreEqual(10, ((IDbDataParameter)itsUpdateSql[0].Parameters[0]).Value,
+            Assert.AreEqual(10, ((IDbDataParameter)sqlStatements[0].Parameters[0]).Value,
                             "Parameter Radius has incorrect value");
-            Assert.AreEqual("MyShape", ((IDbDataParameter)itsUpdateSql[0].Parameters[1]).Value,
+            Assert.AreEqual("MyShape", ((IDbDataParameter)sqlStatements[0].Parameters[1]).Value,
                             "Parameter ShapeName incorrect value");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsUpdateSql[0].Parameters[2]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) sqlStatements[0].Parameters[2]).Value,
                             "Parameter CircleID in where clause has incorrect value");
         }
 
         [Test]
         public void TestCircleDeleteSql()
         {
-            Assert.AreEqual(1, itsDeleteSql.Count,
+            var sqlStatements = itsDeleteSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count,
                             "There should only be one delete statement for concrete table inheritance.");
-            Assert.AreEqual("DELETE FROM `circle_table` WHERE `CircleID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `circle_table` WHERE `CircleID_field` = ?Param0", sqlStatements[0].Statement.ToString(),
                             "Concrete Table Inheritance delete Sql seems to be incorrect.");
-            Assert.AreEqual(strID, ((IDbDataParameter) itsDeleteSql[0].Parameters[0]).Value,
+            Assert.AreEqual(strID, ((IDbDataParameter) sqlStatements[0].Parameters[0]).Value,
                             "Parameter CircleID has incorrect value in Delete Sql statement for concrete table inheritance.");
         }
 

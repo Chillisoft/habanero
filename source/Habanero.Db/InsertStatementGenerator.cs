@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -36,7 +37,7 @@ namespace Habanero.DB
         private StringBuilder _dbValueList;
         private IParameterNameGenerator _gen;
         private SqlStatement _insertSql;
-        private SqlStatementCollection _statementCollection;
+        private List<ISqlStatement> _statements;
         private readonly IDatabaseConnection _connection;
         private bool _firstField;
         private ClassDef _currentClassDef;
@@ -58,9 +59,9 @@ namespace Habanero.DB
         /// object's properties into the database
         /// </summary>
         /// <returns>Returns a sql statement collection</returns>
-        public SqlStatementCollection Generate()
+        public IEnumerable<ISqlStatement> Generate()
         {
-            _statementCollection = new SqlStatementCollection();
+            _statements = new List<ISqlStatement>();
             _currentClassDef = _bo.ClassDef;
             IBOPropCol propsToInclude;
             string tableName;
@@ -84,7 +85,7 @@ namespace Habanero.DB
                 GenerateSingleInsertStatement(propsToInclude, tableName);
             }
 
-            return _statementCollection;
+            return _statements;
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace Habanero.DB
                                             "INSERT INTO {0} ({1}) VALUES ({2})",
                                             _connection.SqlFormatter.DelimitTable(tableName),
                                             _dbFieldList, _dbValueList));
-            _statementCollection.Insert(0, _insertSql);
+            _statements.Insert(0, _insertSql);
         }
 
         private void ModifyForInheritance(IBOPropCol propsToInclude)

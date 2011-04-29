@@ -277,6 +277,17 @@ namespace Habanero.Test.DB
             dr2.Close();
         }
 
+        [Test]
+        public void CreateSqlStatement()
+        {
+            //---------------Set up test pack-------------------
+            var db = DatabaseConnection.CurrentConnection;
+            //---------------Execute Test ----------------------
+            var sqlStatement = db.CreateSqlStatement();
+            //---------------Test Result -----------------------
+            Assert.AreSame(db, sqlStatement.DatabaseConnection);
+        }
+
 
         private class DatabaseConnection_Stub : DatabaseConnection
         {

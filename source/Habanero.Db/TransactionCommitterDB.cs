@@ -133,7 +133,7 @@ namespace Habanero.DB
                 }
             }
 
-            ISqlStatementCollection sql = transactionDB.GetPersistSql();
+            IEnumerable<ISqlStatement> sql = transactionDB.GetPersistSql();
             if (sql == null) return;
             IDatabaseConnection databaseConnection = _databaseConnection;
             databaseConnection.ExecuteSql(sql, _dbTransaction);

@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using Habanero.Base;
 using Habanero.BO;
@@ -169,7 +170,7 @@ namespace Habanero.DB
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public ISqlStatementCollection GetPersistSql()
+        public IEnumerable<ISqlStatement> GetPersistSql()
         {
             SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             string sql = "INSERT INTO " + this._transactionLogTable + " (" +
@@ -201,8 +202,7 @@ namespace Habanero.DB
             tranSql.AddParameterToStatement(_buObjToLog.DirtyXML);
             tranSql.Statement.Append(")");
 
-            SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
-            return sqlStatements;
+            return new [] { tranSql };
         }
 
         private string GetLogonUserName()

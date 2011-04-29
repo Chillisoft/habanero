@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
 using System.Text;
 using Habanero.Base;
 using Habanero.BO;
@@ -48,9 +49,9 @@ namespace Habanero.DB
         /// object from the database
         /// </summary>
         /// <returns>Returns a sql statement collection</returns>
-        public SqlStatementCollection Generate()
+        public IEnumerable<ISqlStatement> Generate()
         {
-            SqlStatementCollection statementCollection = new SqlStatementCollection();
+            var statements = new List<ISqlStatement>();
 
             //AddRelationshipDeleteStatements(statementCollection);
 
@@ -58,7 +59,7 @@ namespace Habanero.DB
             deleteSql.Statement = new StringBuilder(
                 @"DELETE FROM " + _connection.SqlFormatter.DelimitTable(StatementGeneratorUtils.GetTableName(_bo)) +
                 " WHERE " + StatementGeneratorUtils.PersistedDatabaseWhereClause((BOKey) _bo.ID, deleteSql));
-            statementCollection.Add(deleteSql);
+            statements.Add(deleteSql);
             IClassDef currentClassDef = _bo.ClassDef;
             while (currentClassDef.IsUsingClassTableInheritance())
             {
@@ -73,10 +74,10 @@ namespace Habanero.DB
                     _connection.SqlFormatter.DelimitTable(currentClassDef.SuperClassClassDef.TableName) +
                     " WHERE " +
                     StatementGeneratorUtils.PersistedDatabaseWhereClause(BOPrimaryKey.GetSuperClassKey((ClassDef) currentClassDef, _bo), deleteSql));
-                statementCollection.Add(deleteSql);
+                statements.Add(deleteSql);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
-            return statementCollection;
+            return statements;
         }
     }
 }
