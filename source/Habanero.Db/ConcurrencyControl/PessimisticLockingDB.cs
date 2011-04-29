@@ -185,7 +185,8 @@ namespace Habanero.DB.ConcurrencyControl
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
         }
-        private void ReleaseLockingToDB()
+
+        private void ReleaseLockingFromDB()
         {
             ISqlStatementCollection sql = GetReleaseLockSql();
             if (sql == null) return;
@@ -251,8 +252,9 @@ namespace Habanero.DB.ConcurrencyControl
             var gen = new UpdateStatementGenerator(_busObj,  DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
+
         /// <summary>
-        /// Returns an "update" sql statement list for updating this object
+        /// Returns an "update" sql statement that will release the lock on this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
         private SqlStatementCollection GetReleaseLockSql()
@@ -281,7 +283,7 @@ namespace Habanero.DB.ConcurrencyControl
                 if ((bool)_boPropLocked.Value)
                 {
                     _boPropLocked.Value = false;
-                    ReleaseLockingToDB();               
+                    ReleaseLockingFromDB();               
                 }
         }
 
