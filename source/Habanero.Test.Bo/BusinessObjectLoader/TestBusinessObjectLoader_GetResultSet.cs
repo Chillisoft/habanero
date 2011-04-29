@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -49,10 +50,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             var resultSet = BORegistry.DataAccessor.BusinessObjectLoader.GetResultSet(selectQuery);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, resultSet.Fields.Count);
-            Assert.AreEqual(1, resultSet.Rows.Count);
-            Assert.AreEqual(propertyName, resultSet.Fields[0].PropertyName);
-            Assert.AreEqual(cp1.Surname, resultSet.Rows[0].RawValues[0]);
+            var fields = resultSet.Fields.ToList();
+            var rows = resultSet.Rows.ToList();
+            Assert.AreEqual(1, fields.Count);
+            Assert.AreEqual(1, rows.Count);
+            Assert.AreEqual(propertyName, fields[0].PropertyName);
+            Assert.AreEqual(cp1.Surname, rows[0].RawValues[0]);
         }
         
         [Test]
@@ -70,10 +73,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             var resultSet = BORegistry.DataAccessor.BusinessObjectLoader.GetResultSet(selectQuery);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, resultSet.Fields.Count);
-            Assert.AreEqual(1, resultSet.Rows.Count);
-            Assert.AreEqual(propertyName, resultSet.Fields[0].PropertyName);
-            Assert.AreEqual(cp1.Surname, resultSet.Rows[0].RawValues[0]);
+            var fields = resultSet.Fields.ToList();
+            var rows = resultSet.Rows.ToList();
+            Assert.AreEqual(1, fields.Count);
+            Assert.AreEqual(1, rows.Count);
+            Assert.AreEqual(propertyName, fields[0].PropertyName);
+            Assert.AreEqual(cp1.Surname, rows[0].RawValues[0]);
         }
 
         [Test]
@@ -91,10 +96,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             var resultSet = BORegistry.DataAccessor.BusinessObjectLoader.GetResultSet(selectQuery);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, resultSet.Fields.Count);
-            Assert.AreEqual(1, resultSet.Rows.Count);
-            Assert.AreEqual(propertyName, resultSet.Fields[0].PropertyName);
-            Assert.AreEqual(cp1.Surname, resultSet.Rows[0].RawValues[0]);
+            var fields = resultSet.Fields.ToList();
+            var rows = resultSet.Rows.ToList();
+            Assert.AreEqual(1, fields.Count);
+            Assert.AreEqual(1, rows.Count);
+            Assert.AreEqual(propertyName, fields[0].PropertyName);
+            Assert.AreEqual(cp1.Surname, rows[0].RawValues[0]);
         }
 
         [Test]
@@ -115,7 +122,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Execute Test ----------------------
             var resultSet = BORegistry.DataAccessor.BusinessObjectLoader.GetResultSet(selectQuery);
             //---------------Test Result -----------------------
-            Assert.AreEqual(firstNameValue, resultSet.Rows[0].RawValues[0]);
+            var rows = resultSet.Rows.ToList();
+            Assert.AreEqual(firstNameValue, rows[0].RawValues[0]);
+        }
+
+        [Test]
+        public void ShouldOrderResults_WhenOrderCriteriaAreSupplied()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            var cp1 = CreateContactPerson("zzzz");
+            var cp2 = CreateContactPerson("aaaa");
+            var selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            selectQuery.Fields.Clear();
+            const string propertyName = "Surname";
+            selectQuery.Fields.Add(propertyName, QueryBuilder.CreateQueryField(classDef, propertyName));
+            selectQuery.OrderCriteria.Add(propertyName);
+            //---------------Execute Test ----------------------
+            var resultSet = BORegistry.DataAccessor.BusinessObjectLoader.GetResultSet(selectQuery);
+            //---------------Test Result -----------------------
+            var rows = resultSet.Rows.ToList();
+            Assert.AreEqual(2, rows.Count);
+            Assert.AreEqual(cp2.Surname, rows[0].Values[0]);
+            Assert.AreEqual(cp1.Surname, rows[1].Values[0]);
         }
 
         private ContactPersonTestBO CreateContactPersonWithAddress(DateTime dateOfBirth)
@@ -135,8 +164,13 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         private ContactPersonTestBO CreateContactPerson()
         {
+            return CreateContactPerson(Guid.NewGuid().ToString("N"));
+        }
+
+        private ContactPersonTestBO CreateContactPerson(string surname)
+        {
             var cp1 = new ContactPersonTestBO();
-            cp1.Surname = Guid.NewGuid().ToString("N");
+            cp1.Surname = surname;
             cp1.FirstName = Guid.NewGuid().ToString("N");
             cp1.Save();
             return cp1;

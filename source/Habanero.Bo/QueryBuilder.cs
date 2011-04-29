@@ -146,8 +146,7 @@ namespace Habanero.BO
         public static IOrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString(orderByString);
+            IOrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             try
             {
                 //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
