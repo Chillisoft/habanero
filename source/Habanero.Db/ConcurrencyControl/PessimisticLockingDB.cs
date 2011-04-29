@@ -280,11 +280,13 @@ namespace Habanero.DB.ConcurrencyControl
         public void ReleaseWriteLocks()
         {
             if (_boPropLocked != null && _boPropLocked.Value != null)
-                if ((bool)_boPropLocked.Value)
+            {
+                if ((bool) _boPropLocked.Value)
                 {
                     _boPropLocked.Value = false;
                     ReleaseLockingFromDB();               
                 }
+            }
         }
 
 

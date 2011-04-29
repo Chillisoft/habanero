@@ -298,7 +298,7 @@ namespace Habanero.DB
                         return dbConnection;
                     }
                 }
-                IDbConnection newDbConnection = this.NewConnection;
+                var newDbConnection = this.NewConnection;
                 _connections.Add(newDbConnection);
                 return newDbConnection;
             }
@@ -320,7 +320,7 @@ namespace Habanero.DB
         {
             get
             {
-                IDbConnection connection = this.GetConnection();
+                var connection = this.GetConnection();
                 connection.Open();
                 return connection;
             }

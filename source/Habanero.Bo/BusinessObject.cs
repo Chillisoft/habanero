@@ -362,8 +362,14 @@ namespace Habanero.BO
             }
             finally
             {
-                ReleaseWriteLocks();
-                //                ReleaseReadLocks();                
+                try
+                {
+                    ReleaseWriteLocks();
+                }
+                catch (Exception e)
+                {
+                    _logger.Log("it is potentially dangerous to access ADO connections in an object's destructor. But the release locks is really a but if when maybe type situation so we can live with this.", e, LogCategory.Debug);
+                }            
             }
         }
 

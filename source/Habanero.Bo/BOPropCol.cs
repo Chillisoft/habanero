@@ -208,7 +208,7 @@ namespace Habanero.BO
         {
             bool propsValid = true;
             errors = new List<IBOError>();
-            foreach (IBOProp prop in this)
+            foreach (var prop in this)
             {
                 prop.Validate();
                 if (prop.IsValid) continue;

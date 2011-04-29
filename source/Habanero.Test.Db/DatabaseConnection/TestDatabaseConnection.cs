@@ -27,6 +27,7 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestDatabaseConnection : TestUsingDatabase
     {
+// ReSharper disable InconsistentNaming
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
@@ -96,7 +97,7 @@ namespace Habanero.Test.DB
             IDatabaseConnection dbConn = new DatabaseConnection_Stub();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+            var defaultSqlFormatter = dbConn.SqlFormatter;
             //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter) defaultSqlFormatter;
@@ -114,13 +115,13 @@ namespace Habanero.Test.DB
         public void Test_NoColumnName_DoesntError()
         {
             //---------------Set up test pack-------------------
-            string sql = "Select FirstName + ', ' + Surname from contactpersoncompositekey";
-            SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
+            const string sql = "Select FirstName + ', ' + Surname from contactpersoncompositekey";
+            var sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
 
-            DataTable dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
+            var dataTable = DatabaseConnection.CurrentConnection.LoadDataTable(sqlStatement, "", "");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, dataTable.Columns.Count);
         }
@@ -131,7 +132,7 @@ namespace Habanero.Test.DB
             //DatabaseConnection.CurrentConnection.ConnectionString =
             //	@"data source=Core;database=WorkShopManagement;uid=sa;pwd=;";
 
-            string sql = "DELETE from TestTableRead";
+            var sql = "DELETE from TestTableRead";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
             sql = "Insert into TestTableRead (TestTableReadData) VALUES ('aaa')";

@@ -413,7 +413,7 @@ namespace Habanero.Test.DB
         [Test]
         public void TestUpdateExistingContactPerson()
         {
-            ContactPerson myContactPerson =
+            var myContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(_updateContactPersonId);
             myContactPerson.FirstName = "NewFirstName";
             myContactPerson.Save();
