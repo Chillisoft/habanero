@@ -203,6 +203,7 @@
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
     <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
     <Compile Include="ObjectManager\IBusinessObjectManager.cs" />
+    <Compile Include="ObjectTreeXmlReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
