@@ -27,7 +27,6 @@ namespace Habanero.BO
 {
     public class DataStoreInMemoryXmlWriter
     {
-        private readonly Stream _stream;
         private XmlWriterSettings _settings;
 
         public DataStoreInMemoryXmlWriter()
@@ -40,52 +39,27 @@ namespace Habanero.BO
             _settings = xmlWriterSettings;
         }
 
-        public DataStoreInMemoryXmlWriter(Stream stream): this(stream, new XmlWriterSettings {ConformanceLevel = ConformanceLevel.Auto})
+        public void Write(Stream stream, DataStoreInMemory dataStore)
         {
+            Write(stream, dataStore.AllObjects);
         }
 
-        public DataStoreInMemoryXmlWriter(Stream stream, XmlWriterSettings xmlWriterSettings)
+        public void Write(StringBuilder s, DataStoreInMemory dataStore)
         {
-            _stream = stream;
-            _settings = xmlWriterSettings;
+            var writer = XmlWriter.Create(s, _settings);
+            Write(writer, dataStore.AllObjects);
         }
 
-        public void Write(DataStoreInMemory dataStore)
+        public void Write(Stream stream, Dictionary<Guid, IBusinessObject> businessObjects)
         {
-            Write(dataStore.AllObjects);
+            var writer = XmlWriter.Create(stream, _settings);
+            Write(writer, businessObjects);
         }
 
-        public void WriteToString(DataStoreInMemory dataStore, StringBuilder s)
+        public void Write(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects)
         {
-            XmlWriter writer = XmlWriter.Create(s, _settings);
-            WriteObjects(writer, dataStore.AllObjects);
-        }
-
-        public void Write(Dictionary<Guid, IBusinessObject> businessObjects)
-        {
-            if (_stream == null) throw new ArgumentException("'stream' cannot be null");
-            XmlWriter writer = XmlWriter.Create(_stream, _settings);
-            WriteObjects(writer, businessObjects);
-        }
-
-        private void WriteObjects(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects)
-        {
-            writer.WriteStartDocument();
-            writer.WriteStartElement("BusinessObjects");
-            foreach (var o in businessObjects)
-            {
-                writer.WriteStartElement("bo");
-                writer.WriteAttributeString("__tn", o.Value.ClassDef.ClassName);
-                writer.WriteAttributeString("__an", o.Value.ClassDef.AssemblyName);
-                foreach (IBOProp prop in o.Value.Props)
-                {
-                    writer.WriteAttributeString(prop.PropertyName, prop.PropertyValueString);
-                }
-                writer.WriteEndElement();
-            }
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Close();
+            var boWriter = new BusinessObjectXmlWriter();
+            boWriter.Write(writer, businessObjects.Values);
         }
     }
 }

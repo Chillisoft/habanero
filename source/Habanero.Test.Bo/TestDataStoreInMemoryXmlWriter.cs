@@ -46,36 +46,36 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Construct()
+        public void Construct()
         {
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            var writer = new DataStoreInMemoryXmlWriter(new MemoryStream());
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Test Result -----------------------
             
             //---------------Tear Down -------------------------          
         }
 
         [Test]
-        public void Test_Write()
+        public void Write()
         {
             //---------------Set up test pack-------------------
             var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
             var stream = new MemoryStream();
-            var writer = new DataStoreInMemoryXmlWriter(stream);
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dataStore);
+            writer.Write(stream, dataStore);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithXmlWriterSettings()
+        public void Write_WithXmlWriterSettings()
         {
             //---------------Set up test pack-------------------
             var dataStore = new DataStoreInMemory();
@@ -84,36 +84,36 @@ namespace Habanero.Test.BO
             var xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Auto;
             xmlWriterSettings.NewLineOnAttributes = true;
-            var writer = new DataStoreInMemoryXmlWriter(stream, xmlWriterSettings);
+            var writer = new DataStoreInMemoryXmlWriter(xmlWriterSettings);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dataStore);
+            writer.Write(stream, dataStore);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithDictionary()
+        public void Write_WithDictionary()
         {
             //---------------Set up test pack-------------------
             var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
             var dictionary = dataStore.AllObjects;
             var stream = new MemoryStream();
-            var writer = new DataStoreInMemoryXmlWriter(stream);
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dictionary);
+            writer.Write(stream, dictionary);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithDictionary_WithXmlWriterSettings()
+        public void Write_WithDictionary_WithXmlWriterSettings()
         {
             //---------------Set up test pack-------------------
             var dataStore = new DataStoreInMemory();
@@ -123,18 +123,18 @@ namespace Habanero.Test.BO
             var xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Auto;
             xmlWriterSettings.NewLineOnAttributes = true;
-            var writer = new DataStoreInMemoryXmlWriter(stream, xmlWriterSettings);
+            var writer = new DataStoreInMemoryXmlWriter(xmlWriterSettings);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dictionary);
+            writer.Write(stream, dictionary);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_WriteToString()
+        public void Write_ToString()
         {
             //---------------Set up test pack-------------------
             var dataStore = new DataStoreInMemory();
@@ -145,7 +145,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, sb.Length);
             //---------------Execute Test ----------------------
-            writer.WriteToString(dataStore, sb);
+            writer.Write(sb, dataStore);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, sb.Length);
         }

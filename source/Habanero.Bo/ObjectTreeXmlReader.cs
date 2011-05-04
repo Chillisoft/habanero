@@ -1,121 +1,152 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// This class reads an xml stream and loads the objects in it into an IEnumerable[IBusinessObject].
+    /// It will update existing objects. For example, if you are deserialising an object from an xml stream
+    /// that exists in your data store, it will load the object from the data store and update its properties
+    /// from the xml stream. It won't persist after this.  If the object does not exist in the data store then
+    /// it will instantiate the object and set up its properties as a new object, ready to persist.
+    /// </summary>
     public class ObjectTreeXmlReader
     {
-        private readonly Stream _stream;
-
-        private List<string> _propertyReadExceptions = new List<string>();
         public Result ReadResult { get; private set; }
 
-        public ObjectTreeXmlReader( )
+        /// <summary>
+        /// Reads from a stream that contains xml text. Creates the XmlReader that reads the stream and then uses
+        /// a default <see cref="IBusinessObjectXmlReader"/> to create the objects from the xml.
+        /// Any errors that occur when setting properties on objects will be added to the ReadResult property.
+        /// Once this method returns, check the Successful flag of the ReadResult to see if there are errors, and
+        /// check the Message flag to see what the errors were.
+        /// </summary>
+        /// <param name="stream">The stream to read from. This stream must contain xml text</param>
+        /// <returns>A <see cref="DataStoreInMemory"/> containing all objects that were in the xml</returns>
+        public IEnumerable<IBusinessObject> Read(Stream stream)
         {
-        }
-        public ObjectTreeXmlReader(Stream stream)
-        {
-            _stream = stream;
+            var xmlReader = XmlReader.Create(stream, GetSettings());
+            return Read(xmlReader);
         }
 
-        public IEnumerable<IBusinessObject> ReadFromString(string xml)
+        /// <summary>
+        /// Reads from a string that contains xml text. Creates the XmlReader that reads the string and then uses
+        /// a default <see cref="IBusinessObjectXmlReader"/> to create the objects from the xml.
+        /// Any errors that occur when setting properties on objects will be added to the ReadResult property.
+        /// Once this method returns, check the Successful flag of the ReadResult to see if there are errors, and
+        /// check the Message flag to see what the errors were.
+        /// </summary>
+        /// <param name="xml">The xml to read</param>
+        /// <returns>A <see cref="DataStoreInMemory"/> containing all objects that were in the xml</returns>
+        public IEnumerable<IBusinessObject> Read(string xml)
         {
             var reader = XmlReader.Create(new StringReader(xml), GetSettings());
-            return ReadFromReader(reader);
+            return Read(reader);
         }
 
-        public IEnumerable<IBusinessObject> Read()
+        /// <summary>
+        /// Reads from an XmlReader. Uses a default <see cref="IBusinessObjectXmlReader"/> to 
+        /// create the objects from the xml.
+        /// Any errors that occur when setting properties on objects will be added to the ReadResult property.
+        /// Once this method returns, check the Successful flag of the ReadResult to see if there are errors, and
+        /// check the Message flag to see what the errors were.
+        /// </summary>
+        /// <param name="xmlReader">The reader to use</param>
+        /// <returns>A <see cref="DataStoreInMemory"/> containing all objects that were in the xml</returns>
+        public IEnumerable<IBusinessObject> Read(XmlReader xmlReader)
         {
-            if (_stream == null) throw new ArgumentException("'stream' cannot be null");
-            var reader = XmlReader.Create(_stream, GetSettings());
-            return ReadFromReader(reader);
+            var boReader = new BusinessObjectXmlReader();
+            return Read(xmlReader, boReader);
         }
 
-        private IEnumerable<IBusinessObject> ReadFromReader(XmlReader reader)
+        /// <summary>
+        /// Reads from a stream. Uses the given <see cref="IBusinessObjectXmlReader"/> to 
+        /// create the objects from the xml.
+        /// Any errors that occur when setting properties on objects will be added to the ReadResult property.
+        /// Once this method returns, check the Successful flag of the ReadResult to see if there are errors, and
+        /// check the Message flag to see what the errors were.
+        /// </summary>
+        /// <param name="stream">The stream to read the xml from</param>
+        /// <param name="boReader">The <see cref="IBusinessObjectXmlReader"/> to use. This object
+        /// converts the xml data into business objects, so you can control how the objects are deserialised by
+        /// creating your own.</param>
+        /// <returns>A <see cref="DataStoreInMemory"/> containing all objects that were in the xml</returns>
+        public IEnumerable<IBusinessObject> Read(Stream stream, IBusinessObjectXmlReader boReader)
+        {
+            var reader = XmlReader.Create(stream, GetSettings());
+            return Read(reader, boReader);
+        }
+
+        /// <summary>
+        /// Reads from a stream. Uses the given <see cref="IBusinessObjectXmlReader"/> to 
+        /// create the objects from the xml.
+        /// Any errors that occur when setting properties on objects will be added to the ReadResult property.
+        /// Once this method returns, check the Successful flag of the ReadResult to see if there are errors, and
+        /// check the Message flag to see what the errors were.
+        /// </summary>
+        /// <param name="xmlReader">The xml reader to use</param>
+        /// <param name="boReader">The <see cref="IBusinessObjectXmlReader"/> to use. This object
+        /// converts the xml data into business objects, so you can control how the objects are deserialised by
+        /// creating your own.</param>
+        /// <returns>A <see cref="DataStoreInMemory"/> containing all objects that were in the xml</returns>
+        public IEnumerable<IBusinessObject> Read(XmlReader xmlReader, IBusinessObjectXmlReader boReader)
         {
             BOSequenceNumber.LoadNumberGenClassDef();
             var objects = new List<IBusinessObject>();
-            reader.Read();
-            reader.Read();
-            while (reader.Name == "BusinessObjects") reader.Read();
-            while (reader.Name == "bo")
-            {
-                var typeName = reader.GetAttribute("__tn");
-                var assemblyName = reader.GetAttribute("__an");
-                var classDef = ClassDef.ClassDefs[assemblyName, typeName];
-                var boType = classDef.ClassType;
-                var bo = (IBusinessObject)Activator.CreateInstance(boType);
-                
-                while (reader.MoveToNextAttribute())
-                {
-                    var propertyName = reader.Name;
-                    if (reader.Name == "__tn" || reader.Name == "__an") continue;
-                    var propertyValue = reader.Value;
-                    try 
-                    {
-                        SetupProperty(bo, propertyName, propertyValue);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log the exception and continue
-                        _propertyReadExceptions.Add(string.Format("An error occured when attempting to set property '{0}.{1}'. {2}", bo.ClassDef.ClassName , propertyName, ex.Message));
-                        continue;
-                    }
-                }
-                BusinessObjectManager.Instance.Remove(bo);
-                var existingBo = GetExistingBo(classDef, bo);
-                if (existingBo != null)
-                {
-                    foreach (var prop in existingBo.Props)
-                    {
-                        existingBo.SetPropertyValue(prop.PropertyName, bo.GetPropertyValue(prop.PropertyName));
-                    }
-                    objects.Add(existingBo);
-                }
-                else
-                {
-                    //BusinessObjectLoaderBase.SetStatusAfterLoad(bo);
-                    //((BusinessObject)bo).SetStatus(BOStatus.Statuses.isNew, true);
-                    //ReflectionUtilities.SetPropertyValue(bo.Status, "IsNew", true);
-                    BusinessObjectLoaderBase.CallAfterLoad(bo);
-                    objects.Add(bo);
-                    try
-                    {
-                        BusinessObjectManager.Instance.Add(bo);
-                    } catch (HabaneroDeveloperException ex)
-                    {
-                        // object already exists - this is a possible circumstance so we can let it go
-                        if (!ex.DeveloperMessage.Contains("Two copies of the business object"))
-                            throw;
-                        
-                    }
-                    bo.Props.BackupPropertyValues();
-                }
-                
-                reader.Read();
-            }
+            var bos = boReader.Read(xmlReader);
+            bos.ForEach(bo => objects.Add(ConfigureObjectAfterLoad(bo)));
 
-            //foreach (IBusinessObject businessObject in objects.Values)
-            //{
-            //    businessObject.Props.BackupPropertyValues();
-            //}
+            ReadResult = boReader.PropertyReadExceptions.Count() == 0 
+                 ? new Result(true) 
+                 : new Result(false, BuildExceptionMessage(boReader.PropertyReadExceptions));
+            return objects;
+        }
 
-            if (_propertyReadExceptions.Count == 0)
+        /// <summary>
+        /// Sets up the object after loading. In this case:
+        /// 1. Tries to load the object from the data store. If it exists:
+        /// --a. Updates the existing object's properties
+        /// --b. Returns the existing object
+        /// 2. Otherwise:
+        /// --a. Calls the <see cref="BusinessObject.AfterLoad()"/> method on the object
+        /// --b. Backs up the property values, setting the persisted values of the properties
+        /// </summary>
+        /// <param name="bo">The object to configure</param>
+        /// <returns>The business object to add. In the case of an existing object the object returned 
+        /// will be different from the one passed in</returns>
+        protected virtual IBusinessObject ConfigureObjectAfterLoad(IBusinessObject bo)
+        {
+            BusinessObjectManager.Instance.Remove(bo);
+            var existingBo = GetExistingBo(bo.ClassDef, bo);
+            if (existingBo != null)
             {
-                ReadResult = new Result(true);
+                foreach (var prop in existingBo.Props)
+                {
+                    existingBo.SetPropertyValue(prop.PropertyName, bo.GetPropertyValue(prop.PropertyName));
+                }
+                return existingBo;
             }
             else
             {
-                ReadResult = new Result(false, BuildExceptionMessage(_propertyReadExceptions));
+                BusinessObjectLoaderBase.CallAfterLoad(bo);
+                try
+                {
+                    BusinessObjectManager.Instance.Add(bo);
+                } catch (HabaneroDeveloperException ex)
+                {
+                    // object already exists - this is a possible circumstance so we can let it go
+                    if (!ex.DeveloperMessage.Contains("Two copies of the business object"))
+                        throw;
+                }
+                bo.Props.BackupPropertyValues();
+                return bo;
             }
-            return objects;
         }
 
         private IBusinessObject GetExistingBo(IClassDef classDef, IBusinessObject bo)
@@ -133,7 +164,7 @@ namespace Habanero.BO
             return null;
         }
 
-        private XmlReaderSettings GetSettings()
+        protected virtual XmlReaderSettings GetSettings()
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.IgnoreComments = true;
@@ -153,12 +184,6 @@ namespace Habanero.BO
             }
             return exceptionMessage.ToString();
         }
-
-        protected  virtual void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
-        {
-            bo.Props[propertyName].InitialiseProp(propertyValue);
-        }
-
      
     }
 }

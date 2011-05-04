@@ -189,11 +189,14 @@
     <Compile Include="TestBusinessObjectRules.cs" />
     <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
+    <Compile Include="TestBusinessObjectXmlReader.cs" />
+    <Compile Include="TestBusinessObjectXmlWriter.cs" />
     <Compile Include="TestDataAccessorMultiSource.cs" />
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
     <Compile Include="TestDataStoreInMemoryXmlReader.cs" />
     <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
     <Compile Include="TestNumberGenerator.cs" />
+    <Compile Include="TestObjectTreeXmlReader.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection.cs" />
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_AddedBOs.cs" />

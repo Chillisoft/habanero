@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
-using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -11,16 +9,15 @@ using NUnit.Framework;
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestDataStoreInMemoryXmlReader
+    public class TestObjectTreeXmlReader
     {
-        
         [SetUp]
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
             new Address();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TearDown]
@@ -29,19 +26,19 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Construct()
+        public void Construct()
         {
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Test Result -----------------------
             
             //---------------Tear Down -------------------------          
         }
-  
+
         [Test]
-        public void Read_ShouldLoadObjectsAsSaved()
+        public void Read_ShouldLoadObjectsAsNew_WhenNotInExistingDataStore()
         {
             //---------------Set up test pack-------------------
             LoadMyBOClassDefsWithNoUIDefs();
@@ -51,25 +48,40 @@ namespace Habanero.Test.BO
             transactionCommitter.AddBusinessObject(savedBo);
             transactionCommitter.CommitTransaction();
             var writeStream = GetStreamForDataStore(savedDataStore);
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, savedDataStore.Count);
             //---------------Execute Test ----------------------
-            var loadedDataStore = reader.Read(writeStream);
+            var loadedObjects = reader.Read(writeStream);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
-            IBusinessObject loadedBo;
-            var success = loadedDataStore.AllObjects.TryGetValue(savedBo.MyBoID.GetValueOrDefault(), out loadedBo);
-            Assert.IsTrue(success);
-            Assert.IsNotNull(loadedBo);
-            Assert.IsInstanceOf(typeof(MyBO), loadedBo);
-            var loadedMyBo = (MyBO)loadedBo;
+            var businessObjects = loadedObjects.ToList();
+            Assert.AreEqual(1, businessObjects.Count);
+            var loadedMyBo = (MyBO)businessObjects[0];
             Assert.AreNotSame(savedBo, loadedMyBo);
 
-            Assert.IsFalse(loadedBo.Status.IsNew, "Should not be New");
-            Assert.IsFalse(loadedBo.Status.IsDeleted, "Should not be Deleted");
-            Assert.IsFalse(loadedBo.Status.IsDirty, "Should not be Dirty");
-            Assert.IsFalse(loadedBo.Status.IsEditing, "Should not be Editing");
+            Assert.IsTrue(loadedMyBo.Status.IsNew, "Should not be New");
+            Assert.IsFalse(loadedMyBo.Status.IsDeleted, "Should not be Deleted");
+        }
+
+        [Test]
+        public void Read_ShouldUpdatedExistingObject_WhenFoundInDataAccessor()
+        {
+            //---------------Set up test pack-------------------
+            LoadMyBOClassDefsWithNoUIDefs();
+            var newBo = new MyBO { TestProp = "characters" };
+            var stream = GetStreamForBusinessObject(newBo);
+            newBo.TestProp = "oldvalue";
+            newBo.Save();
+            var reader = new ObjectTreeXmlReader();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual("oldvalue", newBo.TestProp);
+            //---------------Execute Test ----------------------
+            var loadedObjects = reader.Read(stream);
+            //---------------Test Result -----------------------
+            var businessObjects = loadedObjects.ToList();
+            Assert.AreEqual(1, businessObjects.Count);
+            Assert.AreSame(newBo, businessObjects[0]);
+            Assert.AreEqual("characters", newBo.TestProp);
         }
 
         [Test]
@@ -78,11 +90,11 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             LoadMyBOClassDefsWithNoUIDefs();
             var writeStream = GetStreamForBusinessObject(new MyBO());
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Execute Test ----------------------
-            var loadedDataStore = reader.Read(writeStream, new BusinessObjectXmlReaderWithError());
+            var loadedObjects = reader.Read(writeStream, new BusinessObjectXmlReaderWithError());
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
+            Assert.AreEqual(1, loadedObjects.Count());
             Assert.IsNotNull(reader.ReadResult);
             Assert.IsFalse(reader.ReadResult.Successful);
         }
@@ -93,7 +105,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             LoadMyBOClassDefsWithNoUIDefs();
             var toStream = GetStreamForBusinessObject(new MyBO());
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             reader.Read(toStream);
@@ -107,7 +119,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             var classDef = LoadMyBOClassDefsWithNoUIDefs();
-            var bo = new MyBO {TestProp = "characters"};
+            var bo = new MyBO { TestProp = "characters" };
             var propDef = classDef.PropDefcol["TestProp"];
             classDef.PropDefcol.Remove(propDef);
             var propDefWithDifferentType = propDef.Clone();
@@ -116,13 +128,13 @@ namespace Habanero.Test.BO
             propDefWithDifferentType.PropertyType = typeof(int);
             classDef.PropDefcol.Add(propDefWithDifferentType);
             var toStream = GetStreamForBusinessObject(bo);
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Assert Precondition----------------
             Assert.IsNull(reader.ReadResult);
             //---------------Execute Test ----------------------
             var businessObjects = reader.Read(toStream);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, businessObjects.Count);
+            Assert.AreEqual(1, businessObjects.Count());
             Assert.IsNotNull(reader.ReadResult);
             Assert.IsFalse(reader.ReadResult.Successful);
             StringAssert.Contains("An error occured when attempting to set property 'MyBO.TestProp'.", reader.ReadResult.Message);
@@ -133,16 +145,16 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             LoadMyBOClassDefsWithNoUIDefs();
-            var bo = new MyBO {TestProp = "characters"};
+            var bo = new MyBO { TestProp = "characters" };
             var stream = GetStreamForBusinessObject(bo);
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             var boReader = new BusinessObjectXmlReaderWithError();
             //---------------Assert Precondition----------------
             Assert.IsNull(reader.ReadResult);
             //---------------Execute Test ----------------------
             var businessObjects = reader.Read(stream, boReader);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, businessObjects.Count);
+            Assert.AreEqual(1, businessObjects.Count());
             Assert.IsNotNull(reader.ReadResult);
             Assert.IsFalse(reader.ReadResult.Successful);
             StringAssert.Contains("An error occured when attempting to set property 'MyBO.MyBoID'.", reader.ReadResult.Message);
@@ -161,20 +173,14 @@ namespace Habanero.Test.BO
             writer.Write(sb, dataStore);
             var xml = sb.ToString();
 
-            var reader = new DataStoreInMemoryXmlReader();
+            var reader = new ObjectTreeXmlReader();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.Greater(xml.Length, 100);
             //---------------Execute Test ----------------------
-            var businessObjects =  reader.Read(xml);
+            var businessObjects = reader.Read(xml);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, businessObjects.Count);
-        }
-       
-        private static IClassDef LoadMyBOClassDefsWithNoUIDefs()
-        {
-            ClassDef.ClassDefs.Clear();
-            return MyBO.LoadClassDefsNoUIDef();
+            Assert.AreEqual(1, businessObjects.Count());
         }
 
         private MemoryStream GetStreamForBusinessObject(MyBO businessObject)
@@ -197,14 +203,12 @@ namespace Habanero.Test.BO
             return writeStream;
         }
 
-    }
-
-    public class BusinessObjectXmlReaderWithError : BusinessObjectXmlReader
-    {
-        protected override void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
+        private static IClassDef LoadMyBOClassDefsWithNoUIDefs()
         {
-            throw new Exception("Test property read exception");
+            ClassDef.ClassDefs.Clear();
+            return MyBO.LoadClassDefsNoUIDef();
         }
-    }
+        // ReSharper restore InconsistentNaming
 
+    }
 }

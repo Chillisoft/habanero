@@ -150,6 +150,8 @@
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="BusinessObjectXmlReader.cs" />
+    <Compile Include="BusinessObjectXmlWriter.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\ClassDefValidator.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
