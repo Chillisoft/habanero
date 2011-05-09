@@ -2200,11 +2200,7 @@ namespace Habanero.BO
                 //use the customised classdef instead of the default.
                 try
                 {
-                    
-                    newBO = (TBusinessObject)
-                            ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(typeof (TBusinessObject), new object[] {this.ClassDef});
-                    //newBO = (TBusinessObject)
-                    //        Activator.CreateInstance(typeof (TBusinessObject), new object[] {this.ClassDef});
+                    newBO = (TBusinessObject)CreateInstance();
                 }
                 catch (MissingMethodException ex)
                 {
@@ -2216,6 +2212,11 @@ namespace Habanero.BO
                 }
             }
             return newBO;
+        }
+
+        private object CreateInstance()
+        {
+            return ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(typeof (TBusinessObject), new object[] {this.ClassDef});
         }
 
         /// <summary>
