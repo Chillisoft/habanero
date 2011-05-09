@@ -2200,7 +2200,7 @@ namespace Habanero.BO
                 //use the customised classdef instead of the default.
                 try
                 {
-                    //throw new NotImplementedException("CF: Code commented out to get CF to compile");
+                    
                     newBO = (TBusinessObject)
                             ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(typeof (TBusinessObject), new object[] {this.ClassDef});
                     //newBO = (TBusinessObject)
