@@ -19,8 +19,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//TODO andrew 22 Dec 2010: CF: Serialization is not available in compact framework
-//using System.Runtime.Serialization;
 using System.Linq;
 using System.Security.Permissions;
 using Habanero.Base;
