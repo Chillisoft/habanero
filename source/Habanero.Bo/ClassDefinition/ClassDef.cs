@@ -90,6 +90,7 @@ namespace Habanero.BO.ClassDefinition
         private Type _classType;
         private string _displayName = "";
         private KeyDefCol _keysCol;
+        private KeyDefCol _keyDefColIncludingInheritance;
 
         private IPrimaryKeyDef _primaryKeyDef;
         private IPropDefCol _propDefCol;
@@ -500,6 +501,34 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
+        /// This is a bit of a Hack, but is needed to deal with a situation 
+        /// where you call <see cref="KeyDefColIncludingInheritance"/> then add a key
+        /// to this class or any of its superclasses and then call 
+        /// <see cref="KeyDefColIncludingInheritance"/> again.
+        /// You would expect to see the new KeyDef added at the same time you 
+        /// do not want to do the recursive algorithm of building the KeyDef list repeatedly
+        /// This recursive method with adding all the keys is less intensive.
+        /// We also do not want to add events to the KeysCol that can be fired every
+        /// time a KeyDef is added or removed since this would
+        /// 
+        /// </summary>
+        private int TotalNoOfKeysIncludingInheritance
+        {
+            get
+            {
+                int noKeys = this.KeysCol.Count;
+                ClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassClassDef != null)
+                {
+                    currentClassDef = (ClassDef)currentClassDef.SuperClassClassDef;
+                    noKeys += currentClassDef.TotalNoOfKeysIncludingInheritance;
+                }
+                return noKeys;
+            }
+        }
+
+
+        /// <summary>
         /// The collection of relationship definitions
         /// </summary>
         public IRelationshipDefCol RelationshipDefCol
@@ -720,6 +749,39 @@ namespace Habanero.BO.ClassDefinition
         public IClassDef SuperClassClassDef
         {
             get { return SuperClassDef == null ? null : SuperClassDef.SuperClassClassDef; }
+        }
+
+        /// <summary>
+        /// The collection of key definitions for this
+        /// class and any key defs inherited from parent classes
+        /// </summary>
+        public KeyDefCol KeyDefColIncludingInheritance
+        {
+            get
+            {
+                if (_keyDefColIncludingInheritance==null||
+                            _keyDefColIncludingInheritance.Count != this.TotalNoOfKeysIncludingInheritance)
+                _keyDefColIncludingInheritance = new KeyDefCol { ClassDef = this };
+                foreach (var keyDef in this.KeysCol)
+                {
+                    _keyDefColIncludingInheritance.Add(keyDef);
+                }
+
+                IClassDef currentClassDef = this;
+                while (currentClassDef.SuperClassClassDef != null)
+                {
+                    currentClassDef = currentClassDef.SuperClassClassDef;
+                    _keyDefColIncludingInheritance.ClassDef = currentClassDef;
+                    foreach (var keyDef in currentClassDef.KeysCol)
+                    {
+                        _keyDefColIncludingInheritance.Add(keyDef);
+                    }
+                }
+                _keyDefColIncludingInheritance.ClassDef = this;
+
+                return _keyDefColIncludingInheritance;
+            }
+            
         }
 
         /// <summary>

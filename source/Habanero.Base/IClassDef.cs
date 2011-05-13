@@ -230,6 +230,11 @@ namespace Habanero.Base
         IClassDef SuperClassClassDef { get; }
 
         /// <summary>
+        /// Returns all key defs from an inheritance hierarchy
+        /// </summary>
+        KeyDefCol KeyDefColIncludingInheritance { get; }
+
+        /// <summary>
         /// Returns the name of the table that applies to the propdef given, taking into allowance
         /// any inheritance structure.
         /// </summary>
