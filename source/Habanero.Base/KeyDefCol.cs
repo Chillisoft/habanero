@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Habanero.Base
 {
@@ -57,9 +58,9 @@ namespace Habanero.Base
         /// <param name="keyDefs"></param>
         public void AddRange(IEnumerable<IKeyDef> keyDefs)
         {
-            foreach (var keyDef in keyDefs)
+            if (keyDefs == null) throw new ArgumentNullException("keyDefs");
+            foreach (var keyDef in keyDefs.Where(keyDef => !this.Contains(keyDef.KeyName)))
             {
-                if (this.Contains(keyDef.KeyName)) continue;
                 this.Add(keyDef);
             }
         }
