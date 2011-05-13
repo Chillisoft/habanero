@@ -52,6 +52,20 @@ namespace Habanero.Base
         }
 
         /// <summary>
+        /// Adds multiple <see cref="IKeyDef"></see> objects to the collection
+        /// </summary>
+        /// <param name="keyDefs"></param>
+        public void AddRange(IEnumerable<IKeyDef> keyDefs)
+        {
+            foreach (var keyDef in keyDefs)
+            {
+                if (this.Contains(keyDef.KeyName)) continue;
+                this.Add(keyDef);
+            }
+        }
+
+
+        /// <summary>
         /// Removes a key definition from the collection
         /// </summary>
         /// <param name="keyDef">The Key Definition to remove</param>
@@ -193,5 +207,7 @@ namespace Habanero.Base
         /// The ClassDef that these KeyDefs belong to.
         ///</summary>
         public IClassDef ClassDef { get; set; }
+
+
     }
 }

@@ -762,29 +762,20 @@ namespace Habanero.BO.ClassDefinition
                 if (_keyDefColIncludingInheritance==null||
                             _keyDefColIncludingInheritance.Count != this.TotalNoOfKeysIncludingInheritance)
                 _keyDefColIncludingInheritance = new KeyDefCol { ClassDef = this };
-                AddKeyDefCol(_keyDefColIncludingInheritance, this);
+                _keyDefColIncludingInheritance.AddRange(this.KeysCol);
 
                 IClassDef currentClassDef = this;
                 while (currentClassDef.SuperClassClassDef != null)
                 {
                     currentClassDef = currentClassDef.SuperClassClassDef;
                     _keyDefColIncludingInheritance.ClassDef = currentClassDef;
-                    AddKeyDefCol(_keyDefColIncludingInheritance, currentClassDef);
+                    _keyDefColIncludingInheritance.AddRange(currentClassDef.KeysCol);
                 }
                 _keyDefColIncludingInheritance.ClassDef = this;
 
                 return _keyDefColIncludingInheritance;
             }
             
-        }
-
-        private static void AddKeyDefCol(KeyDefCol keyDefColIncludingInheritance, IClassDef currentClassDef)
-        {
-            foreach (var keyDef in currentClassDef.KeysCol)
-            {
-                if (keyDefColIncludingInheritance.Contains(keyDef.KeyName)) continue;
-                keyDefColIncludingInheritance.Add(keyDef);
-            }
         }
 
         /// <summary>
