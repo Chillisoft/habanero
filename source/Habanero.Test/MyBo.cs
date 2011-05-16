@@ -124,6 +124,16 @@ namespace Habanero.Test
 			get { return (bool) this.GetPropertyValue("TestBoolean"); }
 			set { this.SetPropertyValue("TestBoolean", value); }
 		}
+		public int TestInt
+		{
+            get { return (int)this.GetPropertyValue("TestInt"); }
+            set { this.SetPropertyValue("TestInt", value); }
+		}		
+        public int? TestIntNullable
+		{
+            get { return (int?)this.GetPropertyValue("TestInt"); }
+            set { this.SetPropertyValue("TestInt", value); }
+		}
 		public string TestProp2
 		{
 			get

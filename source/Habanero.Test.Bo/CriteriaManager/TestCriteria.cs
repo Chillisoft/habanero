@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -750,7 +751,7 @@ namespace Habanero.Test.BO
             var val = "hello";
             var expectedCriteria = new Criteria("TestProp", op, val);
             //---------------Execute Test ----------------------
-            var criteria = new Criteria<MyBO, string>(bo => bo.TestProp, op, val);
+            var criteria = Criteria.Create<MyBO, string>(bo => bo.TestProp, op, val);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
