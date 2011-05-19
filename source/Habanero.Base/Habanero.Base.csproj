@@ -144,6 +144,7 @@
     <Compile Include="ClassDefCol.cs" />
     <Compile Include="CoverageExcludeAttribute.cs" />
     <Compile Include="DataMappers\BoolDataMapper.cs" />
+    <Compile Include="DataMappers\ByteArrayDataMapper.cs" />
     <Compile Include="DataMappers\DataMapper.cs" />
     <Compile Include="DataMappers\DataMapperFactory.cs" />
     <Compile Include="DataMappers\DateTimeDataMapper.cs" />

@@ -108,6 +108,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Asset.cs" />
+    <Compile Include="Base\DataMappers\TestByteArrayDataMapper.cs" />
     <Compile Include="Base\DataMappers\TestGeneralDataMapper.cs" />
     <Compile Include="Base\DataMappers\TestDataMapper.cs" />
     <Compile Include="Base\DataMappers\TestDataMapperFactory.cs" />

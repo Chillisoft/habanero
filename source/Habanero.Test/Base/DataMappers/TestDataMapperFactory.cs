@@ -108,6 +108,18 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
+        public void GetDataMapper_ShouldReturnByteArrayDataMapper_WhenTargetTypeIsByteArray()
+        {
+            //---------------Set up test pack-------------------
+            var factory = new DataMapperFactory();
+            var targetType = typeof(byte[]);
+            //---------------Execute Test ----------------------
+            var dataMapper = factory.GetDataMapper(targetType);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<ByteArrayDataMapper>(dataMapper);
+        }
+
+        [Test]
         public void GetDataMapper_ShouldReturnGeneralDataMapper_WhenTargetTypeIsOther()
         {
             //---------------Set up test pack-------------------

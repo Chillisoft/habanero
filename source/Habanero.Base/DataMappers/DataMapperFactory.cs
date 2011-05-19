@@ -23,6 +23,7 @@ namespace Habanero.Base.DataMappers
             _dataMappers.Add(typeof(int), new IntDataMapper());
             _dataMappers.Add(typeof(long), new LongDataMapper());
             _dataMappers.Add(typeof(Image), new ImageDataMapper());
+            _dataMappers.Add(typeof(byte[]), new ByteArrayDataMapper());
             _dataMappers.Add(typeof(TimeSpan), new TimeSpanDataMapper());
         }
 
