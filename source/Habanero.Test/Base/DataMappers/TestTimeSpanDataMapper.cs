@@ -36,26 +36,63 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
-        public void TryParsePropValue_ShouldUseTimeOfDay_WhenGivenADateTime()
+        public void TryParsePropValue_WhenGivenADate_OnTheBaseDate_ShouldBeTimeOfDay()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new TimeSpanDataMapper();
-            var valueToParse = new DateTime(TestUtil.GetRandomInt());
+            var valueToParse = TimeSpanDataMapper.BaseDate.Add(new TimeSpan(0,23,59,59,999));
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
 
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
-            Assert.AreEqual(valueToParse.TimeOfDay, parsedValue);
+			Assert.AreEqual(valueToParse.TimeOfDay, parsedValue);
         }
 
         [Test]
-        public void TryParsePropValue_ConvertsStringToTimeSpan()
+        public void TryParsePropValue_WhenGivenADate_WithNumberOfDays_ShouldNotLooseNumberOfDays()
+        {
+            //---------------Set up test pack-------------------
+            var dataMapper = new TimeSpanDataMapper();
+        	var days = TestUtil.GetRandomInt(1,500);
+        	var valueToParse = TimeSpanDataMapper.BaseDate.Add(TestUtil.GetRandomTimeSpan(days));
+            object parsedValue;
+            //---------------Execute Test ----------------------
+            var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+        	var timeSpan = (TimeSpan) parsedValue;
+        	Assert.AreEqual(days, timeSpan.Days);
+			Assert.AreEqual(valueToParse.Hour, timeSpan.Hours);
+			Assert.AreEqual(valueToParse.Minute, timeSpan.Minutes);
+			Assert.AreEqual(valueToParse.Second, timeSpan.Seconds);
+			Assert.AreEqual(valueToParse.Millisecond, timeSpan.Milliseconds);
+        }
+
+    	[Test]
+        public void TryParsePropValue_WhenString_ShouldConvertCorrectly()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new TimeSpanDataMapper();
             var originalValue = new TimeSpan(TestUtil.GetRandomInt());
+            var valueToParse = dataMapper.ConvertValueToString(originalValue);
+            object parsedValue;
+            //---------------Execute Test ----------------------
+            var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.IsInstanceOf(typeof(TimeSpan), parsedValue);
+            Assert.AreEqual(originalValue, parsedValue);
+        }
+
+    	[Test]
+        public void TryParsePropValue_WhenString_WithDays_ShouldConvertCorrectly()
+        {
+            //---------------Set up test pack-------------------
+            var dataMapper = new TimeSpanDataMapper();
+            var originalValue = TestUtil.GetRandomTimeSpan(TestUtil.GetRandomInt(1,500));
             var valueToParse = dataMapper.ConvertValueToString(originalValue);
             object parsedValue;
             //---------------Execute Test ----------------------

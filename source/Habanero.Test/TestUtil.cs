@@ -234,5 +234,15 @@ namespace Habanero.Test
             Assert.IsInstanceOf(typeof(T), obj);
             return (T)obj;
         }
+
+    	public static TimeSpan GetRandomTimeSpan()
+    	{
+    		return GetRandomTimeSpan(GetRandomInt());
+    	}
+
+    	public static TimeSpan GetRandomTimeSpan(int days)
+    	{
+    		return new TimeSpan(days, GetRandomInt(0, 23), GetRandomInt(0, 59), GetRandomInt(0, 59), GetRandomInt(0, 999));
+    	}
     }
 }
