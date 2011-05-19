@@ -8,6 +8,12 @@ namespace Habanero.Base.DataMappers
     /// </summary>
     public class TimeSpanDataMapper : DataMapper
     {
+		///<summary>
+		/// The base date for storage of a TimeStamp as a date time value.
+		/// This is the 'zero' date for SQL server and should be supported by all data stores.
+		///</summary>
+		public readonly static DateTime BaseDate = new DateTime(1900,1,1);
+
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
             if (base.TryParsePropValue(valueToParse, out returnValue)) return true;

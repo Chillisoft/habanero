@@ -172,5 +172,33 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string strg = g.ToString("B").ToUpper();
             Assert.AreEqual(strg, preparedValue, "PrepareValue is not preparing guids correctly.");
         }
+
+        [Test]
+        public void Test_PrepareValue_WithTimeSpan_ShouldReturnDateTime()
+        {
+            //---------------Set up test pack-------------------
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
+            var value = new TimeSpan(0,23,59,59,999);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+			object preparedValue = sqlFormatter.PrepareValue(value);
+            //---------------Test Result -----------------------
+        	var expected = new DateTime(1900,1,1,23,59,59,999);
+			Assert.AreEqual(expected, preparedValue, "PrepareValue is not preparing timespans correctly.");
+        }
+
+        [Test]
+        public void Test_PrepareValue_WithTimeSpan_WhenHasDays_ShouldReturnDateTime()
+        {
+            //---------------Set up test pack-------------------
+            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
+            var value = new TimeSpan(1,23,59,59,999);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+			object preparedValue = sqlFormatter.PrepareValue(value);
+            //---------------Test Result -----------------------
+        	var expected = new DateTime(1900,1,2,23,59,59,999);
+			Assert.AreEqual(expected, preparedValue, "PrepareValue is not preparing timespans correctly.");
+        }
     }
 }
