@@ -6,6 +6,9 @@ using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {
+    ///<summary>
+    /// data mapper that is used for  reading and writing byte[] (Byte array) from a database
+    ///</summary>
     public class ByteArrayDataMapper : DataMapper
     {
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
