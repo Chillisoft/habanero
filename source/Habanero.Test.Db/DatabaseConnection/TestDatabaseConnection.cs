@@ -143,7 +143,7 @@ namespace Habanero.Test.DB
 
 
             using (
-                IDataReader dr =
+                var dr =
                     DatabaseConnection.CurrentConnection.LoadDataReader(
                         new SqlStatement(DatabaseConnection.CurrentConnection,
                                          "SELECT * FROM TestTableRead Order By TestTableReadData")))
