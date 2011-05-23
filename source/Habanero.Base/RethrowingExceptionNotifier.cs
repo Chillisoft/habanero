@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Reflection;
 using System.Threading;
 
 namespace Habanero.Base
@@ -37,15 +38,17 @@ namespace Habanero.Base
         /// <param name="title">The title</param>
         public void Notify(Exception ex, string furtherMessage, string title)
         {
-           throw ex;
-            //if (ex != null)
-            //{
-            //    ThreadStart savestack =
-            //        Delegate.CreateDelegate(typeof(ThreadStart), ex, "InternalPreserveStackTrace", false, false) as
-            //        ThreadStart;
-            //    if (savestack != null) savestack();
-            //    throw ex;
-            //}
+           //throw ex;
+            if (ex != null)
+            {
+                var methodInfo = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                var savestack =
+                    Delegate.CreateDelegate(typeof(ThreadStart), ex, methodInfo) as
+                    ThreadStart;
+                if (savestack != null) savestack();
+                throw ex;
+            }
         }
 
         ///<summary>

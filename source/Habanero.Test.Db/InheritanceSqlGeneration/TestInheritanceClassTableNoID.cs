@@ -169,21 +169,18 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         {
             BusinessObjectManager.Instance.ClearLoadedObjects();
             // Test inserting & selecting
-            Shape shape = new Shape();
-            shape.ShapeName = "MyShape";
+            var shape = new Shape {ShapeName = "MyShape"};
             shape.Save();
 
-            BusinessObjectCollection<Shape> shapes = new BusinessObjectCollection<Shape>();
+            var shapes = new BusinessObjectCollection<Shape>();
             shapes.LoadAll();
             Assert.AreEqual(1, shapes.Count);
 
-            BusinessObjectCollection<CircleNoPrimaryKey> circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
+            var circles = new BusinessObjectCollection<CircleNoPrimaryKey>();
             circles.LoadAll();
             Assert.AreEqual(0, circles.Count);
 
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
-            circle.Radius = 5;
-            circle.ShapeName = "Circle";
+            var circle = new CircleNoPrimaryKey {Radius = 5, ShapeName = "Circle"};
             circle.Save();
 
             shapes.LoadAll("ShapeName");

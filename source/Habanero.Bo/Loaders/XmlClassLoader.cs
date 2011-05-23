@@ -328,7 +328,7 @@ namespace Habanero.BO.Loaders
                 
                 foreach (string propDefXml in xmlDefs)
                 {
-                    XmlPropertyLoader propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
+                    var propLoader = new XmlPropertyLoader(DtdLoader, _defClassFactory);
                     IPropDef propDef = propLoader.LoadProperty(propDefXml);
                     if(propDef != null) _propDefCol.Add(propDef);
                 }

@@ -171,12 +171,12 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             circles.LoadAll();
             Assert.AreEqual(0, circles.Count);
 
-            BusinessObjectCollection<FilledCircleNoPrimaryKey> filledCircles =
+            var filledCircles =
                 new BusinessObjectCollection<FilledCircleNoPrimaryKey>();
             filledCircles.LoadAll();
             Assert.AreEqual(0, filledCircles.Count);
 
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey {Radius = 5, ShapeName = "Circle"};
+            var circle = new CircleNoPrimaryKey {Radius = 5, ShapeName = "Circle"};
             circle.Save();
 
             BusinessObjectManager.Instance.ClearLoadedObjects();
@@ -193,7 +193,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             Assert.AreEqual(5, circles[0].Radius);
             Assert.AreEqual("Circle", circles[0].ShapeName);
 
-            FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey
+            var filledCircle = new FilledCircleNoPrimaryKey
                                                         {
                                                             Colour = 3,
                                                             Radius = 7,

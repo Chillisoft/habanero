@@ -94,7 +94,7 @@ namespace Habanero.BO.Loaders
         public static void LoadLookupListIntoProperty(string sourceElement, IPropDef def, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
         {
             //throw new NotImplementedException("CF: Code commented out to get CF to compile");
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(sourceElement);
             if (doc.DocumentElement == null)
             {
@@ -102,10 +102,11 @@ namespace Habanero.BO.Loaders
                     ("There was a problem loading the class definitions pleaser refer to the system administrator",
                      "The load lookup list property could not be loaded since the source element does not contain a document name");
             }
-            string loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
-            Type loaderType = Type.GetType
+            var loaderClassName = "Xml" + doc.DocumentElement.Name + "Loader";
+            //throw new Exception();
+            var loaderType = Type.GetType
                 (typeof(XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
-            XmlLookupListLoader loader =
+            var loader =
                 (XmlLookupListLoader)
                 ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(loaderType,
                                                                            new object[] {dtdLoader, defClassFactory});

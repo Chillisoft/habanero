@@ -399,7 +399,7 @@ namespace Habanero.Test.BO.Loaders
 					</property>");
             Assert.IsNotNull(def.LookupList);
             Assert.IsInstanceOf(typeof(IBusinessObjectLookupList), def.LookupList);
-            IBusinessObjectLookupList source = (IBusinessObjectLookupList)def.LookupList;
+            var source = (IBusinessObjectLookupList)def.LookupList;
             Assert.AreEqual("MyBO", source.ClassName);
             Assert.AreEqual("Habanero.Test", source.AssemblyName);
         }

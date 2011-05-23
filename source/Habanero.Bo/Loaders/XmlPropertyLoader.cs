@@ -121,7 +121,7 @@ namespace Habanero.BO.Loaders
                 XmlRuleLoader loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
                 loader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef);
             }
-            int len = "lookupList".Length;
+            var len = "lookupList".Length;
             if (_reader.Name.Length >= len &&
                 _reader.Name.Substring(_reader.Name.Length - len, len) == "LookupList")
             {

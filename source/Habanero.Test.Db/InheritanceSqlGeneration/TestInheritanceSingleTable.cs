@@ -258,8 +258,8 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             //MyBO has a relationship to Shape. Shape potentially has a circle for single table inheritance.
             MyBO.LoadClassDefWithShape_SingleTableInheritance_Relationship();
 
-            MyBO bo = new MyBO();
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            var bo = new MyBO();
+            var circle = new CircleNoPrimaryKey();
             circle.Radius = 5;
             circle.ShapeName = "MyShape";
             circle.Save();
@@ -288,9 +288,9 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             //---------------Set up test pack-------------------
             DatabaseConnection.CurrentConnection.ExecuteRawSql(
                 "delete from filledcircle_table; delete from circle_table; delete from shape_table");
-            Shape shape = new Shape {ShapeName = "MyShape"};
+            var shape = new Shape {ShapeName = "MyShape"};
             shape.Save();
-            CircleNoPrimaryKey circle = new CircleNoPrimaryKey();
+            var circle = new CircleNoPrimaryKey();
             circle.Radius = 5;
             circle.ShapeName = "MyShape";
 

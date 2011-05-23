@@ -157,7 +157,7 @@ namespace Habanero.BO.Loaders
             {
                 try
                 {
-                    XmlClassLoader classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
+                    var classLoader = new XmlClassLoader(DtdLoader, _defClassFactory);
                     var classDefCol = classLoader.LoadClass(_reader.ReadOuterXml());
                     if(classDefCol != null) _classDefList.Add(classDefCol);
                 }
