@@ -113,6 +113,7 @@
     <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropLongDataMapper.cs" />
     <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
+    <Compile Include="ClassDefinition\BOPropByteArrayDataMapper.cs" />
     <Compile Include="ClassDefinition\ClassDef.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\ClassDefValidator.cs" />

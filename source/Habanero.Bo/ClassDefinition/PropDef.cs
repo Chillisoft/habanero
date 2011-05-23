@@ -1206,6 +1206,10 @@ namespace Habanero.BO.ClassDefinition
             {
                 return new BOPropLongDataMapper();
             }
+            else if (propertyType == typeof(byte[]))
+            {
+                return new BOPropByteArrayDataMapper();
+            }
             else if (propertyType == typeof(System.Drawing.Image) || propertyType == typeof(System.Drawing.Bitmap))
             {
                 return new BOPropImageDataMapper();
