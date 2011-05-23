@@ -103,6 +103,12 @@ namespace Habanero.BO.Loaders
                      "The load lookup list property could not be loaded since the source element does not contain a document name");
             }
             var loaderClassName = doc.DocumentElement.Name;
+            XmlLookupListLoader loader = GetLookuplistLoader(loaderClassName, dtdLoader, defClassFactory);
+            def.LookupList = loader.LoadLookupList(doc.DocumentElement);
+        }
+
+        private static XmlLookupListLoader GetLookuplistLoader(string loaderClassName, DtdLoader dtdLoader, IDefClassFactory defClassFactory)
+        {
             XmlLookupListLoader loader;
             switch (loaderClassName)
             {
@@ -116,17 +122,7 @@ namespace Habanero.BO.Loaders
                     loader = new XmlSimpleLookupListLoader(dtdLoader, defClassFactory);
                     break;
             }
-/* GetType does not appear to be supported in our implementation of CE 
- * var loaderType = Type.GetType
-                (typeof(XmlLookupListLoader).Namespace + "." + loaderClassName, true, true);
-             loader =
-                (XmlLookupListLoader)
-                ReflectionUtilitiesCF.GetInstanceWithConstructorParameters(loaderType,
-                                                                           new object[] {dtdLoader, defClassFactory});*/
-            //XmlLookupListLoader loader =
-            //    (XmlLookupListLoader)
-            //    Activator.CreateInstance(loaderType, new object[] { dtdLoader, defClassFactory });
-            def.LookupList = loader.LoadLookupList(doc.DocumentElement);
+            return loader;
         }
     }
 }
