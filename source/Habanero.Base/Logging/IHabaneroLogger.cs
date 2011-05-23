@@ -53,5 +53,12 @@ namespace Habanero.Base.Logging
         /// <param name="exception">The exception being logged</param>
         /// <param name="logCategory">The specified LogCategory</param>
         void Log(string message, Exception exception, LogCategory logCategory);
+
+    	///<summary>
+    	/// Checks the logger to see if it has been enabled to log messages of the specified <see cref="LogCategory"/> type.
+    	///</summary>
+    	///<param name="logCategory">The <see cref="LogCategory"/> for which to check if logging is enabled or not.</param>
+    	///<returns>true if the specified <see cref="LogCategory"/> messages will be logged, otherwise false.</returns>
+    	bool IsLogging(LogCategory logCategory);
     }
 }

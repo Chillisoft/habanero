@@ -48,26 +48,23 @@ namespace Habanero.Base.Logging
         ///<param name="logCategory"></param>
         public void Log(string message, LogCategory logCategory)
         {
+			if (!IsLogging(logCategory)) return;
             switch (logCategory)
             {
                 case LogCategory.Fatal:
-                    if (_log.IsFatalEnabled) _log.Fatal(message);
-                    //else Log(message, LogCategory.Exception);
+                    _log.Fatal(message);
                     break;
                 case LogCategory.Exception:
-                    if (_log.IsErrorEnabled) _log.Error(message);
-                    //else Log(message, LogCategory.Debug);
+                    _log.Error(message);
                     break;
                 case LogCategory.Debug:
-                    if (_log.IsDebugEnabled) _log.Debug(message);
-                    //else Log(message, LogCategory.Warn);
+                    _log.Debug(message);
                     break;
                 case LogCategory.Warn:
-                    if (_log.IsWarnEnabled) _log.Warn(message);
-                    //else Log(message, LogCategory.Info);
+                    _log.Warn(message);
                     break;
                 default:
-                    if (_log.IsInfoEnabled) _log.Info(message);
+                    _log.Info(message);
                     break;
             }
         }
@@ -95,28 +92,42 @@ namespace Habanero.Base.Logging
 
         public void Log(string message, Exception exception, LogCategory logCategory)
         {
+			if (!IsLogging(logCategory)) return;
             switch (logCategory)
             {
                 case LogCategory.Fatal:
-                    if (_log.IsFatalEnabled) _log.Fatal(message, exception);
-                    //else Log(message, LogCategory.Exception);
+                    _log.Fatal(message, exception);
                     break;
                 case LogCategory.Exception:
-                    if (_log.IsErrorEnabled) _log.Error(message, exception);
-                    //else Log(message, LogCategory.Debug);
+                    _log.Error(message, exception);
                     break;
                 case LogCategory.Debug:
-                    if (_log.IsDebugEnabled) _log.Debug(message, exception);
-                    //else Log(message, LogCategory.Warn);
+                    _log.Debug(message, exception);
                     break;
                 case LogCategory.Warn:
-                    if (_log.IsWarnEnabled) _log.Warn(message, exception);
-                    //else Log(message, LogCategory.Info);
+                    _log.Warn(message, exception);
                     break;
                 default:
-                    if (_log.IsInfoEnabled) _log.Info(message, exception);
+                    _log.Info(message, exception);
                     break;
             }       
         }
+
+		public bool IsLogging(LogCategory logCategory)
+		{
+			switch (logCategory)
+            {
+                case LogCategory.Fatal:
+                    return _log.IsFatalEnabled;
+                case LogCategory.Exception:
+            		return _log.IsErrorEnabled;
+                case LogCategory.Debug:
+            		return _log.IsDebugEnabled;
+                case LogCategory.Warn:
+            		return _log.IsWarnEnabled;
+                default:
+            		return _log.IsInfoEnabled;
+            }       
+		}
     }
 }
