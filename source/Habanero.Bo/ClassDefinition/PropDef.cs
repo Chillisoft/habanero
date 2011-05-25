@@ -1151,9 +1151,7 @@ namespace Habanero.BO.ClassDefinition
 
         private IDataMapper GetBOPropDataMapper()
         {
-            if (_propDataMapper != null) return _propDataMapper;
-            _propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType);
-            return _propDataMapper;
+        	return _propDataMapper ?? (_propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType));
         }
     }
 }

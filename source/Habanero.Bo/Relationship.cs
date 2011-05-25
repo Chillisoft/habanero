@@ -129,10 +129,6 @@ namespace Habanero.BO
     ///</summary>
     public abstract class RelationshipBase : IRelationship
     {
-        /// <summary>
-        /// The Key that defines this relationship I.e. OwningProps and their related props.
-        /// </summary>
-        protected IRelKey _relKey;
 
         ///<summary>
         /// The key that identifies this relationship i.e. the properties in the 
@@ -283,7 +279,12 @@ namespace Habanero.BO
         /// <summary> The Definition that defines this relationship. </summary>
         protected IRelationshipDef _relDef;
         /// <summary> The Busienss Object that owns this relationship </summary>
-        protected readonly IBusinessObject _owningBo;
+		protected readonly IBusinessObject _owningBo;
+		/// <summary>
+		/// The Key that defines this relationship I.e. OwningProps and their related props.
+		/// </summary>
+		private readonly Lazy<IRelKey> _relKey;
+
         private bool _initialised;
 
         /// <summary>
@@ -301,7 +302,7 @@ namespace Habanero.BO
             if (lBOPropCol == null) throw new ArgumentNullException("lBOPropCol");
             _relDef = lRelDef;
             _owningBo = owningBo;
-            _relKey = _relDef.RelKeyDef.CreateRelKey(lBOPropCol);
+			_relKey = new Lazy<IRelKey>(() => _relDef.RelKeyDef.CreateRelKey(lBOPropCol));
         }
 
         /// <summary>
@@ -344,7 +345,7 @@ namespace Habanero.BO
         ///</summary>
         public override IRelKey RelKey
         {
-            get { return _relKey; }
+            get { return _relKey.Value; }
         }
 
         /// <summary>

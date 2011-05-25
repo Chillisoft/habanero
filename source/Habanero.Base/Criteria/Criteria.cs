@@ -615,13 +615,14 @@ namespace Habanero.Base
         /// <returns>The Criteria this IRelationship instance is defined by.</returns>
         public static Criteria FromRelationship(IRelationship relationship)
         {
-            if (relationship.RelKey.Count == 1)
+        	var relKey = relationship.RelKey;
+        	if (relKey.Count == 1)
             {
-                IRelProp relProp = relationship.RelKey[0];
+                IRelProp relProp = relKey[0];
                 return new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
             }
             Criteria lastCriteria = null;
-            foreach (IRelProp relProp in relationship.RelKey)
+            foreach (IRelProp relProp in relKey)
             {
                 Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
                 lastCriteria = lastCriteria == null 

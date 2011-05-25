@@ -134,9 +134,10 @@ namespace Habanero.BO
 		protected IPrimaryKey _primaryKey;
 
 		/// <summary>
-		/// The Relationships owned by this <see cref="IBusinessObject"/>
+		/// The Relationships owned by this <see cref="IBusinessObject"/>.
+		/// This is a lazy initialised part of the <see cref="IBusinessObject"/>
 		/// </summary>
-		protected IRelationshipCol _relationshipCol;
+		private IRelationshipCol _relationshipCol;
 
 		#endregion //Fields
 
@@ -443,7 +444,8 @@ namespace Habanero.BO
 					throw new HabaneroDeveloperException(ex.Message + " Your discriminator field is not included in the properties of the class and you are using Single Table Inheritance. Please include the discriminator field as a property.");
 				}
 			}
-			_relationshipCol = classDef.CreateRelationshipCol(_boPropCol, this);
+			// NOTE: This has been moved to the Relationships getter so that it does lazy loading.
+			//_relationshipCol = classDef.CreateRelationshipCol(_boPropCol, this);
 		}
 
 		private void SetPrimaryKeyForInheritedClass()
@@ -517,7 +519,11 @@ namespace Habanero.BO
 		[TypeDescriptorIgnore]
 		public RelationshipCol Relationships
 		{
-			get { return (RelationshipCol) _relationshipCol; }
+			get
+			{
+				return (RelationshipCol) (_relationshipCol 
+					   ?? (_relationshipCol = ((ClassDef) _classDef).CreateRelationshipCol(_boPropCol, this)));
+			}
 			set { _relationshipCol = value; }
 		}
 
@@ -547,7 +553,7 @@ namespace Habanero.BO
 		[TypeDescriptorIgnore]
 		IRelationshipCol IBusinessObject.Relationships
 		{
-			get { return _relationshipCol; }
+			get { return this.Relationships; }
 			set { _relationshipCol = value; }
 		}
 
@@ -1518,7 +1524,7 @@ namespace Habanero.BO
 			{
 				writer.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
 			}
-			foreach (IRelationship relationship in _relationshipCol)
+			foreach (IRelationship relationship in Relationships)
 			{
 				//what type of relationship? composition,aggregation...
 				//if (relationship.RelationshipDef.RelationshipType != RelationshipType.Association)
