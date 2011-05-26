@@ -162,8 +162,6 @@
     <Compile Include="IFilterClauseFactory.cs" />
     <Compile Include="IFilterDef.cs" />
     <Compile Include="IFilterPropertyDef.cs" />
-    <Compile Include="IHabaneroLogger.cs" />
-    <Compile Include="IHabaneroLoggerFactory.cs" />
     <Compile Include="IKeyDef.cs" />
     <Compile Include="ILookupList.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />
@@ -219,9 +217,11 @@
     <Compile Include="IUIGridColumn.cs" />
     <Compile Include="KeyDefCol.cs" />
     <Compile Include="LayoutStyle.cs" />
-    <Compile Include="Log4NetLogger.cs" />
-    <Compile Include="Log4NetLoggerFactory.cs" />
-    <Compile Include="LogCategory.cs" />
+    <Compile Include="Logging\IHabaneroLogger.cs" />
+    <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
+    <Compile Include="Logging\Log4NetLogger.cs" />
+    <Compile Include="Logging\Log4NetLoggerFactory.cs" />
+    <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="NullCrypter.cs" />
     <Compile Include="NullProgressIndicator.cs" />
     <Compile Include="OrderCriteria.cs" />
@@ -282,7 +282,6 @@
     <None Include="Util\File\.svn\text-base\TypeLoader.cs.svn-base" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Logging\" />
     <Folder Include="Util\File\.svn\prop-base\" />
     <Folder Include="Util\File\.svn\props\" />
     <Folder Include="Util\File\.svn\tmp\prop-base\" />
