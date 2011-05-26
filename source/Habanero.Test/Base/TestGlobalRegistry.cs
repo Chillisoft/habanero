@@ -19,7 +19,6 @@
 using Habanero.Base;
 //TODO andrew 22 Dec 2010: CF : Habanero.Console not included
 //using Habanero.Console;
-using Habanero.Base.Logging;
 using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
