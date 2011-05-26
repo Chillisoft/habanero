@@ -19,6 +19,7 @@
 using System;
 using System.Xml;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.Base.Util;
 using log4net;
 using log4net.Config;
