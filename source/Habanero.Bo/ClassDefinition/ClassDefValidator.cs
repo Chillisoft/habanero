@@ -175,7 +175,7 @@ namespace Habanero.BO.ClassDefinition
 
             foreach (IRelationshipDef relationshipDef in classDef.RelationshipDefCol)
             {
-                IClassDef relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
+                var relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
                 ValidateReverseRelationship(classDef, relationshipDef, relatedObjectClassDef);
                 ValidateRelKeyDef(classDef, classDefs, relationshipDef, relatedObjectClassDef, loadedFullPropertyLists);
             }
@@ -263,7 +263,7 @@ namespace Habanero.BO.ClassDefinition
                           relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull));
             }
 
-            IRelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
+            var reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
             //            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
             //
