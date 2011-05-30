@@ -38,6 +38,10 @@ namespace Habanero.BO
 		///// <param name="ruleName">The rule name</param>
 		///// <param name="message">This rule's failure message</param>
 		///// <param name="parameters">The parameters for this rule.</param>
+		///<summary>
+		///</summary>
+		///<param name="name"></param>
+		///<param name="message"></param>
 		public PropRuleString(string name, string message) : base(name, message)
 		{
 			InitialiseParameters(0, -1, "", "");

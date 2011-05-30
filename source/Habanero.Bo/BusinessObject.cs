@@ -385,7 +385,7 @@ namespace Habanero.BO
 			}
 			else _classDef = classDef;
 			ConstructFromClassDef(true);
-			Guid myID = Guid.NewGuid();
+			var myID = Guid.NewGuid();
 			if (_primaryKey != null)
 			{
 				_primaryKey.SetObjectGuidID(myID);
