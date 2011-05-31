@@ -136,7 +136,7 @@ namespace Habanero.BO
         /// <param name="propValue">The value that has cuased the broken rule.</param>
         /// <param name="displayName">The display name of the property that the business rule is broken for.</param>
         /// <returns></returns>
-        protected string GetBaseErrorMessage(object propValue, string displayName)
+        protected virtual string GetBaseErrorMessage(object propValue, string displayName)
         {
             string errorMessage = String.Format("'{0}' for property '{1}' is not valid for the rule '{2}'. ",
                                                 propValue, displayName, Name);
