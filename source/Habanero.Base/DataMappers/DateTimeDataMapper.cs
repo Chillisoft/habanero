@@ -32,7 +32,7 @@ namespace Habanero.Base.DataMappers
             if (value == null) return "";
             object parsedPropValue;
             TryParsePropValue(value, out parsedPropValue);
-            if (parsedPropValue is DateTime) return ((DateTime) parsedPropValue).ToString(_standardDateTimeFormat);
+            if (parsedPropValue is DateTime) return ((DateTime) parsedPropValue).ToString(DateTimeUtilities.StandardDateTimeFormat);
 
             return parsedPropValue == null ? "" : parsedPropValue.ToString();
         }

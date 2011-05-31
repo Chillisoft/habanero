@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {
@@ -74,7 +75,7 @@ namespace Habanero.Base.DataMappers
             }
             if (valueToParse is DateTime)
             {
-                returnValue = ((DateTime) valueToParse).ToString(_standardDateTimeFormat);
+                returnValue = ((DateTime) valueToParse).ToString(DateTimeUtilities.StandardDateTimeFormat);
                 return true;
             }
             returnValue = valueToParse.ToString();

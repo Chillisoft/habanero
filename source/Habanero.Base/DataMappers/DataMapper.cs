@@ -40,11 +40,6 @@ namespace Habanero.Base.DataMappers
     public abstract class DataMapper : IDataMapper
     {
         /// <summary>
-        /// The standard date Time Format to use.
-        /// </summary>
-        protected string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
-
-        /// <summary>
         ///  Converts the value of a valid type for this property definition to a string relevant.
         ///  A null value will be oonverted to a zero length string.
         ///  </summary><param name="value">The value to be converted</param><returns>The converted string.</returns>
