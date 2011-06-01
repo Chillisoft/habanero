@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using Habanero.Base.Logging;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -25,6 +27,7 @@ namespace Habanero.Base
     {
         private static ISettings _settings;
         private static IExceptionNotifier _exceptionNotifier;
+        private static IHabaneroLoggerFactory _loggerFactory;
         //private static ISynchronisationController _synchronisationController;
         private static string _applicationName;
         private static string _applicationVersion;
@@ -107,5 +110,16 @@ namespace Habanero.Base
             get { return _securityController; }
             set { _securityController = value; }
         }
+
+        ///<summary>
+        /// Gets and sets the <see cref="IHabaneroLoggerFactory"/> that is used to create the <see cref="IHabaneroLogger"/>
+        /// for this application.
+        ///</summary>
+        public static IHabaneroLoggerFactory LoggerFactory
+        {
+            get { return _loggerFactory ?? (_loggerFactory = new Log4NetLoggerFactory()); }
+            set { _loggerFactory = value; }
+        }
+
     }
 }

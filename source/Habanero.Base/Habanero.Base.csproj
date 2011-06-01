@@ -157,6 +157,11 @@
     <Compile Include="ISimpleLookupList.cs" />
     <Compile Include="ISingleRelationshipDef.cs" />
     <Compile Include="ISingleValueDef.cs" />
+    <Compile Include="Logging\IHabaneroLogger.cs" />
+    <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
+    <Compile Include="Logging\Log4NetLogger.cs" />
+    <Compile Include="Logging\Log4NetLoggerFactory.cs" />
+    <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="OrderCriteriaField.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
