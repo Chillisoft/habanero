@@ -159,9 +159,9 @@ namespace Habanero.DB
         public IEnumerable<ISqlStatement> GenerateForRelationship(IRelationship relationship, IBusinessObject relatedBusinessObject)
         {
             _statements = new List<ISqlStatement>();
-            BOPropCol propsToInclude = new BOPropCol();
+            var propsToInclude = new BOPropCol();
             IBOProp oneProp = null;
-            foreach (IRelPropDef propDef in relationship.RelationshipDef.RelKeyDef)
+            foreach (var propDef in relationship.RelationshipDef.RelKeyDef)
             {
                 oneProp = relatedBusinessObject.Props[propDef.RelatedClassPropName];
                 propsToInclude.Add(oneProp);

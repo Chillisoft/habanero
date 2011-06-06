@@ -117,7 +117,7 @@ namespace Habanero.DB
         /// </summary>
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
-            string transactionID = transaction.TransactionID();
+            var transactionID = transaction.TransactionID();
             if (_transactionsExecutingToDataSource.ContainsKey(transactionID)) return;
             _transactionsExecutingToDataSource.Add(transactionID, transaction);
 
@@ -125,7 +125,7 @@ namespace Habanero.DB
 
             if (transaction is TransactionalBusinessObjectDB)
             {
-                IBusinessObject businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
+                var businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
                 if (businessObject.Status.IsDeleted)
                 {
                     DeleteRelatedChildren(businessObject);
@@ -133,9 +133,9 @@ namespace Habanero.DB
                 }
             }
 
-            IEnumerable<ISqlStatement> sql = transactionDB.GetPersistSql();
+            var sql = transactionDB.GetPersistSql();
             if (sql == null) return;
-            IDatabaseConnection databaseConnection = _databaseConnection;
+            var databaseConnection = _databaseConnection;
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }
