@@ -202,6 +202,34 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------
         }
 
+        [Test]
+        public void Equals_WhenValuesAreEnumerable_ShouldCompareEnumerables_True()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "IntValue";
+            Criteria criteria1 = new Criteria(propName, Criteria.ComparisonOp.In, new[] {1, 3, 5});
+            Criteria criteria2 = new Criteria(propName, Criteria.ComparisonOp.In, new[] { 1, 3, 5 });
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Equals_WhenValuesAreEnumerable_ShouldCompareEnumerables_False()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "IntValue";
+            Criteria criteria1 = new Criteria(propName, Criteria.ComparisonOp.In, new[] {1, 3, 5});
+            Criteria criteria2 = new Criteria(propName, Criteria.ComparisonOp.In, new[] { 1, 2, 3, 5 });
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
 
         [Test]
         public void TestToString_WithSource()

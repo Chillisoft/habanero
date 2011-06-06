@@ -233,7 +233,7 @@ namespace Habanero.Base
         ///<summary>
         /// Gets the comparison operator being used by this Criteria object (If this is a leaf criteria)
         ///</summary>
-        public virtual ComparisonOp ComparisonOperator { get; private set; }
+        public virtual ComparisonOp ComparisonOperator { get; set; }
 
         ///<summary>
         /// Returns true if the business object matches 
@@ -549,6 +549,11 @@ namespace Habanero.Base
             if (IsComposite())
             {
                 if (!otherCriteria.IsComposite()) return false;
+                if (LeftCriteria == null && otherCriteria.LeftCriteria == null)
+                {
+                    return LogicalOperator == otherCriteria.LogicalOperator && RightCriteria.Equals(otherCriteria.RightCriteria);
+                }
+                if (LeftCriteria == null) return false;
                 if (!LeftCriteria.Equals(otherCriteria.LeftCriteria)) return false;
                 return LogicalOperator == otherCriteria.LogicalOperator && RightCriteria.Equals(otherCriteria.RightCriteria);
             }
@@ -556,6 +561,10 @@ namespace Habanero.Base
             if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
             if (FieldValue == null && otherCriteria.FieldValue == null) return true;
             if (FieldValue == null ) return false;
+            if (FieldValue is IEnumerable && otherCriteria.FieldValue is IEnumerable)
+            {
+                return ((IEnumerable) FieldValue).IsEqualTo((IEnumerable) otherCriteria.FieldValue);
+            }
             return FieldValue.Equals(otherCriteria.FieldValue);
         }
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
@@ -801,117 +810,15 @@ namespace Habanero.Base
             return new Criteria(memberExpression.Member.Name, comparisonOp, value);
         }
 
-        public static Criteria Create<T>(Expression<Func<T, bool>> expression)
+        public static CriteriaBuilder Expr<T>(Expression<Func<T, bool>> expression)
         {
-            return Create(expression.Body);
+            return new CriteriaBuilder(expression.Body);
         }
 
-        private static Criteria Create(Expression expression)
+        public static CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
         {
-            if (expression is BinaryExpression)
-                return CreateFromBinaryExpression(expression);
-            if (expression is MethodCallExpression)
-                return CreateFromMethodCallExpression(expression);
-            return CreateFromUnaryExpression(expression);
+            return new CriteriaBuilder(Expression.Not(expression.Body));
         }
 
-        private static Criteria CreateFromUnaryExpression(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static Criteria CreateFromMethodCallExpression(Expression expression)
-        {
-            var methodCallExpression = (MethodCallExpression) expression;
-            var argValue = ((ConstantExpression)methodCallExpression.Arguments[0]).Value;
-
-            if (methodCallExpression.Method.Name == "Contains")
-            {
-                var memberExpression = (MemberExpression)methodCallExpression.Object;
-                var propInfo = (PropertyInfo) memberExpression.Member;
-                if (propInfo.PropertyType == typeof(string))
-                {
-                    return new Criteria(propInfo.Name, ComparisonOp.Like, "%" + argValue + "%");
-                }
-            }
-            else if (methodCallExpression.Method.Name == "StartsWith")
-            {
-                var memberExpression = (MemberExpression)methodCallExpression.Object;
-                var propInfo = (PropertyInfo)memberExpression.Member;
-                if (propInfo.PropertyType == typeof(string))
-                {
-                    return new Criteria(propInfo.Name, ComparisonOp.Like, argValue + "%");
-                }
-            }
-            else if (methodCallExpression.Method.Name == "EndsWith")
-            {
-                var memberExpression = (MemberExpression)methodCallExpression.Object;
-                var propInfo = (PropertyInfo)memberExpression.Member;
-                if (propInfo.PropertyType == typeof(string))
-                {
-                    return new Criteria(propInfo.Name, ComparisonOp.Like, "%" + argValue);
-                }
-            }
-            throw new ArgumentException("Sorry, don't know how to handle a MethodCallExpression: " +
-                                        expression.ToString());
-        }
-
-        private static Criteria CreateFromBinaryExpression(Expression expression)
-        {
-            var logicalOps = new Dictionary<ExpressionType, LogicalOp>
-                                 {
-                                     { ExpressionType.AndAlso, LogicalOp.And },
-                                     { ExpressionType.OrElse, LogicalOp.Or }
-                                 };
-
-            var binaryExpression = (BinaryExpression)expression;
-
-            if (binaryExpression.Left is BinaryExpression)
-            {
-                var leftCriteria = Create(binaryExpression.Left);
-                var logicalOp = logicalOps[binaryExpression.NodeType];
-                var rightCriteria = Create(binaryExpression.Right);
-                return new Criteria(leftCriteria, logicalOp, rightCriteria);
-            }
-
-            var ops = new Dictionary<ExpressionType, ComparisonOp>
-                { { ExpressionType.GreaterThan, ComparisonOp.GreaterThan},
-                  { ExpressionType.GreaterThanOrEqual, ComparisonOp.GreaterThanEqual},
-                  { ExpressionType.LessThan, ComparisonOp.LessThan},
-                  { ExpressionType.LessThanOrEqual, ComparisonOp.LessThanEqual},
-                  { ExpressionType.NotEqual, ComparisonOp.NotEquals},
-                  {ExpressionType.Equal, ComparisonOp.Equals} };
-
-            if (!(binaryExpression.Left is MemberExpression))
-            {
-                throw new ArgumentException(expression + " is not a valid expression for a Criteria, the left must a MemberExpression");
-            }
-            var memberExpression = (MemberExpression)binaryExpression.Left;
-
-            var comparisonOp = ops[binaryExpression.NodeType];
-
-            ConstantExpression valueExpression;
-            object finalValue = null;
-
-            if (binaryExpression.Right is ConstantExpression)
-            {
-                valueExpression = (ConstantExpression)binaryExpression.Right;
-                finalValue = valueExpression.Value;
-            }
-            else if (binaryExpression.Right is MemberExpression)
-            {
-                var fieldExpression = (MemberExpression)binaryExpression.Right;
-                if (fieldExpression.Expression is ConstantExpression)
-                {
-                    valueExpression = (ConstantExpression)fieldExpression.Expression;
-                    var fieldInfo = (FieldInfo)fieldExpression.Member;
-                    finalValue = fieldInfo.GetValue(valueExpression.Value);
-                }
-            }
-
-            if (finalValue == null && comparisonOp == ComparisonOp.Equals) comparisonOp = ComparisonOp.Is;
-            if (finalValue == null && comparisonOp == ComparisonOp.NotEquals) comparisonOp = ComparisonOp.IsNot;
-            return new Criteria(memberExpression.Member.Name, comparisonOp, finalValue);
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Habanero.Base
@@ -21,6 +22,18 @@ namespace Habanero.Base
             {
                 action(item);
             }
+        }
+
+        public static bool IsEqualTo(this IEnumerable enumerable1, IEnumerable enumerable2)
+        {
+            var enumerator1 = enumerable1.GetEnumerator();
+            var enumerator2 = enumerable2.GetEnumerator();
+            while (enumerator1.MoveNext())
+            {
+                if (!enumerator2.MoveNext()) return false;
+                if (!enumerator1.Current.Equals(enumerator2.Current)) return false;
+            }
+            return !enumerator2.MoveNext();
         }
     }
 }

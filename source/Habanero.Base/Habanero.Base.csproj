@@ -143,6 +143,7 @@
     <Compile Include="BusinessObjectDTO.cs" />
     <Compile Include="ClassDefCol.cs" />
     <Compile Include="CoverageExcludeAttribute.cs" />
+    <Compile Include="Criteria\CriteriaBuilder.cs" />
     <Compile Include="DataMappers\BoolDataMapper.cs" />
     <Compile Include="DataMappers\ByteArrayDataMapper.cs" />
     <Compile Include="DataMappers\DataMapper.cs" />
