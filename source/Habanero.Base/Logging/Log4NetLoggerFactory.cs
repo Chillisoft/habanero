@@ -5,7 +5,7 @@ using log4net.Config;
 namespace Habanero.Base.Logging
 {
     /// <summary>
-    /// Logger factory for creating a <see cref="Log4NetLogger"/>
+    /// Logger factory for creating a <see cref="HabaneroLoggerLog4Net"/>
     /// </summary>
     public class Log4NetLoggerFactory : IHabaneroLoggerFactory
     {
@@ -31,13 +31,13 @@ namespace Habanero.Base.Logging
         public IHabaneroLogger GetLogger(string contextName)
         {
             
-            return new Log4NetLogger(contextName);
+            return new HabaneroLoggerLog4Net(contextName);
         }
 
         public IHabaneroLogger GetLogger(Type contextType)
         {
             //   throw new NotImplementedException();
-            return new Log4NetLogger(contextType);
+            return new HabaneroLoggerLog4Net(contextType);
         }
     }
 }

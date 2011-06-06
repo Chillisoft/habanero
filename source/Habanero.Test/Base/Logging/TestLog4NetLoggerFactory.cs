@@ -35,7 +35,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Test Result -----------------------
             Assert.IsNotNull(logger);
             Assert.IsInstanceOf<IHabaneroLogger>(logger );
-            Assert.IsInstanceOf<Log4NetLogger>(logger);
+            Assert.IsInstanceOf<HabaneroLoggerLog4Net>(logger);
         } 
         [Test]
         public void Test_GetLogger_WithContextname_ShouldReturnNewLoggerWithContextName()
@@ -62,7 +62,7 @@ namespace Habanero.Test.Base.Logging
             var logger = loggerFactory.GetLogger(typeof(FakeObject));
             //---------------Test Result -----------------------
             Assert.IsNotNull(logger);
-            Assert.IsInstanceOf<Log4NetLogger>(logger);
+            Assert.IsInstanceOf<HabaneroLoggerLog4Net>(logger);
         }
         [Test]
         public void Test_GetLogger_WithType_ShouldSetContext()

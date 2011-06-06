@@ -22,7 +22,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            var logger = new Log4NetLogger(contextName);
+            var logger = new HabaneroLoggerLog4Net(contextName);
             //---------------Test Result -----------------------
             Assert.IsInstanceOf<IHabaneroLogger>(logger);
             Assert.AreEqual(contextName, logger.ContextName);
@@ -33,7 +33,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Error(message));
@@ -48,7 +48,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var exception = new Exception();
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
@@ -65,7 +65,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var exception = new Exception();
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
@@ -83,7 +83,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var exception = new Exception();
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
@@ -102,7 +102,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var exception = new Exception();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Error("", exception));
@@ -119,7 +119,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var exception = new UserException();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Info("", exception));
@@ -137,7 +137,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Debug(message));
@@ -152,7 +152,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Error(message));
@@ -167,7 +167,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Warn(message));
@@ -182,7 +182,7 @@ namespace Habanero.Test.Base.Logging
         {
             //---------------Set up test pack-------------------
             var log = GetMockLog();
-            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
             var message = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Info(message));
@@ -202,7 +202,7 @@ namespace Habanero.Test.Base.Logging
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
 			log.Stub(log2 => log2.IsDebugEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			var message = TestUtil.GetRandomString();
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.Debug(message));
@@ -218,7 +218,7 @@ namespace Habanero.Test.Base.Logging
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
 			log.Stub(log2 => log2.IsErrorEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			var message = TestUtil.GetRandomString();
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.Error(message));
@@ -234,7 +234,7 @@ namespace Habanero.Test.Base.Logging
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
 			log.Stub(log2 => log2.IsWarnEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			var message = TestUtil.GetRandomString();
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.Warn(message));
@@ -250,7 +250,7 @@ namespace Habanero.Test.Base.Logging
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
 			log.Stub(log2 => log2.IsInfoEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			var message = TestUtil.GetRandomString();
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.Info(message));
@@ -265,7 +265,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsDebugEnabled).Return(true);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
@@ -281,7 +281,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsErrorEnabled).Return(true);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
@@ -297,7 +297,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsWarnEnabled).Return(true);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
@@ -313,7 +313,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsInfoEnabled).Return(true);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
@@ -329,7 +329,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsDebugEnabled).Return(false);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
@@ -345,7 +345,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsErrorEnabled).Return(false);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
@@ -361,7 +361,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsWarnEnabled).Return(false);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
@@ -377,7 +377,7 @@ namespace Habanero.Test.Base.Logging
 		{
 			//---------------Set up test pack-------------------
 			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+			IHabaneroLogger logger = new HabaneroLoggerLog4NetSpy(log);
 			log.Stub(log2 => log2.IsInfoEnabled).Return(false);
 			//---------------Assert Precondition----------------
 			log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
@@ -416,9 +416,9 @@ namespace Habanero.Test.Base.Logging
 
    
 
-    internal class Log4NetLoggerSpy : Log4NetLogger
+    internal class HabaneroLoggerLog4NetSpy : HabaneroLoggerLog4Net
     {
-        public Log4NetLoggerSpy(ILog log) : base(TestUtil.GetRandomString())
+        public HabaneroLoggerLog4NetSpy(ILog log) : base(TestUtil.GetRandomString())
         {
             _log = log;
         }
