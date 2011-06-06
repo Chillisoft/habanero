@@ -22,7 +22,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            var logger = new Log4NetLogger(contextName);
+            var logger = new HabaneroLoggerLog4Net(contextName);
             //---------------Test Result -----------------------
             Assert.IsInstanceOf<IHabaneroLogger>(logger);
             Assert.AreEqual(contextName, logger.ContextName);
