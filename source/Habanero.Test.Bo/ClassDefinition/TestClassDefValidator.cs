@@ -39,11 +39,12 @@ namespace Habanero.Test.BO.ClassDefinition
 			ClassDef.ClassDefs.Clear();
 		}
 
-	   [Test]
+		[Test]
 		public void Test_Valid_Relationship()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -68,8 +69,10 @@ namespace Habanero.Test.BO.ClassDefinition
 			ClassDefValidator defValidator = new ClassDefValidator(GetDefClassFactory());
 			//--------------------Assert Preconditions-----------------
 			Assert.AreEqual(2, classDefList.Count);
-			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
-			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"),
+						  "Class 'TestClass' should have been loaded.");
+			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"),
+						  "Class 'TestRelatedClass' should have been loaded.");
 			//--------------------Execute Test-------------------------
 			defValidator.ValidateClassDefs(classDefList);
 			//--------------------Assert Results ----------------------
@@ -84,7 +87,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void TestLoadClassDefs_KeyDefinedWithInheritedProperties()
 		{
 			//-------------Setup Test Pack ------------------
-			const string xml = @"
+			const string xml =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -110,20 +114,22 @@ namespace Habanero.Test.BO.ClassDefinition
 			var classDefInherited = classDefList["Habanero.Test.BO.Loaders", "TestClassInherited"];
 			var keyDef = classDefInherited.KeysCol.GetKeyDefAtIndex(0);
 			var keyDefPropDef = keyDef["TestClassName"];
-			Assert.AreNotSame(propDef, keyDefPropDef, "The key's property should have been resolved to be the property of the superclass by the validator.");
+			Assert.AreNotSame(propDef, keyDefPropDef,
+							  "The key's property should have been resolved to be the property of the superclass by the validator.");
 			//-------------Execute test ---------------------
 			validator.ValidateClassDefs(classDefList);
 			//-------------Test Result ----------------------
 			var keyDefPropDefAfterValidate = keyDef["TestClassName"];
-			Assert.AreSame(propDef, keyDefPropDefAfterValidate, "The key's property should have been resolved to be the property of the superclass by the loader.");
-
+			Assert.AreSame(propDef, keyDefPropDefAfterValidate,
+						   "The key's property should have been resolved to be the property of the superclass by the loader.");
 		}
 
 		[Test]
 		public void TestLoadClassDefs_KeyDefinedWithNonExistantProperty()
 		{
 			//-------------Setup Test Pack ------------------
-			const string xml = @"
+			const string xml =
+				@"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 						<property  name=""TestClassID"" />
@@ -158,12 +164,13 @@ namespace Habanero.Test.BO.ClassDefinition
 									  "capitalisation of the specified property", ex.Message);
 			}
 		}
-		
+
 		[Test]
 		public void Test_Invalid_Relationship_PropDefDoesNotExistOnRelatedClassDef()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -192,20 +199,21 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefs);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
 				StringAssert.Contains("In a 'relatedProperty' element "
-					+ "for the 'TestRelatedClass' relationship of the 'TestClass' "
-					+ "class, the property 'PropDefDoesNonExist'", ex.Message);
+									  + "for the 'TestRelatedClass' relationship of the 'TestClass' "
+									  + "class, the property 'PropDefDoesNonExist'", ex.Message);
 			}
 		}
-		
+
 		[Test]
 		public void Test_Invalid_Relationship_PropDefForReverseRelationshipNotSameAsRelationship()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -238,18 +246,19 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefs);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
 				StringAssert.Contains("do not have the same properties defined as the relationship keys", ex.Message);
 			}
 		}
-		
+
 		[Test]
 		public void Test_Invalid_Relationship_SingleSingleRelationships_BothSetAsOwning_NeitherIsPrimaryKey()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -282,10 +291,12 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefs);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
-				StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded because the reverse relationship 'TestClass' ", ex.Message);
+				StringAssert.Contains(
+					"The relationship 'TestRelatedClass' could not be loaded because the reverse relationship 'TestClass' ",
+					ex.Message);
 				StringAssert.Contains("are both set up as owningBOHasForeignKey = true", ex.Message);
 			}
 		}
@@ -294,7 +305,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Invalid_Relationship_PropDefDoesNotExistOnOwningClassDef()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -323,10 +335,11 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefs);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
-				StringAssert.Contains("In a 'relatedProperty' element for the 'TestRelatedClass' relationship of the 'TestClass' class, " +
+				StringAssert.Contains(
+					"In a 'relatedProperty' element for the 'TestRelatedClass' relationship of the 'TestClass' class, " +
 					"the property 'PropDefDoesNonExist' given in the 'property' attribute does not exist", ex.Message);
 			}
 		}
@@ -335,7 +348,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_SingleSingleRelationships_OnlyOneHasOwningBOHasForeignKey()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -375,12 +389,13 @@ namespace Habanero.Test.BO.ClassDefinition
 			Assert.IsFalse(relationshipDef.OwningBOHasForeignKey, "Should have converted this to false");
 			Assert.IsFalse(reverserelationshipDef.OwningBOHasForeignKey, "Should have converted this to false");
 		}
-		
+
 		[Test]
 		public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -411,7 +426,7 @@ namespace Habanero.Test.BO.ClassDefinition
 			IRelationshipDef relationshipDef = classDef.RelationshipDefCol["TestRelatedClass"];
 			IClassDef reverseClassDef = classDefList.FindByClassName("TestRelatedClass");
 			IRelationshipDef reverseRelationshipDef = reverseClassDef.RelationshipDefCol["TestClass"];
-			
+
 			//--------------------Assert PreConditions---------------   
 			Assert.IsTrue(relationshipDef.OwningBOHasForeignKey);
 			Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
@@ -423,10 +438,12 @@ namespace Habanero.Test.BO.ClassDefinition
 		}
 
 		[Test]
-		public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_ReverseDoesNotHave()
+		public void
+			Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_ReverseDoesNotHave()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -472,7 +489,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_SingleSingleRelationships_NoReverse_CanDetermine_OwningBOHasForeignKey()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -509,7 +527,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_SingleSingleRelationships_CanDetermine_OwningBOHasForeignKey_SecondClass()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -555,7 +574,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_1_1_NoReverse_RelatatedProp_IsPartOfCompositePrimaryKey()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -595,7 +615,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_1_M_Relationships_CanDetermine_OwningBOHasForeignKey_SecondClass()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -641,7 +662,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_1_M_Relationships_CanDetermine_OwningBOHasForeignKey_SecondClass_NotSetUp()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -687,7 +709,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Invalid_Relationship_SingleSingleRelationships_ReverseRelationshipNotDefined()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -719,19 +742,20 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefList);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
 				StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded for because "
-						+ "the reverse relationship 'ReverseRelNonExist'", ex.Message);
+									  + "the reverse relationship 'ReverseRelNonExist'", ex.Message);
 			}
 		}
-		
+
 		[Test]
 		public void Test_Invalid_Relationship_RelatedClassDefDoesNotExist()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 						<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 							<property  name=""TestClassID"" type=""Guid"" />
@@ -760,10 +784,12 @@ namespace Habanero.Test.BO.ClassDefinition
 				validator.ValidateClassDefs(classDefList);
 				Assert.Fail("expected Err");
 			}
-			//---------------Test Result -----------------------
+				//---------------Test Result -----------------------
 			catch (InvalidXmlDefinitionException ex)
 			{
-				StringAssert.Contains("The relationship 'TestRelatedClass' could not be loaded because when trying to retrieve its related class the folllowing", ex.Message);
+				StringAssert.Contains(
+					"The relationship 'TestRelatedClass' could not be loaded because when trying to retrieve its related class the folllowing",
+					ex.Message);
 			}
 		}
 
@@ -771,7 +797,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Force_PrimaryKey_IsObjectID_AsCompulsoryWriteOnce_WithReadWriteRule_ReadWrite()
 		{
 			//-------------Setup Test Pack ------------------
-			const string xml = @"
+			const string xml =
+				@"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 						<property name=""TestClassID"" type=""Guid"" readWriteRule=""ReadWrite""/>
@@ -800,7 +827,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Force_PrimaryKey_IsObjectID_AsCompulsoryWriteOnce_WithReadWriteRule_WriteNew()
 		{
 			//-------------Setup Test Pack ------------------
-			const string xml = @"
+			const string xml =
+				@"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 						<property name=""TestClassID"" type=""Guid"" readWriteRule=""WriteNew""/>
@@ -824,12 +852,13 @@ namespace Habanero.Test.BO.ClassDefinition
 			Assert.IsTrue(keyPropDef.Compulsory);
 			Assert.AreEqual(PropReadWriteRule.WriteNew, keyPropDef.ReadWriteRule);
 		}
-		
+
 		[Test]
 		public void Test_Validate_PrimaryKey_IsObjectID_True_NonGuidProp()
 		{
 			//-------------Setup Test Pack ------------------
-			const string xml = @"
+			const string xml =
+				@"
 				<classes>
 					<class name=""TestClass"" assembly=""Habanero.Test.BO.Loaders"" >
 						<property name=""TestClassID""/>
@@ -852,7 +881,8 @@ namespace Habanero.Test.BO.ClassDefinition
 			}
 			catch (InvalidXmlDefinitionException ex)
 			{
-				Assert.AreEqual("In the class called 'TestClass', the primary key is set as IsObjectID but the property 'TestClassID' " +
+				Assert.AreEqual(
+					"In the class called 'TestClass', the primary key is set as IsObjectID but the property 'TestClassID' " +
 					"defined as part of the ObjectID primary key is not a Guid.", ex.Message);
 			}
 		}
@@ -862,7 +892,8 @@ namespace Habanero.Test.BO.ClassDefinition
 		public void Test_Valid_Relationship_1_M_Relationships_PrimaryAndForeignKeyDoesNotMatchRelationshipCardinality()
 		{
 			//----------------------Test Setup ----------------------
-			const string classDefsString = @"
+			const string classDefsString =
+				@"
 					<classes>
 
 						<class name=""TestRelatedClass"" assembly=""Habanero.Test.BO.Loaders"" >
@@ -893,8 +924,10 @@ namespace Habanero.Test.BO.ClassDefinition
 			ClassDefCol classDefList = loader.LoadClassDefs(classDefsString);
 			//---------------Test Result -----------------------
 			Assert.AreEqual(2, classDefList.Count);
-			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"), "Class 'TestClass' should have been loaded.");
-			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"), "Class 'TestRelatedClass' should have been loaded.");
+			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestClass"),
+						  "Class 'TestClass' should have been loaded.");
+			Assert.IsTrue(classDefList.Contains("Habanero.Test.BO.Loaders", "TestRelatedClass"),
+						  "Class 'TestRelatedClass' should have been loaded.");
 
 			Assert.Fail("wRITE TEST THSI should throw validation error");
 
@@ -906,10 +939,10 @@ namespace Habanero.Test.BO.ClassDefinition
 			Assert.IsFalse(relationshipDef.OwningBOHasForeignKey);
 			Assert.IsTrue(reverseRelationshipDef.OwningBOHasForeignKey);
 		}
+
 		private XmlClassDefsLoader CreateXmlClassDefsLoader()
 		{
 			return new XmlClassDefsLoader("", new DtdLoader(), GetDefClassFactory());
 		}
-		
 	}
 }
