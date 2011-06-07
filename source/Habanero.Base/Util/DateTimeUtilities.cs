@@ -263,19 +263,7 @@ namespace Habanero.Util
                         return true;
                     }
 
-                    try
-                    {
 
-                        returnValue = DateTime.ParseExact(stringValueToConvert,
-                                                          StandardDateTimeFormat,
-                                                          _dateTimeFormatProvider,
-                                                          DateTimeStyles.AllowWhiteSpaces);
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
 
                 }
                 
@@ -288,7 +276,19 @@ namespace Habanero.Util
                 catch (Exception)
                 {
 
-                    return false;
+                    try
+                    {
+
+                        returnValue = DateTime.ParseExact(valueToParse.ToString(),
+                                                          StandardDateTimeFormat,
+                                                          _dateTimeFormatProvider,
+                                                          DateTimeStyles.AllowWhiteSpaces);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
                 }
                 //DateTime dateTimeOut;
                 //if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
