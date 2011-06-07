@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -35,7 +34,6 @@ namespace Habanero.DB
         : TransactionalBusinessObject, ITransactionalDB
     {
         private readonly IDatabaseConnection _databaseConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.TransactionalBusinessObjectDB");
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>

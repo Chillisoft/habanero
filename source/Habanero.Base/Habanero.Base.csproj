@@ -116,7 +116,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\log4net.dll</HintPath>
     </Reference>
@@ -167,6 +167,7 @@
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
+    <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\IHabaneroLogger.cs" />
     <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
     <Compile Include="ILookupListWithClassDef.cs" />

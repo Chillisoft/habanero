@@ -23,7 +23,6 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
-using log4net;
 
 namespace Habanero.BO
 {

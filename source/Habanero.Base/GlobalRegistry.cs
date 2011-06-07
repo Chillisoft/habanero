@@ -19,7 +19,6 @@
 using System;
 using Habanero.Base.DataMappers;
 using Habanero.Base.Logging;
-using log4net;
 
 namespace Habanero.Base
 {
@@ -107,7 +106,7 @@ namespace Habanero.Base
         ///</summary>
         public static IHabaneroLoggerFactory LoggerFactory
         {
-            get { return _loggerFactory ?? (_loggerFactory = new Log4NetLoggerFactory()); }
+            get { return _loggerFactory ?? (_loggerFactory = new ConsoleLoggerFactory()); }
             set { _loggerFactory = value; }
         }
 

@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using log4net;
+using Habanero.Base.Logging;
 
 namespace Habanero.BO
 {
@@ -80,7 +80,7 @@ namespace Habanero.BO
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
         private readonly Dictionary<string, ITransactional> _originalTransactionsByKey = new Dictionary<string, ITransactional>();
 
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
+        private static readonly IHabaneroLogger Log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.BO.TransactionCommitter");
 
         /// <summary>
         /// A list of all transactions that are executed by the transaction committer.
@@ -405,18 +405,18 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                log.Error
-                    ("Error executing transaction: " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 4, true));
+                Log.Log(
+                    "Error executing transaction: " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 4, true), LogCategory.Exception);
                 try
                 {
                     TryRollback();
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                 }
                 UpdateTransactionsAsRolledBack();
                 throw;
@@ -462,9 +462,9 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                 }
                 throw;
             }
@@ -480,9 +480,9 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                     throw;
                 }
 

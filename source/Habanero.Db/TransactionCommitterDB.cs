@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -38,7 +37,6 @@ namespace Habanero.DB
     [Serializable]
     public class TransactionCommitterDB : TransactionCommitter
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
         private readonly IDatabaseConnection _databaseConnection;
         private IDbConnection _dbConnection;
         private IDbTransaction _dbTransaction;

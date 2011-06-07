@@ -19,8 +19,9 @@
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Habanero.Base;
 using Habanero.Base.Exceptions;
-using log4net;
+using Habanero.Base.Logging;
 
 namespace Habanero.Util
 {
@@ -30,7 +31,7 @@ namespace Habanero.Util
     ///</summary>
     public static class ReflectionUtilities
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.Util.ReflectionUtilities");
+        private static readonly IHabaneroLogger _log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.Util.ReflectionUtilities");
 
         ///<summary>
         /// This method is used to set the enum value of a property of an object.
@@ -140,8 +141,8 @@ namespace Habanero.Util
             {
                 string message = String.Format("Error retrieving public property '{0}' from object of type '{1}'", 
                     propertyName, className);
-                _log.Error(String.Format("{0}" + Environment.NewLine + "{1}", message,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                _log.Log(String.Format("{0}" + Environment.NewLine + "{1}", message,
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
         }
@@ -196,9 +197,9 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                _log.Error(String.Format("Error retrieving private property '{0}' from object of type '{1}'" +
+                _log.Log(String.Format("Error retrieving private property '{0}' from object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
-                                    ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                                    ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw ex.InnerException;
             }
         }
@@ -297,13 +298,13 @@ namespace Habanero.Util
             catch (TargetInvocationException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'" , propertyName, className);
-                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                _log.Log(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw new HabaneroApplicationException(message, ex.InnerException);
             }
             catch (ArgumentException ex)
             {
                 string message = String.Format("Error setting public property '{0}' for object of type '{1}'", propertyName, className);
-                _log.Error(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex, 8, true)));
+                _log.Log(message + Environment.NewLine + String.Format("{0}", ExceptionUtilities.GetExceptionString(ex, 8, true)), LogCategory.Exception);
                 throw new HabaneroApplicationException(message, ex);
             }
         }
@@ -334,9 +335,9 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                _log.Error(String.Format("Error setting private property '{0}' for object of type '{1}'" +
+                _log.Log(String.Format("Error setting private property '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw ex.InnerException;
             }
         }
@@ -386,9 +387,9 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                _log.Error(String.Format("Error setting internal property '{0}' for object of type '{1}'" +
+                _log.Log(String.Format("Error setting internal property '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", propertyName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw ex.InnerException;
             }
         }
@@ -417,9 +418,9 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                _log.Error(String.Format("Error calling public method '{0}' for object of type '{1}'" +
+                _log.Log(String.Format("Error calling public method '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", methodName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw ex.InnerException;
             }
         }
@@ -459,9 +460,9 @@ namespace Habanero.Util
             }
             catch (TargetInvocationException ex)
             {
-                _log.Error(String.Format("Error calling private method '{0}' for object of type '{1}'" +
+                _log.Log(String.Format("Error calling private method '{0}' for object of type '{1}'" +
                                         Environment.NewLine + "{2}", methodName, className,
-                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)));
+                                        ExceptionUtilities.GetExceptionString(ex.InnerException, 8, true)), LogCategory.Exception);
                 throw ex.InnerException;
             }
         }

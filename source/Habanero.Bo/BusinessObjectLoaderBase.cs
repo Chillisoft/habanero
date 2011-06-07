@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
-using log4net;
 
 namespace Habanero.BO
 {
@@ -34,10 +33,6 @@ namespace Habanero.BO
     [Serializable]
     public abstract class BusinessObjectLoaderBase: MarshalByRefObject
     {
-        /// <summary>
-        /// The log file used to log errors or events for this class
-        /// </summary>
-//        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
 			return CriteriaParser.CreateCriteria(criteriaString);

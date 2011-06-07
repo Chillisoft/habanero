@@ -24,8 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-//using log4net;
-
 namespace Habanero.BO
 {
     /// <summary>
@@ -33,7 +31,6 @@ namespace Habanero.BO
     /// </summary>
     public class BOMapper
     {
-        //private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
         private readonly IBusinessObject _businessObject;
 
         /// <summary>
@@ -102,16 +99,10 @@ namespace Habanero.BO
                 return GetAlternateRelationshipValue(propertyName);
             }
             var propertyMapper = BOPropMapperFactory.CreateMapper(this._businessObject, propertyName);
-/*
-            if (IsReflectiveProperty(propertyName))
-            {
-                return GetVirtualPropertyValue(propertyName);
-            }
 
-            BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName) {BusinessObject = _businessObject};
-*/
             return propertyMapper.GetPropertyValue();
         }
+
         /// <summary>
         /// This is a bit of a hack_ was used on a specific project some time ago.
         /// This is not generally supported throughout Habanero so has been isolated here.
@@ -144,22 +135,6 @@ namespace Habanero.BO
         {
             return propertyName.IndexOf("|") != -1;
         }
-/*
-        private static bool IsReflectiveProperty(string propertyName)
-        {
-            return propertyName.IndexOf("-") != -1;
-        }*/
-/*
-        private static bool IsRelatedProperty(string propertyName)
-        {
-            return propertyName.IndexOf(".") != -1;
-        }*/
-/*
-        private object GetVirtualPropertyValue(string propertyName)
-        {
-            string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
-            return ReflectionUtilities.GetPropertyValue(_businessObject, virtualPropName);
-        }*/
 
         ///<summary>
         /// Sets a property of a Business Object given the property name 
@@ -172,30 +147,8 @@ namespace Habanero.BO
             if (_businessObject == null) return;
             var propertyMapper = BOPropMapperFactory.CreateMapper(this._businessObject, propertyName);
              propertyMapper.SetPropertyValue(value);
-/*            if (IsReflectiveProperty(propertyName))
-            {
-                SetVirtualPropertyValue(propertyName, value);
-            }
-            else
-            {
-                BOPropertyMapper boPropertyMapper = new BOPropertyMapper(propertyName) { BusinessObject = _businessObject };
-                boPropertyMapper.SetPropertyValue(value);
-                //_businessObject.SetPropertyValue(propertyName, value);
-            }*/
         }
 
-/*        // ReSharper disable MemberCanBePrivate.Global
-        internal void SetVirtualPropertyValue(string propertyName, object value)
-
-        {
-            if (_businessObject == null) return;
-            string virtualPropName = propertyName.Substring(1, propertyName.Length - 2);
-            PropertyInfo propertyInfo = ReflectionUtilities.GetPropertyInfo(_businessObject.GetType(), virtualPropName);
-            if (propertyInfo != null && propertyInfo.CanWrite)
-            {
-                ReflectionUtilities.SetPropertyValue(_businessObject, virtualPropName, value);
-            }
-        }*/
         // ReSharper restore MemberCanBePrivate.Global
         /// <summary>
         /// Returns the class definition related to the
@@ -218,7 +171,6 @@ namespace Habanero.BO
                     ILookupListWithClassDef lookupList = (ILookupListWithClassDef)propDef.LookupList;
                     return lookupList.ClassDef;
                 }
-                
             }
             return null;
         }

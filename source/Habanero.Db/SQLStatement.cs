@@ -23,7 +23,6 @@ using System.Data.OleDb;
 using System.Text;
 using Habanero.Base;
 using Habanero.Util;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -39,7 +38,6 @@ namespace Habanero.DB
         private readonly IDbCommand _sampleCommand;
         private readonly IParameterNameGenerator _gen;
         private readonly IDbConnection _idbConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.SqlStatement");
 
         /// <summary>
         /// Constructor to initialise a new sql statement

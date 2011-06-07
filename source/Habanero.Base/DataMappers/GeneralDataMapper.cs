@@ -18,12 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.ComponentModel;
-using System.Drawing;
-using Habanero.Base;
-using Habanero.Base.DataMappers;
 using Habanero.Base.Logging;
-using Habanero.Util;
-using log4net;
 
 namespace Habanero.Base.DataMappers
 {

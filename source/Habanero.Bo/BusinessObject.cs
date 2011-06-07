@@ -31,8 +31,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
-using log4net;
 
 namespace Habanero.BO
 {

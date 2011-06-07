@@ -19,9 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
-
-//using log4net;
 
 namespace Habanero.BO
 {
@@ -92,7 +89,6 @@ namespace Habanero.BO
     public class SingleRelationship<TBusinessObject> : SingleRelationshipBase, ISingleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
-        // Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private TBusinessObject _relatedBo;
         private Criteria _storedKeyCriteria;
 

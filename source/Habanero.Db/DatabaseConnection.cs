@@ -23,8 +23,8 @@ using System.Data;
 using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.Util;
-using log4net;
 
 // Limiting the number of records for a Select
 // -------------------------------------------
@@ -67,7 +67,7 @@ namespace Habanero.DB
         private string _connectString;
         private List<IDbConnection> _connections;
         private static IDatabaseConnection _currentDatabaseConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
+        private static readonly IHabaneroLogger Log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = -1;
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Habanero.DB
                     }
                     catch (Exception ex)
                     {
-                        log.Warn("Error closing and disposing connection", ex);
+                        Log.Log("Error closing and disposing connection", ex, LogCategory.Warn);
                     }
                 }
                 _connections = new List<IDbConnection>(5);
@@ -273,9 +273,9 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
                 throw;
             }
         }
@@ -304,9 +304,9 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
                 throw new DatabaseConnectionException
                     ("An error occurred while attempting " + "to connect to the database.", ex);
             }
@@ -377,10 +377,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
@@ -415,10 +415,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
@@ -455,10 +455,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
 
                 Console.Out.WriteLine
                     ("Error reading from database : " + Environment.NewLine
@@ -567,10 +567,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error writing to database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + sql, LogCategory.Exception);
                 Console.WriteLine
                     ("Error writing to database : " + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 10, true));
@@ -600,7 +600,7 @@ namespace Habanero.DB
             }
             catch (NotSupportedException ex)
             {
-                log.Warn("Error setting command timeout period", ex);
+                Log.Log("Error setting command timeout period", ex, LogCategory.Warn);
             }
             return dbCommand;
         }
@@ -679,10 +679,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error writing to database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + statements);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + statements, LogCategory.Exception);
                 if (transaction != null)
                 {
                     transaction.Rollback();
@@ -838,10 +838,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error in LoadDataTable:" + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
-                log.Error("Sql string: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
+                Log.Log("Sql string: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
