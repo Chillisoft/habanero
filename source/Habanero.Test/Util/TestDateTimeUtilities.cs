@@ -358,6 +358,23 @@ namespace Habanero.Test.Util
             Assert.IsNull(parsedValue);
         }
 
+
+        [Test]
+        public void TryParseDate_WhenStringInStandardFormat()
+        {
+            //---------------Set up test pack-------------------
+            // we cant use DateTime.Now because our serialisation format loses the microseconds so we
+            // need a date without microseconds to compare to.
+            var expectedDateTime = DateTime.Today.AddHours(-4).AddMinutes(-2).AddSeconds(-20).AddMilliseconds(352);
+            string dateAsString = expectedDateTime.ToString(DateTimeUtilities.StandardDateTimeFormat);
+            //---------------Execute Test ----------------------
+            DateTime? parsedDateTime;
+            var result = DateTimeUtilities.TryParseDate(dateAsString, out parsedDateTime);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(result);
+            Assert.AreEqual(expectedDateTime, parsedDateTime);
+        }
+
         [Test]
         public void Test_DayEnd_WhenNoOffSet_ShouldReturnLastMillisecondOfTheday()
         {

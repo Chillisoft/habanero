@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -30,6 +31,12 @@ namespace Habanero.Util
         private const  int _DECEMBER = 12;
         private const int _NOVEMBER = 11;
         private const int _JANUARY = 11;
+        /// <summary>
+        /// The standard date Time Format to use.
+        /// </summary>
+        public const string StandardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        private static IFormatProvider _dateTimeFormatProvider = new DateTimeFormatInfo { FullDateTimePattern = StandardDateTimeFormat };
+
 
         /// <summary>
         /// returns the last day of the current month (i.e. LastDayOfTheMonth(Today)
@@ -255,6 +262,21 @@ namespace Habanero.Util
                         returnValue = new DateTimeNow();
                         return true;
                     }
+
+                    try
+                    {
+
+                        returnValue = DateTime.ParseExact(stringValueToConvert,
+                                                          StandardDateTimeFormat,
+                                                          _dateTimeFormatProvider,
+                                                          DateTimeStyles.AllowWhiteSpaces);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+
                 }
                 
                 try
