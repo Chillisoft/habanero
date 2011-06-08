@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Habanero.Base.Logging
 {
@@ -20,7 +21,7 @@ namespace Habanero.Base.Logging
         public IHabaneroLogger GetLogger(string contextName)
         {
             if (_loggers.ContainsKey(contextName)) return _loggers[contextName];
-            var consoleLogger = new ConsoleLogger(contextName, _isLogging);
+            var consoleLogger = new ConsoleLogger(contextName,  new Dictionary<LogCategory, bool>(_isLogging));
             _loggers.Add(contextName, consoleLogger);
             return consoleLogger;
         }
