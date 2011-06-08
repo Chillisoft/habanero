@@ -16,32 +16,33 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System.Security.Cryptography;
-using Habanero.Base;
-using NUnit.Framework;
-
-namespace Habanero.Test.Base
+namespace Habanero.Base
 {
-    [TestFixture]
-    public class TestRSAPasswordCrypter
+    /// <summary>
+    /// An encrypter that carries out null change on the given string. 
+    /// In other words, both the decrypt and encrypt methods simply return the
+    /// string provided without changing it.
+    /// </summary>
+    public class NullCrypter : ICrypter
     {
-        [Test]
-        public void TestEncrypt()
+        /// <summary>
+        /// Returns the given string without carrying out any changes.
+        /// </summary>
+        /// <param name="value">The string to decrypt</param>
+        /// <returns>Returns the unaltered string provided</returns>
+        public string DecryptString(string value)
         {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            Assert.AreEqual(256, encrypted.Length);
+            return value;
         }
 
-        [Test]
-        public void TestDecrypt()
+        /// <summary>
+        /// Returns the given string without carrying out any changes.
+        /// </summary>
+        /// <param name="value">The string to encrypt</param>
+        /// <returns>Returns the unaltered string provided</returns>
+        public string EncryptString(string value)
         {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            string decrypted = crypter.DecryptString(encrypted);
-            Assert.AreEqual("testmessage", decrypted);
+            return value;
         }
     }
 }

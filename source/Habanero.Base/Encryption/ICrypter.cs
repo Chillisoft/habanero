@@ -16,22 +16,25 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using Habanero.Base;
-using NUnit.Framework;
-
-namespace Habanero.Test.Base
+namespace Habanero.Base
 {
-    [TestFixture]
-    public class TestNullCrypter
+    /// <summary>
+    /// Interface for classes that provide an encryption facility.
+    /// </summary>
+    public interface ICrypter
     {
-        [Test]
-        public void TestNullEncryption()
-        {
-            NullCrypter crypter = new NullCrypter();
-            string value = "test";
+        /// <summary>
+        /// Returns the decrypted form of the given string
+        /// </summary>
+        /// <param name="value">The string to decrypt</param>
+        /// <returns>Returns the decrypted string</returns>
+        string DecryptString(string value);
 
-            Assert.AreEqual("test", crypter.EncryptString(value));
-            Assert.AreEqual("test", crypter.DecryptString(value));
-        }
+        /// <summary>
+        /// Returns the encrypted form of the given string
+        /// </summary>
+        /// <param name="value">The string to encrypt</param>
+        /// <returns>Returns the encrypted string</returns>
+        string EncryptString(string value);
     }
 }

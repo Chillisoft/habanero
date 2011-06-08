@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -125,11 +126,11 @@ namespace Habanero.Test.DB
             try
             {
                 itsDbMigrator.CurrentVersion();
-                Assert.Fail("Expected to throw an HabaneroArgumentException");
+                Assert.Fail("Expected to throw an InvalidOperationException");
             //---------------Test Result -----------------------
-            } catch (HabaneroArgumentException ex)
+            } catch (InvalidOperationException ex)
             {
-                Assert.AreEqual("SettingsStorer", ex.ParameterName);
+               StringAssert.Contains("does not exist", ex.Message);
             }
             //---------------Tear Down -------------------------          
             finally

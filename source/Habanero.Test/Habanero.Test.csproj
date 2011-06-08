@@ -120,6 +120,8 @@
     <Compile Include="Base\DataMappers\TestIntDataMapper.cs" />
     <Compile Include="Base\DataMappers\TestStringDataMapper.cs" />
     <Compile Include="Base\DataMappers\TestTimeSpanDataMapper.cs" />
+    <Compile Include="Base\Encryption\TestRSAPasswordCrypter.cs" />
+    <Compile Include="Base\Encryption\TestUtf8Sha1Hasher.cs" />
     <Compile Include="Base\Logging\TestLog4NetLogger.cs" />
     <Compile Include="Base\Logging\TestLog4NetLoggerFactory.cs" />
     <Compile Include="Base\TestDateRange.cs" />
@@ -133,11 +135,11 @@
     <Compile Include="Base\TestExceptions.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestHabaneroApp.cs" />
-    <Compile Include="Base\TestNullCrypter.cs" />
+    <Compile Include="Base\Encryption\TestNullCrypter.cs" />
     <Compile Include="Base\TestProgressIndicators.cs" />
     <Compile Include="Base\TestResult.cs" />
     <Compile Include="Base\TestResultSet.cs" />
-    <Compile Include="Base\TestRSAPasswordCrypter.cs" />
+    <Compile Include="Base\Encryption\TestBase64Sha1Hasher.cs" />
     <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />
     <Compile Include="BOWithCompositePK.cs" />
