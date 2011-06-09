@@ -16,32 +16,22 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-using System.Security.Cryptography;
 using Habanero.Base;
 using NUnit.Framework;
 
-namespace Habanero.Test.Base
+namespace Habanero.Test.Base.Encryption
 {
     [TestFixture]
-    public class TestRSAPasswordCrypter
+    public class TestNullCrypter
     {
         [Test]
-        public void TestEncrypt()
+        public void TestNullEncryption()
         {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            Assert.AreEqual(256, encrypted.Length);
-        }
+            NullCrypter crypter = new NullCrypter();
+            string value = "test";
 
-        [Test]
-        public void TestDecrypt()
-        {
-            RSA rsa = RSA.Create();
-            ICrypter crypter = new RSAPasswordCrypter(rsa);
-            string encrypted = crypter.EncryptString("testmessage");
-            string decrypted = crypter.DecryptString(encrypted);
-            Assert.AreEqual("testmessage", decrypted);
+            Assert.AreEqual("test", crypter.EncryptString(value));
+            Assert.AreEqual("test", crypter.DecryptString(value));
         }
     }
 }

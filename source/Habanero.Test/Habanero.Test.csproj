@@ -99,13 +99,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Asset.cs" />
+    <Compile Include="Base\Encryption\TestBase64Sha1Hasher.cs" />
+    <Compile Include="Base\Encryption\TestNullCrypter.cs" />
+    <Compile Include="Base\Encryption\TestUtf8Sha1Hasher.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />
     <Compile Include="Base\TestDelegatedExceptionNotifier.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestNullCrypter.cs" />
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
     <Compile Include="Base\TestResult.cs" />
-    <Compile Include="Base\TestRSAPasswordCrypter.cs" />
     <Compile Include="BeforeSaveBo.cs" />
     <Compile Include="BOWithCompositePK.cs" />
     <Compile Include="BOWithStringPKProp.cs" />

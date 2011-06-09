@@ -300,7 +300,7 @@ namespace Habanero.DB
         /// <param name="privateKey">The RSA object which has the private key</param>
         public void SetPrivateKey(RSA privateKey)
         {
-            _passwordCrypter = new RSAPasswordCrypter(privateKey);
+           throw new NotImplementedException();
         }
 
         /// <summary>

@@ -24,17 +24,17 @@ namespace Habanero.Base
     public interface ICrypter
     {
         /// <summary>
-        /// Returns the given string without carrying out any changes.
+        /// Returns the decrypted form of the given string
         /// </summary>
         /// <param name="value">The string to decrypt</param>
-        /// <returns>Returns the unaltered string provided</returns>
+        /// <returns>Returns the decrypted string</returns>
         string DecryptString(string value);
 
         /// <summary>
-        /// Returns the given string without carrying out any changes.
+        /// Returns the encrypted form of the given string
         /// </summary>
         /// <param name="value">The string to encrypt</param>
-        /// <returns>Returns the unaltered string provided</returns>
+        /// <returns>Returns the encrypted string</returns>
         string EncryptString(string value);
     }
 }

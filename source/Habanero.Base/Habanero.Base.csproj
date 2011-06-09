@@ -110,6 +110,12 @@
     <Compile Include="DelegatedBusinessObjectEditor.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
     <Compile Include="Encryption.cs" />
+    <Compile Include="Encryption\Base64Sha1Hasher.cs" />
+    <Compile Include="Encryption\ICrypter.cs" />
+    <Compile Include="Encryption\IHasher.cs" />
+    <Compile Include="Encryption\NullCrypter.cs" />
+    <Compile Include="Encryption\RSAPasswordCrypter.cs" />
+    <Compile Include="Encryption\Utf8Sha1Hasher.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandler.cs" />
     <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
@@ -150,7 +156,6 @@
     <Compile Include="IConcurrencyControl.cs" />
     <Compile Include="IConfirmer.cs" />
     <Compile Include="IConnectionStringFactory.cs" />
-    <Compile Include="ICrypter.cs" />
     <Compile Include="IDatabaseConfig.cs" />
     <Compile Include="IDatabaseConnection.cs" />
     <Compile Include="IDatabaseConnectionFactory.cs" />
@@ -217,13 +222,14 @@
     <Compile Include="IUIGridColumn.cs" />
     <Compile Include="KeyDefCol.cs" />
     <Compile Include="LayoutStyle.cs" />
+    <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\IHabaneroLogger.cs" />
     <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
     <Compile Include="Logging\HabaneroLoggerLog4Net.cs" />
     <Compile Include="Logging\Log4NetLoggerFactory.cs" />
     <Compile Include="Logging\LogCategory.cs" />
-    <Compile Include="NullCrypter.cs" />
     <Compile Include="NullProgressIndicator.cs" />
+    <Compile Include="NullSecurityController.cs" />
     <Compile Include="OrderCriteria.cs" />
     <Compile Include="OrderCriteriaField.cs" />
     <Compile Include="ORMapping.cs" />
@@ -234,7 +240,6 @@
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="RethrowingExceptionNotifier.cs" />
-    <Compile Include="RSAPasswordCrypter.cs" />
     <Compile Include="SimpleValueObject.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="SqlFormatter.cs" />
