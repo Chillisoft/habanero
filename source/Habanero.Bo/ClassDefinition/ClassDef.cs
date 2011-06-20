@@ -1071,6 +1071,7 @@ namespace Habanero.BO.ClassDefinition
 
         private IPropDef GetInheritedPropDef(string propertyName, bool throwError)
         {
+            if (this.PropDefcol.Contains(propertyName)) return this.PropDefcol[propertyName];
 /*            IPropDef foundPropDef = null;
             IClassDef currentClassDef = this;
             while (currentClassDef != null)
@@ -1091,14 +1092,14 @@ namespace Habanero.BO.ClassDefinition
             {
                 return this.PropDefColIncludingInheritance[propertyName];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (throwError)
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "The property definition for the property '{0}' could not be " +
                         "found on a ClassDef of type '{1}'", propertyName,
-                        ClassNameFull));
+                        ClassNameFull), ex);
                 }
             }
 
