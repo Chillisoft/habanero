@@ -237,6 +237,9 @@ namespace Habanero.Test.BO
             //---------------Tear Down -------------------------          
         }
 
+
+
+
         [Test]
         public void Test_CreateWithValue_Type()
         {
@@ -532,6 +535,20 @@ namespace Habanero.Test.BO
                 Assert.AreEqual("The ObjectGuidID has already been set for this object.", ex.Message);
                 Assert.AreEqual(id, primaryKey.ObjectID);
             }
+        }
+
+        [Test]
+        public void Test_CreateWithValue_ClassDef_WithSuperClass()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            var value = Guid.NewGuid();
+            var inheritedClassDef = MyInheritedType.LoadInheritedTypeClassDef();
+            //---------------Execute Test ----------------------
+            var key = BOPrimaryKey.CreateWithValue((ClassDef)inheritedClassDef, value);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(value.ToString(), key.ToString());
+            //---------------Tear Down -------------------------          
         }
 
         private static BOPrimaryKey CreateBOPrimaryKeyString()

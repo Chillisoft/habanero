@@ -1396,8 +1396,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
         protected static IClassDef LoadClassDef(string classDefStr)
         {
-            XmlClassLoader itsLoader = CreateXmlClassLoader();
-            IClassDef classDef =
+            var itsLoader = CreateXmlClassLoader();
+            var classDef =
                 itsLoader.LoadClass(classDefStr);
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
