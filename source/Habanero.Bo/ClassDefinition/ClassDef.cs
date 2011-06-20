@@ -520,7 +520,7 @@ namespace Habanero.BO.ClassDefinition
                 ClassDef currentClassDef = this;
                 while (currentClassDef.SuperClassClassDef != null)
                 {
-                    currentClassDef = (ClassDef)currentClassDef.SuperClassClassDef;
+                    currentClassDef = (ClassDef) currentClassDef.SuperClassClassDef;
                     noKeys += currentClassDef.TotalNoOfKeysIncludingInheritance;
                 }
                 return noKeys;
@@ -759,9 +759,9 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                if (_keyDefColIncludingInheritance==null||
-                            _keyDefColIncludingInheritance.Count != this.TotalNoOfKeysIncludingInheritance)
-                _keyDefColIncludingInheritance = new KeyDefCol { ClassDef = this };
+                if (_keyDefColIncludingInheritance == null ||
+                    _keyDefColIncludingInheritance.Count != this.TotalNoOfKeysIncludingInheritance)
+                    _keyDefColIncludingInheritance = new KeyDefCol {ClassDef = this};
                 _keyDefColIncludingInheritance.AddRange(this.KeysCol);
 
                 IClassDef currentClassDef = this;
@@ -775,7 +775,6 @@ namespace Habanero.BO.ClassDefinition
 
                 return _keyDefColIncludingInheritance;
             }
-            
         }
 
         /// <summary>
@@ -1115,34 +1114,23 @@ namespace Habanero.BO.ClassDefinition
 
         private IPropDef GetInheritedPropDef(string propertyName, bool throwError)
         {
-/*            IPropDef foundPropDef = null;
-            IClassDef currentClassDef = this;
-            while (currentClassDef != null)
+            if (this.PropDefcol.Contains(propertyName))
             {
-                if (currentClassDef.PropDefcol.Contains(propertyName))
-                {
-                    foundPropDef = currentClassDef.PropDefcol[propertyName];
-                    break;
-                }
-                currentClassDef = currentClassDef.SuperClassClassDef;
+                return this.PropDefcol[propertyName];
             }
-            if (foundPropDef != null)
-            {
-                return foundPropDef;
-            }*/
 
             try
             {
                 return this.PropDefColIncludingInheritance[propertyName];
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (throwError)
                 {
                     throw new InvalidPropertyNameException(String.Format(
                         "The property definition for the property '{0}' could not be " +
                         "found on a ClassDef of type '{1}'", propertyName,
-                        ClassNameFull));
+                        ClassNameFull), ex);
                 }
             }
 
