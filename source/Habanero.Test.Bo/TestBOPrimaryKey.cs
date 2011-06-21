@@ -220,6 +220,20 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_CreateWithValue_ClassDef_WithSuperClass()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            var value = Guid.NewGuid();
+            var inheritedClassDef = MyInheritedType.LoadInheritedTypeClassDef();
+            //---------------Execute Test ----------------------
+            var key = BOPrimaryKey.CreateWithValue((ClassDef)inheritedClassDef, value);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(value.ToString(), key.ToString());
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void Test_CreateWithValue_ClassDef_WriteNewProp()
         {
             //---------------Set up test pack-------------------
