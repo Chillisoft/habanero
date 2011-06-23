@@ -108,6 +108,7 @@ namespace Habanero.BO
     	private IBusinessObject GetBusinessObjectShared(IClassDef classDef, Criteria criteria)
     	{
     		if (classDef == null) throw new ArgumentNullException("classDef");
+			QueryBuilder.PrepareCriteria(classDef, criteria);
     		return _dataStore.Find(classDef, criteria);
     	}
 

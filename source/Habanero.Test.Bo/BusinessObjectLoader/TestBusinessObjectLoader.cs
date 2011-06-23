@@ -377,6 +377,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		}
 
 		[Test]
+		public void TestGetBusinessObject_CriteriaObject_Untyped_ThroughRelationship()
+		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
+		{
+			//---------------Set up test pack-------------------
+			IClassDef classDef = Engine.LoadClassDef_IncludingCarAndOwner();
+			//            DateTime now = DateTime.Now;
+			string surname;
+			string regno;
+			string engineNo;
+			Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+			Engine.CreateEngineWithCarWithContact();
+			//            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+			Criteria criteria = new Criteria("Car.CarRegNo", Criteria.ComparisonOp.Equals, regno);
+
+			//---------------Execute Test ----------------------
+			Engine returned =
+				(Engine)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
+
+			//---------------Test Result -----------------------
+			Assert.AreSame(engine, returned);
+		}
+
+		[Test]
 		public virtual void TestGetBusinessObject_CriteriaObject_Typed_ThroughRelationship_TwoLevels()
 		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
 		{
@@ -394,6 +417,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 			//---------------Execute Test ----------------------
 			Engine returned =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Engine>(criteria);
+
+			//---------------Test Result -----------------------
+			Assert.AreSame(engine, returned);
+		}
+
+		[Test]
+		public virtual void TestGetBusinessObject_CriteriaObject_Untyped_ThroughRelationship_TwoLevels()
+		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
+		{
+			//---------------Set up test pack-------------------
+			IClassDef classDef = Engine.LoadClassDef_IncludingCarAndOwner();
+			//            DateTime now = DateTime.Now;
+			string surname;
+			string regno;
+			string engineNo;
+			Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+			Engine.CreateEngineWithCarWithContact();
+			//            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+			Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
+
+			//---------------Execute Test ----------------------
+			Engine returned =
+				(Engine)BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
 
 			//---------------Test Result -----------------------
 			Assert.AreSame(engine, returned);
@@ -624,6 +670,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		}
 
 		[Test]
+		public void TestGetBusinessObject_CriteriaString_Untyped_ThroughRelationship()
+		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
+		{
+			//---------------Set up test pack-------------------
+			IClassDef classDef = Engine.LoadClassDef_IncludingCarAndOwner();
+			//            DateTime now = DateTime.Now;
+			string surname;
+			string regno;
+			string engineNo;
+			Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+			Engine.CreateEngineWithCarWithContact();
+			//            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+			string criteria = string.Format("Car.CarRegNo = '{0}'", regno);
+
+			//---------------Execute Test ----------------------
+			Engine returned =
+				(Engine) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
+
+			//---------------Test Result -----------------------
+			Assert.AreSame(engine, returned);
+		}
+
+		[Test]
 		public virtual void TestGetBusinessObject_CriteriaString_Typed_ThroughRelationship_TwoLevels()
 		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
 		{
@@ -641,6 +710,29 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 			//---------------Execute Test ----------------------
 			Engine returned =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Engine>(criteria);
+
+			//---------------Test Result -----------------------
+			Assert.AreSame(engine, returned);
+		}
+
+		[Test]
+		public virtual void TestGetBusinessObject_CriteriaString_Untyped_ThroughRelationship_TwoLevels()
+		//Modified from TestBusinessObjectLoader_GetBusinessObjectCollection.Test_GetBusinessObjectCollection_CriteriaString_ThroughRelationship_TwoLevels
+		{
+			//---------------Set up test pack-------------------
+			IClassDef classDef = Engine.LoadClassDef_IncludingCarAndOwner();
+			//            DateTime now = DateTime.Now;
+			string surname;
+			string regno;
+			string engineNo;
+			Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+			Engine.CreateEngineWithCarWithContact();
+			//            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+			string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
+
+			//---------------Execute Test ----------------------Engine returned =
+			Engine returned =
+				(Engine) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, criteria);
 
 			//---------------Test Result -----------------------
 			Assert.AreSame(engine, returned);
