@@ -2688,8 +2688,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string surname;
             string regno;
             string engineNo;
-            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
-            CreateEngineWithCarWithContact();
+            Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            Engine.CreateEngineWithCarWithContact();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
 
@@ -2712,8 +2712,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string surname;
             string regno;
             string engineNo;
-            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
-            CreateEngineWithCarWithContact();
+            Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            Engine.CreateEngineWithCarWithContact();
 			Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
             //---------------Execute Test ----------------------
             BusinessObjectCollection<Engine> col =
@@ -2912,8 +2912,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string surname;
             string regno;
             string engineNo;
-            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
-            CreateEngineWithCarWithContact();
+            Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            Engine.CreateEngineWithCarWithContact();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             string criteria = string.Format("Car.Owner.Surname = '{0}'", surname);
             BusinessObjectCollection<Engine> col = new BusinessObjectCollection<Engine>();
@@ -2936,8 +2936,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             string surname;
             string regno;
             string engineNo;
-            Engine engine = CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
-            CreateEngineWithCarWithContact();
+            Engine engine = Engine.CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+            Engine.CreateEngineWithCarWithContact();
 			Criteria criteria = new Criteria("Car.Owner.Surname", Criteria.ComparisonOp.Equals, surname);
             BusinessObjectCollection<Engine> col = new BusinessObjectCollection<Engine>();
 
@@ -2947,25 +2947,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(1, col.Count);
             Assert.Contains(engine, col);
-        }
-
-        protected void CreateEngineWithCarWithContact()
-        {
-            string surname;
-            string regno;
-            string engineNo;
-            CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
-            return;
-        }
-
-        private static Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
-        {
-            regno = TestUtil.GetRandomString();
-            engineNo = TestUtil.GetRandomString();
-            surname = TestUtil.GetRandomString();
-            ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
-            Car car = Car.CreateSavedCar(regno, owner);
-            return Engine.CreateSavedEngine(car, engineNo);
         }
 
 //        private Engine CreateEngineWithCarNoContact(out string regno, out string engineNo)
