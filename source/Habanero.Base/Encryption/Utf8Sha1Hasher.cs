@@ -18,7 +18,8 @@ namespace Habanero.Base
                 value = value + "+";
             }
             var valueByteArray = GetPasswordByteArray(value);
-            return Encoding.UTF8.GetString(encrypter.ComputeHash(valueByteArray));
+            var hash = encrypter.ComputeHash(valueByteArray);
+            return Convert.ToBase64String(hash);
         }
 
         private static byte[] GetPasswordByteArray(string value)
