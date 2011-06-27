@@ -191,11 +191,14 @@ namespace Habanero.BO
             }
             else
             {
-                QueryField field = criteria.Field;
-                IPropDef fieldPropDef = PrepareField(field.Source, classDef, field);
+                var field = criteria.Field;
+                var fieldPropDef = PrepareField(field.Source, classDef, field);
                 if (fieldPropDef != null)
                 {
                     field.FieldName = fieldPropDef.DatabaseFieldName;
+                    if (null == fieldPropDef.ClassDef) throw new NullReferenceException("the fieldPropDef.ClassDef is null");
+                    if (null == field.Source) throw new NullReferenceException("the field.Source is null");
+                    if (null == field.Source.ChildSourceLeaf) throw new NullReferenceException("the field.Source.ChildSourceLeaf is null");
                     field.Source.ChildSourceLeaf.EntityName = fieldPropDef.ClassDef.GetTableName(fieldPropDef);
                     if (criteria.CanBeParametrised()
                             && (criteria.ComparisonOperator != Criteria.ComparisonOp.In 
