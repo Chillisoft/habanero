@@ -212,6 +212,13 @@ namespace Habanero.BO
             }
         }
 
+        ///<summary>
+        /// Prepares 
+        ///</summary>
+        ///<param name="currentSource"></param>
+        ///<param name="classDef"></param>
+        ///<param name="field"></param>
+        ///<returns></returns>
         public static IPropDef PrepareField(Source currentSource, IClassDef classDef, QueryField field)
         {
             IClassDef classDefOfField = classDef;
