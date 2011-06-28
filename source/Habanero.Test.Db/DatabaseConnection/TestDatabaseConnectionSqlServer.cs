@@ -79,7 +79,6 @@ namespace Habanero.Test.DB
 			DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
 		}
 
-	    [Ignore("This is proof for bug 1741")] //TODO Brett 20 May 2011: Ignored Test - This is proof for bug 1741
 		[Test]
 		public void PersistSQLparamaterValue_WhenByteArrayNull_WhenSQLServer_ShouldNotExist_FIXBUG1741()
 		{

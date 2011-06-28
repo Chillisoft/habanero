@@ -376,7 +376,7 @@ namespace Habanero.DB
                 return CreateInClause(statement, value);
             }
             var paramName = statement.ParameterNameGenerator.GetNextParameterName();
-            statement.AddParameter(paramName, value);
+            statement.AddParameter(paramName, value, value.GetType());
             return paramName;
         }
 

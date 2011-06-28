@@ -32,7 +32,6 @@ namespace Habanero.DB
     [Serializable]
     public class SqlStatement : ISqlStatement
     {
-
         private StringBuilder _statement;
         private readonly List<IDbDataParameter> _parameters;
         private readonly IDbCommand _sampleCommand;
@@ -48,27 +47,17 @@ namespace Habanero.DB
             if (connection == null) throw new ArgumentNullException("connection");
             _parameters = new List<IDbDataParameter>();
             DatabaseConnection = connection;
-            //if (_connection != null)
-            //{
-                _idbConnection = DatabaseConnection.GetConnection();
-                if (_idbConnection != null)
-                {
-                    _sampleCommand = _idbConnection.CreateCommand();
-                    _gen = connection.CreateParameterNameGenerator();
-                    //if (_idbConnection.State == ConnectionState.Open) log.Debug("The created Connection is Open");
-                }
-                else
-                {
-                    _gen = new ParameterNameGenerator(null);
-                }
-            //}
-            //else
-            //{
-                //_idbConnection = null;
-                //_gen = new ParameterNameGenerator(null);
-            //}
+            _idbConnection = DatabaseConnection.GetConnection();
+            if (_idbConnection != null)
+            {
+                _sampleCommand = _idbConnection.CreateCommand();
+                _gen = connection.CreateParameterNameGenerator();
+            }
+            else
+            {
+                _gen = new ParameterNameGenerator(null);
+            }
             _statement = new StringBuilder(100);
-            
         }
 
         public IDatabaseConnection DatabaseConnection { get; private set; }
@@ -99,46 +88,64 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="paramName">The parameter name</param>
         /// <param name="paramValue">The value to assign</param>
+        /// <param name="paramType">The type of the parameter (only necessary if the value is null, or you wish to specify more directly the type to use when creating the parameter)</param>
+        /// <returns>Returns an IDbDataParameter object</returns>
+        public IDbDataParameter AddParameter(string paramName, object paramValue, Type paramType)
+        {
+            var newParameter = CreateParameter(paramName, paramValue, paramType);
+            _parameters.Add(newParameter);
+            return newParameter;
+        }
+
+        private IDbDataParameter CreateParameter(string paramName, object paramValue, Type paramType)
+        {
+            var paramDbType = DbType.String;
+            if (paramType != null) paramDbType = GetParamTypeForType(paramType);
+            var newParameter = CreateParameter(paramName);
+            if (paramValue == null)
+            {
+                UpdateParam(newParameter, DBNull.Value, paramDbType);
+                return newParameter;
+            }
+            var preparedValue = DatabaseConnection.SqlFormatter.PrepareValue(paramValue);
+            if (paramType == null) paramDbType = GetParamTypeForType(preparedValue.GetType());
+            UpdateParam(newParameter, preparedValue, paramDbType);
+            databaseSpecificParameterSettings(newParameter, paramValue);
+            return newParameter;
+        }
+
+        /// <summary>
+        /// Adds a parameter value
+        /// </summary>
+        /// <param name="paramName">The parameter name</param>
+        /// <param name="paramValue">The value to assign</param>
         /// <returns>Returns an IDbDataParameter object</returns>
         public IDbDataParameter AddParameter(string paramName, object paramValue)
         {
-            if (paramValue == null)
-            {
-                paramValue = DBNull.Value;
-            }
-            IDbDataParameter newParameter = _sampleCommand.CreateParameter();
+            return AddParameter(paramName, paramValue, null);
+        }
+
+        private DbType GetParamTypeForType(Type paramType)
+        {
+            if (paramType == typeof(DateTime)) return DbType.DateTime;
+            if (paramType == typeof(Decimal)) return DbType.Decimal;
+            if (paramType == typeof(Double)) return DbType.Double;
+            if (paramType == typeof(int)) return DbType.Int32;
+            if (paramType == typeof(bool)) return DbType.Boolean;
+            if (paramType == typeof(byte[])) return DbType.Binary;
+            return DbType.String;
+        }
+
+        private void UpdateParam(IDbDataParameter parameter, object value, DbType dbType)
+        {
+            parameter.Value = value;
+            parameter.DbType = dbType;
+        }
+
+        private IDbDataParameter CreateParameter(string paramName)
+        {
+            var newParameter = _sampleCommand.CreateParameter();
             newParameter.ParameterName = paramName;
-            ISqlFormatter sqlFormatter = DatabaseConnection.SqlFormatter;
-            object preparedValue = sqlFormatter.PrepareValue(paramValue);
-            newParameter.Value = preparedValue;
-            if (preparedValue is DateTime)
-            {
-                newParameter.DbType = DbType.DateTime;
-            }
-            else if (preparedValue is Decimal)
-            {
-                newParameter.DbType = DbType.Double; // workaround for bug in Mysql/Connector with Mysql > 4.1.10
-            }
-            else if (preparedValue is int)
-            {
-                newParameter.DbType = DbType.Int32;
-            }
-            else if (preparedValue is bool)
-            {
-                newParameter.DbType = DbType.Boolean;
-            }
-            else if (preparedValue is byte[])
-            {
-                newParameter.DbType = DbType.Binary;
-            }
-            else
-            {
-                newParameter.DbType = DbType.String;
-            }
-
-            databaseSpecificParameterSettings(newParameter, paramValue);
-
-            _parameters.Add(newParameter);
             return newParameter;
         }
 
@@ -161,7 +168,6 @@ namespace Habanero.DB
                 }
             }
         }
-        
 
         /// <summary>
         /// Returns a list of parameters
@@ -194,8 +200,8 @@ namespace Habanero.DB
         /// <returns>Returns a string</returns>
         public override string ToString()
         {
-            StringBuilder s = new StringBuilder(string.Format("Raw statement: {0}   , Parameter values: ", this.Statement));
-            foreach (IDbDataParameter param in Parameters)
+            var s = new StringBuilder(string.Format("Raw statement: {0}   , Parameter values: ", this.Statement));
+            foreach (var param in Parameters)
             {
                 s.AppendFormat("{0}, ", param.Value);
             }
@@ -257,23 +263,22 @@ namespace Habanero.DB
         /// <returns>Returns true if equal</returns>
         public override bool Equals(object obj)
         {
-            SqlStatement statement = obj as SqlStatement;
+            var statement = obj as SqlStatement;
             if (statement != null)
             {
-
                 if (!_statement.ToString().Equals(statement.Statement.ToString()))
                 {
                     return false;
                 }
                 if (_parameters.Count != statement.Parameters.Count)
                 {
-                    Console.WriteLine("Param count different");
+                    Console.WriteLine(@"Param count different");
                     return false;
                 }
                 for (int i = 0; i < _parameters.Count; i++)
                 {
-                    IDbDataParameter myParam = _parameters[i];
-                    IDbDataParameter theirParam = statement.Parameters[i];
+                    var myParam = _parameters[i];
+                    var theirParam = statement.Parameters[i];
                     if (!myParam.GetType().Equals(theirParam.GetType()) ||
                         !myParam.ParameterName.Equals(theirParam.ParameterName) ||
                         !myParam.Value.Equals(theirParam.Value))

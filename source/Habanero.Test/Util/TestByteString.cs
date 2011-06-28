@@ -201,17 +201,6 @@ namespace Habanero.Test.Util
 		{
 			//---------------Set up test pack-------------------
 			TestUsingDatabase.SetupDBDataAccessor();
-/*			var loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-			var classDef = loader.LoadClass(@"
-					<class name=""MyBO"" assembly=""Habanero.Test"">
-						<property  name=""MyBoID"" type=""Guid"" />
-						<property  name=""TestProp"" type=""Habanero.Util.ByteString"" assembly=""Habanero.Base"" />
-						<property  name=""ByteArrayProp"" type=""Byte[]"" />
-						<primaryKey>
-							<prop name=""MyBoID"" />
-						</primaryKey>
-					</class>
-				");*/
 			var bo = _classDef.CreateNewBusinessObject();
 			bo.SetPropertyValue("ByteArrayProp", null);
 			//---------------Assert Precondition----------------

@@ -262,6 +262,7 @@
     <Compile Include="TestSQLStatement.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestSqlStatementBuilder.cs" />
     <Compile Include="TestTransactionalBusinessObjectDB.cs" />
     <Compile Include="TestTransactionCommitterDB.cs" />
     <Compile Include="TestTransactionLoggerDB.cs" />

@@ -179,7 +179,7 @@
     <Compile Include="ISimpleLookupList.cs" />
     <Compile Include="ISingleRelationshipDef.cs" />
     <Compile Include="ISingleValueDef.cs" />
-    <Compile Include="Logging\HabaneroLoggerLog4Net.cs" />
+    <Compile Include="Logging\Log4NetLogger.cs" />
     <Compile Include="Logging\Log4NetLoggerFactory.cs" />
     <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="NullSecurityController.cs" />

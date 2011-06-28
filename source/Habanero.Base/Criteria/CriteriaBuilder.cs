@@ -194,7 +194,7 @@ namespace Habanero.Base
 
             if (!(binaryExpression.Left is MemberExpression))
             {
-                throw new ArgumentException(expression + " is not a valid expression for a Criteria, the left must a MemberExpression");
+                throw new ArgumentException(expression + " is not a valid expression for a Criteria, the left must a MemberExpression or a BinaryExpression");
             }
             var memberExpression = (MemberExpression)binaryExpression.Left;
 

@@ -219,8 +219,7 @@ namespace Habanero.DB
             _dbFieldList.Append(_connection.SqlFormatter.DelimitField(prop.DatabaseFieldName));
             string paramName = _gen.GetNextParameterName();
             _dbValueList.Append(paramName);
-            _insertSql.AddParameter(paramName, prop.Value);
-            //_insertSql.AddParameter(paramName, DatabaseUtil.PrepareValue(prop.PropertyValue));
+            _insertSql.AddParameter(paramName, prop.Value, prop.PropertyType);
             _firstField = false;
         }
 
