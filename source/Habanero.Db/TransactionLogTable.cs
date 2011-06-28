@@ -31,7 +31,7 @@ namespace Habanero.DB
     /// Database Field name and the dirty XML field (shows the previously persisted state
     ///    and newly persisted state of the field.
     /// </summary>
-    public class TransactionLogTable : ITransactionLog, ITransactionalDB
+    public class TransactionLogTable : ITransactionLog
     {
         private readonly BusinessObject _buObjToLog;
         private readonly string _transactionLogTable;
@@ -239,6 +239,21 @@ namespace Habanero.DB
         ///</summary>
         public void UpdateAsRolledBack()
         {
+        }
+    }
+
+
+
+
+    public class TransactionLoggerFactory : ITransactionLoggerFactory
+    {
+        public ITransactionLog GetLogger(BusinessObject bo, string tableName)
+        {
+            return new TransactionLogTable(bo, "asset_transaction_log");
+        }
+        public ITransactionLog GetLogger(BusinessObject bo)
+        {
+            return new TransactionLogTable(bo);
         }
     }
 }

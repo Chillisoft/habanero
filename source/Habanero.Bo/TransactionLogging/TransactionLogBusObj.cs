@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -28,7 +29,6 @@ namespace Habanero.BO
     ///</summary>
     public class TransactionLogBusObj : BusinessObject
     {
-
         /// <summary>
         /// Load ClassDef for accessing the transacionLog table through Business Object.
         /// </summary>
@@ -132,5 +132,51 @@ namespace Habanero.BO
             get { return GetPropertyValueString("BusinessObjectToString"); }
             set { SetPropertyValue("BusinessObjectToString", value); }
         }
+    }
+
+
+    public class TransactionLoggerFactoryNull : ITransactionLoggerFactory
+    {
+        #region Implementation of ITransactionLoggerFactory
+
+        public ITransactionLog GetLogger(BusinessObject bo, string tableName)
+        {
+            return new NullTransactionLogger();
+        }
+
+        #endregion
+    }
+
+    public class NullTransactionLogger : ITransactionLog
+    {
+        #region Implementation of ITransactional
+
+        public string TransactionID()
+        {
+            return "NullTransactionLoggerId" + Guid.NewGuid();
+        }
+
+        public void UpdateStateAsCommitted()
+        {
+            //Do nothing
+        }
+
+        public void UpdateAsRolledBack()
+        {
+            //Do nothing.
+        }
+
+        public IEnumerable<ISqlStatement> GetPersistSql()
+        {
+            return new List<ISqlStatement>();
+        }
+
+        #endregion
+    }
+
+
+    public interface ITransactionLoggerFactory
+    {
+        ITransactionLog GetLogger(BusinessObject bo, string tableName);
     }
 }

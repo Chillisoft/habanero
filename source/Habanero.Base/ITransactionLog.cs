@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+
 namespace Habanero.Base
 {
     /// <summary>
@@ -28,7 +30,7 @@ namespace Habanero.Base
     /// constructor, methods or properties should be able to provide 
     /// all required functionality to implement the strategy chosen.
     /// </summary>
-    public interface ITransactionLog: ITransactional
+    public interface ITransactionLog:  ITransactionalDB
     {
         //    /// <summary>
         //    /// Record a transaction log for the business object
@@ -38,4 +40,5 @@ namespace Habanero.Base
         //    /// <param name="logonUserName">The user who made the changes to the business object that is being logged</param>
         //    void RecordTransactionLog(BusinessObject busObj, string logonUserName);
     }
+
 }

@@ -62,8 +62,8 @@ namespace Habanero.DB
             {
                 sqlStatementCollection = GetUpdateSql();
             }
-            IBOStatus boStatus = BusinessObject.Status;
-            var transactionLog = BusinessObject.TransactionLog as ITransactionalDB;
+            var boStatus = BusinessObject.Status;
+            var transactionLog = BusinessObject.TransactionLog;
             var sqlStatements = sqlStatementCollection.ToList();
             if (transactionLog != null && (boStatus.IsNew || boStatus.IsDeleted || boStatus.IsDirty))
             {

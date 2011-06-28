@@ -381,7 +381,7 @@
     <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionCommitterMultiSource.cs" />
     <Compile Include="TransactionCommitterRemote.cs" />
-    <Compile Include="TransactionLogBusObj.cs" />
+    <Compile Include="TransactionLogging\TransactionLogBusObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />
