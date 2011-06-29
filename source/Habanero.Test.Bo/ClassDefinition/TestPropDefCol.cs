@@ -102,12 +102,53 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
-        public void TestClonePropDefCol()
+        public void Clone()
         {
+            //---------------Set up test pack-------------------
+            var originalClassDef = LoadClassDef();
+            var originalPropDefCol = originalClassDef.PropDefcol;
+            //---------------Execute Test ----------------------
+            var newPropDefCol = originalPropDefCol.Clone();
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(newPropDefCol, originalPropDefCol);
+            Assert.AreEqual(newPropDefCol, originalPropDefCol);
+            Assert.AreSame(newPropDefCol["MyBoID"], originalPropDefCol["MyBoID"]);
+        }
+        
+        [Test]
+        public void Clone_Deep()
+        {
+            //---------------Set up test pack-------------------
+            var originalClassDef = LoadClassDef();
+            var originalPropDefCol = originalClassDef.PropDefcol;
+            //---------------Execute Test ----------------------
+            var newPropDefCol = originalPropDefCol.Clone(true);
+            //---------------Test Result -----------------------
+            Assert.AreNotSame(newPropDefCol, originalPropDefCol);
+            Assert.AreEqual(newPropDefCol, originalPropDefCol);
+            Assert.AreNotSame(newPropDefCol["MyBoID"], originalPropDefCol["MyBoID"]);
+        }
+
+        [Test]
+        public void Clone_ShouldSetClassDef()
+        {
+            //---------------Set up test pack-------------------
             IClassDef originalClassDef = LoadClassDef();
+            //---------------Execute Test ----------------------
             IPropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone();
-            Assert.AreNotSame(newPropDefCol, originalClassDef.PropDefcol);
-            Assert.AreEqual(newPropDefCol, originalClassDef.PropDefcol);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newPropDefCol.ClassDef, originalClassDef.PropDefcol.ClassDef);
+        }
+
+        [Test]
+        public void Clone_DeepClone_ShouldSetClassDef()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef originalClassDef = LoadClassDef();
+            //---------------Execute Test ----------------------
+            IPropDefCol newPropDefCol = originalClassDef.PropDefcol.Clone(true);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(newPropDefCol.ClassDef, originalClassDef.PropDefcol.ClassDef);
         }
 
         [Test]

@@ -173,6 +173,7 @@ namespace Habanero.BO.ClassDefinition
         public IPropDefCol Clone()
         {
             PropDefCol newPropDefCol = new PropDefCol();
+            newPropDefCol.ClassDef = this.ClassDef;
             foreach (PropDef def in this)
             {
                 newPropDefCol.Add(def);
@@ -191,6 +192,7 @@ namespace Habanero.BO.ClassDefinition
         public IPropDefCol Clone(bool clonePropDefs)
         {
             PropDefCol newPropDefCol = new PropDefCol();
+            newPropDefCol.ClassDef = this.ClassDef;
             foreach (PropDef def in this)
             {
                 if (clonePropDefs)
