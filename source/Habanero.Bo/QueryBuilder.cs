@@ -196,10 +196,10 @@ namespace Habanero.BO
                 if (fieldPropDef != null)
                 {
                     field.FieldName = fieldPropDef.DatabaseFieldName;
-                    if (null == fieldPropDef.ClassDef) throw new NullReferenceException("the fieldPropDef.ClassDef is null");
                     if (null == field.Source) throw new NullReferenceException("the field.Source is null");
+                    if (null == field.Source.RelatedClassDef) throw new NullReferenceException("the field.Source.RelatedClassDef is null");
                     if (null == field.Source.ChildSourceLeaf) throw new NullReferenceException("the field.Source.ChildSourceLeaf is null");
-                    field.Source.ChildSourceLeaf.EntityName = fieldPropDef.ClassDef.GetTableName(fieldPropDef);
+                    field.Source.ChildSourceLeaf.EntityName = field.Source.RelatedClassDef.GetTableName(fieldPropDef);
                     if (criteria.CanBeParametrised()
                             && (criteria.ComparisonOperator != Criteria.ComparisonOp.In 
                             && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
@@ -246,8 +246,11 @@ namespace Habanero.BO
         public static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            relatedClassDef = null;
-            if (source != null && source.IsPrepared) return;
+            if (source != null && source.IsPrepared)
+            {
+                relatedClassDef = source.RelatedClassDef;
+                return;
+            }
             Source rootSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName());
             CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
@@ -271,6 +274,7 @@ namespace Habanero.BO
                 relatedClassDef = currentClassDef;
                 source = rootSource;
             }
+            source.RelatedClassDef = relatedClassDef;
             source.IsPrepared = true;
         }
 

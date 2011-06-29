@@ -167,9 +167,9 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         public override string AsString_CurrentValue()
         {
-            if (IsObjectNew && (_objectID != Guid.Empty))
+            if (IsObjectNew && (ObjectID != Guid.Empty))
             {
-                return _objectID.ToString();
+                return ObjectID.ToString();
             }
             return Convert.ToString(ObjectIDProp.Value);
         }
@@ -182,9 +182,9 @@ namespace Habanero.BO
         /// </summary>
         public override string AsString_PreviousValue()
         {
-            if (IsObjectNew && (_objectID != Guid.Empty))
+            if (IsObjectNew && (ObjectID != Guid.Empty))
             {
-                return _objectID.ToString();
+                return ObjectID.ToString();
             }
             if (ObjectIDProp == null) return "";
             if (ObjectIDProp.ValueBeforeLastEdit == null) return Convert.ToString(ObjectIDProp.Value);

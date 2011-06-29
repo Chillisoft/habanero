@@ -132,7 +132,7 @@ namespace Habanero.BO
                 string dirtlyXml = "<Properties>";
                 foreach (IBOProp prop in this.SortedValues)
                 {
-                    if (prop.IsDirty)
+                    if (prop.IsDirty || (prop.BusinessObject != null && prop.BusinessObject.Status.IsNew))
                     {
                         dirtlyXml += prop.DirtyXml;
                     }
