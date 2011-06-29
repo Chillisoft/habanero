@@ -7,7 +7,7 @@ namespace Habanero.Base.Logging
     /// This is an interface for a logger adapter.
     /// It is expected that you can create a specific Adapter 
     /// for the Logger that you use. 
-    /// In Habanero we use the <see cref="HabaneroLoggerLog4Net"/> by default.
+    /// In Habanero we use the <see cref="Log4NetLogger"/> by default.
     /// You can change this in the BootStrapping of your application by registering the appropriate
     /// Logger Factor see <see cref="IHabaneroLoggerFactory"/> for more details
     /// </summary>
@@ -29,7 +29,7 @@ namespace Habanero.Base.Logging
 
         /// <summary>
         /// Creates a single log entry for with the appropriate exception message.
-        /// Although this is an interface and you can implement it as you wish for <see cref="HabaneroLoggerLog4Net"/>
+        /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
         /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
         /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
         /// </summary>
@@ -38,7 +38,7 @@ namespace Habanero.Base.Logging
 
         /// <summary>
         /// Creates a single log entry for with the appropriate exception message and message.
-        /// Although this is an interface and you can implement it as you wish for <see cref="HabaneroLoggerLog4Net"/>
+        /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
         /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
         /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
         /// </summary>

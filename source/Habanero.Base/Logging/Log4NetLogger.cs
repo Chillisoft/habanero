@@ -7,7 +7,7 @@ namespace Habanero.Base.Logging
 	///<summary>
 	/// The Log4Net adapter.
 	///</summary>
-	public class HabaneroLoggerLog4Net : IHabaneroLogger
+	public class Log4NetLogger : IHabaneroLogger
 	{
 		private readonly string _contextName;
 		protected ILog _log;
@@ -16,7 +16,7 @@ namespace Habanero.Base.Logging
 		/// Constructs the Logger with the appropriate context
 		///</summary>
 		///<param name="contextName"></param>
-		public HabaneroLoggerLog4Net(string contextName)
+		public Log4NetLogger(string contextName)
 		{
 			_contextName = contextName;
 			_log = LogManager.GetLogger(contextName);
@@ -26,7 +26,7 @@ namespace Habanero.Base.Logging
 		/// Constructs the Logger with the appropriate contextType
 		///</summary>
 		///<param name="contextType">The Type of object this context is for.</param>
-		public HabaneroLoggerLog4Net(Type contextType)
+		public Log4NetLogger(Type contextType)
 		{
 			_log = LogManager.GetLogger(contextType);
 			_contextName = _log.Logger.Name;

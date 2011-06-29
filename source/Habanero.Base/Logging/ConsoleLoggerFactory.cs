@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.Base.Logging
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ConsoleLoggerFactory : IHabaneroLoggerFactory
     {
         readonly IDictionary<string, IHabaneroLogger> _loggers = new Dictionary<string, IHabaneroLogger>();
