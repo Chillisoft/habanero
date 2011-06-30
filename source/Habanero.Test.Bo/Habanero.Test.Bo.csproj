@@ -197,6 +197,7 @@
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
     <Compile Include="TestDataStoreInMemoryXmlReader.cs" />
     <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
+    <Compile Include="TestNullTransactionLogger.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestObjectTreeXmlReader.cs" />
     <Compile Include="TestPack\BOWithIntID.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="TestReflectionPropertyMapper.cs" />
     <Compile Include="TestRelKey.cs" />
     <Compile Include="TestSimpleLookupList.cs" />
+    <Compile Include="TestTransactionLoggerFactoryNull.cs" />
     <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />

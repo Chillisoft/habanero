@@ -144,6 +144,11 @@ namespace Habanero.BO
             return new NullTransactionLogger();
         }
 
+        public ITransactionLog GetLogger(BusinessObject bo)
+        {
+            return new NullTransactionLogger();
+        }
+
         #endregion
     }
 
@@ -153,7 +158,7 @@ namespace Habanero.BO
 
         public string TransactionID()
         {
-            return "NullTransactionLoggerId" + Guid.NewGuid();
+            return "NullTransactionLoggerID" + Guid.NewGuid();
         }
 
         public void UpdateStateAsCommitted()
@@ -178,5 +183,7 @@ namespace Habanero.BO
     public interface ITransactionLoggerFactory
     {
         ITransactionLog GetLogger(BusinessObject bo, string tableName);
+
+        ITransactionLog GetLogger(BusinessObject bo);
     }
 }

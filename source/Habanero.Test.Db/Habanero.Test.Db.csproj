@@ -266,6 +266,7 @@
     <Compile Include="TestTransactionalBusinessObjectDB.cs" />
     <Compile Include="TestTransactionCommitterDB.cs" />
     <Compile Include="TestTransactionLoggerDB.cs" />
+    <Compile Include="TestTransactionLoggerFactory.cs" />
     <Compile Include="TestUpdateStatementGenerator.cs" />
     <Compile Include="TransactionCommitterStubDB.cs" />
   </ItemGroup>

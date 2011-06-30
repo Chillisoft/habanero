@@ -249,8 +249,9 @@ namespace Habanero.DB
     {
         public ITransactionLog GetLogger(BusinessObject bo, string tableName)
         {
-            return new TransactionLogTable(bo, "asset_transaction_log");
+            return new TransactionLogTable(bo, tableName);
         }
+
         public ITransactionLog GetLogger(BusinessObject bo)
         {
             return new TransactionLogTable(bo);
