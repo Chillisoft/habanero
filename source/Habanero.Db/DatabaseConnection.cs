@@ -25,6 +25,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using Habanero.Util;
+using System.Linq;
 
 // Limiting the number of records for a Select
 // -------------------------------------------
@@ -62,6 +63,7 @@ namespace Habanero.DB
     /// "See registry (480) think typesafe as well."
     public abstract class DatabaseConnection : MarshalByRefObject, IDatabaseConnection
     {
+        private static readonly object LockObject = new object();
         private readonly string _assemblyName;
         private readonly string _className;
         private string _connectString;
@@ -256,20 +258,23 @@ namespace Habanero.DB
         {
             try
             {
-                //log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
-                
-                // looks for closed connections for reading because open 
-                // connections could have readers still associated with them.
-                foreach (IDbConnection dbConnection in _connections)
+                lock (LockObject)
                 {
-                    if (dbConnection.State != ConnectionState.Closed) continue;
-                    dbConnection.Open();
-                    return dbConnection;
+                    //log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+
+                    // looks for closed connections for reading because open 
+                    // connections could have readers still associated with them.
+                    foreach (IDbConnection dbConnection in _connections)
+                    {
+                        if (dbConnection.State != ConnectionState.Closed) continue;
+                        dbConnection.Open();
+                        return dbConnection;
+                    }
+                    IDbConnection newDbConnection = this.NewConnection;
+                    newDbConnection.Open();
+                    _connections.Add(newDbConnection);
+                    return newDbConnection;
                 }
-                IDbConnection newDbConnection = this.NewConnection;
-                newDbConnection.Open();
-                _connections.Add(newDbConnection);
-                return newDbConnection;
             }
             catch (Exception ex)
             {
@@ -291,16 +296,19 @@ namespace Habanero.DB
             try
             {
                 //log.Debug(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
-                foreach (IDbConnection dbConnection in _connections)
+                lock (LockObject)
                 {
-                    if (dbConnection.State == ConnectionState.Closed)
+                    foreach (var dbConnection in _connections)
                     {
-                        return dbConnection;
+                        if (dbConnection.State == ConnectionState.Closed)
+                        {
+                            return dbConnection;
+                        }
                     }
+                    var newDbConnection = this.NewConnection;
+                    _connections.Add(newDbConnection);
+                    return newDbConnection;
                 }
-                var newDbConnection = this.NewConnection;
-                _connections.Add(newDbConnection);
-                return newDbConnection;
             }
             catch (Exception ex)
             {
@@ -320,9 +328,12 @@ namespace Habanero.DB
         {
             get
             {
-                var connection = this.GetConnection();
-                connection.Open();
-                return connection;
+                lock (LockObject)
+                {
+                    var connection = this.GetConnection();
+                    connection.Open();
+                    return connection;
+                }
             }
         }
 
