@@ -298,20 +298,29 @@ namespace Habanero.Base
             
             IComparable compareToValue = FieldValue as IComparable;
 
-            compareToValue = ConvertDateTimeStringToValue(compareToValue);
+			compareToValue = ConvertDateTimeStringToValue(boPropertyValue, compareToValue);
             compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
 
             return IsNonNullMatch(boPropertyValue, compareToValue);
         }
 
-        private static IComparable ConvertDateTimeStringToValue(IComparable y)
-        {
-            DateTime? parsedValue;
-            bool parsedOk = DateTimeUtilities.TryParseDate(y, out parsedValue);
-            return parsedOk ? parsedValue : y;
-        }
+		private static IComparable ConvertDateTimeStringToValue(IComparable propertyValue, IComparable compareToValue)
+		{
+			// Added for performance improvement
+			if (propertyValue is DateTime && compareToValue != null)
+			{
+				if (compareToValue is DateTime)
+                {
+                    return compareToValue;
+                }
+				DateTime? parsedValue;
+				bool parsedOk = DateTimeUtilities.TryParseDate(compareToValue, out parsedValue);
+				return parsedOk ? parsedValue : compareToValue;
+			}
+			return compareToValue;
+		}
 
-        private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
+    	private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
         {
             if (propertyValue is Guid && compareToValue != null)
             {
