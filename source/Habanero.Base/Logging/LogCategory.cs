@@ -31,6 +31,10 @@
         /// There is a Fatal Exception that has occured. 
         ///   You want to log this. Probably want to log and close the app down or something like that.
         /// </summary>
-        Fatal
+        Fatal,
+        /// <summary>
+        /// There is an Error Exception that has occured.
+        /// </summary>
+        Error
     }
 }

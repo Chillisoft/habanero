@@ -63,6 +63,9 @@ namespace Habanero.Base.Logging
 				case LogCategory.Warn:
 					_log.Warn(message);
 					break;
+                case LogCategory.Error:
+                    _log.Error(message);
+                    break;
 				default:
 					_log.Info(message);
 					break;
