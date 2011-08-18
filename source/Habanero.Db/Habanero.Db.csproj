@@ -143,6 +143,8 @@
     <Compile Include="ConnectionStringFirebirdFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="ConnectionStringSQLServerCeFactory.cs" />
+    <Compile Include="DatabaseConnectionSQLServerCe.cs" />
     <Compile Include="CriteriaDB.cs" />
     <Compile Include="DataAccessorDB.cs" />
     <Compile Include="DatabaseConnectionAccess2007.cs" />

@@ -50,83 +50,159 @@ namespace Habanero.Test.DB
             Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
         }
 
-        #endregion
+		#endregion
 
-        #region SqlServer
+		#region SqlServer
 
-        [Test]
-        public void Test_CreateDatabaseConnection_SqlServer()
-        {
-            DatabaseConnection conn = new DatabaseConnectionSqlServer
-                ("System.Data", "System.Data.SqlClient.SqlConnection");
-            conn.ConnectionString =
-                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
-                    ();
-            Assert.AreEqual
-                ("System.Data.SqlClient", conn.TestConnection.GetType().Namespace,
-                 "Namespace of Sql connection is wrong.");
-        }
+		[Test]
+		public void Test_CreateDatabaseConnection_SqlServer()
+		{
+			DatabaseConnection conn = new DatabaseConnectionSqlServer
+				("System.Data", "System.Data.SqlClient.SqlConnection");
+			conn.ConnectionString =
+				new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
+					();
+			Assert.AreEqual
+				("System.Data.SqlClient", conn.TestConnection.GetType().Namespace,
+				 "Namespace of Sql connection is wrong.");
+		}
 
-        [Test]
-        public void Test_IsolationLevel_SqlServer()
-        {
-            //---------------Execute Test ----------------------
-            DatabaseConnection conn =
-                new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
-            //---------------Test Result -----------------------
-            Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
-        }
+		[Test]
+		public void Test_IsolationLevel_SqlServer()
+		{
+			//---------------Execute Test ----------------------
+			DatabaseConnection conn =
+				new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection");
+			//---------------Test Result -----------------------
+			Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
+		}
 
-        [Test]
-        public void Test_CreateSqlFormatter_SQLServer()
-        {
-            //---------------Set up test pack-------------------
-            IDatabaseConnection dbConn = new DatabaseConnectionSqlServer
-                ("System.Data", "System.Data.SqlClient.SqlConnection");
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
-            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
-            Assert.IsNotNull(sqlFormatter);
-            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
-            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
-            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
-            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
-            Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
-            Assert.AreEqual("]", dbConn.RightFieldDelimiter);
-//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
-        }
+		[Test]
+		public void Test_CreateSqlFormatter_SQLServer()
+		{
+			//---------------Set up test pack-------------------
+			IDatabaseConnection dbConn = new DatabaseConnectionSqlServer
+				("System.Data", "System.Data.SqlClient.SqlConnection");
+			//---------------Assert Precondition----------------
+			//---------------Execute Test ----------------------
+			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+			//---------------Test Result -----------------------
+			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+			Assert.IsNotNull(sqlFormatter);
+			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+			Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+			Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+			Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+			Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+			Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+			//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+			//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+		}
 
-        [Test]
-        public void Test_CreateSqlFormatter_AlternateConstructor_SQLServer()
-        {
-            //---------------Set up test pack-------------------
-            string connectionString =
-                new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
-                    ();
-            IDatabaseConnection dbConn = new DatabaseConnectionSqlServer
-                ("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
-            //---------------Assert Precondition----------------
-            //---------------Execute Test ----------------------
-            ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
-            //---------------Test Result -----------------------
-            Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
-            SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
-            Assert.IsNotNull(sqlFormatter);
-            Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
-            Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
-            Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
-            Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
-            Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
-            Assert.AreEqual("]", dbConn.RightFieldDelimiter);
-//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
-//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
-        }
+		[Test]
+		public void Test_CreateSqlFormatter_AlternateConstructor_SQLServer()
+		{
+			//---------------Set up test pack-------------------
+			string connectionString =
+				new DatabaseConfig(DatabaseConfig.SqlServer, "test", "test", "test", "test", "1000").GetConnectionString
+					();
+			IDatabaseConnection dbConn = new DatabaseConnectionSqlServer
+				("System.Data", "System.Data.SqlClient.SqlConnection", connectionString);
+			//---------------Assert Precondition----------------
+			//---------------Execute Test ----------------------
+			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+			//---------------Test Result -----------------------
+			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+			Assert.IsNotNull(sqlFormatter);
+			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+			Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+			Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+			Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+			Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+			Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+			//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+			//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+		}
 
-        #endregion
+		#endregion
+
+		#region SqlServerCe
+
+		[Test]
+		public void Test_CreateDatabaseConnection_SqlServerCe()
+		{
+			DatabaseConnection conn = new DatabaseConnectionSqlServerCe
+				("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection");
+			conn.ConnectionString =
+				new DatabaseConfig(DatabaseConfig.SqlServerCe, "test", "test", "test", "test", "1000").GetConnectionString
+					();
+			Assert.AreEqual
+				("System.Data.SqlServerCe", conn.TestConnection.GetType().Namespace,
+				 "Namespace of Sql connection is wrong.");
+		}
+
+		[Test]
+		public void Test_IsolationLevel_SqlServerCe()
+		{
+			//---------------Execute Test ----------------------
+			DatabaseConnection conn =
+				new DatabaseConnectionSqlServerCe("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection");
+			//---------------Test Result -----------------------
+			Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
+		}
+
+		[Test]
+		public void Test_CreateSqlFormatter_SQLServerCe()
+		{
+			//---------------Set up test pack-------------------
+			IDatabaseConnection dbConn = new DatabaseConnectionSqlServerCe
+				("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection");
+			//---------------Assert Precondition----------------
+			//---------------Execute Test ----------------------
+			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+			//---------------Test Result -----------------------
+			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+			Assert.IsNotNull(sqlFormatter);
+			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+			Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+			Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+			Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+			Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+			Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+			//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+			//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+		}
+
+		[Test]
+		public void Test_CreateSqlFormatter_AlternateConstructor_SQLServerCe()
+		{
+			//---------------Set up test pack-------------------
+			string connectionString =
+				new DatabaseConfig(DatabaseConfig.SqlServerCe, "test", "test", "test", "test", "1000").GetConnectionString
+					();
+			IDatabaseConnection dbConn = new DatabaseConnectionSqlServerCe
+				("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection", connectionString);
+			//---------------Assert Precondition----------------
+			//---------------Execute Test ----------------------
+			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
+			//---------------Test Result -----------------------
+			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
+			Assert.IsNotNull(sqlFormatter);
+			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
+			Assert.AreEqual("]", sqlFormatter.RightFieldDelimiter);
+			Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);
+			Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
+			Assert.AreEqual("[", dbConn.LeftFieldDelimiter);
+			Assert.AreEqual("]", dbConn.RightFieldDelimiter);
+			//            StringAssert.Contains("TOP", dbConn.GetLimitClauseForBeginning(1));
+			//            Assert.AreEqual("", dbConn.GetLimitClauseForEnd(1));
+		}
+
+		#endregion
 
         #region Oracle
 

@@ -49,6 +49,11 @@ namespace Habanero.DB
         public const string SqlServer = "SQLSERVER";
 
         /// <summary>
+        /// Microsoft Sql Server Compact Edition - the built in SqlClient data provider will be used
+        /// </summary>
+        public const string SqlServerCe = "SQLSERVERCE";
+
+        /// <summary>
         /// Oracle - the built in Oracle data provider will be used
         /// </summary>
         public const string Oracle = "ORACLE";
@@ -93,6 +98,7 @@ namespace Habanero.DB
                         {MySql, "MySql"},
                         {DB4O, "DB4O"},
                         {SqlServer, "SqlServer"},
+                        {SqlServerCe, "SqlServerCe"},
                         {Oracle, "Oracle"},
                         {Access, "Access"},
                         {PostgreSql, "PostgreSql"},

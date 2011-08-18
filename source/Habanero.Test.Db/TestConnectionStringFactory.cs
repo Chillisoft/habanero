@@ -27,34 +27,120 @@ namespace Habanero.Test.DB
     /// </summary>
     [TestFixture]
     public class TestConnectionStringFactory
-    {
-		
-    	#region SqlServer
+	{
 
-        [Test]
-        public void TestSqlServer()
-        {
-            String conn =
-                new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
-                                                                                                 "testusername",
-                                                                                                 "testpassword",
-                                                                                                 "testport");
-            Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;password=testpassword;", conn,
-                            "ConnectionStringFactory not working for Sql Server");
-        }
+		#region SqlServer
 
-        [Test]
-        public void TestSqlServerNoPassword()
-        {
-            String conn =
-                new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
-                                                                                                 "testusername", "",
-                                                                                                 "testport");
-            Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;", conn,
-                            "ConnectionStringFactory not working for Sql Server");
-        }
+		[Test]
+		public void TestSqlServer()
+		{
+			String conn =
+				new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
+																								 "testusername",
+																								 "testpassword",
+																								 "testport");
+			Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;password=testpassword;", conn,
+							"ConnectionStringFactory not working for Sql Server");
+		}
 
-    	#endregion //SqlServer
+		[Test]
+		public void TestSqlServerNoPassword()
+		{
+			String conn =
+				new ConnectionStringSqlServerFactory().GetConnectionString("testserver", "testdb",
+																								 "testusername", "",
+																								 "testport");
+			Assert.AreEqual("Server=testserver;Initial Catalog=testdb;User ID=testusername;", conn,
+							"ConnectionStringFactory not working for Sql Server");
+		}
+
+		#endregion //SqlServer
+
+		#region SqlServerCe
+
+		[Test]
+		public void TestSqlServerCe()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "testdb",
+																								 "testusername",
+																								 "testpassword",
+																								 "testport");
+			Assert.AreEqual("Data Source='testdb';Password=testpassword;Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+
+		[Test]
+		public void TestSqlServerCe_NoServerName()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("", "testdb",
+																								 "testusername",
+																								 "testpassword",
+																								 "testport");
+			Assert.AreEqual("Data Source='testdb';Password=testpassword;Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+
+		[Test]
+		public void TestSqlServerCe_NoPort()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "testdb",
+																								 "testusername",
+																								 "testpassword",
+																								 "");
+			Assert.AreEqual("Data Source='testdb';Password=testpassword;Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+		[Test]
+		public void TestSqlServerCe_NoPassword()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "testdb",
+																								 "testusername", "",
+																								 "testport");
+			Assert.AreEqual("Data Source='testdb';Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+		[Test]
+		public void TestSqlServerCe_NoUserName()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "testdb",
+																								 "", "testpassword",
+																								 "testport");
+			Assert.AreEqual("Data Source='testdb';Password=testpassword;Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+		[Test]
+		public void TestSqlServerCe_NoUserName_NoPassword()
+		{
+			String conn =
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "testdb",
+																								 "", "",
+																								 "testport");
+			Assert.AreEqual("Data Source='testdb';Persist Security Info=False;SSCE:Max Database Size=4091;", conn,
+							"ConnectionStringFactory not working for Sql Server Compact Edition");
+		}
+
+		[Test]
+		public void TestSqlServerCe_NoDatabaseName()
+		{
+			ArgumentException ex = Assert.Throws<ArgumentException>(() =>
+			{
+				new ConnectionStringSqlServerCeFactory().GetConnectionString("testserver", "", "testusername",
+				                                                          "testpassword", "testport");
+			});
+			StringAssert.Contains("The database file name of a SQL Server Compact Edition connect string can never be empty", ex.Message);
+		}
+
+		#endregion //SqlServerCe
 
     	#region Oracle
 
