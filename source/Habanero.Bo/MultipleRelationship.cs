@@ -205,6 +205,7 @@ namespace Habanero.BO
         {
             get
             {
+				if (!_boCol.IsValueCreated) return false;
 				var currentCol = _boCol.Value;
             	return (currentCol.CreatedBusinessObjects.Count > 0) || (currentCol.MarkedForDeleteBusinessObjects.Count > 0)
 					   || (currentCol.RemovedBusinessObjects.Count > 0) || (currentCol.AddedBusinessObjects.Count > 0);
@@ -303,6 +304,7 @@ namespace Habanero.BO
 
         internal override void CancelEdits()
         {
+			if (!_boCol.IsValueCreated) return;
 			var currentCol = _boCol.Value;
         	foreach (TBusinessObject createdChild in currentCol.CreatedBusinessObjects.ToArray())
             {
@@ -322,6 +324,7 @@ namespace Habanero.BO
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
+			if (!_boCol.IsValueCreated) return;
         	var currentCol = _boCol.Value;
         	foreach (TBusinessObject businessObject in GetDirtyChildren())
             {
@@ -354,8 +357,9 @@ namespace Habanero.BO
 
         internal IList<TBusinessObject> GetDirtyChildren()
         {
-        	var currentCol = _boCol.Value;
         	IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
+			if (!_boCol.IsValueCreated) return dirtyChildren;
+        	var currentCol = _boCol.Value;
         	if (!_owningBo.Status.IsDeleted)
             {
                 if (this.RelationshipDef.InsertParentAction == InsertParentAction.InsertRelationship)
