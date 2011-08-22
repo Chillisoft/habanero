@@ -28,10 +28,10 @@ using NUnit.Framework;
 
 namespace Habanero.Test.DB
 {
+    // ReSharper disable InconsistentNaming
     [TestFixture]
-    public class TestNumberGeneratorDB : TestUsingDatabase
+    public class TestINumberGenerator_AgainstDB : TestUsingDatabase
     {
-// ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
         {

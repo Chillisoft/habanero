@@ -244,12 +244,13 @@
     <Compile Include="TestDeleteStatementGenerator.cs" />
     <Compile Include="TestGeneral.cs" />
     <Compile Include="TestCompositeKeyBO.cs" />
+    <Compile Include="TestIDatabaseNumberGenerator.cs" />
     <Compile Include="TestInsertStatementGenerator.cs" />
     <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
     <Compile Include="TestMultipleRelationship_Association_DB.cs" />
     <Compile Include="TestMultipleRelationship_Composition_DB.cs" />
     <Compile Include="TestMySqlDatabaseConnection.cs" />
-    <Compile Include="TestNumberGeneratorDB.cs" />
+    <Compile Include="TestINumberGenerator_AgainstDB.cs" />
     <Compile Include="TestNumberGeneratorPessimisticLocking.cs" />
     <Compile Include="TestParameterNameGenerator.cs">
       <SubType>Code</SubType>

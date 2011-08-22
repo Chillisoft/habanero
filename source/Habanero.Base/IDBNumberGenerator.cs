@@ -25,9 +25,12 @@ namespace Habanero.Base
     /// receipt number for a retail business.  Incrementing the numbers
     /// as they are dispensed is one means of achieving uniqueness.
     /// </summary>
-    /// need to apply concurrency control to ensure new number not retrieved
-    /// by another user before first user saves and updates number (could
-    /// update immediately)
+    /// <remarks>
+    /// This number generator does not implement concurrency control of any type.
+    /// It is susceptible to both lost number and to multiple users generating the 
+    /// same number. If either of these scenarious exist in your application then
+    /// please use one of the sub types of <see cref="INumberGenerator"/>. 
+    /// </remarks>
     public interface IDBNumberGenerator
     {
         /// <summary>

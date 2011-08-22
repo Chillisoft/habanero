@@ -23,6 +23,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.DB
 {
+    // ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestDatabaseConnectionCreation
     {
