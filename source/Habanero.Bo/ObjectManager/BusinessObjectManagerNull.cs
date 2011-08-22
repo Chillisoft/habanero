@@ -225,7 +225,7 @@ namespace Habanero.BO
         /// origional businessObject has been made.
         ///</summary>
         ///<param name="businessObject"></param>
-        public void AddWithReplace(BusinessObject businessObject)
+        public void AddWithReplace(IBusinessObject businessObject)
         {
             // Do Nothing
         }

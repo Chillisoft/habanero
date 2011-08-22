@@ -695,7 +695,7 @@ namespace Habanero.BO
         /// origional businessObject has been made.
         ///</summary>
         ///<param name="businessObject"></param>
-        public void AddWithReplace(BusinessObject businessObject) {
+        public void AddWithReplace(IBusinessObject businessObject) {
             //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering AddWithReplace(BusinessObject businessObject)");
             lock (_lock)
             {
