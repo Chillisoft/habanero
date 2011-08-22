@@ -85,7 +85,18 @@ namespace Habanero.DB
         /// <param name="busObjToLog"></param>
         /// <param name="securityController"></param>
         public TransactionLogTable(BusinessObject busObjToLog,ISecurityController securityController)
-            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+            : this(busObjToLog, securityController, "transactionLog")
+        {
+        }
+
+        /// <summary>
+        /// Constructs the new transactionlogTable with default table name and logging fields and a specific security controller for getting the currently logged on user.
+        /// </summary>
+        /// <param name="busObjToLog"></param>
+        /// <param name="securityController"></param>
+        /// <param name="transactionLogTable"></param>
+        public TransactionLogTable(BusinessObject busObjToLog, ISecurityController securityController, string transactionLogTable)
+            : this(busObjToLog, transactionLogTable, "DateTimeUpdated",
                    "WindowsUser", "LogonUser", "BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
             _securityController = securityController;
