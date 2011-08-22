@@ -120,7 +120,7 @@ namespace Habanero.DB
 		protected void ReleaseLocks()
 		{
 			var concurrencyControl = this._boSequenceNumber.ConcurrencyControl();
-			concurrencyControl.ReleaseWriteLocks();;
+			concurrencyControl.ReleaseWriteLocks();
 		}
 	}
 

@@ -136,7 +136,7 @@ namespace Habanero.DB
         /// <returns>Returns an integer</returns>
         public int GetNextNumberInt()
         {
-            return _numberUpdater.GetNextNumberInt();;
+            return _numberUpdater.GetNextNumberInt();
         }
 
         /// <summary>
