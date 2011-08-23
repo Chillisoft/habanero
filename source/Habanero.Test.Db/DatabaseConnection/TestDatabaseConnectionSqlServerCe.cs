@@ -16,10 +16,12 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -76,8 +78,8 @@ namespace Habanero.Test.DB
 
 		private static void SetupSQLServerCeConnection()
 		{
-			var directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) ?? "";
-			var databaseFile = Path.Combine(directoryName, "sqlserverce-testdb.sdf");
+			var uri = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) ?? "");
+			var databaseFile = Path.Combine(uri.LocalPath, "sqlserverce-testdb.sdf");
 			var databaseConfig = new DatabaseConfig(DatabaseConfig.SqlServerCe, "", databaseFile, "", "", null);
 			DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
 		}
