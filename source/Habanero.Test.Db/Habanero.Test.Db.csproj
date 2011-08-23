@@ -283,6 +283,114 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\EULA_ENU.rtf">
+      <Link>amd64\EULA_ENU.rtf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest">
+      <Link>amd64\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\EULA_ENU.rtf">
+      <Link>x86\EULA_ENU.rtf</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest">
+      <Link>x86\Microsoft.VC90.CRT\Microsoft.VC90.CRT.manifest</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\Microsoft.VC90.CRT\msvcr90.dll">
+      <Link>amd64\Microsoft.VC90.CRT\msvcr90.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\ReadmeSSCE35_ENU.htm">
+      <Link>amd64\ReadmeSSCE35_ENU.htm</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\REDIST_ENU.TXT">
+      <Link>amd64\REDIST_ENU.TXT</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlceca35.dll">
+      <Link>amd64\sqlceca35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlcecompact35.dll">
+      <Link>amd64\sqlcecompact35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlceer35EN.dll">
+      <Link>amd64\sqlceer35EN.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlceme35.dll">
+      <Link>amd64\sqlceme35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlceoledb35.dll">
+      <Link>amd64\sqlceoledb35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlceqp35.dll">
+      <Link>amd64\sqlceqp35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\sqlcese35.dll">
+      <Link>amd64\sqlcese35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\amd64\System.Data.SqlServerCe.Entity.dll">
+      <Link>amd64\System.Data.SqlServerCe.Entity.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\Microsoft.VC90.CRT\msvcr90.dll">
+      <Link>x86\Microsoft.VC90.CRT\msvcr90.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\ReadmeSSCE35_ENU.htm">
+      <Link>x86\ReadmeSSCE35_ENU.htm</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\REDIST_ENU.TXT">
+      <Link>x86\REDIST_ENU.TXT</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlceca35.dll">
+      <Link>x86\sqlceca35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlcecompact35.dll">
+      <Link>x86\sqlcecompact35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlceer35EN.dll">
+      <Link>x86\sqlceer35EN.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlceme35.dll">
+      <Link>x86\sqlceme35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlceoledb35.dll">
+      <Link>x86\sqlceoledb35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlceqp35.dll">
+      <Link>x86\sqlceqp35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\sqlcese35.dll">
+      <Link>x86\sqlcese35.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\lib\SQLServerCeV3_5\x86\System.Data.SqlServerCe.Entity.dll">
+      <Link>x86\System.Data.SqlServerCe.Entity.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
