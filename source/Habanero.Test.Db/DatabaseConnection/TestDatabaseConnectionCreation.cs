@@ -151,7 +151,7 @@ namespace Habanero.Test.DB
 			DatabaseConnection conn =
 				new DatabaseConnectionSqlServerCe("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection");
 			//---------------Test Result -----------------------
-			Assert.AreEqual(IsolationLevel.ReadUncommitted, conn.IsolationLevel);
+			Assert.AreEqual(IsolationLevel.ReadCommitted, conn.IsolationLevel);
 		}
 
 		[Test]
