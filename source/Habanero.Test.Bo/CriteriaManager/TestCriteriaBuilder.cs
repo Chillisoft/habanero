@@ -315,6 +315,25 @@ namespace Habanero.Test.BO.CriteriaManager
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
+        
+        [Test]
+        public void CompoundBinaryExpression_BitwiseAnd()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.GreaterThan;
+            var expectedCriteria =
+                new Criteria(
+                    Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.GreaterThan, 5),
+                    Criteria.LogicalOp.And,
+                    Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.LessThan, 10)
+                    );
+                    
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestInt > 5 & bo.TestInt < 10).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
 
         [Test]
         public void CompoundBinaryExpression_Or()
@@ -331,6 +350,25 @@ namespace Habanero.Test.BO.CriteriaManager
                     
             //---------------Execute Test ----------------------
             var criteria = Criteria.Expr<MyBO>(bo => bo.TestInt < 5 || bo.TestInt > 10).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void CompoundBinaryExpression_BitwiseOr()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.GreaterThan;
+            var expectedCriteria =
+                new Criteria(
+                    Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.LessThan, 5),
+                    Criteria.LogicalOp.Or,
+                    Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.GreaterThan, 10)
+                    );
+                    
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestInt < 5 | bo.TestInt > 10).Build();
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
@@ -543,6 +581,5 @@ namespace Habanero.Test.BO.CriteriaManager
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
-
     }
 }

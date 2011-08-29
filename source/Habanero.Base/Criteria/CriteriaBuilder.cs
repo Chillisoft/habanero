@@ -29,7 +29,9 @@ namespace Habanero.Base
             LogicalOps = new Dictionary<ExpressionType, Criteria.LogicalOp>
                 {
                     { ExpressionType.AndAlso, Criteria.LogicalOp.And },
-                    { ExpressionType.OrElse, Criteria.LogicalOp.Or }
+                    { ExpressionType.And, Criteria.LogicalOp.And },
+                    { ExpressionType.OrElse, Criteria.LogicalOp.Or },
+                    { ExpressionType.Or, Criteria.LogicalOp.Or }
                 };
         
         private static readonly Dictionary<ExpressionType, Criteria.ComparisonOp> 

@@ -107,6 +107,14 @@ namespace Habanero.Test
 			}
 		}
 
+		public MyRelatedBo MyRelationship
+		{
+			get
+			{
+                return this.Relationships.GetRelatedObject<MyRelatedBo>("MyRelationship");
+			}
+		}
+
 		public virtual Shape Shape
 		{
 			get
@@ -1804,7 +1812,11 @@ namespace Habanero.Test
 				return this.Relationships.GetRelatedObject<MyBO>("MyRelationship");
 			}
 		}
-
+        public string MyRelatedTestProp
+        {
+            get { return (string)this.GetPropertyValue("MyRelatedTestProp"); }
+            set { this.SetPropertyValue("MyRelatedTestProp", value); }
+        }		
 		public Guid? MyBoID
 		{
 			get { return (Guid?) this.GetPropertyValue("MyBoID"); }
