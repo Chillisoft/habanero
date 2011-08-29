@@ -292,8 +292,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO bo = ContactPersonTestBO.CreateUnsavedContactPerson();
-            bool updatedEventFired = false;
+            var bo = ContactPersonTestBO.CreateUnsavedContactPerson();
+            var updatedEventFired = false;
             bo.IDUpdated += ((sender, e) => updatedEventFired = true);
             //---------------Assert Precondition----------------
             Assert.IsFalse(updatedEventFired);
@@ -308,9 +308,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
-            IBOProp boProp = bo.Props["TestProp"];
+            var classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            var bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            var boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
@@ -691,24 +691,22 @@ namespace Habanero.Test.BO
             Assert.IsFalse(bo.Status.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
         }
 
-
-        [Ignore("Cannot figure out what this is doing and why it is suddenly failing")] //TODO Brett 07 Dec 2009: Ignored Test - Cannot figure out what this is doing and why it is suddenly failing
         [Test]
         public void TestApplyEditResetsPreviousValues()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            var classDef = MyBO.LoadDefaultClassDef();
+            var mock = new MockRepository();
+            var itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
                 Repeat.Times(2);
             Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
             mock.ReplayAll();
-            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
+            var bo = (MyBO) classDef.CreateNewBusinessObject();
 
             bo.SetPropertyValue("TestProp", "Goodbye");
-            TransactionCommitterStub committer = new TransactionCommitterStub();
+            var committer = new TransactionCommitterStub();
             committer.AddBusinessObject(bo);
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
