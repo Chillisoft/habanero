@@ -382,10 +382,10 @@ namespace Habanero.Test.BO
 			this.GeneratedNumber = numGen.NextNumber().ToString();
 			numGen.AddToTransaction(transactionCommitter);
 		}
-
+/*
 		public static void DeleteAllContactPeople()
 		{
 			DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From contact_person");
-		}
+		}*/
 	}
 }

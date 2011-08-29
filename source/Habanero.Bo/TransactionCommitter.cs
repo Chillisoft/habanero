@@ -115,34 +115,40 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
-            if (businessObject == null) return;
-            //Do not add objects that are new and deleted to the transaction committer.
-            if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
-            {
-                return;
-            }
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
+            if (MustBOBeAdded(businessObject)) return;
+
+            var transaction = CreateTransactionalBusinessObject(businessObject);
             bool added = AddTransactionInternal(transaction);
+            UpdateObjectBeforePersisting(transaction, added);
+        }
+        /// <summary>
+        /// Adds the <param name="businessObject"></param> into the first position
+        ///  in the list of transactional objects that will be committed by this
+        /// transaction committer. This is often required for referential integrity issues.
+        /// </summary>
+        /// <param name="businessObject"></param>
+        public void InsertBusinessObject(IBusinessObject businessObject)
+        {
+            if (MustBOBeAdded(businessObject)) return;
+
+            var transaction = CreateTransactionalBusinessObject(businessObject);
+            var added = InsertTransactionInternal(transaction);
+            UpdateObjectBeforePersisting(transaction, added);
+        }
+
+        private void UpdateObjectBeforePersisting(TransactionalBusinessObject transaction, bool added)
+        {
             if (added && _runningUpdatingBeforePersisting)
             {
                 transaction.UpdateObjectBeforePersisting(this);
             }
         }
 
-        public void InsertBusinessObject(IBusinessObject businessObject)
+        private static bool MustBOBeAdded(IBusinessObject businessObject)
         {
-            if (businessObject == null) return;
+            if(businessObject == null) return false;
             //Do not add objects that are new and deleted to the transaction committer.
-            if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
-            {
-                return;
-            }
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
-            bool added = InsertTransactionInternal(transaction);
-            if (added && _runningUpdatingBeforePersisting)
-            {
-                transaction.UpdateObjectBeforePersisting(this);
-            }
+            return businessObject.Status.IsNew && businessObject.Status.IsDeleted;
         }
 
         ///<summary>
@@ -162,22 +168,24 @@ namespace Habanero.BO
         /// <returns>True or false if the provided object was added or not.</returns>
         private bool AddTransactionInternal(ITransactional transaction)
         {
-            var transactionID = transaction.TransactionID();
-            // NOTE: The sole purpose of the dictionary is to optimise the performance of a this check on TransactionID.
-            // The original transactions list is still maintained because the transactions must be in the order they were added.
-            if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
-            _originalTransactionsByKey.Add(transactionID, transaction);
+            if (!AddToTransactionsByKey(transaction)) return false;
             _originalTransactions.Add(transaction);
             return true;
         }
         private bool InsertTransactionInternal(ITransactional transaction)
+        {
+            if (!AddToTransactionsByKey(transaction)) return false;
+            _originalTransactions.Insert(0, transaction);
+            return true;
+        }
+
+        private bool AddToTransactionsByKey(ITransactional transaction)
         {
             var transactionID = transaction.TransactionID();
             // NOTE: The sole purpose of the dictionary is to optimise the performance of a this check on TransactionID.
             // The original transactions list is still maintained because the transactions must be in the order they were added.
             if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
             _originalTransactionsByKey.Add(transactionID, transaction);
-            _originalTransactions.Insert(0, transaction);
             return true;
         }
 
@@ -190,7 +198,10 @@ namespace Habanero.BO
             Begin();
             Execute();
             Commit();
-            return _executedTransactions.FindAll(transactional => transactional is TransactionalBusinessObject).ConvertAll(transactional => ((TransactionalBusinessObject)transactional).BusinessObject.ID.ObjectID);
+            return _executedTransactions
+                .FindAll(transactional => transactional is TransactionalBusinessObject)
+                .ConvertAll(transactional => ((TransactionalBusinessObject)transactional)
+                    .BusinessObject.ID.ObjectID);
         }
 
         /// <summary>
@@ -509,11 +520,11 @@ namespace Habanero.BO
 
         private void UpdateTransactionsAsRolledBack()
         {
-            foreach (ITransactional transaction in _originalTransactions)
+            foreach (var transaction in _originalTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }
-            foreach (ITransactional transaction in _executedTransactions)
+            foreach (var transaction in _executedTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }

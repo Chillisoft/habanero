@@ -571,7 +571,7 @@ namespace Habanero.BO
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
-            foreach (TBusinessObject businessObject in GetDirtyChildren())
+            foreach (var businessObject in GetDirtyChildren())
             {
                 if (this.OwningBOHasForeignKey)
                     transactionCommitter.InsertBusinessObject(businessObject);
