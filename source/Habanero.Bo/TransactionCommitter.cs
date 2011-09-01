@@ -115,10 +115,10 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
-            if (MustBOBeAdded(businessObject)) return;
+            if (!MustBOBeAdded(businessObject)) return;
 
             var transaction = CreateTransactionalBusinessObject(businessObject);
-            bool added = AddTransactionInternal(transaction);
+            var added = AddTransactionInternal(transaction);
             UpdateObjectBeforePersisting(transaction, added);
         }
         /// <summary>
@@ -129,7 +129,7 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         public void InsertBusinessObject(IBusinessObject businessObject)
         {
-            if (MustBOBeAdded(businessObject)) return;
+            if (!MustBOBeAdded(businessObject)) return;
 
             var transaction = CreateTransactionalBusinessObject(businessObject);
             var added = InsertTransactionInternal(transaction);
@@ -146,9 +146,9 @@ namespace Habanero.BO
 
         private static bool MustBOBeAdded(IBusinessObject businessObject)
         {
-            if(businessObject == null) return false;
+            if (businessObject == null) return false;
             //Do not add objects that are new and deleted to the transaction committer.
-            return businessObject.Status.IsNew && businessObject.Status.IsDeleted;
+            return !(businessObject.Status.IsNew && businessObject.Status.IsDeleted);
         }
 
         ///<summary>
