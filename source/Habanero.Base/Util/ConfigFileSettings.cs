@@ -38,7 +38,7 @@ namespace Habanero.Util
         /// </summary>
         public ConfigFileSettings()
         {
-           // _configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+           //_configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
         /////<summary>

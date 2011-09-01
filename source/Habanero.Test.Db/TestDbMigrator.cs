@@ -111,7 +111,8 @@ namespace Habanero.Test.DB
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
             itsSettingsMock.Verify();
         }
-        
+
+        [Ignore("This test will not work because GlobalRegistry.Settings now returns a default configfilesettings if internal _setting==null")] //TODO Andrew Russell 01 Sep 2011: Ignored Test - This test will not work because GlobalRegistry.Settings now returns a default configfilesettings if internal _setting==null
         [Test]
         public void TestGetCurrentVersionFailure() {
             //---------------Set up test pack-------------------

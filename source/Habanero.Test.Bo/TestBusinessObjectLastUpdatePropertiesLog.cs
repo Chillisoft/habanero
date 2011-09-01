@@ -31,6 +31,7 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObjectLastUpdatePropertiesLog
     {
+// ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
         {
@@ -57,11 +58,11 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_NoGlobalSecurityController()
         {
             //-------------Setup Test Pack ------------------
-            BOProp dateBoProp = new BOProp(new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, null));
-            BOProp userBoProp = new BOProp(new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null));
-            BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp);
+            var dateBoProp = new BOProp(new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, null));
+            var userBoProp = new BOProp(new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null));
+            var log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp);
             //-------------Test Pre-conditions --------------
-            Assert.IsNull(GlobalRegistry.SecurityController);
+            Assert.IsInstanceOf<NullSecurityController>(GlobalRegistry.SecurityController);
             Assert.IsNull(userBoProp.Value);
             //-------------Execute test ---------------------
             DateTime beforeUpdate = DateTime.Now;
@@ -79,12 +80,12 @@ namespace Habanero.Test.BO
         public void TestUpdatesProperties_UsingSecurityController()
         {
             //-------------Setup Test Pack ------------------
-            BOProp dateBoProp = new BOProp(new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, null));
-            BOProp userBoProp = new BOProp(new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null));
+            var dateBoProp = new BOProp(new PropDef("DateLastUpdated", typeof(DateTime), PropReadWriteRule.ReadWrite, null));
+            var userBoProp = new BOProp(new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null));
             ISecurityController securityController = new MySecurityController();
-            BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp, securityController);
+            var log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp, securityController);
             //-------------Test Pre-conditions --------------
-            Assert.IsNull(GlobalRegistry.SecurityController);
+            Assert.IsInstanceOf<NullSecurityController>(GlobalRegistry.SecurityController);
             //-------------Execute test ---------------------
             DateTime beforeUpdate = DateTime.Now;
             log.Update();
