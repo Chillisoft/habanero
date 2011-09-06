@@ -116,12 +116,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Remotion">
-      <HintPath>..\..\lib\Remotion.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Data.Linq">
-      <HintPath>..\..\lib\Remotion.Data.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -194,8 +188,6 @@
     <Compile Include="IDataSetProvider.cs" />
     <Compile Include="ClassDefinition\IDefClassFactory.cs" />
     <Compile Include="IPropRuleComparable.cs" />
-    <Compile Include="Linq\HabQueryable.cs" />
-    <Compile Include="Linq\HabQueryExecutor.cs" />
     <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
     <Compile Include="Loaders\XmlFilterLoader.cs" />
     <Compile Include="Loaders\XmlTriggerLoader.cs" />
