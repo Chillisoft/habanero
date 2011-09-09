@@ -44,7 +44,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nmock.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework>
+    <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\nunit.framework.dll</HintPath>
     </Reference>
