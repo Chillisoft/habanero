@@ -1,6 +1,6 @@
 Habanero Change Log
 
- Habanero v2.6.0 - 17 October 2011
+ Habanero v2.6.0 - 24 October 2011
    This version is built against .NET 4.0
    
 Major changes/enhancements
