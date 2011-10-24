@@ -25,7 +25,6 @@ namespace Habanero.Base
     ///</summary>
     public interface IPropDef : ISingleValueDef
     {
-
         ///<summary>
         /// Adds an <see cref="IPropRule"/> to the list of rules for the 
         /// Property Definiton.

@@ -19,9 +19,6 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
-
-//using log4net;
 
 namespace Habanero.BO
 {
@@ -92,7 +89,6 @@ namespace Habanero.BO
     public class SingleRelationship<TBusinessObject> : SingleRelationshipBase, ISingleRelationship
         where TBusinessObject : class, IBusinessObject, new()
     {
-        // Implement logging private static readonly ILog log = LogManager.GetLogger("Habanero.BO.SingleRelationship");
         private TBusinessObject _relatedBo;
         private Criteria _storedKeyCriteria;
 
@@ -199,7 +195,7 @@ namespace Habanero.BO
         /// <returns>Returns true if related object exists</returns>
         public virtual bool HasRelatedObject()
         {
-            return _relKey.HasRelatedObject();
+            return RelKey.HasRelatedObject();
         }
 
 
@@ -234,7 +230,7 @@ namespace Habanero.BO
                 AddToReverseRelationship(_relatedBo, isInternalAdd);
                 if (_relatedBo != null) return _relatedBo;
             }
-            Criteria newKeyCriteria = _relKey.Criteria;
+			Criteria newKeyCriteria = RelKey.Criteria;
             if (_relatedBo != null && newKeyCriteria.IsMatch(_relatedBo, false))
             {
                 return _relatedBo;
@@ -275,7 +271,7 @@ namespace Habanero.BO
 //            {
 //                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
 //            }
-            return (TBusinessObject) BORegistry.BusinessObjectManager.FindFirst<TBusinessObject>(_relKey.Criteria);
+			return (TBusinessObject)BORegistry.BusinessObjectManager.FindFirst<TBusinessObject>(RelKey.Criteria);
         }
 
         /// <summary>
@@ -439,7 +435,7 @@ namespace Habanero.BO
             }
             else if (!this.OwningBOHasForeignKey)
             {
-                foreach (RelProp relProp in _relKey)
+				foreach (RelProp relProp in RelKey)
                 {
                     _relatedBo.SetPropertyValue(relProp.RelatedClassPropName, null);
                 }
@@ -467,9 +463,10 @@ namespace Habanero.BO
 
         private void UpdatedForeignKeyAndStoredRelationshipExpression()
         {
-            if (this.OwningBOHasForeignKey)
+        	var relKey = RelKey;
+        	if (this.OwningBOHasForeignKey)
             {
-                foreach (RelProp relProp in _relKey)
+				foreach (RelProp relProp in relKey)
                 {
                     object relatedObjectValue = _relatedBo == null
                                                     ? null
@@ -479,7 +476,7 @@ namespace Habanero.BO
             }
             else if (!HasReverseRelationshipDefined(this))
             {
-                foreach (RelProp relProp in _relKey)
+				foreach (RelProp relProp in relKey)
                 {
                     object owningBOValue = _owningBo == null
                                                ? null
@@ -487,7 +484,7 @@ namespace Habanero.BO
                     if (_relatedBo != null) _relatedBo.SetPropertyValue(relProp.RelatedClassPropName, owningBOValue);
                 }
             }
-            _storedKeyCriteria = _relKey.Criteria;
+			_storedKeyCriteria = relKey.Criteria;
         }
 
         private bool IsRelatedBODirty()
@@ -574,9 +571,12 @@ namespace Habanero.BO
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
-            foreach (TBusinessObject businessObject in GetDirtyChildren())
+            foreach (var businessObject in GetDirtyChildren())
             {
-                transactionCommitter.AddBusinessObject(businessObject);
+                if (this.OwningBOHasForeignKey)
+                    transactionCommitter.InsertBusinessObject(businessObject);
+                else
+                    transactionCommitter.AddBusinessObject(businessObject);
             }
             if (this.RelationshipDef.RelationshipType == RelationshipType.Association)
             {

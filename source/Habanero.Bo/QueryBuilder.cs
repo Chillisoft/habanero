@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -74,22 +75,31 @@ namespace Habanero.BO
 
         private static void AddAllPropsToQuery(IClassDef classDef, SelectQuery selectQuery)
         {
-            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance)
+            foreach (IPropDef propDef in classDef.PropDefColIncludingInheritance.ToList())
             {
                 if (propDef.Persistable)
                 {
                     IClassDef fieldClassDef = classDef;
                     if (!((ClassDef)classDef).IsUsingConcreteTableInheritance())
                         fieldClassDef = propDef.ClassDef;
-                    QueryField queryField = GetQueryField(fieldClassDef, propDef);
+                    QueryField queryField = CreateQueryField(fieldClassDef, propDef);
                     selectQuery.Fields.Add(propDef.PropertyName, queryField);
                 }
             }
         }
 
-        private static QueryField GetQueryField(IClassDef classDef, IPropDef propDef)
+        private static QueryField CreateQueryField(IClassDef classDef, IPropDef propDef)
         {
             Source propSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName(propDef));
+            return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
+        }
+
+        public static QueryField CreateQueryField(IClassDef classDef, string propertyName)
+        {
+            var propDef = classDef.GetPropDef(propertyName);
+            var propClassDef = (ClassDef)propDef.ClassDef;
+            var classNameExcludingTypeParameter = propClassDef.GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter;
+            var propSource = new Source(classNameExcludingTypeParameter, propClassDef.GetTableName(propDef));
             return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
@@ -136,8 +146,7 @@ namespace Habanero.BO
         public static IOrderCriteria CreateOrderCriteria(IClassDef classDef, string orderByString)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString(orderByString);
+            IOrderCriteria orderCriteria = OrderCriteria.FromString(orderByString);
             try
             {
                 //TODO Mark 20 Mar 2009: Souldn't the following code be stripped out into a PrepareOrderBy method that is called before loading? (Similar to PrepareCriteria)
@@ -182,29 +191,45 @@ namespace Habanero.BO
             }
             else
             {
-                QueryField field = criteria.Field;
-                Source currentSource = field.Source;
-                IClassDef classDefOfField = classDef;
-                if (classDef.IsUsingClassTableInheritance())
-                    classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
-                IClassDef propParentClassDef;
-                PrepareSource(classDefOfField, ref currentSource, out propParentClassDef);
-                field.Source = currentSource;
-                if (propParentClassDef != null)
+                var field = criteria.Field;
+                var fieldPropDef = PrepareField(field.Source, classDef, field);
+                if (fieldPropDef != null)
                 {
-                    IPropDef propDef = propParentClassDef.GetPropDef(field.PropertyName);
-                    field.FieldName = propDef.DatabaseFieldName;
-                    field.Source.ChildSourceLeaf.EntityName = propParentClassDef.GetTableName(propDef);
+                    field.FieldName = fieldPropDef.DatabaseFieldName;
+                    if (null == field.Source) throw new NullReferenceException("the field.Source is null");
+                    if (null == field.Source.RelatedClassDef) throw new NullReferenceException("the field.Source.RelatedClassDef is null");
+                    if (null == field.Source.ChildSourceLeaf) throw new NullReferenceException("the field.Source.ChildSourceLeaf is null");
+                    field.Source.ChildSourceLeaf.EntityName = field.Source.RelatedClassDef.GetTableName(fieldPropDef);
                     if (criteria.CanBeParametrised()
                             && (criteria.ComparisonOperator != Criteria.ComparisonOp.In 
                             && criteria.ComparisonOperator != Criteria.ComparisonOp.NotIn))
                     {
                         object returnedValue;
-                        propDef.TryParsePropValue(criteria.FieldValue, out returnedValue );
+                        fieldPropDef.TryParsePropValue(criteria.FieldValue, out returnedValue);
                         criteria.FieldValue = returnedValue;
                     }
                 }
             }
+        }
+
+        ///<summary>
+        /// Prepares 
+        ///</summary>
+        ///<param name="currentSource"></param>
+        ///<param name="classDef"></param>
+        ///<param name="field"></param>
+        ///<returns></returns>
+        public static IPropDef PrepareField(Source currentSource, IClassDef classDef, QueryField field)
+        {
+            IClassDef classDefOfField = classDef;
+            if (classDef.IsUsingClassTableInheritance())
+                classDefOfField = classDef.GetPropDef(field.PropertyName).ClassDef;
+            IClassDef fieldClassDef;
+            PrepareSource(classDefOfField, ref currentSource, out fieldClassDef);
+            field.Source = currentSource;
+            if (fieldClassDef != null)
+                return fieldClassDef.GetPropDef(field.PropertyName);
+            return null;
         }
 
         ///<summary>
@@ -218,11 +243,14 @@ namespace Habanero.BO
             PrepareSource(classDef, ref source, out relatedClassDef);
         }
 
-        private static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
+        public static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            relatedClassDef = null;
-            if (source != null && source.IsPrepared) return;
+            if (source != null && source.IsPrepared)
+            {
+                relatedClassDef = source.RelatedClassDef;
+                return;
+            }
             Source rootSource = new Source(((ClassDef)classDef).GetBaseClassOfSingleTableHierarchy().ClassNameExcludingTypeParameter, classDef.GetTableName());
             CreateInheritanceJoins(classDef, rootSource);
             if (source == null)
@@ -246,6 +274,7 @@ namespace Habanero.BO
                 relatedClassDef = currentClassDef;
                 source = rootSource;
             }
+            source.RelatedClassDef = relatedClassDef;
             source.IsPrepared = true;
         }
 

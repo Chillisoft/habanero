@@ -21,7 +21,7 @@ using System;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using NUnit.Framework;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]

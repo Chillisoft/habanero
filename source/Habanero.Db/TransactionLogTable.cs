@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Security.Principal;
 using Habanero.Base;
 using Habanero.BO;
@@ -30,7 +31,7 @@ namespace Habanero.DB
     /// Database Field name and the dirty XML field (shows the previously persisted state
     ///    and newly persisted state of the field.
     /// </summary>
-    public class TransactionLogTable : ITransactionLog, ITransactionalDB
+    public class TransactionLogTable : ITransactionLog
     {
         private readonly BusinessObject _buObjToLog;
         private readonly string _transactionLogTable;
@@ -84,7 +85,18 @@ namespace Habanero.DB
         /// <param name="busObjToLog"></param>
         /// <param name="securityController"></param>
         public TransactionLogTable(BusinessObject busObjToLog,ISecurityController securityController)
-            : this(busObjToLog, "transactionLog", "DateTimeUpdated",
+            : this(busObjToLog, securityController, "transactionLog")
+        {
+        }
+
+        /// <summary>
+        /// Constructs the new transactionlogTable with default table name and logging fields and a specific security controller for getting the currently logged on user.
+        /// </summary>
+        /// <param name="busObjToLog"></param>
+        /// <param name="securityController"></param>
+        /// <param name="transactionLogTable"></param>
+        public TransactionLogTable(BusinessObject busObjToLog, ISecurityController securityController, string transactionLogTable)
+            : this(busObjToLog, transactionLogTable, "DateTimeUpdated",
                    "WindowsUser", "LogonUser", "BusinessObjectToString", "MachineName", "BusinessObjectTypeName", "CRUDAction", "DirtyXML")
         {
             _securityController = securityController;
@@ -169,7 +181,7 @@ namespace Habanero.DB
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public ISqlStatementCollection GetPersistSql()
+        public IEnumerable<ISqlStatement> GetPersistSql()
         {
             SqlStatement tranSql = new SqlStatement(DatabaseConnection.CurrentConnection);
             string sql = "INSERT INTO " + this._transactionLogTable + " (" +
@@ -201,8 +213,7 @@ namespace Habanero.DB
             tranSql.AddParameterToStatement(_buObjToLog.DirtyXML);
             tranSql.Statement.Append(")");
 
-            SqlStatementCollection sqlStatements = new SqlStatementCollection(tranSql);
-            return sqlStatements;
+            return new [] { tranSql };
         }
 
         private string GetLogonUserName()
@@ -213,8 +224,11 @@ namespace Habanero.DB
         }
 
         ///<summary>
+        /// This is the ID that uniquely identifies this item of the transaction.
+        /// This must be the same for the lifetime of the transaction object. 
+        /// This assumption is relied upon for certain optimisations in the Transaction Comitter.
         ///</summary>
-        ///<returns>The ID that uniquelty identifies this item of the transaction. In the case of business objects the object Id.
+        ///<returns>The ID that uniquely identifies this item of the transaction. In the case of business objects the object Id.
         /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
         /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
         /// is not added twice in error.</returns>
@@ -236,6 +250,22 @@ namespace Habanero.DB
         ///</summary>
         public void UpdateAsRolledBack()
         {
+        }
+    }
+
+
+
+
+    public class TransactionLoggerFactory : ITransactionLoggerFactory
+    {
+        public ITransactionLog GetLogger(BusinessObject bo, string tableName)
+        {
+            return new TransactionLogTable(bo, tableName);
+        }
+
+        public ITransactionLog GetLogger(BusinessObject bo)
+        {
+            return new TransactionLogTable(bo);
         }
     }
 }

@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 
@@ -31,7 +32,7 @@ namespace Habanero.DB
             _databaseConnection = databaseConnection;
         }
 
-        public virtual ISqlStatementCollection GetPersistSql()
+        public virtual IEnumerable<ISqlStatement> GetPersistSql()
         {
             UpdateStatementGenerator gen = new UpdateStatementGenerator(RelatedBO, _databaseConnection);
             return gen.GenerateForRelationship(Relationship, RelatedBO);

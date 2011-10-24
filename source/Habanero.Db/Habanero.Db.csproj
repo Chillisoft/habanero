@@ -116,10 +116,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -147,6 +143,8 @@
     <Compile Include="ConnectionStringFirebirdFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="ConnectionStringSQLServerCeFactory.cs" />
+    <Compile Include="DatabaseConnectionSQLServerCe.cs" />
     <Compile Include="CriteriaDB.cs" />
     <Compile Include="DataAccessorDB.cs" />
     <Compile Include="DatabaseConnectionAccess2007.cs" />
@@ -228,9 +226,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SqlStatementBuilder.cs" />
-    <Compile Include="SqlStatementCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="SqlStatementException.cs" />
     <Compile Include="StatementGeneratorUtils.cs" />
     <Compile Include="TransactionalBusinessObjectDB.cs" />

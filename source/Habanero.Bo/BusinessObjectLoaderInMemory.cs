@@ -18,9 +18,11 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
+using System.Linq;
 
 namespace Habanero.BO
 {
@@ -93,10 +95,24 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            return _dataStore.Find<T>(criteria);
+            return GetBusinessObjectShared<T>(criteria);
         }
 
-        /// <summary>
+		private T GetBusinessObjectShared<T>(Criteria criteria) where T : class, IBusinessObject, new()
+    	{
+			IClassDef classDef = ClassDef.ClassDefs[typeof(T)];
+			QueryBuilder.PrepareCriteria(classDef, criteria);
+    		return _dataStore.Find<T>(criteria);
+    	}
+
+    	private IBusinessObject GetBusinessObjectShared(IClassDef classDef, Criteria criteria)
+    	{
+    		if (classDef == null) throw new ArgumentNullException("classDef");
+			QueryBuilder.PrepareCriteria(classDef, criteria);
+    		return _dataStore.Find(classDef, criteria);
+    	}
+
+    	/// <summary>
         /// Loads a business object of the type identified by a <see cref="ClassDef"/>, using the criteria given
         /// </summary>
         /// <param name="classDef">The ClassDef of the object to load.</param>
@@ -104,11 +120,10 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
-            if (classDef == null) throw new ArgumentNullException("classDef");
-            return _dataStore.Find(classDef, criteria);
+        	return GetBusinessObjectShared(classDef, criteria);
         }
 
-        /// <summary>
+    	/// <summary>
         /// Loads a business object of type T, using the SelectQuery given. It's important to make sure that T (meaning the ClassDef set up for T)
         /// has the properties defined in the fields of the select query.  
         /// This method allows you to define a custom query to load a business object
@@ -118,7 +133,7 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            return _dataStore.Find<T>(selectQuery.Criteria);
+			return GetBusinessObjectShared<T>(selectQuery.Criteria);
         }
 
         /// <summary>
@@ -132,7 +147,7 @@ namespace Habanero.BO
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
-            return _dataStore.Find(classDef.ClassType, selectQuery.Criteria);
+			return GetBusinessObjectShared(classDef, selectQuery.Criteria);
         }
 
         /// <summary>
@@ -146,7 +161,7 @@ namespace Habanero.BO
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
             Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
-            return _dataStore.Find<T>(criteriaObject);
+			return GetBusinessObjectShared<T>(criteriaObject);
         }
 
         /// <summary>
@@ -158,7 +173,7 @@ namespace Habanero.BO
         public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
         {
             Criteria criteriaObject = CriteriaParser.CreateCriteria(criteriaString);
-            return _dataStore.Find(classDef.ClassType, criteriaObject);
+			return GetBusinessObjectShared(classDef, criteriaObject);
         }
 
         /// <summary>
@@ -339,5 +354,32 @@ namespace Habanero.BO
         }
 
         #endregion
+
+        #region GetResultSet
+
+        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        {
+            QueryBuilder.PrepareCriteria(selectQuery.ClassDef, selectQuery.Criteria);
+            var collection = _dataStore.FindAll(selectQuery.ClassDef, selectQuery.Criteria);
+            var resultSet = new ResultSet();
+            var propNames = selectQuery.Fields.Keys;
+            propNames.ForEach(resultSet.AddField);
+
+            foreach (IBusinessObject bo in collection)
+            {
+                var bo1 = bo;
+                resultSet.AddResult(
+                    propNames.Select(s => new BOMapper(bo1).GetPropertyValueToDisplay(s))
+                        .ToArray()
+                    );
+            }
+            resultSet.Sort(selectQuery.OrderCriteria);
+            return resultSet;
+        }
+
+        #endregion
+
     }
+
+   
 }

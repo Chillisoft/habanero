@@ -29,6 +29,7 @@ using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.DB
 {
     [TestFixture]
@@ -432,7 +433,6 @@ namespace Habanero.Test.DB
             contactPersonCompositeKey.FirstName = origFirstname;
             IBOProp prop = contactPersonCompositeKey.Props["FirstName"];
             //---------------Assert Precondition----------------
-            Assert.IsTrue(contactPersonCompositeKey.Status.IsDirty);
             Assert.IsFalse(prop.IsDirty);
             //---------------Execute Test ----------------------
             committer.CommitTransaction();

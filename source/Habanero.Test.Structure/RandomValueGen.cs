@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
@@ -33,7 +34,7 @@ namespace Habanero.Test.Structure
         private static DateTime GetDate(string dateString, DateTime initialDate)
         {
             object value;
-            bool dateValueParsedOk = new BOPropDateTimeDataMapper().TryParsePropValue(dateString, out value);
+            bool dateValueParsedOk = new DateTimeDataMapper().TryParsePropValue(dateString, out value);
             DateTime dateTime = initialDate;
             if (dateValueParsedOk)
             {

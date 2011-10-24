@@ -29,6 +29,7 @@ namespace Habanero.Test.BO
 	[TestFixture]
 	public class TestNumberGenerator : TestUsingDatabase
 	{
+// ReSharper disable InconsistentNaming
 		[SetUp]
 		public void SetupTest()
 		{
@@ -381,10 +382,10 @@ namespace Habanero.Test.BO
 			this.GeneratedNumber = numGen.NextNumber().ToString();
 			numGen.AddToTransaction(transactionCommitter);
 		}
-
+/*
 		public static void DeleteAllContactPeople()
 		{
 			DatabaseConnection.CurrentConnection.ExecuteRawSql("Delete From contact_person");
-		}
+		}*/
 	}
 }

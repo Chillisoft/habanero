@@ -123,6 +123,17 @@ namespace Habanero.Base.Exceptions
         public HabaneroApplicationException(string message) : base(message, "")
         {
         }
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="developerMessage">A message specifically for a developer this can add additional information that would not show up in.
+        /// The users normal error message.</param>
+        public HabaneroApplicationException(string message, string developerMessage)
+            : base(message, developerMessage)
+        {
+        }
 
         /// <summary>
         /// Constructor to initialise the exception with a specific message
@@ -131,6 +142,19 @@ namespace Habanero.Base.Exceptions
         /// <param name="message">The error message</param>
         /// <param name="inner">The inner exception</param>
         public HabaneroApplicationException(string message, Exception inner) : base(message, "", inner)
+        {
+        }
+
+        /// <summary>
+        /// Constructor to initialise the exception with a specific message
+        /// to display, and the inner exception specified
+        /// </summary>
+        /// <param name="message">The error message</param>
+        /// <param name="developerMessage">A message specifically for a developer this can add additional information that would not show up in.
+        /// The users normal error message.</param>
+        /// <param name="inner">The inner exception</param>
+        public HabaneroApplicationException(string message, string developerMessage, Exception inner)
+            : base(message, developerMessage, inner)
         {
         }
 

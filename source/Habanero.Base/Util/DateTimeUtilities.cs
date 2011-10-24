@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -31,6 +32,12 @@ namespace Habanero.Util
         private const int _NOVEMBER = 11;
         private const int _JANUARY = 11;
 
+        /// <summary>
+        /// The standard date Time Format to use.
+        /// </summary>
+        public const string StandardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        private static IFormatProvider _dateTimeFormatProvider = new DateTimeFormatInfo { FullDateTimePattern = StandardDateTimeFormat};
+                    
         /// <summary>
         /// returns the last day of the current month (i.e. LastDayOfTheMonth(Today)
         /// </summary>
@@ -232,26 +239,34 @@ namespace Habanero.Util
                 if (valueToParse is String)
                 {
                     string stringValueToConvert = (string)valueToParse;
-                    if (stringValueToConvert.ToUpper() == "TODAY")
+                    var stringValueToConvertUpperCase = stringValueToConvert.ToUpper();
+                    if (stringValueToConvertUpperCase == "TODAY")
                     {
                         returnValue = new DateTimeToday();
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "YESTERDAY")
+                    if (stringValueToConvertUpperCase == "YESTERDAY")
                     {
                         returnValue = new DateTimeToday();
                         ((DateTimeToday) returnValue).OffSet = -1;
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "TOMORROW")
+                    if (stringValueToConvertUpperCase == "TOMORROW")
                     {
                         returnValue = new DateTimeToday();
                         ((DateTimeToday) returnValue).OffSet = 1;
                         return true;
                     }
-                    if (stringValueToConvert.ToUpper() == "NOW")
+                    if (stringValueToConvertUpperCase == "NOW")
                     {
                         returnValue = new DateTimeNow();
+                        return true;
+                    }
+                  
+                    DateTime dtOut;
+                    if (DateTime.TryParseExact(stringValueToConvert, StandardDateTimeFormat, _dateTimeFormatProvider, DateTimeStyles.AllowWhiteSpaces, out dtOut))
+                    {
+                        returnValue = dtOut;
                         return true;
                     }
                 }

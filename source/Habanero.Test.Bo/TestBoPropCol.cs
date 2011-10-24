@@ -88,22 +88,6 @@ namespace Habanero.Test.BO
                             "There should be 3 items in the BOPropCol after adding the other BOPropCol to it.");
         }
 
-        //		[Test]
-        //		public void TestPropDefColIsValid()
-        //		{
-        //			mProp = _boPropCol["Prop2"];
-        //			try
-        //			{
-        //				mProp.PropertyValue = "Prop Value fdfdfdf ff";
-        //			}
-        //			catch (Exception e)
-        //			{}
-        //			mProp = _boPropCol["PropName"];
-        //			string reason;
-        //			Assert.IsFalse(_boPropCol.IsValid(out reason));
-        //			Assert.IsTrue(reason.Length > 0);
-        //			
-        //		}
         [Test]
         public void TestDirtyXml()
         {

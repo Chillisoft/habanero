@@ -61,8 +61,7 @@ namespace Habanero.Test
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(lPropDefCol);
 
 
-            ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey,  lPropDefCol, keysCol, relDefCol);
-            lClassDef.TableName = "car_table";
+            ClassDef lClassDef = new ClassDef(typeof (Car), primaryKey, "car_table", lPropDefCol, keysCol, relDefCol);
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

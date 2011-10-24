@@ -50,12 +50,6 @@ namespace Habanero.Test.BO.TransactionCommitters
             _committed = false;
         }
 
-        public ISqlStatementCollection GetSql()
-        {
-            return null;
-        }
-
-
         /// <summary>
         /// Whether the business object's state is deleted
         /// </summary>

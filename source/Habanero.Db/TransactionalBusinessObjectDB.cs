@@ -17,9 +17,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -33,7 +34,6 @@ namespace Habanero.DB
         : TransactionalBusinessObject, ITransactionalDB
     {
         private readonly IDatabaseConnection _databaseConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.TransactionalBusinessObjectDB");
         ///<summary>
         ///</summary>
         ///<param name="businessObject"></param>
@@ -46,11 +46,11 @@ namespace Habanero.DB
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        public virtual ISqlStatementCollection GetPersistSql()
+        public virtual IEnumerable<ISqlStatement> GetPersistSql()
         {
             if (IsNewAndDeleted()) return null;
 
-            SqlStatementCollection sqlStatementCollection;
+            IEnumerable<ISqlStatement> sqlStatementCollection;
             if (IsNew())
             {
                 sqlStatementCollection = GetInsertSql();
@@ -62,20 +62,21 @@ namespace Habanero.DB
             {
                 sqlStatementCollection = GetUpdateSql();
             }
-            IBOStatus boStatus = BusinessObject.Status;
-            ITransactionalDB transactionLog = BusinessObject.TransactionLog as ITransactionalDB;
+            var boStatus = BusinessObject.Status;
+            var transactionLog = BusinessObject.TransactionLog;
+            var sqlStatements = sqlStatementCollection.ToList();
             if (transactionLog != null && (boStatus.IsNew || boStatus.IsDeleted || boStatus.IsDirty))
             {
-                sqlStatementCollection.Add(transactionLog.GetPersistSql());
+                transactionLog.GetPersistSql().ForEach(sqlStatements.Add);
             }
-            return sqlStatementCollection;
+            return sqlStatements;
         }
 
         /// <summary>
         /// Returns an "insert" sql statement list for inserting this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetInsertSql()
+        private IEnumerable<ISqlStatement> GetInsertSql()
         {
             InsertStatementGenerator gen = new InsertStatementGenerator(BusinessObject, _databaseConnection);
             return gen.Generate();
@@ -85,7 +86,7 @@ namespace Habanero.DB
         /// Builds a "delete" sql statement list for this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetDeleteSql()
+        private IEnumerable<ISqlStatement> GetDeleteSql()
         {
             DeleteStatementGenerator generator = new DeleteStatementGenerator(BusinessObject, _databaseConnection);
             return generator.Generate();
@@ -95,7 +96,7 @@ namespace Habanero.DB
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetUpdateSql()
+        private IEnumerable<ISqlStatement> GetUpdateSql()
         {
             UpdateStatementGenerator gen = new UpdateStatementGenerator(BusinessObject, _databaseConnection);
             return gen.Generate();

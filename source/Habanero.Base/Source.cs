@@ -116,6 +116,9 @@ namespace Habanero.Base
         /// </summary>
         public bool IsPrepared { get; set; }
 
+
+        public IClassDef RelatedClassDef { get; set; }
+
         /// <summary>
         /// Returns this source in a string form
         /// </summary>

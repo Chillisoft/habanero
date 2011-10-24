@@ -55,24 +55,16 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestRefreshLoadedCollection_RemovedItem()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
             ContactPersonTestBO.LoadDefaultClassDef();
             DateTime now = DateTime.Now;
-            ContactPersonTestBO cp1 = new ContactPersonTestBO();
-            cp1.DateOfBirth = now;
-            cp1.Surname = Guid.NewGuid().ToString("N");
-            cp1.Save();
-            ContactPersonTestBO cp2 = new ContactPersonTestBO();
-            cp2.DateOfBirth = now;
-            cp2.Surname = Guid.NewGuid().ToString("N");
-            cp2.Save();
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            var cp1 = CreateContactPerson(now);
+            var cp2 = CreateContactPerson(now);
+            var criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             BusinessObjectCollection<ContactPersonTestBO> col =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection<ContactPersonTestBO>
                     (criteria);
 
-            dataStore.Remove(cp2);
+            _dataStore.Remove(cp2);
             //---------------Execute Test ----------------------
             BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
             //---------------Test Result -----------------------
@@ -80,5 +72,15 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(cp1, col);
             //---------------Tear Down -------------------------
         }
+
+        private ContactPersonTestBO CreateContactPerson(DateTime now)
+        {
+            ContactPersonTestBO cp1 = new ContactPersonTestBO();
+            cp1.DateOfBirth = now;
+            cp1.Surname = Guid.NewGuid().ToString("N");
+            cp1.Save();
+            return cp1;
+        }
+
     }
 }

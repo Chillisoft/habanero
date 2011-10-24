@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -53,8 +54,8 @@ namespace Habanero.Test.DB.SqlGeneration
             ClassDef.ClassDefs[typeof(TestAutoInc)].TableName = "test autoinc";
             bo.TestField = TestUtil.GetRandomString();
             UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            ISqlStatement statement = statementCol[0];
+            var statementCol = gen.Generate();
+            ISqlStatement statement = statementCol.First();
             StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
         }
 
@@ -68,9 +69,10 @@ namespace Habanero.Test.DB.SqlGeneration
             bo.SetPropertyValue("MockBOProp2", "dfggjh");
 
             UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            Assert.AreEqual(1, statementCol.Count);
-            ISqlStatement statement = statementCol[0];
+            var statementCol = gen.Generate();
+            var sqlStatements = statementCol.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            ISqlStatement statement = sqlStatements[0];
             Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
         }
         
@@ -91,12 +93,13 @@ namespace Habanero.Test.DB.SqlGeneration
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sql = generator.GenerateForRelationship(relationship, contactPersonTestBO);
+            var sql = generator.GenerateForRelationship(relationship, contactPersonTestBO);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, sql.Count);
-            Assert.AreEqual("UPDATE `contact_person` SET `OrganisationID` = ?Param0 WHERE `ContactPersonID` = ?Param1", sql[0].Statement.ToString());
-            Assert.AreEqual(organisationTestBO.OrganisationID.Value.ToString("B").ToUpper(), sql[0].Parameters[0].Value);
-            Assert.AreEqual(contactPersonTestBO.ContactPersonID.ToString("B").ToUpper(), sql[0].Parameters[1].Value);           
+            var sqlStatements = sql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            Assert.AreEqual("UPDATE `contact_person` SET `OrganisationID` = ?Param0 WHERE `ContactPersonID` = ?Param1", sqlStatements[0].Statement.ToString());
+            Assert.AreEqual(organisationTestBO.OrganisationID.Value.ToString("B").ToUpper(), sqlStatements[0].Parameters[0].Value);
+            Assert.AreEqual(contactPersonTestBO.ContactPersonID.ToString("B").ToUpper(), sqlStatements[0].Parameters[1].Value);           
         }
 
 
@@ -122,13 +125,14 @@ namespace Habanero.Test.DB.SqlGeneration
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sql = generator.GenerateForRelationship(relationship, car);
+            var sql = generator.GenerateForRelationship(relationship, car);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, sql.Count);
-            Assert.AreEqual("UPDATE `car_table` SET `Driver_FK1` = ?Param0, `Driver_FK2` = ?Param1 WHERE `CAR_ID` = ?Param2", sql[0].Statement.ToString());
-            Assert.AreEqual(contactPerson.PK1Prop1, sql[0].Parameters[0].Value);
-            Assert.AreEqual(contactPerson.PK1Prop2, sql[0].Parameters[1].Value);
-            Assert.AreEqual(car.CarID.ToString("B").ToUpper(), sql[0].Parameters[2].Value);
+            var sqlStatements = sql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            Assert.AreEqual("UPDATE `car_table` SET `Driver_FK1` = ?Param0, `Driver_FK2` = ?Param1 WHERE `CAR_ID` = ?Param2", sqlStatements[0].Statement.ToString());
+            Assert.AreEqual(contactPerson.PK1Prop1, sqlStatements[0].Parameters[0].Value);
+            Assert.AreEqual(contactPerson.PK1Prop2, sqlStatements[0].Parameters[1].Value);
+            Assert.AreEqual(car.CarID.ToString("B").ToUpper(), sqlStatements[0].Parameters[2].Value);
 
             //---------------Tear Down -------------------------                  
         }

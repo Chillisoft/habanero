@@ -135,8 +135,7 @@ namespace Habanero.Console
         {
             if (DatabaseConnection.CurrentConnection != null) return;
             if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
-            string vendor = _databaseConfig.Vendor;
-            if (string.IsNullOrEmpty(vendor) || vendor.ToLower().Contains("memory"))
+            if (_databaseConfig.IsInMemoryDB)
             {
                 BORegistry.DataAccessor = new DataAccessorInMemory();
             }

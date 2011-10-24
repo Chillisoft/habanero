@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.BO;
@@ -27,6 +28,7 @@ using NUnit.Framework;
 
 namespace Habanero.Test.BO
 {
+    // ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestDataStoreInMemoryXmlWriter
     {
@@ -44,250 +46,111 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_Construct()
+        public void Construct()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(new MemoryStream());
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Test Result -----------------------
             
             //---------------Tear Down -------------------------          
         }
 
         [Test]
-        public void Test_Write()
+        public void Write()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
+            var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            MemoryStream stream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream);
+            var stream = new MemoryStream();
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dataStore);
+            writer.Write(stream, dataStore);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithXmlWriterSettings()
+        public void Write_WithXmlWriterSettings()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
+            var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            MemoryStream stream = new MemoryStream();
-            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            var stream = new MemoryStream();
+            var xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Auto;
             xmlWriterSettings.NewLineOnAttributes = true;
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream, xmlWriterSettings);
+            var writer = new DataStoreInMemoryXmlWriter(xmlWriterSettings);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dataStore);
+            writer.Write(stream, dataStore);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithDictionary()
+        public void Write_WithDictionary()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
+            var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            Dictionary<Guid, IBusinessObject> dictionary = dataStore.AllObjects;
-            MemoryStream stream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream);
+            var dictionary = dataStore.AllObjects;
+            var stream = new MemoryStream();
+            var writer = new DataStoreInMemoryXmlWriter();
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dictionary);
+            writer.Write(stream, dictionary);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Write_WithDictionary_WithXmlWriterSettings()
+        public void Write_WithDictionary_WithXmlWriterSettings()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
+            var dataStore = new DataStoreInMemory();
             dataStore.Add(new Car());
-            Dictionary<Guid, IBusinessObject> dictionary = dataStore.AllObjects;
-            MemoryStream stream = new MemoryStream();
-            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            var dictionary = dataStore.AllObjects;
+            var stream = new MemoryStream();
+            var xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Auto;
             xmlWriterSettings.NewLineOnAttributes = true;
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(stream, xmlWriterSettings);
+            var writer = new DataStoreInMemoryXmlWriter(xmlWriterSettings);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, dataStore.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
-            writer.Write(dictionary);
+            writer.Write(stream, dictionary);
             //---------------Test Result -----------------------
             Assert.AreNotEqual(0, stream.Length);
         }
 
         [Test]
-        public void Test_Read()
+        public void Write_ToString()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            savedDataStore.Add(new MyBO());
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
+            var dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            var writer = new DataStoreInMemoryXmlWriter();
+            var sb = new StringBuilder();
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, savedDataStore.Count);
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, sb.Length);
             //---------------Execute Test ----------------------
-            loadedDataStore.AllObjects = reader.Read();
+            writer.Write(sb, dataStore);
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
-            
-        }
-        [Test]
-        public void Test_Read_WhenPropHasBeenRemoved_ShouldReadWithoutProp()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            IClassDef def = MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            savedDataStore.Add(new MyBO());
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
-            
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, savedDataStore.Count);
-            //---------------Execute Test ----------------------
-            def.PropDefcol.Remove(def.PropDefcol["TestProp2"]);
-            loadedDataStore.AllObjects = reader.Read();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
+            Assert.AreNotEqual(0, sb.Length);
         }
 
-        [Test]
-        public void Test_Read_ShouldLoadPropertiesCorrectly()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            MyBO savedBO = new MyBO();
-            savedBO.TestProp = TestUtil.GetRandomString();
-            savedBO.TestProp2 = TestUtil.GetRandomString();
-            TransactionCommitterInMemory transactionCommitter = new TransactionCommitterInMemory(savedDataStore);
-            transactionCommitter.AddBusinessObject(savedBO);
-            transactionCommitter.CommitTransaction();
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, savedDataStore.Count);
-            //---------------Execute Test ----------------------
-            loadedDataStore.AllObjects = reader.Read();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
-            IBusinessObject loadedBO;
-            bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.Value, out loadedBO);
-            Assert.IsTrue(success);
-            Assert.IsNotNull(loadedBO);
-            Assert.IsInstanceOf(typeof(MyBO), loadedBO);
-            MyBO loadedMyBO = (MyBO) loadedBO;
-            Assert.AreNotSame(savedBO, loadedMyBO);
-            Assert.AreEqual(savedBO.MyBoID, loadedMyBO.MyBoID);
-            Assert.AreEqual(savedBO.Props["MyBoID"].PersistedPropertyValue, loadedMyBO.Props["MyBoID"].PersistedPropertyValue);
-            Assert.AreEqual(savedBO.TestProp, loadedMyBO.TestProp);
-            Assert.AreEqual(savedBO.Props["TestProp"].PersistedPropertyValue, loadedMyBO.Props["TestProp"].PersistedPropertyValue);
-            Assert.AreEqual(savedBO.TestProp2, loadedMyBO.TestProp2);
-            Assert.AreEqual(savedBO.Props["TestProp2"].PersistedPropertyValue, loadedMyBO.Props["TestProp2"].PersistedPropertyValue);
-        }
-
-        [Test]
-        public void Test_ReadWrite_MultipleObjects()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            MyBO bo1 = new MyBO();
-            Car bo2 = new Car();
-            savedDataStore.Add(bo1);
-            savedDataStore.Add(bo2);
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(2, savedDataStore.Count);
-            //---------------Execute Test ----------------------
-            loadedDataStore.AllObjects = reader.Read();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(2, loadedDataStore.Count);
-            Assert.IsNotNull(loadedDataStore.Find<MyBO>(bo1.ID));
-            Assert.IsNotNull(loadedDataStore.Find<Car>(bo2.ID));
-        }
-
-        [Test]
-        public void Test_Read_ShouldLoadObjectsWithCorrectStatus()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            MyBO.LoadClassDefsNoUIDef();
-            DataStoreInMemory savedDataStore = new DataStoreInMemory();
-            MyBO savedBO = new MyBO();
-            TransactionCommitterInMemory transactionCommitter = new TransactionCommitterInMemory(savedDataStore);
-            transactionCommitter.AddBusinessObject(savedBO);
-            transactionCommitter.CommitTransaction();
-            MemoryStream writeStream = new MemoryStream();
-            DataStoreInMemoryXmlWriter writer = new DataStoreInMemoryXmlWriter(writeStream);
-            writer.Write(savedDataStore);
-            BORegistry.BusinessObjectManager = new BusinessObjectManager();
-            DataStoreInMemory loadedDataStore = new DataStoreInMemory();
-            writeStream.Seek(0, SeekOrigin.Begin);
-            DataStoreInMemoryXmlReader reader = new DataStoreInMemoryXmlReader(writeStream);
-            //---------------Assert Precondition----------------
-            Assert.AreEqual(1, savedDataStore.Count);
-            //---------------Execute Test ----------------------
-            loadedDataStore.AllObjects = reader.Read();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(1, loadedDataStore.Count);
-            IBusinessObject loadedBO;
-            bool success = loadedDataStore.AllObjects.TryGetValue(savedBO.MyBoID.GetValueOrDefault(), out loadedBO);
-            Assert.IsTrue(success);
-            Assert.IsNotNull(loadedBO);
-            Assert.IsInstanceOf(typeof(MyBO), loadedBO);
-            MyBO loadedMyBO = (MyBO)loadedBO;
-            Assert.AreNotSame(savedBO, loadedMyBO);
-
-            Assert.IsFalse(loadedBO.Status.IsNew, "Should not be New");
-            Assert.IsFalse(loadedBO.Status.IsDeleted, "Should not be Deleted");
-            Assert.IsFalse(loadedBO.Status.IsDirty, "Should not be Dirty");
-            Assert.IsFalse(loadedBO.Status.IsEditing, "Should not be Editing");
-        }
-        
     }
 
-  
+
 }

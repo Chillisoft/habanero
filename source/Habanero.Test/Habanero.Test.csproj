@@ -108,6 +108,20 @@
     <Compile Include="Address.cs" />
     <Compile Include="ArchitectureTest.cs" />
     <Compile Include="Asset.cs" />
+    <Compile Include="Base\DataMappers\TestByteArrayDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestGeneralDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDataMapperFactory.cs" />
+    <Compile Include="Base\DataMappers\TestLongDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestBoolDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestDateTimeDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestGuidDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestImageDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestIntDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestStringDataMapper.cs" />
+    <Compile Include="Base\DataMappers\TestTimeSpanDataMapper.cs" />
+    <Compile Include="Base\Encryption\TestRSAPasswordCrypter.cs" />
+    <Compile Include="Base\Encryption\TestUtf8Sha1Hasher.cs" />
     <Compile Include="Base\Logging\TestLog4NetLogger.cs" />
     <Compile Include="Base\Logging\TestLog4NetLoggerFactory.cs" />
     <Compile Include="Base\TestDateRange.cs" />
@@ -121,10 +135,11 @@
     <Compile Include="Base\TestExceptions.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestHabaneroApp.cs" />
-    <Compile Include="Base\TestNullCrypter.cs" />
+    <Compile Include="Base\Encryption\TestNullCrypter.cs" />
     <Compile Include="Base\TestProgressIndicators.cs" />
     <Compile Include="Base\TestResult.cs" />
-    <Compile Include="Base\TestRSAPasswordCrypter.cs" />
+    <Compile Include="Base\TestResultSet.cs" />
+    <Compile Include="Base\Encryption\TestBase64Sha1Hasher.cs" />
     <Compile Include="Base\TestXmlWrapper.cs" />
     <Compile Include="BeforeSaveBo.cs" />
     <Compile Include="BOWithCompositePK.cs" />
@@ -135,6 +150,8 @@
     <Compile Include="ColContactPeople.cs" />
     <Compile Include="ContactPerson.cs" />
     <Compile Include="ContactPersonCompositeKey.cs" />
+    <Compile Include="EmailAddressAsCustomProperty.cs" />
+    <Compile Include="EmailAddressConverter.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
     <Compile Include="OrderItem.cs" />
@@ -177,6 +194,7 @@
     <Compile Include="Util\TestStringUtilities.cs" />
     <Compile Include="Util\TestTypeUtilities.cs" />
     <Compile Include="Util\TestUtilities.cs" />
+    <Compile Include="Util\TestValueObject.cs" />
     <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>

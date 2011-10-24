@@ -23,6 +23,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectLoader
 {
     [TestFixture]
@@ -40,7 +41,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             
             //---------------Execute Test ----------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             //---------------Test Result -----------------------
             Assert.IsNull(selectQuery.Criteria);
             Assert.AreEqual(0, selectQuery.Fields.Count);
@@ -53,10 +54,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestCriteria()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source("bob");
+            var selectQuery = new SelectQuery {Source = new Source("bob")};
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("test", Criteria.ComparisonOp.Equals, "testValue");
+            var criteria = new Criteria("test", Criteria.ComparisonOp.Equals, "testValue");
             selectQuery.Criteria = criteria;
             //---------------Test Result -----------------------
             Assert.AreSame(criteria, selectQuery.Criteria);
@@ -68,14 +68,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSetCriteria_AddsJoins()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
-            Source fieldSource = new Source(sourceName);
-            string expectedSourceName = TestUtil.GetRandomString();
+            var fieldSource = new Source(sourceName);
+            var expectedSourceName = TestUtil.GetRandomString();
             fieldSource.JoinToSource(new Source(expectedSourceName));
-            QueryField field = new QueryField("testfield", "testfield", fieldSource);
-            Criteria criteria = new Criteria(field, Criteria.ComparisonOp.Equals, "value");
+            var field = new QueryField("testfield", "testfield", fieldSource);
+            var criteria = new Criteria(field, Criteria.ComparisonOp.Equals, "value");
 
             //---------------Execute Test ----------------------
             selectQuery.Criteria = criteria;
@@ -89,20 +89,20 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSetCompoundCriteria_AddsJoins()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
-            Source field1Source = new Source(sourceName);
-            Source field2Source = new Source(sourceName); 
-            string expectedSourceName1 = TestUtil.GetRandomString();
-            string expectedSourceName2 = TestUtil.GetRandomString();
+            var field1Source = new Source(sourceName);
+            var field2Source = new Source(sourceName); 
+            var expectedSourceName1 = TestUtil.GetRandomString();
+            var expectedSourceName2 = TestUtil.GetRandomString();
             field1Source.JoinToSource(new Source(expectedSourceName1));
             field2Source.JoinToSource(new Source(expectedSourceName2));
-            QueryField field1 = new QueryField("testfield", "testfield", field1Source);
-            QueryField field2 = new QueryField("testfield", "testfield", field2Source);
-            Criteria criteria1 = new Criteria(field1, Criteria.ComparisonOp.Equals, "value");
-            Criteria criteria2 = new Criteria(field2, Criteria.ComparisonOp.Equals, "value");
-            Criteria criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
+            var field1 = new QueryField("testfield", "testfield", field1Source);
+            var field2 = new QueryField("testfield", "testfield", field2Source);
+            var criteria1 = new Criteria(field1, Criteria.ComparisonOp.Equals, "value");
+            var criteria2 = new Criteria(field2, Criteria.ComparisonOp.Equals, "value");
+            var criteria = new Criteria(criteria1, Criteria.LogicalOp.And, criteria2);
             //---------------Execute Test ----------------------
             selectQuery.Criteria = criteria;
             //---------------Test Result -----------------------
@@ -113,16 +113,16 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(expectedSourceName2, selectQuery.Source.Joins[1].ToSource.Name);
         }
 
-     
-
         [Test]
         public void Test_SetOrderCriteriaToNull_NoError()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source(TestUtil.GetRandomString());
+            var selectQuery = new SelectQuery
+                            {
+                                Source = new Source(TestUtil.GetRandomString()),
+                                OrderCriteria = null
+                            };
             //---------------Execute Test ----------------------
-            selectQuery.OrderCriteria = null;
 
             //---------------Test Result -----------------------
             Assert.IsNull(selectQuery.OrderCriteria);
@@ -133,10 +133,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSetOrderCriteria()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
-            selectQuery.Source = new Source(TestUtil.GetRandomString());
+            var selectQuery = new SelectQuery {Source = new Source(TestUtil.GetRandomString())};
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+            var orderCriteria = new OrderCriteria().Add("testfield");
             selectQuery.OrderCriteria = orderCriteria;
             //---------------Test Result -----------------------
             Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
@@ -148,14 +147,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSetOrderCriteria_AddsJoinToSource()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             const string sourceName = "mysource";
             selectQuery.Source = new Source(sourceName);
-            Source orderSource = new Source(sourceName);
-            string expectedSourceName = TestUtil.GetRandomString();
+            var orderSource = new Source(sourceName);
+            var expectedSourceName = TestUtil.GetRandomString();
             orderSource.JoinToSource(new Source(expectedSourceName));
-            OrderCriteriaField orderOrderCriteriaField = new OrderCriteriaField("testfield", "testfield", orderSource, SortDirection.Ascending);
-            IOrderCriteria orderCriteria = new OrderCriteria().Add(orderOrderCriteriaField);
+            var orderOrderCriteriaField = new OrderCriteriaField("testfield", "testfield", orderSource, SortDirection.Ascending);
+            var orderCriteria = new OrderCriteria().Add(orderOrderCriteriaField);
 
             //---------------Execute Test ----------------------
             selectQuery.OrderCriteria = orderCriteria;
@@ -171,9 +170,9 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             try
             {
                 //---------------Set up test pack-------------------
-                SelectQuery selectQuery = new SelectQuery();
+                var selectQuery = new SelectQuery();
                 //---------------Execute Test ----------------------
-                IOrderCriteria orderCriteria = new OrderCriteria().Add("testfield");
+                var orderCriteria = new OrderCriteria().Add("testfield");
                 selectQuery.OrderCriteria = orderCriteria;
                 //---------------Test Result -----------------------
                 Assert.AreSame(orderCriteria, selectQuery.OrderCriteria);
@@ -191,7 +190,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestSource()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
             Source source = new Source("testsource");
             selectQuery.Source = source;
@@ -204,7 +203,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestLimit()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
             const int limit = 40;
             selectQuery.Limit = limit;
@@ -217,7 +216,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestFirstRecordToLoad()
         {
             //---------------Set up test pack-------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             //---------------Execute Test ----------------------
             const int firstRecordToLoad = 40;
             selectQuery.FirstRecordToLoad = firstRecordToLoad;
@@ -232,7 +231,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             
             //---------------Execute Test ----------------------
-            SelectQuery selectQuery = new SelectQuery();
+            var selectQuery = new SelectQuery();
             //---------------Test Result -----------------------
             Assert.AreEqual(-1, selectQuery.Limit);
             Assert.AreEqual(0, selectQuery.FirstRecordToLoad);

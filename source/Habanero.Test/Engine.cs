@@ -200,5 +200,24 @@ namespace Habanero.Test
           
       
         }
+
+    	public static Engine CreateEngineWithCarWithContact(out string surname, out string regno, out string engineNo)
+    	{
+    		regno = TestUtil.GetRandomString();
+    		engineNo = TestUtil.GetRandomString();
+    		surname = TestUtil.GetRandomString();
+    		ContactPerson owner = ContactPerson.CreateSavedContactPerson(surname);
+    		Car car = Car.CreateSavedCar(regno, owner);
+    		return CreateSavedEngine(car, engineNo);
+    	}
+
+    	public static void CreateEngineWithCarWithContact()
+    	{
+    		string surname;
+    		string regno;
+    		string engineNo;
+    		CreateEngineWithCarWithContact(out surname, out regno, out engineNo);
+    		return;
+    	}
     }
 }

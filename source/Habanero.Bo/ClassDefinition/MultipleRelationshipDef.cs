@@ -57,7 +57,7 @@ namespace Habanero.BO.ClassDefinition
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             OrderCriteriaString = orderBy;
 
-            OrderCriteria = new OrderCriteria().FromString( orderBy);
+            this.OrderCriteria = Base.OrderCriteria.FromString( orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -87,7 +87,7 @@ namespace Habanero.BO.ClassDefinition
 		{
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             OrderCriteriaString = orderBy; 
-            OrderCriteria = new OrderCriteria().FromString(orderBy);
+            OrderCriteria = Base.OrderCriteria.FromString(orderBy);
 			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
 			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 
@@ -118,7 +118,7 @@ namespace Habanero.BO.ClassDefinition
             TimeOut = timeout;
             OrderCriteriaString = orderBy; 
             OrderCriteria = new OrderCriteria();
-            OrderCriteria = OrderCriteria.FromString(orderBy);
+            OrderCriteria = Base.OrderCriteria.FromString(orderBy);
             //_minNoOfRelatedObjects = minNoOfRelatedObjects;
             //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
 

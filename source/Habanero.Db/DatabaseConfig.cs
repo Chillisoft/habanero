@@ -27,17 +27,17 @@ using Habanero.Util;
 
 namespace Habanero.DB
 {
-	/// <summary>
+    /// <summary>
     /// Stores database configuration settings and creates connections
     /// using these settings
     /// </summary>
-    public  class DatabaseConfig : IDatabaseConfig
+    public class DatabaseConfig : IDatabaseConfig
     {
         /// <summary>
         /// MySql - the MySql .NET data provider will be used
         /// </summary>
         public const string MySql = "MYSQL";
-        
+
         /// <summary>
         /// DB4O - the DB4O .NET data provider will be used
         /// </summary>
@@ -49,6 +49,11 @@ namespace Habanero.DB
         public const string SqlServer = "SQLSERVER";
 
         /// <summary>
+        /// Microsoft Sql Server Compact Edition - the built in SqlClient data provider will be used
+        /// </summary>
+        public const string SqlServerCe = "SQLSERVERCE";
+
+        /// <summary>
         /// Oracle - the built in Oracle data provider will be used
         /// </summary>
         public const string Oracle = "ORACLE";
@@ -56,8 +61,8 @@ namespace Habanero.DB
         /// <summary>
         /// Access - the built in OleDb data provider will be used
         /// </summary>
-		public const string Access = "ACCESS";
-        
+        public const string Access = "ACCESS";
+
         /// <summary>
         /// PostGreSQL - the PostGreSQL data provider will be used
         /// </summary>
@@ -86,21 +91,22 @@ namespace Habanero.DB
         /// <summary>
         /// We need to map the database vendor name to the right <see cref="ConnectionStringFactory"/> type.
         /// </summary>
-	    private static readonly Dictionary<string, string> 
-            VendorToConnectionStringFactoryNameMap = 
+        private static readonly Dictionary<string, string>
+            VendorToConnectionStringFactoryNameMap =
                 new Dictionary<string, string>
-                       {
-                           {MySql, "MySql"},
-                           {DB4O, "DB4O"},
-                           {SqlServer, "SqlServer"},
-                           {Oracle, "Oracle"},
-                           {Access, "Access"},
-                           {PostgreSql, "PostgreSql"},
-                           {SQLite, "SQLite"},
-                           {Firebird, "Firebird"},
-                           {FirebirdEmbedded, "FirebirdEmbedded"},
-                           {Access2007, "Access2007"}
-                       };
+                    {
+                        {MySql, "MySql"},
+                        {DB4O, "DB4O"},
+                        {SqlServer, "SqlServer"},
+                        {SqlServerCe, "SqlServerCe"},
+                        {Oracle, "Oracle"},
+                        {Access, "Access"},
+                        {PostgreSql, "PostgreSql"},
+                        {SQLite, "SQLite"},
+                        {Firebird, "Firebird"},
+                        {FirebirdEmbedded, "FirebirdEmbedded"},
+                        {Access2007, "Access2007"}
+                    };
 
         private String _vendor;
         private String _server;
@@ -159,18 +165,18 @@ namespace Habanero.DB
                 if (string.IsNullOrEmpty(_vendor))
                 {
                     throw new ArgumentException("Missing database settings for the database configuration " +
-                                         "in the application configuration file. " +
-                                         "Ensure that you have a setting for 'vendor' " +
-                                         "- see documentation for possible options on the database " +
-                                         "vendor setting.");
+                                                "in the application configuration file. " +
+                                                "Ensure that you have a setting for 'vendor' " +
+                                                "- see documentation for possible options on the database " +
+                                                "vendor setting.");
                 }
             }
             else
             {
                 throw new ArgumentException("The database configuration could not be read. " +
-                                         "Check that your application configuration file exists (eg. app.config), " +
-                                         "that you have DatabaseConfig in the configSections, and that you have " +
-                                         "a section of settings in the DatabaseConfig category.");
+                                            "Check that your application configuration file exists (eg. app.config), " +
+                                            "that you have DatabaseConfig in the configSections, and that you have " +
+                                            "a section of settings in the DatabaseConfig category.");
             }
         }
 
@@ -235,10 +241,7 @@ namespace Habanero.DB
         /// This must be the full name of the assembly if you are to be sure to get the right assembly.  Alternately if the dll is
         /// placed in the same folder as the application you can just specify the name of the file (without the .dll extension).
         /// </summary>
-        public virtual string AssemblyName
-        {
-            get; set;
-        }
+        public virtual string AssemblyName { get; set; }
 
         /// <summary>
         /// The fully qualified name of the type to use when creating the IDbConnection.
@@ -247,39 +250,30 @@ namespace Habanero.DB
         /// This class must exist withing the assembly specified in the <see cref="AssemblyName"/> property, and be fully qualified
         /// i.e. it must include the namespace.
         /// </summary>
-        public virtual string FullClassName
-        {
-            get; set;
-        }
+        public virtual string FullClassName { get; set; }
 
         /// <summary>
         /// The full assembly name of the assembly containing <see cref="ConnectionStringFactory"/> to use.
         /// This does not need to be specified if you are using one of the standard Habanero database types.
         /// </summary>
-        public virtual string ConnectionStringFactoryAssemblyName
-        {
-             get; set;
-        }
+        public virtual string ConnectionStringFactoryAssemblyName { get; set; }
 
         /// <summary>
         /// The fully qualified class name of the <see cref="ConnectionStringFactory"/> to use.
         /// This does not need to be specified if you are using one of the standard Habanero database types.
         /// </summary>
-        public virtual string ConnectionStringFactoryClassName
-        {
-             get; set;
-        }
-        
+        public virtual string ConnectionStringFactoryClassName { get; set; }
+
         /// <summary>
         /// Returns the decrypted password.  This will be the same as <see cref="Password"/> if the private key has not been
         /// set (via <see cref="SetPrivateKey(string)"/> or <see cref="SetPrivateKey(System.Security.Cryptography.RSA)"/>.
         /// </summary>
         public string DecryptedPassword
         {
-            get { return _passwordCrypter.DecryptString(Password);  }
+            get { return _passwordCrypter.DecryptString(Password); }
         }
 
-	    /// <summary>
+        /// <summary>
         /// Sets the private key to use to decrypt the password.  The private key is in xml format.   
         /// </summary>
         /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>
@@ -288,7 +282,6 @@ namespace Habanero.DB
             RSA rsa = RSA.Create();
             rsa.FromXmlString(xmlPrivateKey);
             SetPrivateKey(rsa);
-
         }
 
         /// <summary>
@@ -309,17 +302,17 @@ namespace Habanero.DB
         {
             return ReadFromConfigFile("DatabaseConfig");
         }
-                
-	    ///<summary>
+
+        ///<summary>
         /// Creates a new configuration object by reading the "DatabaseConfig"
         /// settings from the project's configuration settings
-	    ///</summary>
-	    ///<param name="configSectionName">The name of the Config Setting Section where the database connection settings are stored.</param>
+        ///</summary>
+        ///<param name="configSectionName">The name of the Config Setting Section where the database connection settings are stored.</param>
         ///<returns>Returns a DatabaseConfig object</returns>
-	    public static DatabaseConfig ReadFromConfigFile(string configSectionName)
-	    {
-	        return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
-	    }
+        public static DatabaseConfig ReadFromConfigFile(string configSectionName)
+        {
+            return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
+        }
 
         /// <summary>
         /// Returns a connection string tailored for the database vendor
@@ -329,15 +322,18 @@ namespace Habanero.DB
         {
             string factoryClassName = this.ConnectionStringFactoryClassName;
             string factoryAssembly = this.ConnectionStringFactoryAssemblyName;
-            if (String.IsNullOrEmpty(factoryClassName)) factoryClassName = "ConnectionString" + VendorToConnectionStringFactoryNameMap[this.Vendor.ToUpper()] + "Factory";
+            if (String.IsNullOrEmpty(factoryClassName))
+                factoryClassName = "ConnectionString" + VendorToConnectionStringFactoryNameMap[this.Vendor.ToUpper()] +
+                                   "Factory";
             if (String.IsNullOrEmpty(factoryAssembly)) factoryAssembly = "Habanero.DB";
 
             Type factoryType = TypeLoader.LoadType(factoryAssembly, factoryClassName);
             ConnectionStringFactory factory = (ConnectionStringFactory) Activator.CreateInstance(factoryType);
-            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword, this.Port);
+            return factory.GetConnectionString(this.Server, this.Database, this.UserName, this.DecryptedPassword,
+                                               this.Port);
         }
 
-	    /// <summary>
+        /// <summary>
         /// Creates a database connection using the configuration settings
         /// stored
         /// </summary>
@@ -379,7 +375,7 @@ namespace Habanero.DB
             return base.Equals(obj);
         }
 
-	    /// <summary>
+        /// <summary>
         /// Returns the hashcode of all the settings added together
         /// </summary>
         /// <returns>Returns the hashcode</returns>
@@ -397,6 +393,17 @@ namespace Habanero.DB
             return
                 "Vendor:" + this.Vendor + ";Server:" + this.Server + ";Database:" + this.Database + ";UserName:" +
                 this.UserName + ";Password:" + this.Password + ";Port:" + this.Port;
+        }
+        /// <summary>
+        /// Returns true or false for whether this DatabaseConfig points at an In Memory DB or not.
+        /// </summary>
+        public bool IsInMemoryDB
+        {
+            get
+            {
+                var vendor = this.Vendor;
+                return string.IsNullOrEmpty(vendor) || vendor.ToLower().Contains("memory");
+            }
         }
     }
 }

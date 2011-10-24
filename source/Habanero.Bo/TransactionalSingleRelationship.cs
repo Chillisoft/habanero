@@ -56,8 +56,11 @@ namespace Habanero.BO
         }
 
         ///<summary>
+        /// This is the ID that uniquely identifies this item of the transaction.
+        /// This must be the same for the lifetime of the transaction object. 
+        /// This assumption is relied upon for certain optimisations in the Transaction Comitter.
         ///</summary>
-        ///<returns>The ID that uniquelty identifies this item of the transaction. In the case of business objects the object Id.
+        ///<returns>The ID that uniquely identifies this item of the transaction. In the case of business objects the object Id.
         /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
         /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
         /// is not added twice in error.</returns>
@@ -78,7 +81,7 @@ namespace Habanero.BO
             }
             UpdateCollections();
             ((Relationship)Relationship).UpdateRelationshipAsPersisted();
-            businessObject.UpdateDirtyStatusFromProperties();
+            //businessObject.UpdateDirtyStatusFromProperties();
         }
         /// <summary>
         /// Update the Underlying relationship collection e.g. The added or removed Business Object Collections are updated.

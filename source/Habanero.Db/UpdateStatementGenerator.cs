@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -30,7 +32,7 @@ namespace Habanero.DB
     {
         private readonly BusinessObject _bo;
         private readonly IDatabaseConnection _connection;
-        private SqlStatementCollection _statementCollection;
+        private IList<ISqlStatement> _statements;
         private SqlStatement _updateSql;
 
         /// <summary>
@@ -50,9 +52,9 @@ namespace Habanero.DB
         /// object's properties in the database
         /// </summary>
         /// <returns>Returns a sql statement collection</returns>
-        public SqlStatementCollection Generate()
+        public IEnumerable<ISqlStatement> Generate()
         {
-            _statementCollection = new SqlStatementCollection();
+            _statements = new List<ISqlStatement>();
             IBOPropCol propsToInclude;
             string tableName;
             ClassDef currentClassDef = _bo.ClassDef;
@@ -71,7 +73,7 @@ namespace Habanero.DB
             propsToInclude = GetPropsToInclude(_bo.ClassDef);
             tableName = StatementGeneratorUtils.GetTableName(_bo);
             GenerateSingleUpdateStatement(tableName, propsToInclude, false, _bo.ClassDef);
-            return _statementCollection;
+            return _statements;
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Habanero.DB
             }
             if (includedProps > 0)
             {
-                _statementCollection.Add(_updateSql);
+                _statements.Add(_updateSql);
             }
         }
 
@@ -127,7 +129,7 @@ namespace Habanero.DB
         /// Builds a collection of properties to include in the update,
         /// depending on the inheritance type
         /// </summary>
-        private static IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
+        protected virtual IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
         {
             IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
@@ -154,23 +156,24 @@ namespace Habanero.DB
         ///<param name="relationship"></param>
         ///<param name="relatedBusinessObject"></param>
         ///<returns></returns>
-        public ISqlStatementCollection GenerateForRelationship(IRelationship relationship, IBusinessObject relatedBusinessObject)
+        public IEnumerable<ISqlStatement> GenerateForRelationship(IRelationship relationship, IBusinessObject relatedBusinessObject)
         {
-            _statementCollection = new SqlStatementCollection();
-            BOPropCol propsToInclude = new BOPropCol();
+            _statements = new List<ISqlStatement>();
+            var propsToInclude = new BOPropCol();
             IBOProp oneProp = null;
-            foreach (IRelPropDef propDef in relationship.RelationshipDef.RelKeyDef)
+            foreach (var propDef in relationship.RelationshipDef.RelKeyDef)
             {
                 oneProp = relatedBusinessObject.Props[propDef.RelatedClassPropName];
                 propsToInclude.Add(oneProp);
             }
 
-            if (oneProp == null) return _statementCollection;
+            if (oneProp == null) return _statements;
             IClassDef classDef = relatedBusinessObject.ClassDef;
             string tableName = classDef.GetTableName(oneProp.PropDef);
             GenerateSingleUpdateStatement(tableName, propsToInclude, false, (ClassDef) classDef);
 
-            return _statementCollection;
+            return _statements;
         }
     }
+
 }

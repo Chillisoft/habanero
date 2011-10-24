@@ -65,16 +65,6 @@ namespace Habanero.Base
         /// </returns>
         int Compare<T>(T bo1, T bo2) where T:IBusinessObject;
 
-        /// <summary>
-        /// Creates an OrderCriteria object by parsing a string in the correct format.
-        /// The format is:
-        /// <para>&lt;orderCriteria&gt; => &lt;emptystring&gt; | &lt;field&gt; [, &lt;field&gt;, ... ] <br/>
-        /// &lt;field&gt; => &lt;fieldName&gt; [ ASC | DESC ] </para>
-        /// For example: <code>Surname, Age DESC</code> or <code>Age ASC, Surname DESC</code>
-        /// </summary>
-        /// <param name="orderCriteriaString">The string in the correct format (see above)</param>
-        /// <returns>An OrderCriteria created from the string</returns>
-        IOrderCriteria FromString(string orderCriteriaString);
 
     }
 
@@ -191,7 +181,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="orderCriteriaString">The string in the correct format (see above)</param>
         /// <returns>An OrderCriteria created from the string</returns>
-        public IOrderCriteria FromString(string orderCriteriaString)
+        public static IOrderCriteria FromString(string orderCriteriaString)
         {
             IOrderCriteria orderCriteria = new OrderCriteria();
             if (string.IsNullOrEmpty(orderCriteriaString)) return orderCriteria;

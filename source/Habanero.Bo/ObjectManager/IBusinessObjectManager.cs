@@ -161,10 +161,10 @@ namespace Habanero.BO
         ///<summary>
         /// Adds the Business Object to the Object Manager and removes the existing object.
         /// This is used for Deserialising objects etc where a new exact deserialised replacement of the
-        /// origional businessObject has been made.
+        /// original businessObject has been made.
         ///</summary>
         ///<param name="businessObject"></param>
-        void AddWithReplace(BusinessObject businessObject);
+        void AddWithReplace(IBusinessObject businessObject);
 
         /// <summary>
         /// Returns the object specified by the guid passed in, if the object exists in the object manager.

@@ -19,6 +19,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using Habanero.Base.DataMappers;
 using Habanero.Util;
 
 namespace Habanero.Base
@@ -155,7 +156,7 @@ namespace Habanero.Base
             if (objValue is TimeSpan)
             {
                 TimeSpan time = (TimeSpan)objValue;
-                return new DateTime(1900, 1, 1, time.Hours, time.Minutes, time.Seconds, time.Milliseconds);
+                return TimeSpanDataMapper.BaseDate.Add(time);
             }
             return objValue;
         }

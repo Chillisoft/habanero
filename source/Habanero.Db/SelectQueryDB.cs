@@ -35,6 +35,9 @@ namespace Habanero.DB
         private readonly ISelectQuery _selectQuery;
         private readonly IDatabaseConnection _databaseConnection;
         private ISqlFormatter _sqlFormatter;
+        /// <summary>
+        /// Dictionary of all aliases being used in the SQL statement
+        /// </summary>
         public IDictionary<string, string> Aliases { get; private set; }
         ///<summary>
         /// Creates a SelectQueryDB, wrapping an ISelectQuery (Decorator pattern)
@@ -349,13 +352,11 @@ namespace Habanero.DB
                 Criteria classIDCriteria = new Criteria("DMClassID", Criteria.ComparisonOp.Equals, classDef.ClassID.Value);
                 classIDCriteria.Field.Source = this.Source;
                 fullCriteria = Criteria.MergeCriteria(fullCriteria, classIDCriteria);
-
             }
 
             if (fullCriteria == null) return;
             builder.Append(" WHERE ");
             CriteriaDB criteriaDB = new CriteriaDB(fullCriteria);
-            
 
             string whereClause = criteriaDB.ToString(_sqlFormatter, value => AddParameter(value, statement),Aliases);
 
@@ -365,7 +366,7 @@ namespace Habanero.DB
         private string AddParameter(object value, SqlStatement statement)
         {
             if (value == null) value = "NULL";
-            var resolvableValue = value as IResolvableToValue<DateTime>;
+            var resolvableValue = value as IResolvableToValue;
             if (resolvableValue != null)
             {
                 value = resolvableValue.ResolveToValue();
@@ -374,10 +375,9 @@ namespace Habanero.DB
             {
                 return CreateInClause(statement, value);
             }
-            string paramName = statement.ParameterNameGenerator.GetNextParameterName();
-            statement.AddParameter(paramName, value);
+            var paramName = statement.ParameterNameGenerator.GetNextParameterName();
+            statement.AddParameter(paramName, value, value.GetType());
             return paramName;
-
         }
 
         private string CreateInClause(SqlStatement statement, object value)
@@ -400,11 +400,11 @@ namespace Habanero.DB
             inClause += ")";
             return inClause;
         }
-
+/*
         private string DelimitField(Source source, string fieldName)
         {
             return source == null ? _sqlFormatter.DelimitField(fieldName) : DelimitField(source.EntityName, fieldName);
-        }
+        }*/
 
         private string DelimitField(string entityName, string fieldName)
         {
@@ -422,13 +422,13 @@ namespace Habanero.DB
             return _sqlFormatter.DelimitField(fieldName);
         }
 
-        private int aliasCount;
+        private int _aliasCount;
         /// <summary>
         /// Sets up the aliases to use for each of the sources in this select query.
         /// </summary>
         private void SetupAliases()
         {
-            aliasCount = 0;
+            _aliasCount = 0;
             AddAliasForSource(this.Source);
  }
 
@@ -439,7 +439,7 @@ namespace Habanero.DB
             var sourceName = source.ToString();
             if (this.Aliases.ContainsKey(sourceName)) return;
 
-            aliasCount = aliasCount + 1;
+            _aliasCount = _aliasCount + 1;
 
             var sourceParts = sourceName.Split('.').ToList();
             Queue<string> queue = new Queue<string>();
@@ -453,7 +453,7 @@ namespace Habanero.DB
                 subSourceName += singlePartOfSourceName;
                 if (queue.Count > 0 && queue.Peek() == singlePartOfSourceName) continue;
                 if (!this.Aliases.ContainsKey(subSourceName))
-                    this.Aliases.Add(subSourceName, "a" + aliasCount);
+                    this.Aliases.Add(subSourceName, "a" + _aliasCount);
             }
 
             if (source.ChildSource != null) AddAliasForSource(source.ChildSource);

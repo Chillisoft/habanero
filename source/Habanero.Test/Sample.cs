@@ -249,8 +249,11 @@ namespace Habanero.Test
                 new PropDef("SampleText", typeof (String), PropReadWriteRule.ReadWrite, "SampleText",  null));
             lPropDefCol.Add(
                 new PropDef("SampleText2", typeof(String), PropReadWriteRule.ReadWrite, "SampleText2", null));
-            lPropDefCol.Add( CreatePropDef("SampleTextPrivate", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextPrivate", null, false, false, int.MaxValue, null, null, false));
-            lPropDefCol.Add( CreatePropDef("SampleTextDescribed", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextDescribed", null,
+            lPropDefCol.Add(
+                new PropDef("SampleTextPrivate", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextPrivate", null,
+                            false, false, int.MaxValue, null, null, true));
+            lPropDefCol.Add(
+                new PropDef("SampleTextDescribed", typeof(String), PropReadWriteRule.ReadWrite, "SampleTextDescribed", null,
                             false, false, int.MaxValue, null, "This is a sample text property that has a description.", false));
             lPropDefCol.Add(
                 new PropDef("SampleDate", typeof(DateTime), PropReadWriteRule.ReadWrite, "SampleDate", null));
@@ -281,18 +284,6 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             return new ClassDef(typeof (Sample), primaryKey, lPropDefCol, keysCol, relDefCol);
-        }
-
-        private static PropDef CreatePropDef(string propertyName, Type propType
-            , PropReadWriteRule propReadWriteRule, string databaseFieldName
-            , object defaultValue, bool compulsory, bool autoIncrementing, int length, string displayName,
-             string description, bool keepValuePrivate)
-        {
-            var propDef = new PropDef(propertyName, propType, propReadWriteRule, databaseFieldName, defaultValue,
-                                      compulsory, autoIncrementing, length, displayName, description);
-            propDef.KeepValuePrivate = keepValuePrivate;
-
-            return propDef;
         }
 
         public static ClassDef CreateClassDefVWG()

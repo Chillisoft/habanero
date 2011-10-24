@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using log4net;
+using Habanero.Base.Logging;
 
 namespace Habanero.BO
 {
@@ -78,8 +78,9 @@ namespace Habanero.BO
         /// A list of all the transactions that are added to the transaction committer by the application developer.
         /// </summary>
         private readonly List<ITransactional> _originalTransactions = new List<ITransactional>();
+        private readonly Dictionary<string, ITransactional> _originalTransactionsByKey = new Dictionary<string, ITransactional>();
 
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.TransactionCommitter");
+        private static readonly IHabaneroLogger Log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.BO.TransactionCommitter");
 
         /// <summary>
         /// A list of all transactions that are executed by the transaction committer.
@@ -114,32 +115,78 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void AddBusinessObject(IBusinessObject businessObject)
         {
-            if (businessObject == null) return;
-            //Do not add objects that are new and deleted to the transaction committer.
-            if (businessObject.Status.IsNew && businessObject.Status.IsDeleted)
-            {
-                return;
-            }
-            TransactionalBusinessObject transaction = CreateTransactionalBusinessObject(businessObject);
-            this.AddTransaction(transaction);
-            bool added = _originalTransactions.Contains(transaction);
+            if (!MustBOBeAdded(businessObject)) return;
+
+            var transaction = CreateTransactionalBusinessObject(businessObject);
+            var added = AddTransactionInternal(transaction);
+            UpdateObjectBeforePersisting(transaction, added);
+        }
+        /// <summary>
+        /// Adds the <param name="businessObject"></param> into the first position
+        ///  in the list of transactional objects that will be committed by this
+        /// transaction committer. This is often required for referential integrity issues.
+        /// </summary>
+        /// <param name="businessObject"></param>
+        public void InsertBusinessObject(IBusinessObject businessObject)
+        {
+            if (!MustBOBeAdded(businessObject)) return;
+
+            var transaction = CreateTransactionalBusinessObject(businessObject);
+            var added = InsertTransactionInternal(transaction);
+            UpdateObjectBeforePersisting(transaction, added);
+        }
+
+        private void UpdateObjectBeforePersisting(TransactionalBusinessObject transaction, bool added)
+        {
             if (added && _runningUpdatingBeforePersisting)
             {
                 transaction.UpdateObjectBeforePersisting(this);
             }
         }
 
-        /// 
+        private static bool MustBOBeAdded(IBusinessObject businessObject)
+        {
+            if (businessObject == null) return false;
+            //Do not add objects that are new and deleted to the transaction committer.
+            return !(businessObject.Status.IsNew && businessObject.Status.IsDeleted);
+        }
+
         ///<summary>
         /// This method adds an <see cref="ITransactional"/> to the list of transactions.
         ///</summary>
-        ///<param name="transaction"></param>
+        ///<param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
         public void AddTransaction(ITransactional transaction)
         {
-            ITransactional foundTransactional = _originalTransactions.Find
-                (obj => obj.TransactionID() == transaction.TransactionID());
-            if (foundTransactional != null) return;
+            AddTransactionInternal(transaction);
+        }
+
+        /// <summary>
+        /// This method adds an <see cref="ITransactional"/> to the list of transactions and 
+        /// returns true or false if the provided object was added or not.
+        /// </summary>
+        /// <param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
+        /// <returns>True or false if the provided object was added or not.</returns>
+        private bool AddTransactionInternal(ITransactional transaction)
+        {
+            if (!AddToTransactionsByKey(transaction)) return false;
             _originalTransactions.Add(transaction);
+            return true;
+        }
+        private bool InsertTransactionInternal(ITransactional transaction)
+        {
+            if (!AddToTransactionsByKey(transaction)) return false;
+            _originalTransactions.Insert(0, transaction);
+            return true;
+        }
+
+        private bool AddToTransactionsByKey(ITransactional transaction)
+        {
+            var transactionID = transaction.TransactionID();
+            // NOTE: The sole purpose of the dictionary is to optimise the performance of a this check on TransactionID.
+            // The original transactions list is still maintained because the transactions must be in the order they were added.
+            if (_originalTransactionsByKey.ContainsKey(transactionID)) return false;
+            _originalTransactionsByKey.Add(transactionID, transaction);
+            return true;
         }
 
         ///<summary>
@@ -151,7 +198,10 @@ namespace Habanero.BO
             Begin();
             Execute();
             Commit();
-            return _executedTransactions.FindAll(transactional => transactional is TransactionalBusinessObject).ConvertAll(transactional => ((TransactionalBusinessObject)transactional).BusinessObject.ID.ObjectID);
+            return _executedTransactions
+                .FindAll(transactional => transactional is TransactionalBusinessObject)
+                .ConvertAll(transactional => ((TransactionalBusinessObject)transactional)
+                    .BusinessObject.ID.ObjectID);
         }
 
         /// <summary>
@@ -366,18 +416,18 @@ namespace Habanero.BO
             }
             catch (Exception ex)
             {
-                log.Error
-                    ("Error executing transaction: " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 4, true));
+                Log.Log(
+                    "Error executing transaction: " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 4, true), LogCategory.Exception);
                 try
                 {
                     TryRollback();
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                 }
                 UpdateTransactionsAsRolledBack();
                 throw;
@@ -423,9 +473,9 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                 }
                 throw;
             }
@@ -441,9 +491,9 @@ namespace Habanero.BO
                 }
                 catch (Exception rollBackException)
                 {
-                    log.Error
+                    Log.Log
                         ("Error rolling back transaction: " + Environment.NewLine
-                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true));
+                         + ExceptionUtilities.GetExceptionString(rollBackException, 4, true), LogCategory.Exception);
                     throw;
                 }
 
@@ -470,11 +520,11 @@ namespace Habanero.BO
 
         private void UpdateTransactionsAsRolledBack()
         {
-            foreach (ITransactional transaction in _originalTransactions)
+            foreach (var transaction in _originalTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }
-            foreach (ITransactional transaction in _executedTransactions)
+            foreach (var transaction in _executedTransactions)
             {
                 transaction.UpdateAsRolledBack();
             }
@@ -522,5 +572,7 @@ namespace Habanero.BO
         /// <param name="relationship"></param>
         /// <param name="businessObject"></param>
         protected internal abstract void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) where T : class, IBusinessObject, new();
+
+      
     }
 }

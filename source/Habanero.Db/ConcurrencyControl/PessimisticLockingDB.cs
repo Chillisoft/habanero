@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Security;
 using System.Security.Principal;
@@ -137,8 +138,8 @@ namespace Habanero.DB.ConcurrencyControl
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, 
                                                                       _busObj.ID.ToString(), _busObj);
                 }
-                bool locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
-                DateTime dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
+                var locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
+                var dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
                 if (locked && (LockDurationValid(dateLocked)))
                 {
                     string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
@@ -159,10 +160,10 @@ namespace Habanero.DB.ConcurrencyControl
         }
         private ISqlStatement GetSQLStatement()
         {
-            BusinessObjectLoaderDB boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
+            var boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
             ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
+            var selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
             return selectQueryDB.CreateSqlStatement();
         }
         private bool LockDurationValid(DateTime dateLocked)
@@ -181,7 +182,14 @@ namespace Habanero.DB.ConcurrencyControl
 
         private void UpdateLockingToDB()
         {
-            ISqlStatementCollection sql = GetUpdateSql();
+            var sql = GetUpdateSql();
+            if (sql == null) return;
+            DatabaseConnection.CurrentConnection.ExecuteSql(sql);
+        }
+
+        private void ReleaseLockingFromDB()
+        {
+            IEnumerable<ISqlStatement> sql = GetReleaseLockSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
         }
@@ -235,13 +243,24 @@ namespace Habanero.DB.ConcurrencyControl
             {
             }
         }
+
         /// <summary>
         /// Returns an "update" sql statement list for updating this object
         /// </summary>
         /// <returns>Returns a collection of sql statements</returns>
-        private SqlStatementCollection GetUpdateSql()
+        private IEnumerable<ISqlStatement> GetUpdateSql()
         {
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(_busObj, DatabaseConnection.CurrentConnection);
+            var gen = new UpdateStatementGenerator(_busObj,  DatabaseConnection.CurrentConnection);
+            return gen.Generate();
+        }
+
+        /// <summary>
+        /// Returns an "update" sql statement that will release the lock on this object
+        /// </summary>
+        /// <returns>Returns a collection of sql statements</returns>
+        private IEnumerable<ISqlStatement> GetReleaseLockSql()
+        {
+            var gen = new UpdateStatementGeneratorLocking(_busObj, _boPropLocked, DatabaseConnection.CurrentConnection);
             return gen.Generate();
         }
 
@@ -262,11 +281,13 @@ namespace Habanero.DB.ConcurrencyControl
         public void ReleaseWriteLocks()
         {
             if (_boPropLocked != null && _boPropLocked.Value != null)
-                if ((bool)_boPropLocked.Value)
+            {
+                if ((bool) _boPropLocked.Value)
                 {
                     _boPropLocked.Value = false;
-                    UpdateLockingToDB();               
+                    ReleaseLockingFromDB();               
                 }
+            }
         }
 
 
@@ -276,14 +297,28 @@ namespace Habanero.DB.ConcurrencyControl
         ///</summary>
         public void UpdateAsTransactionRolledBack()
         {
-            //if (_versionNumber.Value == null)
-            //{
-            //    _versionNumber.Value = 0;
-            //    return;
-            //}
-            //_versionNumber.Value = (int)_versionNumber.Value - 1;
+            ReleaseWriteLocks();
+            _boPropDateLocked.Value = DateTime.Now.AddMinutes(-1*_lockDurationInMinutes);
         }
 
         #endregion
+
+
+        private class UpdateStatementGeneratorLocking : UpdateStatementGenerator
+        {
+            private readonly IBOProp _boPropLocked;
+
+            internal UpdateStatementGeneratorLocking(BusinessObject bo, IBOProp boPropLocked, IDatabaseConnection connection)
+                : base(bo, connection)
+            {
+                if (boPropLocked == null) throw new ArgumentNullException("boPropLocked");
+                _boPropLocked = boPropLocked;
+            }
+
+            protected override IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
+            {
+                return new BOPropCol {_boPropLocked};
+            }
+        }
     }
 }

@@ -17,7 +17,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
-using log4net;
+using Habanero.Base.DataMappers;
+using Habanero.Base.Logging;
+using Habanero.Util;
 
 namespace Habanero.Base
 {
@@ -27,54 +29,32 @@ namespace Habanero.Base
     public class GlobalRegistry
     {
         private static IExceptionNotifier _exceptionNotifier;
-        //private static ISynchronisationController _synchronisationController;
+        private static IHabaneroLoggerFactory _loggerFactory;
+        private static IDataMapperFactory _dataMapperFactory;
+        private static ICrypter _passwordCrypter;
+        private static IHasher _passwordHasher;
+        private static ISettings _settings;
+        private static ISecurityController _securityController;
 
         /// <summary>
-        /// Gets and sets the application's settings storer, which stores
-        /// database settings
+        /// Gets and sets the application's settings storer, which stores settings
+        /// This defaults to the <see cref="ConfigFileSettings"/>
         /// </summary>
-        public static ISettings Settings { get; set; }
+        public static ISettings Settings { 
+            get { return _settings ?? (_settings = new ConfigFileSettings()); } 
+            set { _settings = value; }
+        }
 
         /// <summary>
         /// Gets and sets the application's exception notifier, which
         /// provides a means to communicate exceptions to the user
+        /// The default is the <see cref="RethrowingExceptionNotifier"/>
         /// </summary>
         public static IExceptionNotifier UIExceptionNotifier
         {
-            get
-            {
-                if (_exceptionNotifier == null) return new RethrowingExceptionNotifier();
-                return _exceptionNotifier;
-            }
+            get {  return _exceptionNotifier ?? (_exceptionNotifier = new RethrowingExceptionNotifier()); }
             set { _exceptionNotifier = value; }
         }
-
-//        /// <summary>
-//        /// //TODO sherwin 29 Oct 2010: 
-//        /// </summary>
-//        public static ILoggerFacade GetLogger(string contextName)
-//        {
-//           
-//            if (_logger == null) return LogManager.GetLogger(contextName); ;
-//            return _logger;
-//        }
-
-        ///// <summary>
-        ///// Gets and sets the application's synchronisation controller,
-        ///// which implements a synchronisation strategy for the application
-        ///// </summary>
-        //public static ISynchronisationController SynchronisationController
-        //{
-        //    get
-        //    {
-        //        if (_synchronisationController == null)
-        //        {
-        //            _synchronisationController = new NullSynchronisationController();
-        //        }
-        //        return _synchronisationController;
-        //    }
-        //    set { _synchronisationController = value; }
-        //}
 
         /// <summary>
         /// Gets and sets the application name
@@ -94,22 +74,53 @@ namespace Habanero.Base
         ///<summary>
         /// Gets and sets the security controller for the application
         ///</summary>
-        public static ISecurityController SecurityController { get; set; }
+        public static ISecurityController SecurityController
+        {
+            get { return _securityController ?? (_securityController = new NullSecurityController()); }
+            set { _securityController = value; }
+        }
 
-        private static IHabaneroLoggerFactory _loggerFactory;
+        /// <summary>
+        /// Gets and sets the crypter used to encrypt and decrypt short strings. This is typically used for encrypting and decrypting database passwords.
+        /// This defaults to the <see cref="NullCrypter"/> which does no encryption and returns the value passed in.
+        /// </summary>
+        public static ICrypter PasswordCrypter
+        {
+            get { return _passwordCrypter ?? (_passwordCrypter = new NullCrypter()); } 
+            set { _passwordCrypter = value; }
+        }
+
+        /// <summary>
+        /// Gets and sets the hash function used to hash passwords.
+        /// This defaults to the <see cref="Utf8Sha1Hasher"/>
+        /// </summary>
+        public static IHasher PasswordHasher { 
+            get { return _passwordHasher ?? (_passwordHasher = new Utf8Sha1Hasher()); }
+            set { _passwordHasher = value; }
+        }
 
         ///<summary>
         /// Gets and sets the <see cref="IHabaneroLoggerFactory"/> that is used to create the <see cref="IHabaneroLogger"/>
         /// for this application.
+        /// This defaults to the <see cref="ConsoleLoggerFactory"/>
         ///</summary>
         public static IHabaneroLoggerFactory LoggerFactory
         {
-            get
-            {
-                if (_loggerFactory == null) return new Log4NetLoggerFactory();
-                return _loggerFactory;
-            }
+            get { return _loggerFactory ?? (_loggerFactory = new ConsoleLoggerFactory()); }
             set { _loggerFactory = value; }
+        }
+
+        /// <summary>
+        /// The <see cref="IDataMapperFactory"/> is used to create mappers that map from one type to another
+        /// These are used, for instance, when populating business objects when loading from a data source.
+        /// If you wish to override how certain types are loaded from the database (for example, converted from a
+        /// string value), then replace that type's mapper with your own class that implements from <see cref="IDataMapper"/>
+        /// This defaults to the <see cref="DataMapperFactory"/>
+        /// </summary>
+        public static IDataMapperFactory DataMapperFactory
+        {
+            get { return _dataMapperFactory ?? (_dataMapperFactory = new DataMapperFactory()); }
+            set { _dataMapperFactory = value; }
         }
     }
 }

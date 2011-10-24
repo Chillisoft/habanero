@@ -57,4 +57,6 @@ namespace Habanero.Base
         /// </summary>
         public string Message { get; private set; }
     }
+
+
 }

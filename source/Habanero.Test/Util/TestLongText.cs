@@ -19,8 +19,10 @@
 using System;
 using System.Collections;
 using System.Data;
+using System.Linq;
 using System.Text;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
@@ -118,9 +120,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof (LongText), PropReadWriteRule.ReadWrite, null);
             LongText longText = new LongText("test");
-            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            GeneralDataMapper generalDataMapper = new GeneralDataMapper(typeof(LongText));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -135,9 +136,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_InheritedCustomProperty()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof(CustomProperty), PropReadWriteRule.ReadWrite, null);
             LongText longText = new LongText("test");
-            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            GeneralDataMapper generalDataMapper = new GeneralDataMapper(typeof(CustomProperty));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -152,9 +152,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_InheritedLongText()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof(LongText), PropReadWriteRule.ReadWrite, null);
             LongText longText = new ExtendedLongText("test");
-            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            GeneralDataMapper generalDataMapper = new GeneralDataMapper(typeof(LongText));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -181,9 +180,8 @@ namespace Habanero.Test.Util
         public void Test_BOPropGeneralDataMapper_TryParseCustomProperty_StringValue()
         {
             //---------------Set up test pack-------------------
-            PropDef propDef = new PropDef("Name", typeof (LongText), PropReadWriteRule.ReadWrite, null);
             string test = "test";
-            BOPropGeneralDataMapper generalDataMapper = new BOPropGeneralDataMapper(propDef);
+            GeneralDataMapper generalDataMapper = new GeneralDataMapper(typeof(LongText));
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -232,13 +230,14 @@ namespace Habanero.Test.Util
             stringBuilder.Append('*', 2500);
             string value = stringBuilder.ToString();
             bo.SetPropertyValue("TestProp", value);
-            ISqlStatementCollection sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
-            ISqlStatement sqlStatement = sqlCol[0];
+            var  sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
+            ISqlStatement sqlStatement = sqlCol.First();
             IList parameters = sqlStatement.Parameters;
             IDbDataParameter longTextParam = (IDbDataParameter) parameters[1];
             string oracleTypeEnumString = ReflectionUtilities.GetEnumPropertyValue(longTextParam, "OracleType");
             Assert.IsTrue(oracleTypeEnumString == "Clob");
         }
+
     }
 
     

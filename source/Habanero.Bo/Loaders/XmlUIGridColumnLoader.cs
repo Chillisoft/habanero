@@ -21,8 +21,8 @@ using System.Collections;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
-using log4net;
 
 namespace Habanero.BO.Loaders
 {
@@ -31,7 +31,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIGridColumnLoader : XmlLoader
     {
-        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.Loaders.XmlUIGridColumnLoader");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(XmlUIGridColumnLoader));
         private string _heading;
         private string _propertyName;
 //        private Type _gridControlType;

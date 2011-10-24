@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using Habanero.Base;
+
 namespace Habanero.BO
 {
     /// <summary>
@@ -23,7 +25,7 @@ namespace Habanero.BO
     /// for certain types in this case we have implemented them for Decimal, Double, DateTime and Integer.
     /// The IPropRuleComparable has only a MinValue and a MaxValue to Type T.
     /// </summary>
-    public interface IPropRuleComparable<T> where T:struct
+    public interface IPropRuleComparable<T>: IPropRule where T:struct
     {
         /// <summary>
         /// Gets and sets the minimum value that the Double can be assigned

@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Test
@@ -51,8 +52,7 @@ namespace Habanero.Test
             primaryKey.Add(lPropDefCol["FilledCircleID"]);
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
-            ClassDef lClassDef = new ClassDef(typeof (FilledCircle), primaryKey,  lPropDefCol, keysCol, relDefCol);
-            lClassDef.TableName = "FilledCircle_table";
+            ClassDef lClassDef = new ClassDef(typeof (FilledCircle), primaryKey, "FilledCircle_table", lPropDefCol, keysCol, relDefCol);
             lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
@@ -99,60 +99,6 @@ namespace Habanero.Test
             filledCircleClassDef.TableName = "filledcircle_concrete";
             filledCircleClassDef.SuperClassDef = new SuperClassDef(circleClassDef, ORMapping.ConcreteTableInheritance);
             return filledCircleClassDef;
-        }
-    }
-    public static class ClassDefTestingExtensions
-    {
-
-        /// <summary>
-        /// Create a new property definition and add it to the collection
-        /// </summary>
-        /// <param name="propName">The name of the property, e.g. surname</param>
-        /// <param name="propType">The type of the property, e.g. string</param>
-        /// <param name="propRWStatus">Rules for how a property can be
-        /// accessed. See PropReadWriteRule enumeration for more detail.</param>
-        /// <param name="databaseFieldName">The database field name - this
-        /// allows you to have a database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up</param>
-        /// <param name="defaultValue">The default value that a property 
-        /// of a new object will be set to</param>
-        /// <returns>Returns the new definition created, after it has
-        /// been added to the collection</returns>
-        internal static IPropDef Add
-            (this PropDefCol propDefCol, string propName, Type propType, PropReadWriteRule propRWStatus, string databaseFieldName,
-             object defaultValue)
-        {
-            propDefCol.CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, databaseFieldName, defaultValue);
-            propDefCol.Add(lPropDef);
-            return lPropDef;
-        }
-        /// <summary>
-        /// Creates and adds a new property definition as before, but 
-        /// assumes the database field name is the same as the property name.
-        /// </summary>
-        internal static IPropDef Add(this PropDefCol propDefCol, string propName, Type propType, PropReadWriteRule propRWStatus, object defaultValue)
-        {
-            propDefCol.CheckPropNotAlreadyAdded(propName);
-            PropDef lPropDef = new PropDef(propName, propType, propRWStatus, defaultValue);
-            propDefCol.Add(lPropDef);
-            return lPropDef;
-        }
-
-        /// <summary>
-        /// Checks if a property definition with that name has already been added
-        /// and throws an exception if so
-        /// </summary>
-        /// <param name="propName">The property name</param>
-        private static void CheckPropNotAlreadyAdded(this PropDefCol propDefCol, string propName)
-        {
-            if (propName == null) throw new ArgumentNullException("propName");
-            if (propDefCol.Contains(propName.ToUpper()))
-            {
-                throw new ArgumentException
-                    (String.Format("A property definition with the name '{0}' already " + "exists.", propName));
-            }
         }
     }
 }

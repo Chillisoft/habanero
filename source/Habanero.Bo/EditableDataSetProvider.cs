@@ -24,8 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-//using log4net;
-
 namespace Habanero.BO
 {
     /// <summary>
@@ -33,7 +31,6 @@ namespace Habanero.BO
     /// </summary>
     public class EditableDataSetProvider : DataSetProvider
     {
-//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.EditableDataSetProvider");
         private readonly DataTableNewRowEventHandler _newRowHandler;
         private readonly DataRowChangeEventHandler _rowChangedHandler;
         private readonly DataRowChangeEventHandler _rowDeletedHandler;
@@ -443,7 +440,6 @@ namespace Habanero.BO
                     RegisterForBOEvents();
                 }
 
-                //log.Debug("Initialising obj");
                 if (ObjectInitialiser != null)
                 {
                     try

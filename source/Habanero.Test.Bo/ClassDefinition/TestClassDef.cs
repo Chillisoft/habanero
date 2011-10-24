@@ -318,14 +318,33 @@ namespace Habanero.Test.BO.ClassDefinition
             IClassDef grandchildClassDef;
             LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
 
-            Assert.AreEqual(1, parentClassDef.PropDefColIncludingInheritance.Count);
-            Assert.AreEqual(2, childClassDef.PropDefColIncludingInheritance.Count);
-            Assert.AreEqual(3, grandchildClassDef.PropDefColIncludingInheritance.Count);
+            Assert.AreEqual(2, parentClassDef.PropDefColIncludingInheritance.Count);
+            Assert.AreEqual(4, childClassDef.PropDefColIncludingInheritance.Count);
+            Assert.AreEqual(6, grandchildClassDef.PropDefColIncludingInheritance.Count);
 
-            Assert.AreEqual(1, parentClassDef.PropDefcol.Count);
-            Assert.AreEqual(1, childClassDef.PropDefcol.Count);
-            Assert.AreEqual(1, grandchildClassDef.PropDefcol.Count);
+            Assert.AreEqual(2, parentClassDef.PropDefcol.Count);
+            Assert.AreEqual(2, childClassDef.PropDefcol.Count);
+            Assert.AreEqual(2, grandchildClassDef.PropDefcol.Count);
         }
+
+        [Test]
+        public void Test_KeyDefColIncludingInheritance_ShouldLoadAllKeyDefsInHierarchy()
+        {
+            ClassDef.ClassDefs.Clear();
+            IClassDef parentClassDef;
+            IClassDef childClassDef;
+            IClassDef grandchildClassDef;
+            LoadInheritedClassdefStructure(out parentClassDef, out childClassDef, out grandchildClassDef);
+
+            Assert.AreEqual(1, parentClassDef.KeyDefColIncludingInheritance.Count);
+            Assert.AreEqual(2, childClassDef.KeyDefColIncludingInheritance.Count);
+            Assert.AreEqual(3, grandchildClassDef.KeyDefColIncludingInheritance.Count);
+
+            Assert.AreEqual(1, parentClassDef.KeysCol.Count);
+            Assert.AreEqual(1, childClassDef.KeysCol.Count);
+            Assert.AreEqual(1, grandchildClassDef.KeysCol.Count);
+        }
+
 
         private static void LoadInheritedClassdefStructure(out IClassDef parentClassDef, out IClassDef childClassDef, out IClassDef grandchildClassDef)
         {
@@ -345,21 +364,34 @@ namespace Habanero.Test.BO.ClassDefinition
             parentClassDef = loader.LoadClass(
                 @"<class name=""Parent"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
-					<primaryKey>
+                    <property name=""FakeUCProp"" type=""string"" />
+                    <key name=""UC_Fake"">
+                      <prop name=""FakeUCProp"" />
+                    </key>
+                    <primaryKey>
 						<prop name=""MyBoID"" />
 					</primaryKey>
+
 				</class>
 			");
             childClassDef = loader.LoadClass(String.Format(
                 @"<class name=""Child"" assembly=""Habanero.Test"">
 					<superClass class=""Parent"" assembly=""Habanero.Test"" orMapping=""{0}"" {1} />
                     <property  name=""Prop1"" />
+                    <property name=""FakeUCPropChild"" type=""string"" />
+                    <key name=""UC_FakeChild"">
+                      <prop name=""FakeUCPropChild"" />
+                    </key>
 				</class>
 			", inheritanceType, discriminator));
             grandchildClassDef = loader.LoadClass(String.Format(
                 @"<class name=""Grandchild"" assembly=""Habanero.Test"">
 					<superClass class=""Child"" assembly=""Habanero.Test"" orMapping=""{0}"" {1} />
-                    <property  name=""Prop2"" />
+                    <property name=""Prop2"" />
+                    <property name=""FakeUCPropGrandchild"" type=""string"" />
+                    <key name=""UC_FakeGrandchild"">
+                      <prop name=""FakeUCPropGrandchild"" />
+                    </key>
 				</class>
 			", inheritanceType, discriminator));
             ClassDef.ClassDefs.Add(parentClassDef);
@@ -1364,8 +1396,8 @@ namespace Habanero.Test.BO.ClassDefinition
 
         protected static IClassDef LoadClassDef(string classDefStr)
         {
-            XmlClassLoader itsLoader = CreateXmlClassLoader();
-            IClassDef classDef =
+            var itsLoader = CreateXmlClassLoader();
+            var classDef =
                 itsLoader.LoadClass(classDefStr);
             ClassDef.ClassDefs.Add(classDef);
             return classDef;

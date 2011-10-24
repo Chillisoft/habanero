@@ -21,7 +21,6 @@ using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 using Habanero.BO;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -38,7 +37,6 @@ namespace Habanero.DB
     [Serializable]
     public class TransactionCommitterDB : TransactionCommitter
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.TransactionCommitterDB");
         private readonly IDatabaseConnection _databaseConnection;
         private IDbConnection _dbConnection;
         private IDbTransaction _dbTransaction;
@@ -69,12 +67,6 @@ namespace Habanero.DB
             _dbConnection = _databaseConnection.GetConnection();
             _dbConnection.Open();
             _dbTransaction = _databaseConnection.BeginTransaction(_dbConnection);
-//            IDbCommand command = _dbConnection.CreateCommand();
-//            command.Transaction = _dbTransaction;
-//            command.CommandText = "sp_MSForEachTable";
-//            command.CommandType = CommandType.StoredProcedure;
-//            command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? NOCHECK CONSTRAINT ALL"));
-//            command.ExecuteNonQuery();
         }
 
         /// <summary>
@@ -117,7 +109,7 @@ namespace Habanero.DB
         /// </summary>
         protected override void ExecuteTransactionToDataSource(ITransactional transaction)
         {
-            string transactionID = transaction.TransactionID();
+            var transactionID = transaction.TransactionID();
             if (_transactionsExecutingToDataSource.ContainsKey(transactionID)) return;
             _transactionsExecutingToDataSource.Add(transactionID, transaction);
 
@@ -125,7 +117,7 @@ namespace Habanero.DB
 
             if (transaction is TransactionalBusinessObjectDB)
             {
-                IBusinessObject businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
+                var businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
                 if (businessObject.Status.IsDeleted)
                 {
                     DeleteRelatedChildren(businessObject);
@@ -133,9 +125,9 @@ namespace Habanero.DB
                 }
             }
 
-            ISqlStatementCollection sql = transactionDB.GetPersistSql();
+            var sql = transactionDB.GetPersistSql();
             if (sql == null) return;
-            IDatabaseConnection databaseConnection = _databaseConnection;
+            var databaseConnection = _databaseConnection;
             databaseConnection.ExecuteSql(sql, _dbTransaction);
             base.ExecuteTransactionToDataSource(transaction);
         }
@@ -148,12 +140,6 @@ namespace Habanero.DB
         {
             try
             {
-//                IDbCommand command = _dbConnection.CreateCommand();
-//                command.Transaction = _dbTransaction;
-//                command.CommandText = "sp_MSForEachTable";
-//                command.CommandType = CommandType.StoredProcedure;
-//                command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-//                command.ExecuteNonQuery();
                 _dbTransaction.Commit();
                 return true;
             }
@@ -161,12 +147,6 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
-//                    IDbCommand command = _dbConnection.CreateCommand();
-//                    command.Transaction = _dbTransaction;
-//                    command.CommandText = "sp_MSForEachTable";
-//                    command.CommandType = CommandType.StoredProcedure;
-//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }
@@ -187,12 +167,6 @@ namespace Habanero.DB
             {
                 if (_dbConnection != null && _dbConnection.State == ConnectionState.Open)
                 {
-//                    IDbCommand command = _dbConnection.CreateCommand();
-//                    command.Transaction = _dbTransaction;
-//                    command.CommandText = "sp_MSForEachTable";
-//                    command.CommandType = CommandType.StoredProcedure;
-//                    command.Parameters.Add(new SqlParameter("@command1", "ALTER TABLE ? CHECK CONSTRAINT ALL"));
-//                    command.ExecuteNonQuery();
                     _dbConnection.Close();
                 }
             }

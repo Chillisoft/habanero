@@ -53,20 +53,6 @@ namespace Habanero.Test.Base
             Assert.GreaterOrEqual(dateTime, dateTimeBefore);
             Assert.LessOrEqual(dateTime, dateTimeAfter);
         }
-        
-        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value. June 2008")]
-        public void Test_Comparable_Equals_WithDateTimeNowValue()
-        {
-            //-------------Setup Test Pack ------------------
-            DateTimeNow dateTimeNow = new DateTimeNow();
-            IComparable comparable = dateTimeNow;
-
-            //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeNow.Value);
-
-            //-------------Test Result ----------------------
-            Assert.AreEqual(0, i);
-        }
 
         [Test]
         public void Test_Comparable_Equals_WithDateTimeNowType()
@@ -112,20 +98,6 @@ namespace Habanero.Test.Base
 
             //-------------Test Result ----------------------
             Assert.AreEqual(-1, i);
-        }
-
-        [Test, Ignore("This test fails intermittently due to the mutability of the DateTimeNow value. June 2008")]
-        public void Test_Comparable_OfDateTime_Equals()
-        {
-            //-------------Setup Test Pack ------------------
-            DateTimeNow dateTimeNow = new DateTimeNow();
-            IComparable<DateTime> comparable = dateTimeNow;
-            //-------------Test Pre-conditions --------------
-
-            //-------------Execute test ---------------------
-            int i = comparable.CompareTo(DateTimeNow.Value);
-            //-------------Test Result ----------------------
-            Assert.AreEqual(0, i);
         }
 
         [Test]

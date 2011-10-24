@@ -190,7 +190,7 @@ namespace Habanero.DB
             {
                 statement = CreateInsertStatement(settingName, settingValue);
             }
-            DatabaseConnection.CurrentConnection.ExecuteSql(new SqlStatementCollection(statement));
+            DatabaseConnection.CurrentConnection.ExecuteSql(statement);
             UpdateCache(settingName);
         }
 

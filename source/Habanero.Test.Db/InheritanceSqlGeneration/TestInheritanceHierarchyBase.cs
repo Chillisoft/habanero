@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
+using Habanero.Base;
 using Habanero.BO;
 using Habanero.DB;
 
@@ -24,11 +26,11 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
     public abstract class TestInheritanceHierarchyBase : TestUsingDatabase
     {
         protected BusinessObject _filledCircle;
-        protected SqlStatementCollection _insertSql;
-        protected SqlStatementCollection _updateSql;
-        protected SqlStatementCollection _deleteSql;
+        protected IEnumerable<ISqlStatement> _insertSql;
+        protected IEnumerable<ISqlStatement> _updateSql;
+        protected IEnumerable<ISqlStatement> _deleteSql;
         protected string _filledCircleId;
-        protected SqlStatement _loadSql;
+        protected ISqlStatement _loadSql;
 
         public void SetupTest()
         {

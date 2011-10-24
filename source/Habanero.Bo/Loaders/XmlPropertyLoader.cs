@@ -116,7 +116,7 @@ namespace Habanero.BO.Loaders
 
             while (_reader.Name == "rule")
             {
-                XmlRuleLoader loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
+                var loader = new XmlRuleLoader(DtdLoader, _defClassFactory);
                 loader.LoadRuleIntoProperty(_reader.ReadOuterXml(), _propDef);
             }
             int len = "lookupList".Length;
@@ -137,7 +137,7 @@ namespace Habanero.BO.Loaders
         private void LoadPropertyName()
         {
             _propertyName = _reader.GetAttribute("name");
-            if (_propertyName == null || _propertyName.Length == 0)
+            if (string.IsNullOrEmpty(_propertyName))
             {
                 throw new InvalidXmlDefinitionException("A 'property' element has no 'name' attribute " +
                    "set. Each 'property' element requires a 'name' attribute that " +
@@ -269,7 +269,7 @@ namespace Habanero.BO.Loaders
         /// </summary>
         private void LoadLength()
         {
-            string length = _reader.GetAttribute("length");
+            var length = _reader.GetAttribute("length");
             if (length != null)
             {
                 if (!Int32.TryParse(length, out _length))

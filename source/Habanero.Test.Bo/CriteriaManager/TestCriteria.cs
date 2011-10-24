@@ -18,6 +18,7 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.Linq.Expressions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -198,6 +199,34 @@ namespace Habanero.Test.BO
             bool areEquals = composite1.Equals(composite2);
             //---------------Test Result -----------------------
             Assert.IsTrue(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Equals_WhenValuesAreEnumerable_ShouldCompareEnumerables_True()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "IntValue";
+            Criteria criteria1 = new Criteria(propName, Criteria.ComparisonOp.In, new[] {1, 3, 5});
+            Criteria criteria2 = new Criteria(propName, Criteria.ComparisonOp.In, new[] { 1, 3, 5 });
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(areEquals);
+            //---------------Tear Down -------------------------
+        }
+
+        [Test]
+        public void Equals_WhenValuesAreEnumerable_ShouldCompareEnumerables_False()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "IntValue";
+            Criteria criteria1 = new Criteria(propName, Criteria.ComparisonOp.In, new[] {1, 3, 5});
+            Criteria criteria2 = new Criteria(propName, Criteria.ComparisonOp.In, new[] { 1, 2, 3, 5 });
+            //---------------Execute Test ----------------------
+            bool areEquals = criteria1.Equals(criteria2);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(areEquals);
             //---------------Tear Down -------------------------
         }
 
@@ -741,7 +770,19 @@ namespace Habanero.Test.BO
             }
         }
 
-
+        [Test]
+        public void Construct_UsingLambdas()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.Equals;
+            var val = "hello";
+            var expectedCriteria = new Criteria("TestProp", op, val);
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Create<MyBO, string>(bo => bo.TestProp, op, val);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
 
         #region Test Comparison operators
 

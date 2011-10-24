@@ -752,6 +752,35 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.AreEqual(expected, selectQuery.DiscriminatorCriteria);
         }
 
+        [Test]
+        public void CreateQueryField()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MyBO.LoadDefaultClassDef();
+            var propertyName = "MyBoID";
+            //---------------Execute Test ----------------------
+            var queryField = QueryBuilder.CreateQueryField(classDef, propertyName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propertyName, queryField.PropertyName);
+            Assert.AreEqual(propertyName, queryField.FieldName);
+            Assert.AreEqual(new Source("MyBO"), queryField.Source);
+        }
 
+        [Test]
+        public void CreateQueryField_WithRelatedClass()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MyBO.LoadClassDefWithRelationship();
+            var relatedClassDef = MyRelatedBo.LoadClassDef();
+            const string relationshipName = "MyRelationship";
+            const string propertyName = "MyRelatedTestProp";
+            const string fullpropertyName = relationshipName + "." + propertyName;
+            //---------------Execute Test ----------------------
+            var queryField = QueryBuilder.CreateQueryField(classDef, fullpropertyName);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(propertyName, queryField.PropertyName);
+            Assert.AreEqual(propertyName, queryField.FieldName);
+            Assert.AreEqual(new Source(relatedClassDef.ClassName), queryField.Source);
+        }
     }
 }

@@ -51,6 +51,13 @@ namespace Habanero.Base
         /// </summary>
         List<IDbDataParameter> Parameters { get; }
 
+        ///<summary>
+        /// Returns the <see cref="IDatabaseConnection"/> this statement is using. This
+        /// connection is required for generating commands, parameters etc for the correct
+        /// db type
+        ///</summary>
+        IDatabaseConnection DatabaseConnection { get; }
+
         /// <summary>
         /// Sets up the IDbCommand object
         /// </summary>

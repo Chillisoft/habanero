@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Habanero.Base
 {
@@ -50,6 +51,20 @@ namespace Habanero.Base
             }
             _keyDefs.Add(keyDef.KeyName, keyDef);
         }
+
+        /// <summary>
+        /// Adds multiple <see cref="IKeyDef"></see> objects to the collection
+        /// </summary>
+        /// <param name="keyDefs"></param>
+        public void AddRange(IEnumerable<IKeyDef> keyDefs)
+        {
+            if (keyDefs == null) throw new ArgumentNullException("keyDefs");
+            foreach (var keyDef in keyDefs.Where(keyDef => !this.Contains(keyDef.KeyName)))
+            {
+                this.Add(keyDef);
+            }
+        }
+
 
         /// <summary>
         /// Removes a key definition from the collection
@@ -193,5 +208,7 @@ namespace Habanero.Base
         /// The ClassDef that these KeyDefs belong to.
         ///</summary>
         public IClassDef ClassDef { get; set; }
+
+
     }
 }

@@ -54,7 +54,7 @@ namespace Habanero.Test.DB
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override IEnumerable<ISqlStatement> GetPersistSql()
         {
             throw new NotImplementedException();
         }
@@ -100,15 +100,15 @@ namespace Habanero.Test.DB
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override IEnumerable<ISqlStatement> GetPersistSql()
         {
-            ISqlStatementCollection col = new SqlStatementCollection();
-            col.Add(
-                new SqlStatement(DatabaseConnection.CurrentConnection,
-                                 "insert into stubdatabasetransaction values('1', 'test')"));
-            col.Add(
-                new SqlStatement(DatabaseConnection.CurrentConnection,
-                                 "insert into stubdatabasetransaction values('2', 'test')"));
+            var col = new List<ISqlStatement>
+                          {
+                              new SqlStatement(DatabaseConnection.CurrentConnection,
+                                               "insert into stubdatabasetransaction values('1', 'test')"),
+                              new SqlStatement(DatabaseConnection.CurrentConnection,
+                                               "insert into stubdatabasetransaction values('2', 'test')")
+                          };
             return col;
         }
 
@@ -149,11 +149,11 @@ namespace Habanero.Test.DB
         ///<summary>
         /// Execute
         ///</summary>
-        public override ISqlStatementCollection GetPersistSql()
+        public override IEnumerable<ISqlStatement> GetPersistSql()
         {
-            return new SqlStatementCollection(
+            return new [] {
                 new SqlStatement(DatabaseConnection.CurrentConnection,
-                                 "insert into stubdatabasetransaction values('1', 'test')"));
+                                 "insert into stubdatabasetransaction values('1', 'test')") };
         }
 
         ///<summary>
@@ -198,7 +198,7 @@ namespace Habanero.Test.DB
             _committed = false;
         }
 
-        public override ISqlStatementCollection GetPersistSql()
+        public override IEnumerable<ISqlStatement> GetPersistSql()
         {
             throw new NotImplementedException();
         }

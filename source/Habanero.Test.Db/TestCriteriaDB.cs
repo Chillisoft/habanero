@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 using Habanero.DB;
 using NUnit.Framework;
 
@@ -47,7 +48,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_BlankSource()
+        public void Test_ToString_BlankSource()
         {
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
@@ -72,7 +73,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_IsNullCriteria()
+        public void Test_ToString_IsNullCriteria()
         {
             //-------------Setup Test Pack ------------------
             const string surnameField = "Surname";
@@ -92,7 +93,7 @@ namespace Habanero.Test.DB
 
 
         [Test]
-        public void TestToString_EqualsNullCriteria()
+        public void Test_ToString_EqualsNullCriteria()
         {
             //-------------Setup Test Pack ------------------
             const string surnameField = "Surname";
@@ -111,7 +112,7 @@ namespace Habanero.Test.DB
         }
         
         [Test]
-        public void TestToString_NotEqualsNullCriteria()
+        public void Test_ToString_NotEqualsNullCriteria()
         {
             //-------------Setup Test Pack ------------------
             const string surnameField = "Surname";
@@ -130,7 +131,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_NoSource()
+        public void Test_ToString_NoSource()
         {
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
@@ -147,7 +148,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_UsesFormatter()
+        public void Test_ToString_UsesFormatter()
         {
             //-------------Setup Test Pack ------------------
             string surnameValue = Guid.NewGuid().ToString("N");
@@ -167,7 +168,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_UsingDelegates()
+        public void Test_ToString_UsingDelegates()
         {
             //---------------Set up test pack-------------------
             string surnameValue = Guid.NewGuid().ToString("N");
@@ -194,7 +195,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_In()
+        public void Test_ToString_In()
         {
             //---------------Set up test pack-------------------
             string surnameValue1 = Guid.NewGuid().ToString("N");
@@ -213,7 +214,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_NotIn()
+        public void Test_ToString_NotIn()
         {
             //---------------Set up test pack-------------------
             string surnameValue1 = Guid.NewGuid().ToString("N");
@@ -232,7 +233,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
-        public void TestToString_ShouldUseAliases()
+		public void Test_ToString_ShouldUseAliases()
         {
             //---------------Set up test pack-------------------
             const string sourceName = "mysource";
@@ -240,7 +241,7 @@ namespace Habanero.Test.DB
             Source field1Source = source1;
             QueryField field1 = new QueryField("testfield", "testfield", field1Source);
             Criteria criteria = new Criteria(field1, Criteria.ComparisonOp.Equals, "myvalue");
-            IDictionary<string, string> aliases = new Dictionary<string, string>() {{ source1.ToString(), "a1"}};
+			IDictionary<string, string> aliases = new Dictionary<string, string>() { { source1.ToString(), "a1" } };
             CriteriaDB criteriaDb = new CriteriaDB(criteria);
             SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
             //---------------Execute Test ----------------------
@@ -248,5 +249,30 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             StringAssert.AreEqualIgnoringCase("a1.[testfield] = Param", whereClause);
         }
+
+		[Test]
+		public void Test_ToString_WithFieldHavingSource_WhenAliasMissing_ShouldThrowError()
+		{
+			//---------------Set up test pack-------------------
+			const string sourceName = "mysource";
+			const string propertyName = "testproperty";
+			QueryField queryField = new QueryField(propertyName, "testfield", new Source(sourceName));
+			Criteria criteria = new Criteria(queryField, Criteria.ComparisonOp.Equals, "myvalue");
+			IDictionary<string, string> aliases = new Dictionary<string, string>();
+			CriteriaDB criteriaDb = new CriteriaDB(criteria);
+			SqlFormatter sqlFormatter = new SqlFormatter("[", "]", "", "LIMIT");
+			//---------------Execute Test ----------------------
+			var habaneroDeveloperException = Assert.Throws<HabaneroDeveloperException>(() =>
+			{
+				criteriaDb.ToString(sqlFormatter, value => "Param", aliases);
+			});
+			//---------------Test Result -----------------------
+			Assert.IsNotNull(habaneroDeveloperException);
+			var expectedMessage = string.Format("The source '{0}' for the property '{1}' " + "in the given criteria does not have an alias provided for it.", sourceName, queryField.PropertyName);
+			var expectedDeveloperMessage = expectedMessage 
+				+ " The criteria object may have not been prepared correctly before the aliases were set up.";
+			Assert.AreEqual(expectedMessage, habaneroDeveloperException.Message);
+			Assert.AreEqual(expectedDeveloperMessage, habaneroDeveloperException.DeveloperMessage);
+    }
     }
 }

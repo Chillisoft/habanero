@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -41,7 +42,7 @@ namespace Habanero.DB
         /// </summary>
         public const string DatabaseVersionSetting = "DATABASE_VERSION";
         private readonly IDatabaseConnection _connection;
-        private readonly SortedDictionary<int, SqlStatement> _migrations;
+        private readonly SortedDictionary<int, ISqlStatement> _migrations;
         private ISettings _settings;
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace Habanero.DB
         /// <param name="connection">The database connection</param>
         public DBMigrator(IDatabaseConnection connection) {
             _connection = connection;
-            _migrations = new SortedDictionary<int, SqlStatement>();
+            _migrations = new SortedDictionary<int, ISqlStatement>();
         }
 
         /// <summary>
@@ -90,17 +91,10 @@ namespace Habanero.DB
         /// <param name="startAfterVersion">The start version number (exclusive)</param>
         /// <param name="endVersion">The end version number (inclusive)</param>
         /// <returns>Returns a collection of sql objects</returns>
-        public SqlStatementCollection  GetMigrationSql(int startAfterVersion, int endVersion) {
-            SqlStatementCollection migrationSql = new SqlStatementCollection();
-            foreach (KeyValuePair<int, SqlStatement> migration in _migrations)
-            {
-                if (migration.Key > startAfterVersion && migration.Key <= endVersion)
-                {
-                    migrationSql.Add(migration.Value);
-                }
-            }
-            return migrationSql;
-            
+        public IEnumerable<ISqlStatement> GetMigrationSql(int startAfterVersion, int endVersion) {
+            return from migration in _migrations
+                    where migration.Key > startAfterVersion && migration.Key <= endVersion
+                    select migration.Value;
         }
 
         /// <summary>
@@ -108,7 +102,7 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="number">The version number</param>
         /// <returns>Returns a sql statement object, or null if not found</returns>
-        public SqlStatement GetMigration(int number)
+        public ISqlStatement GetMigration(int number)
         {
             return _migrations[number];
         }
@@ -124,7 +118,7 @@ namespace Habanero.DB
             //Each migration should be done separately because changes to DDL does not support rollback.
             for (int i = startAfterVersion + 1; i <= endVersion; i++)
             {
-                _connection.ExecuteSql(GetMigrationSql(i - 1, i));
+                _connection.ExecuteSql(GetMigrationSql(i - 1, i).ToArray());
                 SetCurrentVersion(i);
             }
             //_connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
@@ -187,7 +181,7 @@ namespace Habanero.DB
         /// <returns>Returns an integer</returns>
         public int LatestVersion() {
             int latestVersion = 0;
-            foreach (KeyValuePair<int, SqlStatement > migration in _migrations) {
+            foreach (KeyValuePair<int, ISqlStatement > migration in _migrations) {
                 latestVersion = migration.Key;
             }
             return latestVersion;

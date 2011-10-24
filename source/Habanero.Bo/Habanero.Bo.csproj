@@ -116,10 +116,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.0.30714, Culture=neutral, PublicKeyToken=b32731d11ce58905">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -150,14 +146,8 @@
     <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="BusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoaderMultiSource.cs" />
-    <Compile Include="ClassDefinition\BOPropBoolDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropDateTimeDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropGeneralDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropGuidDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropIntDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropLongDataMapper.cs" />
-    <Compile Include="ClassDefinition\BOPropStringDataMapper.cs" />
+    <Compile Include="BusinessObjectXmlReader.cs" />
+    <Compile Include="BusinessObjectXmlWriter.cs" />
     <Compile Include="ClassDefinition\ClassDefHelper.cs" />
     <Compile Include="ClassDefinition\ClassDefValidator.cs" />
     <Compile Include="ClassDefinition\FilterDef.cs" />
@@ -211,6 +201,7 @@
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
     <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
     <Compile Include="ObjectManager\IBusinessObjectManager.cs" />
+    <Compile Include="ObjectTreeXmlReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -390,7 +381,7 @@
     <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionCommitterMultiSource.cs" />
     <Compile Include="TransactionCommitterRemote.cs" />
-    <Compile Include="TransactionLogBusObj.cs" />
+    <Compile Include="TransactionLogging\TransactionLogBusObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="key.snk" />

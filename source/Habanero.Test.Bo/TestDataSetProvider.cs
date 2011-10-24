@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using Habanero.Base;
@@ -569,7 +570,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(1, table.Rows.Count);
             DataRow row1 = table.Rows[0];
-            Assert.AreEqual(null, myBO.TestProp);
+            Assert.IsNullOrEmpty( myBO.TestProp);
             Assert.AreEqual(DBNull.Value, row1["TestProp"]);
             Assert.AreEqual(errMessage, row1.RowError);
         }
@@ -623,7 +624,7 @@ namespace Habanero.Test.BO
             myBO.TestProp = null;
             _dataSetProvider.UpdateBusinessObjectRowValues(myBO);
             //---------------Test Result -----------------------
-            Assert.IsNull( myBO.TestProp);
+            Assert.IsNullOrEmpty( myBO.TestProp);
             Assert.AreEqual(DBNull.Value, row1["TestProp"]);
         }
 
@@ -1194,6 +1195,12 @@ namespace Habanero.Test.BO
        {
            throw new NotImplementedException();
        }
+
+       public IEnumerable<T> AsEnumerable<T>() 
+       {
+           throw new NotImplementedException();
+       }
+
        // ReSharper disable UnusedMember.Local
        //This is being used so as to prevent Compiler warnings which I do not seem to be able to suppress with pragma's
        private void RaiseEvents()

@@ -24,6 +24,7 @@ using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]
@@ -158,13 +159,13 @@ namespace Habanero.Test.BO
             tc.CommitTransaction();
             //---------------Test Result -----------------------
             //Test that a transaction Log was created with
-            BusinessObjectCollection<TransactionLogBusObj> colTransactions =
+            var colTransactions =
                 new BusinessObjectCollection<TransactionLogBusObj>();
             colTransactions.LoadAll("TransactionSequenceNo");
 
             //CRUD = Insert and Dirty XML all properties in DirtyXML.
             Assert.IsTrue(colTransactions.Count > 0);
-            TransactionLogBusObj trLog = colTransactions[colTransactions.Count - 1];
+            var trLog = colTransactions[colTransactions.Count - 1];
 
             //CRUD = Deleted
             Assert.AreEqual("Deleted", trLog.CrudAction);

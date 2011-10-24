@@ -21,13 +21,17 @@ namespace Habanero.BO
         {
             _remoteTransactionCommitter.AddBusinessObject(businessObject);
         }
-        public void AddTransaction(ITransactional transaction) { _remoteTransactionCommitter.AddTransaction(transaction); }
-        List<Guid> ITransactionCommitter.CommitTransaction() {
-            List<Guid> executedTransactions = _remoteTransactionCommitter.CommitTransaction();
-            executedTransactions.ForEach(guid => ((BusinessObject)BORegistry.BusinessObjectManager[guid]).UpdateStateAsPersisted());
-            return executedTransactions;
+
+        public void AddTransaction(ITransactional transaction)
+        {
+            _remoteTransactionCommitter.AddTransaction(transaction);
         }
 
-       
+        List<Guid> ITransactionCommitter.CommitTransaction()
+        {
+            List<Guid> executedTransactions = _remoteTransactionCommitter.CommitTransaction();
+            executedTransactions.ForEach(guid => ((BusinessObject) BORegistry.BusinessObjectManager[guid]).UpdateStateAsPersisted());
+            return executedTransactions;
+        }
     }
 }

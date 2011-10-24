@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 
@@ -58,12 +59,12 @@ namespace Habanero.BO.ClassDefinition
 
         private static void UpdatePrimaryKeys(IEnumerable<IClassDef> col)
         {
-            foreach (IClassDef classDef in col)
+            foreach (var classDef in col)
             {
-                IPrimaryKeyDef primaryKeyDef = classDef.PrimaryKeyDef;
+                var primaryKeyDef = classDef.PrimaryKeyDef;
                 if (primaryKeyDef == null) continue;
                 if (!primaryKeyDef.IsGuidObjectID) continue;
-                IPropDef keyPropDef = primaryKeyDef[0];
+                var keyPropDef = primaryKeyDef[0];
                 if (primaryKeyDef.IsGuidObjectID && (keyPropDef.PropertyType != typeof(Guid)))
                 {
                     throw new InvalidXmlDefinitionException("In the class called '" + classDef.ClassNameFull +
@@ -77,8 +78,8 @@ namespace Habanero.BO.ClassDefinition
 
         private void UpdateKeyDefinitionsWithBoProp(ClassDefCol col)
         {
-            Dictionary<IClassDef, IPropDefCol> loadedFullPropertyLists = new Dictionary<IClassDef, IPropDefCol>();
-            foreach (IClassDef classDef in col)
+            var loadedFullPropertyLists = new Dictionary<IClassDef, IPropDefCol>();
+            foreach (var classDef in col)
             {
                 UpdateKeyDefinitionsWithBoProp(loadedFullPropertyLists, classDef, col);
             }
@@ -93,10 +94,10 @@ namespace Habanero.BO.ClassDefinition
             // valid i.e. does not reference the Prop Def for a particular property.
             // This method attempts to find the actual prop def from the class def and associated it with the keydef.
             if (classDef == null) return;
-            IPropDefCol allPropsForAClass = GetAllClassDefProps(loadedFullPropertyLists, classDef, col);
-            foreach (IKeyDef keyDef in classDef.KeysCol)
+            var allPropsForAClass = GetAllClassDefProps(loadedFullPropertyLists, classDef, col);
+            foreach (var keyDef in classDef.KeysCol)
             {
-                List<string> propNames = new List<string>();
+                var propNames = new List<string>();
                 foreach (IPropDef propDef in keyDef)
                 {
                     propNames.Add(propDef.PropertyName);
@@ -116,7 +117,7 @@ namespace Habanero.BO.ClassDefinition
                                   + "capitalisation of the specified property.", keyDef.KeyName,
                                   classDef.ClassName, propName));
                     }
-                    IPropDef keyPropDef = allPropsForAClass[propName];
+                    var keyPropDef = allPropsForAClass[propName];
                     keyDef.Add(keyPropDef);
                 }
             }
@@ -152,14 +153,14 @@ namespace Habanero.BO.ClassDefinition
 
         private static IClassDef GetSuperClassClassDef(IClassDef currentClassDef, ClassDefCol col)
         {
-            ISuperClassDef superClassDef = currentClassDef.SuperClassDef;
+            var superClassDef = currentClassDef.SuperClassDef;
             return superClassDef == null ? null : col[superClassDef.AssemblyName, superClassDef.ClassName];
         }
 
 
         private void CheckRelationships(ClassDefCol classDefs)
         {
-            Dictionary<IClassDef, IPropDefCol> loadedFullPropertyLists = new Dictionary<IClassDef, IPropDefCol>();
+            var loadedFullPropertyLists = new Dictionary<IClassDef, IPropDefCol>();
             foreach (IClassDef classDef in classDefs)
             {
                 CheckRelationshipsForAClassDef(loadedFullPropertyLists, classDef, classDefs);
@@ -173,9 +174,9 @@ namespace Habanero.BO.ClassDefinition
         {
             if (classDef == null) return;
 
-            foreach (IRelationshipDef relationshipDef in classDef.RelationshipDefCol)
+            foreach (var relationshipDef in classDef.RelationshipDefCol)
             {
-                IClassDef relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
+                var relatedObjectClassDef = GetRelatedObjectClassDef(classDefs, relationshipDef);
                 ValidateReverseRelationship(classDef, relationshipDef, relatedObjectClassDef);
                 ValidateRelKeyDef(classDef, classDefs, relationshipDef, relatedObjectClassDef, loadedFullPropertyLists);
             }
@@ -211,8 +212,8 @@ namespace Habanero.BO.ClassDefinition
             (IClassDef classDef, ClassDefCol classDefs, IRelationshipDef relationshipDef, IClassDef relatedObjectClassDef,
              IDictionary<IClassDef, IPropDefCol> loadedFullPropertyLists)
         {
-            IPropDefCol allPropsForClassDef = GetAllClassDefProps(loadedFullPropertyLists, classDef, classDefs);
-            IPropDefCol allPropsForRelatedClassDef = GetAllClassDefProps
+            var allPropsForClassDef = GetAllClassDefProps(loadedFullPropertyLists, classDef, classDefs);
+            var allPropsForRelatedClassDef = GetAllClassDefProps
                 (loadedFullPropertyLists, relatedObjectClassDef, classDefs);
             // Check Relationship Properties
             foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
@@ -263,7 +264,7 @@ namespace Habanero.BO.ClassDefinition
                           relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull));
             }
 
-            IRelationshipDef reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
+            var reverseRelationshipDef = relatedClassDef.RelationshipDefCol[reverseRelationshipName];
             CheckReverseRelationshipRelKeyDefProps(relationshipDef, relatedClassDef, reverseRelationshipName, reverseRelationshipDef, classDef);
             //            if (!reverseRelationshipDef.OwningBOHasForeignKey) return;
             //
@@ -274,13 +275,20 @@ namespace Habanero.BO.ClassDefinition
             //            }
             if (relationshipDef.OwningBOHasForeignKey && reverseRelationshipDef.OwningBOHasForeignKey)
             {
-                string errorMessage = string.Format
-                    ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' are both set up as owningBOHasForeignKey = true. Please check your ClassDefs.xml or fix in Firestarter.",
-                     relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
-                     relationshipDef.RelationshipName, classDef.ClassNameFull);
+                var baseMessage = GetBaseRelationshipMessage(relationshipDef, relatedClassDef, reverseRelationshipName, classDef);
+                string errorMessage = baseMessage + "are both set up as owningBOHasForeignKey = true. Please check your ClassDefs.xml or fix in Firestarter.";
                 throw new InvalidXmlDefinitionException(errorMessage);
             }
         }
+
+        private static string GetBaseRelationshipMessage(IRelationshipDef relationshipDef, IClassDef relatedClassDef, string reverseRelationshipName, IClassDef classDef)
+        {
+            return string.Format
+                ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' " ,
+                 relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
+                 relationshipDef.RelationshipName, classDef.ClassNameFull);
+        }
+
         /// <summary>
         /// Checks to see if the relationship and reverse relationship are defined for the same relationship.
         /// </summary>
@@ -291,45 +299,39 @@ namespace Habanero.BO.ClassDefinition
         /// <param name="classDef"></param>
         private static void CheckReverseRelationshipRelKeyDefProps(IRelationshipDef relationshipDef, IClassDef relatedClassDef, string reverseRelationshipName, IRelationshipDef reverseRelationshipDef, IClassDef classDef)
         {
-            if (!ReverseRelationshipHasSameProps(relationshipDef, reverseRelationshipDef))
+            var relationshipHasSameProps = ReverseRelationshipHasSameProps(relationshipDef, reverseRelationshipDef);
+            if (!relationshipHasSameProps.Valid)
             {
-                string message = string.Format
-                    ("The relationship '{0}' could not be loaded because the reverse relationship '{1}' "
-                     + "defined for the related class '{2}' and the relationship '{3}' defined for the class '{4}' do not have the same properties defined as the relationship keys"
-                     , relationshipDef.RelationshipName, reverseRelationshipName, relatedClassDef.ClassNameFull,
-                     relationshipDef.RelationshipName, classDef.ClassNameFull);
-                throw new InvalidXmlDefinitionException(message);
+                var baseMessage = GetBaseRelationshipMessage(relationshipDef, relatedClassDef, reverseRelationshipName,
+                                                             classDef);
+                string errorMessage = baseMessage + " do not have the same properties defined as the relationship keys " + relationshipHasSameProps.ErrorMessage;
+                throw new InvalidXmlDefinitionException(errorMessage);
             }
         }
 
-        private static bool ReverseRelationshipHasSameProps(IRelationshipDef relationshipDef, IRelationshipDef reverseRelationshipDef)
+        private static Result ReverseRelationshipHasSameProps(IRelationshipDef relationshipDef, IRelationshipDef reverseRelationshipDef)
         {
-            if (relationshipDef.RelKeyDef.Count != reverseRelationshipDef.RelKeyDef.Count) return false;
-            foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
+            if (relationshipDef.RelKeyDef.Count != reverseRelationshipDef.RelKeyDef.Count) return new Result(false, "relationship KeyCount : " + relationshipDef.RelKeyDef.Count + " reverseRelationshpDef KeyCount : " + reverseRelationshipDef.RelKeyDef.Count);
+            foreach (var relPropDef in relationshipDef.RelKeyDef)
             {
-                bool foundMatch = false;
-                foreach (IRelPropDef reverseRelPropDef in reverseRelationshipDef.RelKeyDef)
-                {
-                    if (relPropDef.OwnerPropertyName == reverseRelPropDef.RelatedClassPropName
-                        && relPropDef.RelatedClassPropName == reverseRelPropDef.OwnerPropertyName)
-                    {
-                        foundMatch = true;
-                        break;
-                    }
-                }
-                if (!foundMatch) return false;
+                var localRelDef = relPropDef;
+                var foundMatch = reverseRelationshipDef.RelKeyDef.Any(reverseRelPropDef => reverseRelPropDef.DoKeyPropsMatch(localRelDef));
+
+                if (!foundMatch) return new Result(false, "- No matching RelProp found for " + relPropDef.OwnerPropertyName + " -> " + relPropDef.RelatedClassPropName 
+                        + Environment.NewLine + "Relationship " + relationshipDef.RelationshipName  + relationshipDef.GetRelPropDefString() +
+                        Environment.NewLine + "ReverseRelationship " + reverseRelationshipDef.RelationshipName + reverseRelationshipDef.GetRelPropDefString());
             }
-            return true;
+            return new Result(true, "");
         }
 
         private static bool OwningClassHasPrimaryKey(IRelationshipDef relationshipDef, IClassDef classDef, ClassDefCol classDefCol)
         {
             //For each Property in the Relationship Key check if it is defined as the primary key for the
             //class if it is then check the other properties else this is not a primaryKey
-            IPrimaryKeyDef primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
-            foreach (IRelPropDef relPropDef in relationshipDef.RelKeyDef)
+            var primaryKeyDef = ClassDefHelper.GetPrimaryKeyDef(classDef, classDefCol);
+            foreach (var relPropDef in relationshipDef.RelKeyDef)
             {
-                bool isInKeyDef = false;
+                var isInKeyDef = false;
                 foreach (IPropDef propDef in primaryKeyDef)
                 {
                     if (propDef.PropertyName != relPropDef.OwnerPropertyName)
@@ -348,5 +350,38 @@ namespace Habanero.BO.ClassDefinition
         {
             return !string.IsNullOrEmpty(relationshipDef.ReverseRelationshipName);
         }
+        private class Result
+        {
+            public Result(bool valid, string errorMessage)
+            {
+                Valid = valid;
+                ErrorMessage = errorMessage;
+            }
+
+            public bool Valid { get; private set; }
+            public string ErrorMessage { get; private set; }
+        }
+    }
+    
+    internal static class ClassValidatorExtensions
+    {
+
+        internal static string GetRelPropDefString(this IRelationshipDef relationshipDef)
+        {
+            string relName = "";
+            int i = 0;
+            foreach (var relKeyDef in relationshipDef.RelKeyDef)
+            {
+                i++;
+                relName += "RelProp " + i + " " + relKeyDef.OwnerPropertyName + " - " + relKeyDef.RelatedClassPropName;
+            }
+            return relName;
+        }
+        internal static bool DoKeyPropsMatch(this IRelPropDef relPropDef, IRelPropDef reverseRelPropDef)
+        {
+            return relPropDef.OwnerPropertyName == reverseRelPropDef.RelatedClassPropName
+                   && relPropDef.RelatedClassPropName == reverseRelPropDef.OwnerPropertyName;
+        }
+
     }
 }

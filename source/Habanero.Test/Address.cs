@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -62,8 +63,7 @@ namespace Habanero.Test
 
             RelationshipDefCol relDefCol = CreateRelationshipDefCol(propDefCol);
 
-            ClassDef classDef = new ClassDef(typeof (Address),  primaryKey,  propDefCol, keysCol, relDefCol);
-            classDef.TableName = "contact_person_address";
+            ClassDef classDef = new ClassDef(typeof (Address),  primaryKey, "contact_person_address", propDefCol, keysCol, relDefCol);
             ClassDef.ClassDefs.Add(classDef);
             return classDef;
         }

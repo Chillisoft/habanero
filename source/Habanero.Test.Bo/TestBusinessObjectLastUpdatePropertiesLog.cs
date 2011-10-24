@@ -61,14 +61,14 @@ namespace Habanero.Test.BO
             BOProp userBoProp = new BOProp(new PropDef("UserLastUpdated", typeof(string), PropReadWriteRule.ReadWrite, null));
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp);
             //-------------Test Pre-conditions --------------
-            Assert.IsNull(GlobalRegistry.SecurityController);
             Assert.IsNull(userBoProp.Value);
             //-------------Execute test ---------------------
             DateTime beforeUpdate = DateTime.Now;
             log.Update();
             DateTime afterUpdate = DateTime.Now;
             //-------------Test Result ----------------------
-            Assert.IsNull(userBoProp.Value);
+            Assert.IsNotNull(userBoProp.Value);
+            Assert.AreEqual(Environment.UserName, userBoProp.Value);
             Assert.IsNotNull(dateBoProp.Value);
             Assert.IsTrue(beforeUpdate <= (DateTime)dateBoProp.Value);
             Assert.IsTrue(afterUpdate >= (DateTime)dateBoProp.Value);
@@ -84,7 +84,6 @@ namespace Habanero.Test.BO
             ISecurityController securityController = new MySecurityController();
             BusinessObjectLastUpdatePropertiesLog log = new BusinessObjectLastUpdatePropertiesLog(userBoProp, dateBoProp, securityController);
             //-------------Test Pre-conditions --------------
-            Assert.IsNull(GlobalRegistry.SecurityController);
             //-------------Execute test ---------------------
             DateTime beforeUpdate = DateTime.Now;
             log.Update();

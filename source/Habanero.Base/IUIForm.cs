@@ -75,5 +75,10 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         IUIDef UIDef { get; set; }
 
+        ///<summary>
+        /// The ClassDef that this IUIForm is related to.
+        ///</summary>
+        IClassDef ClassDef { get; set; }
+
     }
 }

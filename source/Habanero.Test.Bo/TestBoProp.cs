@@ -18,6 +18,8 @@
 //---------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -26,6 +28,7 @@ using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
     [TestFixture]
@@ -1438,5 +1441,125 @@ namespace Habanero.Test.BO
                     , x, y, areEqual) + Environment.NewLine + message;
             Assert.AreEqual(areEqual, currentValueEquals, expectedMessage);
         }
+
+        [Test]
+        public void Test_Construct_WhenCustomType_WithDefault_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EmailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var prop = new BOProp(propDef, expectedValue);
+            var value = prop.Value;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, value.ToString());
+        }
+        [Test]
+        public void Test_SetValue_WhenCustomType_ShouldSetValue()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EmailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var prop = new BOProp(propDef, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(prop.Value);
+            //---------------Execute Test ----------------------
+            prop.Value = expectedValue;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+
+        [Test]
+        public void Test_ConstructProp_WithDefaultValueForCustomType_ShouldConstructWithCorrectValue()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var propDef = new PropDef("Name", typeof(EmailAddressAsCustomProperty), PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+            //---------------Execute Test ----------------------
+            var prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressAsCustomProperty>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+
+
+        [Test]
+        public void Test_Cunstruct_WhenCustomTypeWithATypeConverter_WithDefault_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EmailAddressWithTypeConverter), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var prop = new BOProp(propDef, expectedValue);
+            var value = prop.Value;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(prop.Value);
+            Assert.AreEqual(expectedValue, value.ToString());
+        }
+        [Test]
+        public void Test_SetValue_WhenCustomTypeWithATypeConverter()
+        {
+            //---------------Set up test pack-------------------
+            var propDef = new PropDef("Name", typeof(EmailAddressWithTypeConverter), PropReadWriteRule.ReadWrite, "DD", null, false, false);
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var prop = new BOProp(propDef, null);
+            //---------------Assert Precondition----------------
+            Assert.IsNull(prop.Value);
+            //---------------Execute Test ----------------------
+            prop.Value = expectedValue;
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+
+        [Test]
+        public void Test_ConstructProp_ForCustomTypeWithATypeConverter_WithDefaultValue_ShouldConstructWithCorrectValue()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var propDef = new PropDef("Name", typeof(EmailAddressWithTypeConverter), PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+            //---------------Execute Test ----------------------
+            var prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+        [Test]
+        public void Test_ConstructProp_ForCustomTypeWithATypeConverter_WithDefaultValueString_ShouldConstructWithCorrectValue()
+        {
+            //---------------Set up test pack-------------------
+            const string expectedValue = "xxxx.yyyy@ccc.aa.zz";
+            var type = typeof(EmailAddressWithTypeConverter);
+            var propDef = new PropDef("Name", type.Assembly.FullName, type.Name, PropReadWriteRule.ReadWrite, "DD", expectedValue, false, false);
+            //---------------Assert Precondition----------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(propDef.DefaultValue);
+            Assert.AreEqual(expectedValue, propDef.DefaultValue.ToString());
+            Assert.AreEqual(expectedValue, propDef.DefaultValueString);
+            //---------------Execute Test ----------------------
+            var prop = propDef.CreateBOProp(true);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<EmailAddressWithTypeConverter>(prop.Value);
+            Assert.AreEqual(expectedValue, prop.Value.ToString());
+        }
+        // ReSharper restore InconsistentNaming
     }
+
+
+
+    
+
 }

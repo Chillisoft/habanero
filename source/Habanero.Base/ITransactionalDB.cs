@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
+
 namespace Habanero.Base
 {
     ///<summary>
@@ -28,6 +30,6 @@ namespace Habanero.Base
         /// Returns the appropriate sql statement collection depending on the state of the object.
         /// E.g. Update SQL, InsertSQL or DeleteSQL.
         ///</summary>
-        ISqlStatementCollection GetPersistSql();
+        IEnumerable<ISqlStatement> GetPersistSql();
     }
 }

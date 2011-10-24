@@ -24,8 +24,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.Util;
-using log4net;
 
 namespace Habanero.DB
 {
@@ -48,7 +46,6 @@ namespace Habanero.DB
         private readonly IDatabaseConnection _databaseConnection;
         private IDictionary<IClassDef, IBusinessObject> _tempObjectsByClassDef;
         private IDictionary<Type, IBusinessObject> _tempObjectsByType;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.BusinessObjectLoaderDB");
 
         ///<summary>
         /// Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor
@@ -69,6 +66,19 @@ namespace Habanero.DB
         {
             get { return _databaseConnection; }
         }
+
+        ///<summary>
+        ///Create a select Query based on the class definition and the primary key.
+        ///</summary>
+        ///<param name="classDef">The class definition.</param>
+        ///<param name="primaryKey">The primary key of the object.</param>
+        ///<returns></returns>
+        public ISelectQuery GetSelectQuery(IClassDef classDef, IPrimaryKey primaryKey)
+        {
+            return GetSelectQuery(classDef, Criteria.FromPrimaryKey(primaryKey));
+        }
+
+        #region GetBusinessObject
 
         /// <summary>
         /// Loads a business object of type T, using the Primary key given as the criteria
@@ -121,17 +131,6 @@ namespace Habanero.DB
             IClassDef classDef = ClassDef.ClassDefs[typeof (T)];
             ISelectQuery selectQuery = GetSelectQuery(classDef, criteria);
             return GetBusinessObject<T>(selectQuery);
-        }
-
-        ///<summary>
-        ///Create a select Query based on the class definition and the primary key.
-        ///</summary>
-        ///<param name="classDef">The class definition.</param>
-        ///<param name="primaryKey">The primary key of the object.</param>
-        ///<returns></returns>
-        public ISelectQuery GetSelectQuery(IClassDef classDef, IPrimaryKey primaryKey)
-        {
-            return GetSelectQuery(classDef, Criteria.FromPrimaryKey(primaryKey));
         }
 
         ///<summary>
@@ -197,6 +196,28 @@ namespace Habanero.DB
             
             return loadedBo;
         }
+
+        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
+    where T : class, IBusinessObject, new()
+        {
+            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
+            // is stored in a dictionary and reused as the object populated to perform a search on the business object
+            // manager.
+
+            objectUpdatedInLoading = false;
+
+            T bo = GetTempBO<T>();
+
+            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject == bo)
+            {
+                var tempObject = new T();
+                _tempObjectsByType[typeof(T)] = tempObject;
+                BORegistry.BusinessObjectManager.Remove(tempObject);
+            }
+            return (T)loadedBusinessObject;
+        }
+
 
         private static void ThrowRetrieveDuplicateObjectException(ISqlStatement statement, IBusinessObject loadedBo)
         {
@@ -308,6 +329,8 @@ namespace Habanero.DB
             return criteria;
         }
 
+        #endregion
+
         #region GetBusinessObjectCollection
 
         /// <summary>
@@ -338,7 +361,6 @@ namespace Habanero.DB
         {
             IClassDef classDef = collection.ClassDef;
             SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
-            QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
 
             int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
             if (IsLoadNecessary(selectQuery, totalNoOfRecords))
@@ -645,37 +667,8 @@ namespace Habanero.DB
         }
 
         #endregion
-        /// <summary>
-        /// Creates a Generic Collection of the appropriate Typee.
-        /// </summary>
-        /// <param name="boType">The Type of collection to create</param>
-        /// <returns></returns>
-        protected static IBusinessObjectCollection CreateCollectionOfType(Type boType)
-        {
-            Type boColType = typeof (BusinessObjectCollection<>).MakeGenericType(boType);
-            return (IBusinessObjectCollection) Activator.CreateInstance(boColType);
-        }
-        // ReSharper disable RedundantAssignment
-        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
-            where T : class, IBusinessObject, new()
-        {
-            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
-            // is stored in a dictionary and reused as the object populated to perform a search on the business object
-            // manager.
 
-            objectUpdatedInLoading = false;
-
-            T bo = GetTempBO<T>();
-
-            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
-            if (loadedBusinessObject == bo)
-            {
-                var tempObject = new T();
-                _tempObjectsByType[typeof (T)] = tempObject;
-                BORegistry.BusinessObjectManager.Remove(tempObject);
-            }
-            return (T) loadedBusinessObject;
-        }
+       // ReSharper disable RedundantAssignment
 
         private T GetTempBO<T>() where T : class, IBusinessObject, new()
         {
@@ -806,5 +799,39 @@ namespace Habanero.DB
             //SetStatusAfterLoad(bo);
             return objectUpdatedInLoading;
         }
+
+        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        {
+            var classDef = selectQuery.ClassDef;
+            var criteria = selectQuery.Criteria;
+            QueryBuilder.PrepareCriteria(classDef, criteria);
+            //Ensure that all the criteria field sources are merged correctly
+            selectQuery.Criteria = criteria;
+            selectQuery.Fields.ForEach(pair =>
+            {
+                var field = pair.Value;
+                var fieldSource = field.Source;
+                QueryBuilder.PrepareField(fieldSource, classDef, field);
+                selectQuery.Source.MergeWith(field.Source);
+                field.Source = field.Source.ChildSourceLeaf;
+            });
+            var queryDb = new SelectQueryDB(selectQuery, _databaseConnection);
+            var statement = queryDb.CreateSqlStatement();
+            var resultSet = new ResultSet();
+            var propNames = selectQuery.Fields.Keys;
+            propNames.ForEach(resultSet.AddField);
+
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                while (dr.Read())
+                {
+                    var rawValues = new object[dr.FieldCount];
+                    dr.GetValues(rawValues);
+                    resultSet.AddResult(rawValues);
+                }
+            }
+            return resultSet;
+        }
+
     }
 }

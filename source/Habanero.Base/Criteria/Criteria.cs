@@ -19,6 +19,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
@@ -145,7 +147,9 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(string propName, ComparisonOp comparisonOp, object value)
             : this(QueryField.FromString(propName), comparisonOp, value)
-        {}
+        {
+            InitFieldCriteria(propName, comparisonOp, value);
+        }
 
         /// <summary>
         /// Creates a composite criteria by logically joining two other criteria.
@@ -168,11 +172,22 @@ namespace Habanero.Base
         /// <param name="value">The value to compare to</param>
         public Criteria(QueryField field, ComparisonOp comparisonOp, object value)
         {
+            InitFieldCriteria(field, comparisonOp, value);
+        }
+
+        protected void InitFieldCriteria(string propName, ComparisonOp comparisonOp, object value)
+        {
+            InitFieldCriteria(QueryField.FromString(propName), comparisonOp, value);
+        }
+
+        protected void InitFieldCriteria(QueryField field, ComparisonOp comparisonOp, object value)
+        {
             Field = field;
             ComparisonOperator = comparisonOp;
             FieldValue = value;
             if (FieldValue is IEnumerable && !(FieldValue is string)) FieldValue = new CriteriaValues((IEnumerable)FieldValue);
         }
+
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
 
         /// <summary>
@@ -218,7 +233,7 @@ namespace Habanero.Base
         ///<summary>
         /// Gets the comparison operator being used by this Criteria object (If this is a leaf criteria)
         ///</summary>
-        public virtual ComparisonOp ComparisonOperator { get; private set; }
+        public virtual ComparisonOp ComparisonOperator { get; set; }
 
         ///<summary>
         /// Returns true if the business object matches 
@@ -283,20 +298,29 @@ namespace Habanero.Base
             
             IComparable compareToValue = FieldValue as IComparable;
 
-            compareToValue = ConvertDateTimeStringToValue(compareToValue);
+			compareToValue = ConvertDateTimeStringToValue(boPropertyValue, compareToValue);
             compareToValue = ConvertGuidStringToValue(boPropertyValue, compareToValue);
 
             return IsNonNullMatch(boPropertyValue, compareToValue);
         }
 
-        private static IComparable ConvertDateTimeStringToValue(IComparable y)
-        {
-            DateTime? parsedValue;
-            bool parsedOk = DateTimeUtilities.TryParseDate(y, out parsedValue);
-            return parsedOk ? parsedValue : y;
-        }
+		private static IComparable ConvertDateTimeStringToValue(IComparable propertyValue, IComparable compareToValue)
+		{
+			// Added for performance improvement
+			if (propertyValue is DateTime && compareToValue != null)
+			{
+				if (compareToValue is DateTime)
+                {
+                    return compareToValue;
+                }
+				DateTime? parsedValue;
+				bool parsedOk = DateTimeUtilities.TryParseDate(compareToValue, out parsedValue);
+				return parsedOk ? parsedValue : compareToValue;
+			}
+			return compareToValue;
+		}
 
-        private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
+    	private static IComparable ConvertGuidStringToValue(IComparable propertyValue, IComparable compareToValue)
         {
             if (propertyValue is Guid && compareToValue != null)
             {
@@ -534,6 +558,11 @@ namespace Habanero.Base
             if (IsComposite())
             {
                 if (!otherCriteria.IsComposite()) return false;
+                if (LeftCriteria == null && otherCriteria.LeftCriteria == null)
+                {
+                    return LogicalOperator == otherCriteria.LogicalOperator && RightCriteria.Equals(otherCriteria.RightCriteria);
+                }
+                if (LeftCriteria == null) return false;
                 if (!LeftCriteria.Equals(otherCriteria.LeftCriteria)) return false;
                 return LogicalOperator == otherCriteria.LogicalOperator && RightCriteria.Equals(otherCriteria.RightCriteria);
             }
@@ -541,6 +570,10 @@ namespace Habanero.Base
             if (String.Compare(Field.PropertyName, otherCriteria.Field.PropertyName) != 0) return false;
             if (FieldValue == null && otherCriteria.FieldValue == null) return true;
             if (FieldValue == null ) return false;
+            if (FieldValue is IEnumerable && otherCriteria.FieldValue is IEnumerable)
+            {
+                return ((IEnumerable) FieldValue).IsEqualTo((IEnumerable) otherCriteria.FieldValue);
+            }
             return FieldValue.Equals(otherCriteria.FieldValue);
         }
         // ReSharper restore DoNotCallOverridableMethodsInConstructor
@@ -600,13 +633,14 @@ namespace Habanero.Base
         /// <returns>The Criteria this IRelationship instance is defined by.</returns>
         public static Criteria FromRelationship(IRelationship relationship)
         {
-            if (relationship.RelKey.Count == 1)
+        	var relKey = relationship.RelKey;
+        	if (relKey.Count == 1)
             {
-                IRelProp relProp = relationship.RelKey[0];
+                IRelProp relProp = relKey[0];
                 return new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
             }
             Criteria lastCriteria = null;
-            foreach (IRelProp relProp in relationship.RelKey)
+            foreach (IRelProp relProp in relKey)
             {
                 Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
                 lastCriteria = lastCriteria == null 
@@ -769,5 +803,31 @@ namespace Habanero.Base
                 return _values.GetEnumerator();
             }
         }
+
+        //Peter: busy working on this stuff... work in progress...
+        public static Criteria Create<T, TProp>(Expression<Func<T, TProp>> propNameExpression, ComparisonOp comparisonOp, TProp value)
+        {
+            MemberExpression memberExpression;
+            try
+            {
+                memberExpression = (MemberExpression)propNameExpression.Body;
+            }
+            catch (InvalidCastException)
+            {
+                throw new ArgumentException(propNameExpression + " is not a valid property on " + typeof(T).Name);
+            }
+            return new Criteria(memberExpression.Member.Name, comparisonOp, value);
+        }
+
+        public static CriteriaBuilder Expr<T>(Expression<Func<T, bool>> expression)
+        {
+            return new CriteriaBuilder(expression.Body);
+        }
+
+        public static CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
+        {
+            return new CriteriaBuilder(Expression.Not(expression.Body));
+        }
+
     }
 }

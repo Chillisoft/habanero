@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -24,39 +25,39 @@ using Habanero.DB;
 
 namespace Habanero.Test
 {
-    /// <summary>
-    /// This is a simple composite key class.  The database table must be
-    /// created at run-time and dropped when done.
-    /// </summary>
-    public class OrderItem : BusinessObject
-    {
-        public static void CreateTable()
-        {
-            string sqlCreate = "DROP TABLE IF EXISTS `orderitem`; " +
-                               "CREATE TABLE `orderitem` " +
-                               "(`OrderNumber` int(10) unsigned NOT NULL default '0', " +
-                               "`Product` varchar(100) NOT NULL default '', " +
-                               "PRIMARY KEY  (`OrderNumber`,`Product`)) " +
-                               "ENGINE=InnoDB DEFAULT CHARSET=utf8;;";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlCreate);
-        }
+	/// <summary>
+	/// This is a simple composite key class.  The database table must be
+	/// created at run-time and dropped when done.
+	/// </summary>
+	public class OrderItem : BusinessObject
+	{
+		public static void CreateTable()
+		{
+			string sqlCreate = "DROP TABLE IF EXISTS `orderitem`; " +
+							   "CREATE TABLE `orderitem` " +
+							   "(`OrderNumber` int(10) unsigned NOT NULL default '0', " +
+							   "`Product` varchar(100) NOT NULL default '', " +
+							   "PRIMARY KEY  (`OrderNumber`,`Product`)) " +
+							   "ENGINE=InnoDB DEFAULT CHARSET=utf8;;";
+			DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlCreate);
+		}
 
-        public static void DropTable()
-        {
-            string sqlDrop = "DROP TABLE IF EXISTS `orderitem`;";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlDrop);
-        }
+		public static void DropTable()
+		{
+			string sqlDrop = "DROP TABLE IF EXISTS `orderitem`;";
+			DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlDrop);
+		}
 
-        public static IClassDef LoadDefaultClassDef()
-        {
-            XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            IClassDef classDef = itsLoader.LoadClass(@"
+		public static IClassDef LoadDefaultClassDef()
+		{
+			XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+			IClassDef classDef = itsLoader.LoadClass(@"
 				<class name=""OrderItem"" assembly=""Habanero.Test"">
 					<property name=""OrderNumber"" type=""int"" compulsory=""true"" />
 					<property name=""Product"" compulsory=""true"" />
 					<primaryKey isObjectID=""false"" >
 						<prop name=""OrderNumber"" />
-                        <prop name=""Product"" />
+						<prop name=""Product"" />
 					</primaryKey>
 					<ui>
 						<grid>
@@ -72,63 +73,63 @@ namespace Habanero.Test
 			");
 			ClassDef.ClassDefs.Add(classDef);
 			return classDef;
-        }
+		}
 
-        public static OrderItem AddOrder1Car()
-        {
-            OrderItem item = new OrderItem();
-            item.OrderNumber = 1;
-            item.Product = "car";
-            item.Save();
-            return item;
-        }
+		public static OrderItem AddOrder1Car()
+		{
+			OrderItem item = new OrderItem();
+			item.OrderNumber = 1;
+			item.Product = "car";
+			item.Save();
+			return item;
+		}
 
-        public static OrderItem AddOrder2Chair()
-        {
-            OrderItem item = new OrderItem();
-            item.OrderNumber = 2;
-            item.Product = "chair";
-            item.Save();
-            return item;
-        }
+		public static OrderItem AddOrder2Chair()
+		{
+			OrderItem item = new OrderItem();
+			item.OrderNumber = 2;
+			item.Product = "chair";
+			item.Save();
+			return item;
+		}
 
-        public static OrderItem AddOrder3Roof()
-        {
-            OrderItem item = new OrderItem();
-            item.OrderNumber = 3;
-            item.Product = "roof";
-            item.Save();
-            return item;
-        }
+		public static OrderItem AddOrder3Roof()
+		{
+			OrderItem item = new OrderItem();
+			item.OrderNumber = 3;
+			item.Product = "roof";
+			item.Save();
+			return item;
+		}
 
-        public static void ClearTable()
-        {
-            BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
-            col.LoadAll();
-            OrderItem item;
-            while (col.Count > 0)
-            {
-                item = col[0];
-                item.MarkForDelete();
-            }
-            col.SaveAll();
-        }
-    
-        public int OrderNumber
-        {
-            get { return (int) GetPropertyValue("OrderNumber"); }
-            set { SetPropertyValue("OrderNumber", value); }
-        }
+		public static void ClearTable()
+		{
+			BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
+			col.LoadAll();
+			OrderItem item;
+			while (col.Count > 0)
+			{
+				item = col[0];
+				item.MarkForDelete();
+			}
+			col.SaveAll();
+		}
+	
+		public int? OrderNumber
+		{
+			get { return (int?) GetPropertyValue("OrderNumber"); }
+			set { SetPropertyValue("OrderNumber", value); }
+		}
 
-        public string Product
-        {
-            get { return (string)GetPropertyValue("Product"); }
-            set { SetPropertyValue("Product", value); }
-        }
+		public string Product
+		{
+			get { return Convert.ToString( GetPropertyValue("Product")); }
+			set { SetPropertyValue("Product", value); }
+		}
 
-        public override string ToString()
-        {
-            return OrderNumber + " - " + Product;
-        }
-    }
+		public override string ToString()
+		{
+			return OrderNumber + " - " + Product;
+		}
+	}
 }

@@ -375,8 +375,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString("TestProp");
+            IOrderCriteria orderCriteria = OrderCriteria.FromString("TestProp");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, orderCriteria.Fields.Count);
             IOrderCriteriaField orderCriteriaField = orderCriteria.Fields[0];
@@ -392,8 +391,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString("TestProp DESC");
+            IOrderCriteria orderCriteria = OrderCriteria.FromString("TestProp DESC");
             //---------------Test Result -----------------------
             Assert.AreEqual(1, orderCriteria.Fields.Count);
             Assert.AreEqual("TestProp", orderCriteria.Fields[0].PropertyName);
@@ -407,8 +405,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString("TestProp DESC, TestProp2 ASC");
+            IOrderCriteria orderCriteria = OrderCriteria.FromString("TestProp DESC, TestProp2 ASC");
             //---------------Test Result -----------------------
             Assert.AreEqual(2, orderCriteria.Fields.Count);
             Assert.AreEqual("TestProp", orderCriteria.Fields[0].PropertyName);
@@ -424,8 +421,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString(null);
+            IOrderCriteria orderCriteria = OrderCriteria.FromString(null);
             //---------------Test Result -----------------------
             Assert.IsNotNull(orderCriteria);
             Assert.AreEqual(0, orderCriteria.Fields.Count);
@@ -438,8 +434,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString(" ");
+            IOrderCriteria orderCriteria = OrderCriteria.FromString(" ");
             //---------------Test Result -----------------------
             Assert.IsNotNull(orderCriteria);
             Assert.AreEqual(0, orderCriteria.Fields.Count);
@@ -454,8 +449,7 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             try
             {
-                IOrderCriteria orderCriteria = new OrderCriteria();
-                orderCriteria = orderCriteria.FromString("TestProp adfe");
+                OrderCriteria.FromString("TestProp adfe");
                 Assert.Fail("FromString should have failed due to a badly named sort order");
             //---------------Test Result -----------------------
             } catch (ArgumentException ex)
@@ -470,8 +464,7 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
 
             //---------------Execute Test ----------------------
-            IOrderCriteria orderCriteria = new OrderCriteria();
-            orderCriteria = orderCriteria.FromString("TestProp dEsc, TestProp2 aSc");
+            IOrderCriteria orderCriteria = OrderCriteria.FromString("TestProp dEsc, TestProp2 aSc");
             //---------------Test Result -----------------------
             Assert.AreEqual(2, orderCriteria.Fields.Count);
             Assert.AreEqual(SortDirection.Descending, orderCriteria.Fields[0].SortDirection);

@@ -1,0 +1,402 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D04BB138-C144-4406-9A41-17192E7D44BF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Habanero.Base</AssemblyName>
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Habanero.Base</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\Habanero.Base.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>false</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <DocumentationFile>bin\Debug\Habanero.Base.XML</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOEventArgs.cs" />
+    <Compile Include="BOKeyCol.cs" />
+    <Compile Include="BOKeyEventArgs.cs" />
+    <Compile Include="BOPropEventArgs.cs" />
+    <Compile Include="BOPropUpdatedEventArgs.cs" />
+    <Compile Include="BusinessObjectDTO.cs" />
+    <Compile Include="ClassDefCol.cs" />
+    <Compile Include="CoverageExcludeAttribute.cs" />
+    <Compile Include="DateTimeNow.cs" />
+    <Compile Include="DateTimeNowConverter.cs" />
+    <Compile Include="DateTimeTodayConverter.cs" />
+    <Compile Include="DelegatedExceptionNotifier.cs" />
+    <Compile Include="Exceptions\InvalidDefinitionException.cs" />
+    <Compile Include="Exceptions\RecordedExceptionsException.cs" />
+    <Compile Include="IBusinessObjectLookupList.cs" />
+    <Compile Include="IDatabaseLookupList.cs" />
+    <Compile Include="Logging\IHabaneroLogger.cs" />
+    <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
+    <Compile Include="ILookupListWithClassDef.cs" />
+    <Compile Include="InvalidOrderCriteriaException.cs" />
+    <Compile Include="IResolvableToValue.cs" />
+    <Compile Include="ISimpleLookupList.cs" />
+    <Compile Include="ISingleRelationshipDef.cs" />
+    <Compile Include="ISingleValueDef.cs" />
+    <Compile Include="Logging\Log4NetLogger.cs" />
+    <Compile Include="Logging\Log4NetLoggerFactory.cs" />
+    <Compile Include="Logging\LogCategory.cs" />
+    <Compile Include="OrderCriteriaField.cs" />
+    <Compile Include="RecordingExceptionNotifier.cs" />
+    <Compile Include="Exceptions\InvalidKeyException.cs" />
+    <Compile Include="Exceptions\ReflectionException.cs" />
+    <Compile Include="IBusinessObjectRule.cs" />
+    <Compile Include="IConnectionStringFactory.cs" />
+    <Compile Include="IDatabaseConnectionFactory.cs" />
+    <Compile Include="IFilterDef.cs" />
+    <Compile Include="IFilterPropertyDef.cs" />
+    <Compile Include="InvalidRelationshipNameException.cs" />
+    <Compile Include="Criteria\Criteria.cs" />
+    <Compile Include="Criteria\CriteriaExpression.cs" />
+    <Compile Include="Criteria\CriteriaParser.cs" />
+    <Compile Include="DateTimeToday.cs" />
+    <Compile Include="DelegatedBusinessObjectCreator.cs" />
+    <Compile Include="DelegatedBusinessObjectEditor.cs" />
+    <Compile Include="EventHandler.cs" />
+    <Compile Include="Exceptions\InvalidObjectIdException.cs" />
+    <Compile Include="Exceptions\InvalidXmlDefinitionException.cs" />
+    <Compile Include="FilterModes.cs" />
+    <Compile Include="HabaneroApp.cs" />
+    <Compile Include="Criteria\HabaneroStringBuilder.cs" />
+    <Compile Include="IApplicationVersionUpgrader.cs" />
+    <Compile Include="IBOError.cs" />
+    <Compile Include="IBOPropCol.cs" />
+    <Compile Include="IBusinessObjectAuthorisation.cs" />
+    <Compile Include="IBOKey.cs" />
+    <Compile Include="IBOProp.cs" />
+    <Compile Include="IBOStatus.cs" />
+    <Compile Include="IBusinessObject.cs" />
+    <Compile Include="IBusinessObjectCollection.cs" />
+    <Compile Include="IBusinessObjectDeletor.cs" />
+    <Compile Include="IBusinessObjectList.cs" />
+    <Compile Include="IClassDef.cs" />
+    <Compile Include="IBusinessObjectUpdateLog.cs" />
+    <Compile Include="IConcurrencyControl.cs" />
+    <Compile Include="IExpression.cs" />
+    <Compile Include="IParameterSQLInfo.cs" />
+    <Compile Include="IPrimaryKeyDef.cs" />
+    <Compile Include="IRelationshipDef.cs" />
+    <Compile Include="IRelationshipDefCol.cs" />
+    <Compile Include="IRelKeyDef.cs" />
+    <Compile Include="IRelPropDef.cs" />
+    <Compile Include="ISqlFormatter.cs" />
+    <Compile Include="IDBNumberGenerator.cs" />
+    <Compile Include="IKeyDef.cs" />
+    <Compile Include="InvalidPropertyException.cs" />
+    <Compile Include="InvalidPropertyNameException.cs" />
+    <Compile Include="InvalidRelationshipAccessException.cs" />
+    <Compile Include="IPrimaryKey.cs" />
+    <Compile Include="IPropDef.cs" />
+    <Compile Include="IPropDefCol.cs" />
+    <Compile Include="IPropertyComparer.cs" />
+    <Compile Include="IPropRule.cs" />
+    <Compile Include="IRelationship.cs" />
+    <Compile Include="IRelationshipCol.cs" />
+    <Compile Include="IRelKey.cs" />
+    <Compile Include="IRelProp.cs" />
+    <Compile Include="ISelectQuery.cs" />
+    <Compile Include="ISecurityController.cs" />
+    <Compile Include="ISuperClassDef.cs" />
+    <Compile Include="ISupportsAutoIncrementingField.cs" />
+    <Compile Include="ITransactional.cs" />
+    <Compile Include="ITransactionalDB.cs" />
+    <Compile Include="ITransactionCommitter.cs" />
+    <Compile Include="ITransactionLog.cs" />
+    <Compile Include="ITrigger.cs" />
+    <Compile Include="ITriggerCol.cs" />
+    <Compile Include="IUIDef.cs" />
+    <Compile Include="IUIForm.cs" />
+    <Compile Include="IUIFormColumn.cs" />
+    <Compile Include="IUIFormField.cs" />
+    <Compile Include="IUIFormGrid.cs" />
+    <Compile Include="IUIFormTab.cs" />
+    <Compile Include="IUIGrid.cs" />
+    <Compile Include="IUIGridColumn.cs" />
+    <Compile Include="KeyDefCol.cs" />
+    <Compile Include="LayoutStyle.cs" />
+    <Compile Include="OrderCriteria.cs" />
+    <Compile Include="ORMapping.cs" />
+    <Compile Include="PropAlignment.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="..\Common\AssemblyInfoShared.cs">
+      <Link>Properties\AssemblyInfoShared.cs</Link>
+    </Compile>
+    <Compile Include="Exceptions\ArgumentValidationHelper.cs" />
+    <Compile Include="Exceptions\CannotSaveException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\ExceptionUtilities.cs" />
+    <Compile Include="Exceptions\HabaneroArgumentException.cs" />
+    <Compile Include="ICrypter.cs" />
+    <Compile Include="Encryption.cs" />
+    <Compile Include="Exceptions\HabaneroException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomProperty.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilterClause.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FilterClauseCompositeOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFilterClauseFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FilterClauseOperator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GlobalRegistry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IConfirmer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDatabaseConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IDatabaseConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IExceptionNotifier.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ILookupList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INumberGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IBusinessObjectCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IBusinessObjectEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IBusinessObjectInitialiser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IParameterNameGenerator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISqlStatement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ISqlStatementCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ITextFileLoader.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NullCrypter.cs" />
+    <Compile Include="NullProgressIndicator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProgressIndicator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Exceptions\UnknownTypeNameException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PropReadWriteRule.cs" />
+    <Compile Include="QueryField.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="RethrowingExceptionNotifier.cs" />
+    <Compile Include="RSAPasswordCrypter.cs" />
+    <Compile Include="Source.cs" />
+    <Compile Include="SqlFormatter.cs" />
+    <Compile Include="UIDefCol.cs" />
+    <Compile Include="Util\ByteString.cs" />
+    <Compile Include="Util\ConfigFileSettings.cs" />
+    <Compile Include="Util\CrossThreadRunner.cs" />
+    <Compile Include="Util\DateRange.cs" />
+    <Compile Include="Util\DateRangeOptions.cs" />
+    <Compile Include="Util\DateRangeOptionsConverter.cs" />
+    <Compile Include="Util\DateTimeUtilities.cs" />
+    <Compile Include="Util\Delegates.cs" />
+    <Compile Include="Util\EmailSender.cs" />
+    <Compile Include="Util\FileUtilities.cs" />
+    <Compile Include="Util\File\CSVFileReader.cs" />
+    <Compile Include="Util\File\CSVFileWriter.cs" />
+    <Compile Include="Util\File\TextFileLoader.cs" />
+    <Compile Include="Util\File\TypeLoader.cs" />
+    <Compile Include="Util\IdNumberUtilities.cs" />
+    <Compile Include="Util\ImageThumbnailCreator.cs" />
+    <Compile Include="Util\LongText.cs" />
+    <Compile Include="Util\ReflectionUtilities.cs" />
+    <Compile Include="Util\SerialisationUtilities.cs" />
+    <Compile Include="Util\SortedStringCollection.cs" />
+    <Compile Include="Util\StringUtilities.cs" />
+    <Compile Include="Util\TypeUtilities.cs" />
+    <Compile Include="Util\Utilities.cs" />
+    <Compile Include="Util\XmlDocumentValidator.cs" />
+    <Compile Include="SimpleValueObject.cs" />
+    <Compile Include="XMLWrapper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="key.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VisualBasic.PowerPacks.10.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft Visual Basic PowerPacks 10.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)PostBuild-2010_3.5.cmd" "$(SolutionDir)"  "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

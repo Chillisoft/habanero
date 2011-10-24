@@ -19,11 +19,11 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.BO.Comparer;
 using Habanero.Util;
-
-//using log4net;
 
 namespace Habanero.BO.ClassDefinition
 {
@@ -48,7 +48,7 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class PropDef : IPropDef
     {
-//        private static readonly ILog log = LogManager.GetLogger("Habanero.BO.ClassDefinition.PropDef");
+        public static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(PropDef));
         private string _propertyName;
         private string _description;
         private Type _propType;
@@ -58,11 +58,8 @@ namespace Habanero.BO.ClassDefinition
         private object _defaultValue;
         private string _defaultValueString;
         private bool _hasDefaultValueBeenValidated;
-        private bool _compulsory;
-        private readonly List<IPropRule> _propRules = new List<IPropRule>();
 
 
-        private string _databaseFieldName; //This allows you to have a 
         //database field name different from your property name. 
         //We have customers whose standard for naming database 
         //fields is DATABASE_FIELD_NAME. 
@@ -72,9 +69,44 @@ namespace Habanero.BO.ClassDefinition
         private ILookupList _lookupList = new NullLookupList();
 
         private string _displayName;
-        private bool _persistable = true;
-        private string _unitOfMeasure = "";
-        private BOPropDataMapper _propDataMapper;
+        private IDataMapper _propDataMapper;
+
+        ///<summary>
+        /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
+        /// as for Asset Management System (See Intermap Asset Management) or for any reflective/calculated field that 
+        /// you would like to store propdef information for e.g. rules, Units of measure etc.
+        /// This will prevent the property from being persisted in the usual manner.
+        ///</summary>
+        public bool Persistable { get; set; }
+
+        ///<summary>
+        /// The unit of measure that this property is recorded in. e.g. Weight might be recorded in Kg. Capacity in Litre, m^3 etc
+        ///</summary>
+        public string UnitOfMeasure { get; set; }
+
+        /// <summary>
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
+        /// </summary>
+        public List<IPropRule> PropRules { get; private set; }
+
+        /// <summary>
+        /// The database field name - this allows you to have a 
+        /// database field name that is different to the
+        /// property name, which is useful for migrating systems where
+        /// the database has already been set up
+        /// </summary>
+        public string DatabaseFieldName { get; set; }
+
+        ///<summary>
+        /// Is this property compulsary or not
+        ///</summary>
+        public bool Compulsory { get; set; }
+
+        /// <summary>
+        /// Returns the rule for how the property can be accessed. 
+        /// See the PropReadWriteRule enumeration (<see cref="PropReadWriteRule"/> for more detail.
+        /// </summary>
+        public PropReadWriteRule ReadWriteRule { get; set; }
 
         #region Constuctor and destructors
 
@@ -373,6 +405,9 @@ namespace Habanero.BO.ClassDefinition
              string databaseFieldName, object defaultValue, string defaultValueString, bool compulsory,
              bool autoIncrementing, int length, string displayName, string description, bool keepValuePrivate)
         {
+            PropRules = new List<IPropRule>();
+            Persistable = true;
+            UnitOfMeasure = "";
             SetupPropDef
                 (propertyName, propType, assemblyName, typeName, propRWStatus, databaseFieldName, defaultValue,
                  defaultValueString, compulsory, autoIncrementing, length, displayName, description, keepValuePrivate);
@@ -414,7 +449,7 @@ namespace Habanero.BO.ClassDefinition
                 _propTypeName = typeName;
             }
             ReadWriteRule = propRWStatus;
-            _databaseFieldName = databaseFieldName ?? propertyName;
+            DatabaseFieldName = databaseFieldName ?? propertyName;
             if (defaultValue != null)
             {
                 MyDefaultValue = defaultValue;
@@ -423,16 +458,21 @@ namespace Habanero.BO.ClassDefinition
             {
                 _defaultValueString = defaultValueString;
             }
-            _compulsory = compulsory;
+            Compulsory = compulsory;
             AutoIncrementing = autoIncrementing;
             Length = length;
             _displayName = displayName;
             if (string.IsNullOrEmpty(_displayName))
             {
-                _displayName = StringUtilities.DelimitPascalCase(_propertyName, " ");
+                _displayName = GetDisplayName(_propertyName);
             }
             _description = description;
             KeepValuePrivate = keepValuePrivate;
+        }
+
+        private static string GetDisplayName(string propertyName)
+        {
+            return StringUtilities.DelimitPascalCase(propertyName, " ");
         }
 
         #endregion
@@ -508,26 +548,6 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition.
-        /// </summary>
-        public List<IPropRule> PropRules
-        {
-            get { return _propRules; }
-        }
-
-        /// <summary>
-        /// The database field name - this allows you to have a 
-        /// database field name that is different to the
-        /// property name, which is useful for migrating systems where
-        /// the database has already been set up
-        /// </summary>
-        public string DatabaseFieldName
-        {
-            get { return _databaseFieldName; }
-            set { _databaseFieldName = value; }
-        }
-
-        /// <summary>
         /// The default value that a property of a new object will be set to
         /// </summary>
         public object DefaultValue
@@ -552,15 +572,6 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-        ///<summary>
-        /// Is this property compulsary or not
-        ///</summary>
-        public bool Compulsory
-        {
-            get { return _compulsory; }
-            set { _compulsory = value; }
-        }
-
         /// <summary>
         /// Provides access to read and write the ILookupList object
         /// in this definition
@@ -575,11 +586,6 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-        /// <summary>
-        /// Returns the rule for how the property can be accessed. 
-        /// See the PropReadWriteRule enumeration (<see cref="PropReadWriteRule"/> for more detail.
-        /// </summary>
-        public PropReadWriteRule ReadWriteRule { get; set; }
 
         /// <summary>
         /// Indicates whether this object has a LookupList object set
@@ -631,10 +637,10 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>Returns true if valid, false if not</returns>
         public bool IsValueValid(object propValue, ref string errorMessage)
         {
-            string tmpErrMsg = "";
+            var tmpErrMsg = "";
             errorMessage = "";
-            string displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
-            if (_compulsory)
+            var displayNameFull = this.ClassDef == null ? DisplayName : this.ClassDef.ClassName + "." + DisplayName;
+            if (Compulsory)
             {
                 if (IsNullOrEmpty(propValue))
                 {
@@ -648,11 +654,35 @@ namespace Habanero.BO.ClassDefinition
                 return false;
             }
             //Valid Item in list
+            if (!IsLookupItemValid(propValue, ref errorMessage)) return false;
+            //Validate string lengths are less than the maximum length allowable for this propdef.
+            if (!IsStringLengthValid(propValue, displayNameFull, out errorMessage)) return false;
+
+            var propValueParsedToCorrectType = ChangeType(propValue);
+
+            if (!IsValueObjectValid(propValueParsedToCorrectType, out errorMessage)) return false;
+            var valid = true;
+            foreach (var propRule in PropRules)
+            {
+                var tmpValid = (propRule == null
+                                 || propRule.IsPropValueValid(displayNameFull, propValueParsedToCorrectType, ref tmpErrMsg));
+                valid = valid & tmpValid;
+                errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
+            }
+            return valid;
+        }
+
+        private bool IsLookupItemValid(object propValue, ref string errorMessage)
+        {
             if (!IsLookupListItemValid(propValue, ref errorMessage))
             {
                 return false;
             }
-            //Validate string lengths are less than the maximum length allowable for this propdef.
+            return true;
+        }
+
+        private bool IsStringLengthValid(object propValue, string displayNameFull, out string errorMessage)
+        {
             if (propValue is string && Length != Int32.MaxValue)
             {
                 if (((string) propValue).Length > Length)
@@ -661,17 +691,24 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
-            
-            bool valid = true;
-            foreach (IPropRule propRule in _propRules)
-            {
+            errorMessage = "";
+            return true;
+        }
 
-                bool tmpValid = (propRule == null
-                                 || propRule.IsPropValueValid(displayNameFull, GetNewValue(propValue), ref tmpErrMsg));
-                valid = valid & tmpValid;
-                errorMessage = StringUtilities.AppendMessage(errorMessage, tmpErrMsg);
+        private static bool IsValueObjectValid(object propValueParsedToCorrectType, out string errorMessage)
+        {
+            if (propValueParsedToCorrectType is SimpleValueObject)
+            {
+                var valueObject = propValueParsedToCorrectType as SimpleValueObject;
+                var isValid = valueObject.IsValid();
+                if (!isValid.Successful)
+                {
+                    errorMessage = isValid.Message;
+                    return false;
+                }
             }
-            return valid;
+            errorMessage = "";
+            return true;
         }
 
         private static bool IsNullOrEmpty(object propValue)
@@ -769,39 +806,7 @@ namespace Habanero.BO.ClassDefinition
             return businessObject;
         }
 
-        internal object GetNewValue(object value)
-        {
-            if (value == null) return value;
-
-            object newValue;
-            try
-            {
-                newValue = Convert.ChangeType(value, this.PropertyType);
-            }
-            catch (InvalidCastException)
-            {
-                newValue = GetNewValueOnError(value);
-            }
-            catch (FormatException)
-            {
-                newValue = GetNewValueOnError(value);
-            }
-            return newValue;
-        }
-
-        private static object GetNewValueOnError(object value)
-        {
-            object newValue;
-            if (value is string && String.IsNullOrEmpty((string) value))
-            {
-                newValue = null;
-            }
-            else
-            {
-                newValue = value;
-            }
-            return newValue;
-        }
+       
 
         private bool IsValueValidType(object propValue, ref string errorMessage)
         {
@@ -809,28 +814,21 @@ namespace Habanero.BO.ClassDefinition
             if (propValue == null) return true;
             if (propValue is string && string.IsNullOrEmpty((string) propValue)) return true;
             if (this.HasLookupList()) return true;
-            Type propertyType = this.PropertyType;
+            var propertyType = this.PropertyType;
             if (propValue.GetType().IsSubclassOf(propertyType)) return true;
-            try
-            {
-                Convert.ChangeType(propValue, propertyType);
-            }
-            catch (InvalidCastException)
-            {
-                if (!(propValue is Guid && propertyType == typeof (string)))
-                {
-                    errorMessage = GetErrorMessage(propValue,this.DisplayName);
-                }
-            }
-            catch (FormatException)
-            {
-                errorMessage = GetErrorMessage(propValue, this.DisplayName);
-            }
-            return string.IsNullOrEmpty(errorMessage);
+
+            //If you can parse the value then it is of a valid type.
+            object value;
+            if (TryParsePropValue(propValue, out value)) return true;
+
+            errorMessage = GetErrorMessage(propValue);
+            return false;
         }
 
-        private string GetErrorMessage(object propValue, string displayName)
+        private string GetErrorMessage(object propValue)
         {
+            string displayName = this.DisplayName;
+            if (string.IsNullOrEmpty(displayName)) displayName = GetDisplayName(this.PropertyName);
             string errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
             errorMessage += "It is not a type of " + this.PropertyTypeName + ".";
             return errorMessage;
@@ -863,14 +861,6 @@ namespace Habanero.BO.ClassDefinition
 
         #region "For Testing"
 
-        /// <summary>
-        /// Returns the type of the property
-        /// </summary>
-        protected internal Type PropType
-        {
-            get { return MyPropertyType; }
-            protected set { MyPropertyType = value; }
-        }
 
         #endregion
 
@@ -922,7 +912,7 @@ namespace Habanero.BO.ClassDefinition
         {
             get
             {
-                //TODO Brett: Remove all this code move to mapper.
+                //This is necessary due to the fact that the _defaultValueString might be 'Today', 'YesterDay' etc
                 object defaultValue;
                 if (MyPropertyType == typeof (DateTime) && _defaultValueString != null)
                 {
@@ -931,35 +921,7 @@ namespace Habanero.BO.ClassDefinition
                 if (_defaultValue == null && _defaultValueString != null)
                 {
                     _hasDefaultValueBeenValidated = false;
-                    if (MyPropertyType == typeof (Guid))
-                    {
-                        defaultValue = new Guid(_defaultValueString);
-                    }
-                    else if (MyPropertyType.IsEnum)
-                    {
-                        defaultValue = Enum.Parse(MyPropertyType, _defaultValueString);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            defaultValue = Convert.ChangeType(_defaultValueString, MyPropertyType);
-                        }
-                        catch (InvalidCastException ex)
-                        {
-                            throw new InvalidCastException
-                                (String.Format
-                                     ("The default value '{0}' cannot be cast to " + "the property type ({1}).",
-                                      _defaultValueString, _propTypeName), ex);
-                        }
-                        catch (FormatException ex)
-                        {
-                            throw new FormatException
-                                (String.Format
-                                     ("The default value '{0}' cannot be converted to " + "the property type ({1}).",
-                                      _defaultValueString, _propTypeName), ex);
-                        }
-                    }
+                    defaultValue = ChangeType(_defaultValueString);
                 }
                 else
                 {
@@ -976,27 +938,16 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
-
-        ///<summary>
-        /// Is this property persistable or not. This is used for special properties e.g. Dynamically inserted properties
-        /// as for Asset Management System (See Intermap Asset Management) or for any reflective/calculated field that 
-        /// you would like to store propdef information for e.g. rules, Units of measure etc.
-        /// This will prevent the property from being persisted in the usual manner.
-        ///</summary>
-        public bool Persistable
+        private object ChangeType(object valueToChange)
         {
-            get { return _persistable; }
-            set { _persistable = value; }
+            object value;
+            if (TryParsePropValue(valueToChange, out value)) return value;
+
+            //If you cannot Change the Type then throw an exception
+            throw new InvalidCastException(GetErrorMessage(valueToChange));
         }
 
-        ///<summary>
-        /// The unit of measure that this property is recorded in. e.g. Weight might be recorded in Kg. Capacity in Litre, m^3 etc
-        ///</summary>
-        public string UnitOfMeasure
-        {
-            get { return _unitOfMeasure; }
-            set { _unitOfMeasure = value; }
-        }
+
 
         ///<summary>
         /// Returns the full display name for a property definition.
@@ -1030,18 +981,16 @@ namespace Habanero.BO.ClassDefinition
         private void ValidateDefaultValue(object defaultValue)
         {
             if (_hasDefaultValueBeenValidated) return;
-
-            if ((defaultValue == null) || MyPropertyType.IsInstanceOfType(defaultValue))
+            if (defaultValue == null) return;
+            string errorMessage = "";
+            if (IsValueValidType(defaultValue, ref errorMessage))
             {
-                _defaultValue = defaultValue;
+                _defaultValue = ChangeType(defaultValue);
                 _hasDefaultValueBeenValidated = true;
             }
             else
             {
-                throw new ArgumentException
-                    (string.Format
-                         ("Default value {0} is invalid since it is " + "not of type {1}.", defaultValue,
-                          _propTypeName), "defaultValue");
+                throw new ArgumentException(errorMessage);
             }
         }
 
@@ -1056,7 +1005,7 @@ namespace Habanero.BO.ClassDefinition
         {
             if (rule == null)
                 throw new HabaneroApplicationException("You cannot add a null property rule to a property def");
-            _propRules.Add(rule);
+            PropRules.Add(rule);
         }
 
         ///<summary>
@@ -1075,9 +1024,9 @@ namespace Habanero.BO.ClassDefinition
                     Persistable = Persistable,
                     DefaultValue = DefaultValue,
                     PropertyTypeAssemblyName = PropertyTypeAssemblyName,
-                    PropType = PropType
+                    PropertyType = PropertyType
                 };
-            foreach (IPropRule rule in _propRules)
+            foreach (IPropRule rule in PropRules)
             {
                 propDef.AddPropRule(rule);
             }
@@ -1115,11 +1064,11 @@ namespace Habanero.BO.ClassDefinition
                    && Equals(obj._propType, _propType) && Equals(obj.ReadWriteRule, ReadWriteRule)
                    && Equals(obj._propTypeAssemblyName, _propTypeAssemblyName)
                    && Equals(obj._defaultValue, _defaultValue) && Equals(obj._defaultValueString, _defaultValueString)
-                   && obj._compulsory.Equals(_compulsory) && Equals(obj._databaseFieldName, _databaseFieldName)
+                   && obj.Compulsory.Equals(Compulsory) && Equals(obj.DatabaseFieldName, DatabaseFieldName)
                    && Equals(obj._lookupList, _lookupList) && obj.AutoIncrementing.Equals(AutoIncrementing)
                    && obj.Length == Length && Equals(obj._displayName, _displayName)
-                   && obj.KeepValuePrivate.Equals(KeepValuePrivate) && obj._persistable.Equals(_persistable)
-                   && Equals(obj.ClassDef, ClassDef) && Equals(obj._unitOfMeasure, _unitOfMeasure);
+                   && obj.KeepValuePrivate.Equals(KeepValuePrivate) && obj.Persistable.Equals(Persistable)
+                   && Equals(obj.ClassDef, ClassDef) && Equals(obj.UnitOfMeasure, UnitOfMeasure);
         }
 
         ///<summary>
@@ -1141,16 +1090,16 @@ namespace Habanero.BO.ClassDefinition
                 result = (result * 397) ^ (_propTypeAssemblyName != null ? _propTypeAssemblyName.GetHashCode() : 0);
                 result = (result * 397) ^ (_defaultValue != null ? _defaultValue.GetHashCode() : 0);
                 result = (result * 397) ^ (_defaultValueString != null ? _defaultValueString.GetHashCode() : 0);
-                result = (result * 397) ^ _compulsory.GetHashCode();
-                result = (result * 397) ^ (_databaseFieldName != null ? _databaseFieldName.GetHashCode() : 0);
+                result = (result * 397) ^ Compulsory.GetHashCode();
+                result = (result * 397) ^ (DatabaseFieldName != null ? DatabaseFieldName.GetHashCode() : 0);
                 result = (result * 397) ^ (_lookupList != null ? _lookupList.GetHashCode() : 0);
                 result = (result * 397) ^ AutoIncrementing.GetHashCode();
                 result = (result * 397) ^ Length;
                 result = (result * 397) ^ (_displayName != null ? _displayName.GetHashCode() : 0);
                 result = (result * 397) ^ KeepValuePrivate.GetHashCode();
-                result = (result * 397) ^ _persistable.GetHashCode();
+                result = (result * 397) ^ Persistable.GetHashCode();
                 result = (result * 397) ^ (ClassDef != null ? ClassDef.GetHashCode() : 0);
-                result = (result * 397) ^ (_unitOfMeasure != null ? _unitOfMeasure.GetHashCode() : 0);
+                result = (result * 397) ^ (UnitOfMeasure != null ? UnitOfMeasure.GetHashCode() : 0);
                 return result;
             }
         }
@@ -1166,8 +1115,26 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>An object of the correct type.</returns>
         public bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            _propDataMapper = CreateDataMapper();
-            return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
+            try
+            {
+                _propDataMapper = GetBOPropDataMapper();
+                return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
+            }
+            catch (Exception ex)
+            {
+                string tableName = this.ClassDef == null ? "" : this.ClassDef.GetTableName(this);
+                _logger.Log
+                    (string.Format
+                         ("Value: {0}, Property: {1}, Field: {2}, Table: {3}", valueToParse,
+                          this.PropertyName, this.DatabaseFieldName, tableName), LogCategory.Exception);
+                          
+                throw new InvalidPropertyValueException
+                    (String.Format
+                         ("An error occurred while attempting to convert "
+                          + "the loaded property value of '{0}' to its specified "
+                          + "type of '{1}'. The property value is '{2}'. See log for details", this.PropertyName,
+                          this.PropertyType, valueToParse), ex);
+            }
         }
 
         /// <summary>
@@ -1178,43 +1145,13 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The converted string.</returns>
         public string ConvertValueToString(object value)
         {
-            CreateDataMapper();
-
+            _propDataMapper = GetBOPropDataMapper();
             return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
         }
 
-        private BOPropDataMapper CreateDataMapper()
+        private IDataMapper GetBOPropDataMapper()
         {
-            if (_propDataMapper != null) return _propDataMapper;
-
-            if (this.PropertyType == typeof(Guid))
-            {
-                _propDataMapper = new BOPropGuidDataMapper();
-            }
-            else if (this.PropertyType == typeof(DateTime))
-            {
-                _propDataMapper = new BOPropDateTimeDataMapper();
-            }
-            else if (this.PropertyType == typeof(string))
-            {
-                _propDataMapper = new BOPropStringDataMapper();
-            }
-            else if (this.PropertyType == typeof(bool))
-            {
-                _propDataMapper = new BOPropBoolDataMapper();
-            }
-            else if (this.PropertyType == typeof(int))
-            {
-                _propDataMapper = new BOPropIntDataMapper();
-            }
-            else if (this.PropertyType == typeof(long))
-            {
-                _propDataMapper = new BOPropLongDataMapper();
-            }
-            return _propDataMapper ?? (_propDataMapper = new BOPropGeneralDataMapper(this));
+        	return _propDataMapper ?? (_propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType));
         }
-
     }
-
-
 }

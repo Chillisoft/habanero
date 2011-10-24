@@ -109,8 +109,7 @@ namespace Habanero.Test
             //Releationships
             RelationshipDefCol relDefs = CreateRelationshipDefCol(lPropDefCol);
 
-            ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, lPropDefCol, keysCol, relDefs);
-            lClassDef.TableName = "contact_person";
+            ClassDef lClassDef = new ClassDef(typeof (ContactPerson), primaryKey, "contact_person", lPropDefCol, keysCol, relDefs);
             
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
@@ -229,8 +228,8 @@ namespace Habanero.Test
             //relDefCol.Add(relDef1);
             relDefs.Add(relDef);
 
-            ClassDef lClassDef = new ClassDef(typeof(ContactPerson), primaryKey, lPropDefCol, keysCol, relDefs);
-            lClassDef.TableName = "contact_person";
+            ClassDef lClassDef = new ClassDef(typeof(ContactPerson), primaryKey, "contact_person", lPropDefCol, keysCol, relDefs);
+
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;
         }

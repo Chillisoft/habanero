@@ -498,8 +498,8 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef
                 ("MockBOProp1", typeof (Guid), PropReadWriteRule.ReadWrite, "MockBOProp1", null);
             lPropDefCol.Add(propDef);
-            lPropDefCol.Add(new PropDef("MockBOProp2", typeof (string), PropReadWriteRule.WriteOnce, "MockBOProp2", null));
-            lPropDefCol.Add(new PropDef("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null));
+            lPropDefCol.Add("MockBOProp2", typeof (string), PropReadWriteRule.WriteOnce, "MockBOProp2", null);
+            lPropDefCol.Add("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
 
@@ -572,8 +572,8 @@ namespace Habanero.Test.BO.ClassDefinition
             PropDef propDef = new PropDef
                 ("MockBOProp1", typeof (Guid), PropReadWriteRule.ReadWrite, "MockBOProp1", null, true, false);
             lPropDefCol.Add(propDef);
-            lPropDefCol.Add(new PropDef("MockBOProp2", typeof (string), PropReadWriteRule.WriteOnce, "MockBOProp2", null));
-            lPropDefCol.Add(new PropDef("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null));
+            lPropDefCol.Add("MockBOProp2", typeof (string), PropReadWriteRule.WriteOnce, "MockBOProp2", null);
+            lPropDefCol.Add("MockBOID", typeof (Guid), PropReadWriteRule.WriteOnce, "MockBOID", null);
             return lPropDefCol;
         }
 

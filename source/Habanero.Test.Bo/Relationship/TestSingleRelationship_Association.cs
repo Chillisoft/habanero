@@ -29,6 +29,7 @@ using Habanero.Test.Structure;
 using Habanero.Util;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
@@ -445,7 +446,7 @@ namespace Habanero.Test.BO.Relationship
             myBO.Organisation = organisationTestBO;
             organisationTestBO.Save();
             ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDeleted", true);
-            ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDirty", true);
+            //ReflectionUtilities.SetPropertyValue(myBO.Status, "IsDirty", true);
 
             //---------------Assert Preconditions---------------
             Assert.IsTrue(myBO.Status.IsDeleted);

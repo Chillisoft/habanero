@@ -116,6 +116,50 @@ namespace Habanero.Test.BO.ClassDefinition
             }
         }
 
+        [Test]
+        public void TestAddRange()
+        {
+            //---------------Set up test pack-------------------
+            var keyDef1 = new KeyDef("key1");
+            var keyDef2 = new KeyDef("key2");
+            var keyDef3 = new KeyDef("key3");
+            
+            var col = new KeyDefCol {keyDef1, keyDef2, keyDef3};
+
+            var testCol = new KeyDefCol();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(3, col.Count);
+            Assert.AreEqual(0, testCol.Count);
+            //---------------Execute Test ----------------------
+            testCol.AddRange(col);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(3, testCol.Count);
+            Assert.IsTrue(col.Contains("key1"));
+            Assert.IsTrue(col.Contains("key2"));
+            Assert.IsTrue(col.Contains("key3"));
+        }
+
+        [Test]
+        public void AddRange_WhenEnumerableIsNull_ShouldRaiseError()
+        {
+            //---------------Set up test pack-------------------
+            var testCol = new KeyDefCol();
+            //---------------Assert Precondition----------------
+
+            try
+            {
+                //---------------Execute Test ----------------------
+                testCol.AddRange(null);
+
+                Assert.Fail("Expected to throw an ArgumentException");
+            } 
+            catch (ArgumentNullException ex)
+            {
+                //---------------Test Result -----------------------
+                StringAssert.Contains("keyDefs", ex.Message);
+            }
+        }
+
         // Grants access to protected methods
         private class KeyDefColInheritor : KeyDefCol
         {

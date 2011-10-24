@@ -96,7 +96,7 @@ namespace Habanero.DB
                 return prop.DatabaseFieldName + " = '" + prop.PersistedPropertyValueString + "'";
             }
             string paramName = sql.ParameterNameGenerator.GetNextParameterName();
-            sql.AddParameter(paramName, prop.PersistedPropertyValue);
+            sql.AddParameter(paramName, prop.PersistedPropertyValue, prop.PropertyType);
             return sql.Connection.SqlFormatter.DelimitField(prop.DatabaseFieldName) + " = " + paramName;
         }
 
@@ -125,8 +125,8 @@ namespace Habanero.DB
             {
                 return prop.DatabaseFieldName + " = '" + prop.PropertyValueString + "'";
             }
-            String paramName = sql.ParameterNameGenerator.GetNextParameterName();
-            sql.AddParameter(paramName, prop.Value);
+            var paramName = sql.ParameterNameGenerator.GetNextParameterName();
+            sql.AddParameter(paramName, prop.Value, prop.PropertyType);
             return sql.Connection.SqlFormatter.DelimitField(prop.DatabaseFieldName) + " = " + paramName;
         }
 

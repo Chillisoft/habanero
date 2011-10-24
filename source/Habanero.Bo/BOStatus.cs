@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -39,6 +40,7 @@ namespace Habanero.BO
         public BOStatus(BusinessObject bo)
         {
             if (bo == null) throw new ArgumentNullException("bo");
+            SetBOFlagValue(Statuses.isEditing, false);
             _bo = bo;
         }
 
@@ -50,9 +52,9 @@ namespace Habanero.BO
         {
             /// <summary>The object is new</summary>
             isNew = 1,
-            /// <summary>The object has changed since its last persistance to
+/*            /// <summary>The object has changed since its last persistance to
             /// the database</summary>
-            isDirty = 2,
+            isDirty = 2,*/
             /// <summary>The object has been deleted</summary>
             isDeleted = 4,
             /// <summary>The object is being edited</summary>
@@ -101,9 +103,10 @@ namespace Habanero.BO
                     const string message = "The IsDirty Failed because the Business Object is null";
                     throw new HabaneroDeveloperException(message, message);
                 }
-                return (GetBOFlagValue(Statuses.isDirty)) || this._bo.Relationships.IsDirty;
+                if (this.IsNew && this.IsDeleted) return false;
+
+                return this._bo.Props.IsDirty || this._bo.Relationships.IsDirty || this.IsDeleted;
             }
-            internal set { SetBOFlagValue(Statuses.isDirty, value); }
         }
 
         /// <summary>
@@ -116,8 +119,7 @@ namespace Habanero.BO
             IList<IBOError> errors;
             bool isValid = IsValid(out errors);
             message = errors
-                .Aggregate("", (current, error) 
-                    => current + (error.Message + Environment.NewLine));
+                .Aggregate("", (current, error) => StringUtilities.AppendMessage(current, error.Message));
             return isValid;
         }
 

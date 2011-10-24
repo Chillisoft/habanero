@@ -53,18 +53,11 @@ namespace Habanero.Test.BO
         protected internal override TransactionalBusinessObject CreateTransactionalBusinessObject(IBusinessObject businessObject)
         {
 
-            return new TransactionalBusinessObjectStub(businessObject);
+            return new TransactionalBusinessObject(businessObject);
 
         }
 
         protected internal override void AddAddedChildBusinessObject<T>(IRelationship relationship, T businessObject) { }
         protected internal override void AddRemovedChildBusinessObject<T>(IRelationship relationship, T businessObject) { }
-    }
-
-    class TransactionalBusinessObjectStub : TransactionalBusinessObject
-    {
-        protected internal TransactionalBusinessObjectStub(IBusinessObject businessObject) : base(businessObject)
-        {
-        }
     }
 }

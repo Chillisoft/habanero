@@ -17,6 +17,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -65,14 +67,15 @@ namespace Habanero.Test.DB
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            var sqlStatementCollection = transactionalBODB.GetPersistSql();
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
-            Assert.AreEqual(2, sqlStatementCollection.Count);
-            ISqlStatement sqlStatement = sqlStatementCollection[1];
+            var sqlStatements = sqlStatementCollection.ToList();
+            Assert.AreEqual(2, sqlStatements.Count);
+            ISqlStatement sqlStatement = sqlStatements[1];
             TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
-            Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
+            Assert.AreEqual(transactionLogTable.GetPersistSql().First().Statement.ToString(), sqlStatement.Statement.ToString());
         }
 
 
@@ -90,17 +93,15 @@ namespace Habanero.Test.DB
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = transactionalBODB.GetPersistSql();
+            IEnumerable<ISqlStatement> sqlStatementCollection = transactionalBODB.GetPersistSql();
             //---------------Test Result -----------------------
             //check if the transaction committer has 2 object
             // check that the one object is the transaction log object.
-            Assert.AreEqual(0, sqlStatementCollection.Count);
+            Assert.AreEqual(0, sqlStatementCollection.Count());
             //ISqlStatement sqlStatement = sqlStatementCollection[1];
             //TransactionLogTable transactionLogTable = new TransactionLogTable(cp);
             //Assert.AreEqual(transactionLogTable.GetPersistSql()[0].Statement.ToString(), sqlStatement.Statement.ToString());
         }
-
-
 
         private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLogging()
         {

@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
@@ -222,13 +223,8 @@ namespace Habanero.BO
 
         private void Initialise(IClassDef classDef, TBusinessObject sampleBo)
         {
-            _boClassDef = classDef
-                          ??
-                          (sampleBo == null
-                               ? ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]
-                               : sampleBo.ClassDef);
+            _boClassDef = classDef ?? (sampleBo != null ? sampleBo.ClassDef : null);
             KeyObjectHashTable = new Hashtable();
-            _selectQuery = QueryBuilder.CreateSelectQuery(_boClassDef);
         }
 
         /// <summary>
@@ -1460,8 +1456,8 @@ namespace Habanero.BO
         /// <exception cref="HabaneroDeveloperException">A collection's select query cannot be set to null</exception>
         public ISelectQuery SelectQuery
         {
-            get { return _selectQuery; }
-            set
+			get { return _selectQuery ?? (_selectQuery = QueryBuilder.CreateSelectQuery(ClassDef)); }
+        	set
             {
                 if (value == null)
                 {
@@ -1534,8 +1530,8 @@ namespace Habanero.BO
         /// </summary>
         public IClassDef ClassDef
         {
-            get { return _boClassDef; }
-            set { _boClassDef = value; }
+			get { return _boClassDef ?? (_boClassDef = ClassDefinition.ClassDef.ClassDefs[typeof (TBusinessObject)]); }
+        	set { _boClassDef = value; }
         }
 
         /// <summary>
@@ -1591,7 +1587,7 @@ namespace Habanero.BO
         public BusinessObjectCollection<TBusinessObject> Clone()
         {
             BusinessObjectCollection<TBusinessObject> clonedCol = new BusinessObjectCollection<TBusinessObject>
-                (_boClassDef);
+				(ClassDef);
             foreach (TBusinessObject businessObjectBase in this)
             {
                 clonedCol.Add(businessObjectBase);
@@ -1633,7 +1629,7 @@ namespace Habanero.BO
         /// to a collection of type <typeparamref name="DestType"/>.</exception>
         public BusinessObjectCollection<DestType> Clone<DestType>() where DestType : BusinessObject, new()
         {
-            BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(_boClassDef);
+			BusinessObjectCollection<DestType> clonedCol = new BusinessObjectCollection<DestType>(ClassDef);
             if (!typeof (DestType).IsSubclassOf(typeof (TBusinessObject))
                 && !typeof (TBusinessObject).IsSubclassOf(typeof (DestType))
                 && !typeof (TBusinessObject).Equals(typeof (DestType)))
@@ -2364,5 +2360,17 @@ namespace Habanero.BO
         {
             _boCol.AddRange(collection);
         }
+
+        /// <summary>
+        /// Gives you a strongly typed enumrable of these objects for iterating over. 
+        /// If the objects are not of type T this with throw an <see cref="InvalidCastException"/>
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}" /> which is a shallow copy of the objects in this collection. </returns>
+        IEnumerable<T> IBusinessObjectCollection.AsEnumerable<T>()
+        {
+            return this.Select(bo => (T) (object) bo);
+        }
+
+
     }
 }

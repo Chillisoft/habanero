@@ -80,7 +80,7 @@ namespace Habanero.BO
         public int TimeOut { get; private set; }
 
         /// <summary> The collection storing the Related Business Objects. </summary>
-        private RelatedBusinessObjectCollection<TBusinessObject> _boCol;
+        private readonly Lazy<RelatedBusinessObjectCollection<TBusinessObject>> _boCol;
 
         /// <summary>
         /// Constructor to initialise a new relationship
@@ -106,9 +106,9 @@ namespace Habanero.BO
             (IBusinessObject owningBo, IRelationshipDef lRelDef, IBOPropCol lBOPropCol, int timeOut)
             : base(owningBo, lRelDef, lBOPropCol)
         {
-            _boCol =
-                (RelatedBusinessObjectCollection<TBusinessObject>)
-                RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectAssemblyName, _relDef.RelatedObjectClassName, this);
+            _boCol = new Lazy<RelatedBusinessObjectCollection<TBusinessObject>>(() => 
+				(RelatedBusinessObjectCollection<TBusinessObject>)
+				RelationshipUtils.CreateRelatedBusinessObjectCollection(_relDef.RelatedObjectAssemblyName, _relDef.RelatedObjectClassName, this));
             TimeOut = timeOut;
         }
 
@@ -185,7 +185,8 @@ namespace Habanero.BO
                 if (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
                     || RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
-                    foreach (IBusinessObject bo in _boCol.PersistedBusinessObjects)
+					var currentCol = _boCol.Value;
+                	foreach (IBusinessObject bo in currentCol.PersistedBusinessObjects)
                     {
                         if (bo.Status.IsDirty)
                         {
@@ -193,7 +194,7 @@ namespace Habanero.BO
                         }
                     }
                 }
-                return false; // || 
+            	return false; // || 
             }
         }
 
@@ -204,8 +205,10 @@ namespace Habanero.BO
         {
             get
             {
-                return (_boCol.CreatedBusinessObjects.Count > 0) || (_boCol.MarkedForDeleteBusinessObjects.Count > 0)
-                       || (_boCol.RemovedBusinessObjects.Count > 0) || (_boCol.AddedBusinessObjects.Count > 0);
+				if (!_boCol.IsValueCreated) return false;
+				var currentCol = _boCol.Value;
+            	return (currentCol.CreatedBusinessObjects.Count > 0) || (currentCol.MarkedForDeleteBusinessObjects.Count > 0)
+					   || (currentCol.RemovedBusinessObjects.Count > 0) || (currentCol.AddedBusinessObjects.Count > 0);
             }
         }
 
@@ -234,7 +237,7 @@ namespace Habanero.BO
         ///</summary>
         public BusinessObjectCollection<TBusinessObject> CurrentBusinessObjectCollection
         {
-            get { return _boCol; }
+			get { return _boCol.Value; }
         }
 
         /// <summary>
@@ -245,7 +248,7 @@ namespace Habanero.BO
         {
             get
             {
-                BusinessObjectCollection<TBusinessObject> currentCol = this.CurrentBusinessObjectCollection;
+                var currentCol = this.CurrentBusinessObjectCollection;
                 if (TimeOutHasExpired(currentCol))
                 {
                     RelationshipUtils.SetupCriteriaForRelationship(this, currentCol);
@@ -271,7 +274,7 @@ namespace Habanero.BO
         /// </summary>
         protected override void DoInitialisation()
         {
-            RelationshipUtils.SetupCriteriaForRelationship(this, _boCol);
+			RelationshipUtils.SetupCriteriaForRelationship(this, _boCol.Value);
         }
 
         /// <summary>
@@ -287,7 +290,7 @@ namespace Habanero.BO
         /// <returns></returns>
         internal override IBusinessObjectCollectionInternal GetLoadedBOColInternal()
         {
-            return _boCol;
+            return _boCol.Value;
         }
 
         ///<summary>
@@ -301,15 +304,16 @@ namespace Habanero.BO
 
         internal override void CancelEdits()
         {
-            foreach (TBusinessObject createdChild in _boCol.CreatedBusinessObjects.ToArray())
+			if (!_boCol.IsValueCreated) return;
+			var currentCol = _boCol.Value;
+        	foreach (TBusinessObject createdChild in currentCol.CreatedBusinessObjects.ToArray())
             {
                 createdChild.CancelEdits();
-                _boCol.RemoveInternal(createdChild);
-//                createdChild.
+				currentCol.RemoveInternal(createdChild);
             }
-            foreach (TBusinessObject addedChild in _boCol.AddedBusinessObjects.ToArray())
+			foreach (TBusinessObject addedChild in currentCol.AddedBusinessObjects.ToArray())
             {
-                _boCol.Remove(addedChild);
+				currentCol.Remove(addedChild);
                 addedChild.CancelEdits();
             }
             foreach (TBusinessObject dirtyChild in GetDirtyChildren())
@@ -320,18 +324,20 @@ namespace Habanero.BO
 
         internal override void AddDirtyChildrenToTransactionCommitter(TransactionCommitter transactionCommitter)
         {
-            foreach (TBusinessObject businessObject in GetDirtyChildren())
+			if (!_boCol.IsValueCreated) return;
+        	var currentCol = _boCol.Value;
+        	foreach (TBusinessObject businessObject in GetDirtyChildren())
             {
                 transactionCommitter.AddBusinessObject(businessObject);
             }
-            if (!this.OwningBO.Status.IsDeleted)
+        	if (!this.OwningBO.Status.IsDeleted)
             {
-                foreach (TBusinessObject businessObject in _boCol.AddedBusinessObjects)
+                foreach (TBusinessObject businessObject in currentCol.AddedBusinessObjects)
                 {
                     transactionCommitter.AddAddedChildBusinessObject(this, businessObject);
                 }
             }
-            foreach (TBusinessObject businessObject in _boCol.RemovedBusinessObjects)
+			foreach (TBusinessObject businessObject in currentCol.RemovedBusinessObjects)
             {
                 transactionCommitter.AddRemovedChildBusinessObject(this, businessObject);
             }
@@ -351,33 +357,35 @@ namespace Habanero.BO
 
         internal IList<TBusinessObject> GetDirtyChildren()
         {
-            IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
-            if (!_owningBo.Status.IsDeleted)
+        	IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
+			if (!_boCol.IsValueCreated) return dirtyChildren;
+        	var currentCol = _boCol.Value;
+        	if (!_owningBo.Status.IsDeleted)
             {
                 if (this.RelationshipDef.InsertParentAction == InsertParentAction.InsertRelationship)
                 {
-                    foreach (TBusinessObject bo in _boCol.CreatedBusinessObjects)
+					foreach (TBusinessObject bo in currentCol.CreatedBusinessObjects)
                     {
                         dirtyChildren.Add(bo);
                     }
                 }
             }
-            foreach (TBusinessObject bo in _boCol.MarkedForDeleteBusinessObjects)
+			foreach (TBusinessObject bo in currentCol.MarkedForDeleteBusinessObjects)
             {
                 dirtyChildren.Add(bo);
             }
             if (this.RelationshipDef.RelationshipType == RelationshipType.Composition
                 || this.RelationshipDef.RelationshipType == RelationshipType.Aggregation)
             {
-                foreach (TBusinessObject bo in _boCol.RemovedBusinessObjects)
+				foreach (TBusinessObject bo in currentCol.RemovedBusinessObjects)
                 {
                     dirtyChildren.Add(bo);
                 }
-                foreach (TBusinessObject bo in _boCol.AddedBusinessObjects)
+				foreach (TBusinessObject bo in currentCol.AddedBusinessObjects)
                 {
                     dirtyChildren.Add(bo);
                 }
-                foreach (TBusinessObject bo in _boCol.PersistedBusinessObjects)
+				foreach (TBusinessObject bo in currentCol.PersistedBusinessObjects)
                 {
                     if (bo.Status.IsDirty && !dirtyChildren.Contains(bo))
                     {

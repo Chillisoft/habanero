@@ -19,10 +19,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.Util;
 
 namespace Habanero.BO
 {
@@ -31,7 +29,6 @@ namespace Habanero.BO
     /// </summary>
     public class RelationshipCol : IRelationshipCol
     {
-      //  private static readonly ILog log = LogManager.GetLogger("Habanero.BO.RelationshipCol");
         private readonly IBusinessObject _bo;
         private readonly Dictionary<string, IRelationship> _relationships;
 

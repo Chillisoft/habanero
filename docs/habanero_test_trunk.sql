@@ -770,6 +770,7 @@ CREATE TABLE `mybo` (
   `TestProp` varchar(45) DEFAULT NULL,
   `TestProp2` varchar(45) DEFAULT NULL,
   `ShapeID` char(38) DEFAULT NULL,
+  `ByteArrayProp` blob,
   PRIMARY KEY (`MyBoID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -778,6 +779,8 @@ CREATE TABLE `mybo` (
 --
 
 /*!40000 ALTER TABLE `mybo` DISABLE KEYS */;
+INSERT INTO `mybo` (`MyBoID`,`TestProp`,`TestProp2`,`ShapeID`,`ByteArrayProp`) VALUES 
+ ('{751ACD97-4EB5-41B5-81B0-E4A1C84C36B7}',NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `mybo` ENABLE KEYS */;
 
 

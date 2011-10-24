@@ -23,8 +23,9 @@ using System.Data;
 using System.Globalization;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Logging;
 using Habanero.Util;
-using log4net;
+using System.Linq;
 
 // Limiting the number of records for a Select
 // -------------------------------------------
@@ -62,12 +63,13 @@ namespace Habanero.DB
     /// "See registry (480) think typesafe as well."
     public abstract class DatabaseConnection : MarshalByRefObject, IDatabaseConnection
     {
+        private static readonly object LockObject = new object();
         private readonly string _assemblyName;
         private readonly string _className;
         private string _connectString;
         private List<IDbConnection> _connections;
         private static IDatabaseConnection _currentDatabaseConnection;
-        private static readonly ILog log = LogManager.GetLogger("Habanero.DB.DatabaseConnection");
+        private static readonly IHabaneroLogger Log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = -1;
 
         /// <summary>
@@ -194,7 +196,7 @@ namespace Habanero.DB
                     }
                     catch (Exception ex)
                     {
-                        log.Warn("Error closing and disposing connection", ex);
+                        Log.Log("Error closing and disposing connection", ex, LogCategory.Warn);
                     }
                 }
                 _connections = new List<IDbConnection>(5);
@@ -256,26 +258,29 @@ namespace Habanero.DB
         {
             try
             {
-                log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
-                
-                // looks for closed connections for reading because open 
-                // connections could have readers still associated with them.
-                foreach (IDbConnection dbConnection in _connections)
+                lock (LockObject)
                 {
-                    if (dbConnection.State != ConnectionState.Closed) continue;
-                    dbConnection.Open();
-                    return dbConnection;
+                    //log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+
+                    // looks for closed connections for reading because open 
+                    // connections could have readers still associated with them.
+                    foreach (IDbConnection dbConnection in _connections)
+                    {
+                        if (dbConnection.State != ConnectionState.Closed) continue;
+                        dbConnection.Open();
+                        return dbConnection;
+                    }
+                    IDbConnection newDbConnection = this.NewConnection;
+                    newDbConnection.Open();
+                    _connections.Add(newDbConnection);
+                    return newDbConnection;
                 }
-                IDbConnection newDbConnection = this.NewConnection;
-                newDbConnection.Open();
-                _connections.Add(newDbConnection);
-                return newDbConnection;
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
                 throw;
             }
         }
@@ -290,23 +295,26 @@ namespace Habanero.DB
         {
             try
             {
-                log.Debug(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
-                foreach (IDbConnection dbConnection in _connections)
+                //log.Debug(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
+                lock (LockObject)
                 {
-                    if (dbConnection.State == ConnectionState.Closed)
+                    foreach (var dbConnection in _connections)
                     {
-                        return dbConnection;
+                        if (dbConnection.State == ConnectionState.Closed)
+                        {
+                            return dbConnection;
+                        }
                     }
+                    var newDbConnection = this.NewConnection;
+                    _connections.Add(newDbConnection);
+                    return newDbConnection;
                 }
-                IDbConnection newDbConnection = this.NewConnection;
-                _connections.Add(newDbConnection);
-                return newDbConnection;
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error opening connection to db : " + ex.GetType().Name + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
                 throw new DatabaseConnectionException
                     ("An error occurred while attempting " + "to connect to the database.", ex);
             }
@@ -320,9 +328,12 @@ namespace Habanero.DB
         {
             get
             {
-                IDbConnection connection = this.GetConnection();
-                connection.Open();
-                return connection;
+                lock (LockObject)
+                {
+                    var connection = this.GetConnection();
+                    connection.Open();
+                    return connection;
+                }
             }
         }
 
@@ -377,17 +388,17 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
             finally
             {
-                if (con != null) log.Debug(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
+                //if (con != null) log.Debug(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
             }
         }
 
@@ -415,17 +426,17 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
             }
             finally
             {
-                if (con != null) log.Debug(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
+                //if (con != null) log.Debug(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
             }
         }
 
@@ -455,10 +466,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error reading from database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + selectSql, LogCategory.Exception);
 
                 Console.Out.WriteLine
                     ("Error reading from database : " + Environment.NewLine
@@ -471,7 +482,7 @@ namespace Habanero.DB
             }
             finally
             {
-                if (con != null) log.Debug(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
+                //if (con != null) log.Debug(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
             }
         }
 
@@ -492,7 +503,7 @@ namespace Habanero.DB
         /// Executes a sql command that returns no result set and takes no 
         /// parameters, using the provided connection
         /// </summary>
-        /// <param name="sql">A valid sql statement (typically "insert",
+        /// <param name="statements">A valid sql statement (typically "insert",
         /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <returns>Returns the number of rows affected</returns>
@@ -500,9 +511,9 @@ namespace Habanero.DB
         /// In future override this method with others that allow you to 
         /// pass in stored procedures and parameters.
         /// </future>
-        public int ExecuteSql(ISqlStatementCollection sql)
+        public int ExecuteSql(IEnumerable<ISqlStatement> statements)
         {
-            return ExecuteSql(sql, null);
+            return ExecuteSql(statements, null);
         }
 
         /// <summary>
@@ -567,10 +578,10 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error writing to database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + sql, LogCategory.Exception);
                 Console.WriteLine
                     ("Error writing to database : " + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 10, true));
@@ -600,7 +611,7 @@ namespace Habanero.DB
             }
             catch (NotSupportedException ex)
             {
-                log.Warn("Error setting command timeout period", ex);
+                Log.Log("Error setting command timeout period", ex, LogCategory.Warn);
             }
             return dbCommand;
         }
@@ -615,7 +626,7 @@ namespace Habanero.DB
         /// Access and MySql, the sql statements will need to be split up
         /// and executed as separate transactions.
         /// </summary>
-        /// <param name="sql">A valid sql statement object (typically "insert",
+        /// <param name="statements">A valid sql statement object (typically "insert",
         /// "update" or "delete"). Note_ that this assumes that the
         /// sqlCommand is not a stored procedure.</param>
         /// <param name="transaction">A valid transaction object in which the 
@@ -628,10 +639,10 @@ namespace Habanero.DB
         /// In future override this method with methods that allow you to 
         /// pass in stored procedures and parameters.
         /// </future>
-        public virtual int ExecuteSql(ISqlStatementCollection sql, IDbTransaction transaction)
+        public virtual int ExecuteSql(IEnumerable<ISqlStatement> statements, IDbTransaction transaction)
         {
             bool inTransaction = false;
-            ArgumentValidationHelper.CheckArgumentNotNull(sql, "sql");
+            ArgumentValidationHelper.CheckArgumentNotNull(statements, "statements");
             IDbConnection con = null;
             try
             {
@@ -656,7 +667,7 @@ namespace Habanero.DB
                     cmd.Transaction = transaction;
                 }
                 int totalRowsAffected = 0;
-                foreach (SqlStatement statement in sql)
+                foreach (SqlStatement statement in statements)
                 {
                     statement.SetupCommand(cmd);
                     //cmd.CommandText = sql;
@@ -679,18 +690,18 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error writing to database : " + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                log.Error("Sql: " + sql);
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + statements, LogCategory.Exception);
                 if (transaction != null)
                 {
                     transaction.Rollback();
                 }
                 throw new DatabaseWriteException
                     ("There was an error writing to the database. Please contact your system administrator."
-                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + sql.ToString(),
-                     "The command executeNonQuery could not be completed.", ex, sql.ToString(), ErrorSafeConnectString());
+                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + statements.ToString(),
+                     "The command executeNonQuery could not be completed.", ex, statements.ToString(), ErrorSafeConnectString());
             }
             finally
             {
@@ -712,7 +723,7 @@ namespace Habanero.DB
         public int ExecuteSql(ISqlStatement sql)
         {
             if (sql == null) throw new ArgumentNullException("sql");
-            return ExecuteSql(new SqlStatementCollection(sql));
+            return ExecuteSql(new[] { sql });
         }
 
         /// <summary>
@@ -792,6 +803,15 @@ namespace Habanero.DB
         public abstract IParameterNameGenerator CreateParameterNameGenerator();
 
         /// <summary>
+        /// Creates a <see cref="ISqlStatement"/> initialised with this <see cref="IDatabaseConnection"/>
+        /// </summary>
+        /// <returns></returns>
+        public ISqlStatement CreateSqlStatement()
+        {
+            return new SqlStatement(this);
+        }
+
+        /// <summary>
         /// Loads data from the database into a DataTable object, using the
         /// sql statement object provided
         /// </summary>
@@ -829,17 +849,17 @@ namespace Habanero.DB
             }
             catch (Exception ex)
             {
-                log.Error
+                Log.Log
                     ("Error in LoadDataTable:" + Environment.NewLine
-                     + ExceptionUtilities.GetExceptionString(ex, 8, true));
-                log.Error("Sql string: " + selectSql);
+                     + ExceptionUtilities.GetExceptionString(ex, 8, true), LogCategory.Exception);
+                Log.Log("Sql string: " + selectSql, LogCategory.Exception);
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
             finally
             {
-                if (con != null) log.Debug(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
+                //if (con != null) log.Debug(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
             }
         }
         /// <summary>

@@ -21,9 +21,7 @@ using System.Security;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using Habanero.BO.ClassDefinition;
-using Habanero.Util;
-using log4net;
+using Habanero.Base.Logging;
 
 namespace Habanero.BO
 {
@@ -38,9 +36,11 @@ namespace Habanero.BO
     public class BOProp : IBOProp
     {
         /// <summary> The Logger </summary>
-        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BOProp");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BOProp));
         /// <summary> The current value of the BOProp </summary>
+// ReSharper disable InconsistentNaming
         protected object _currentValue;
+
         /// <summary> Whether the prop has been edited since being created or loaded from the database </summary>
         protected internal bool _isDirty;
         /// <summary> Is the boProp valid </summary>
@@ -62,6 +62,7 @@ namespace Habanero.BO
         private IBOPropAuthorisation _boPropAuthorisation;
         protected bool _convertEmptyStringToNull = true;
         private bool _loadedPropHasBeenValidated;
+        // ReSharper restore InconsistentNaming
         /// <summary>
         /// Indicates that the value held by the property has been
         /// changed. This is fired any time that the current value of the property is set to a new value.
@@ -294,10 +295,10 @@ namespace Habanero.BO
                 _valueBeforeLastEdit = _currentValue;
                 _currentValue = newValue;
                 _isDirty = !PersistedValueEquals(newValue);
-                if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
+/*                if (_isDirty && UpdatesBusinessObjectStatus && _businessObject != null)
                 {
                     _businessObject.SetDirty(true);
-                }
+                }*/
                 FireBOPropValueUpdated();
             }
         }

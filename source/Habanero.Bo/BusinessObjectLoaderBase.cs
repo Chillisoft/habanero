@@ -22,7 +22,6 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
-using log4net;
 
 namespace Habanero.BO
 {
@@ -34,15 +33,18 @@ namespace Habanero.BO
     [Serializable]
     public abstract class BusinessObjectLoaderBase: MarshalByRefObject
     {
-        /// <summary>
-        /// The log file used to log errors or events for this class
-        /// </summary>
-//        protected static readonly ILog log = LogManager.GetLogger("Habanero.BO.BusinessObjectLoaderBase");
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+			return CriteriaParser.CreateCriteria(criteriaString);
+        }
+
+		private static void PrepareForRefresh(IBusinessObjectCollection col)
+		{
+			var classDef = col.ClassDef;
+			Criteria criteria = col.SelectQuery.Criteria;
             QueryBuilder.PrepareCriteria(classDef, criteria);
-            return criteria;
+			//Ensure that all the criteria field sources are merged correctly
+			col.SelectQuery.Criteria = criteria;
         }
 
         #region GetBusinessObjectCollection
@@ -65,7 +67,8 @@ namespace Habanero.BO
             where T : class, IBusinessObject, new()
         {
             CheckNotTypedAsBusinessObject<T>();
-            BusinessObjectCollection<T> col = new BusinessObjectCollection<T> {SelectQuery = {Criteria = criteria}};
+            BusinessObjectCollection<T> col = new BusinessObjectCollection<T>();
+        	col.SelectQuery.Criteria = criteria;
             Refresh(col);
             return col;
         }
@@ -81,8 +84,6 @@ namespace Habanero.BO
         {
             CheckNotTypedAsBusinessObject<T>();
             Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
-            //            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
-            //            QueryBuilder.PrepareCriteria(ClassDef.ClassDefs[typeof(T)], criteria);
             return GetBusinessObjectCollection<T>(criteria);
         }
 
@@ -112,7 +113,8 @@ namespace Habanero.BO
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
             boColInternal.Loading = true;
-//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
+//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);PrepareForRefresh
+        	PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
  //           ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
@@ -128,7 +130,8 @@ namespace Habanero.BO
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
-            boColInternal.Loading = true;
+			boColInternal.Loading = true; 
+			PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
 //            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
@@ -353,7 +356,6 @@ namespace Habanero.BO
             IBusinessObjectCollection col = CreateCollectionOfType(classDef);
             if (orderCriteria == null) orderCriteria = new OrderCriteria();
             col.ClassDef = classDef;
-            QueryBuilder.PrepareCriteria(classDef, criteria);
             col.SelectQuery.Criteria = criteria;
             col.SelectQuery.OrderCriteria = orderCriteria;
             Refresh(col);

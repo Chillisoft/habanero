@@ -25,7 +25,8 @@ using Habanero.Test.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.TransactionCommitters
-{
+{ // ReSharper disable InconsistentNaming
+
     [TestFixture]
     public class TestTransactionCommitter : TestUsingDatabase
     {
@@ -319,6 +320,18 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
             //---------------Execute Test ----------------------
             committerDB.AddBusinessObject(null);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+        }
+        [Test]
+        public void Test_InsertNull_DoesNotFailInTransactionCommitter()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committerDB = new TransactionCommitterStub();
+            //---------------Assert Preconditions---------------
+            Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
+            //---------------Execute Test ----------------------
+            committerDB.InsertBusinessObject(null);
             //---------------Test Result -----------------------
             Assert.AreEqual(0, committerDB.OriginalTransactions.Count);
         }

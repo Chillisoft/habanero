@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
-using log4net;
+using Habanero.Base.Logging;
 
 namespace Habanero.BO
 {
@@ -53,12 +53,12 @@ namespace Habanero.BO
     ///</summary>
     public class BusinessObjectManager : IBusinessObjectManager
     {
-        private static readonly ILog _log = LogManager.GetLogger("Habanero.BO.BusinessObjectManager");
+        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObjectManager));
         /// <summary>
         /// The Single Instance of the <see cref="BusinessObjectManager"/> used by the Singleton.
         /// </summary>
         protected static IBusinessObjectManager _businessObjectManager = new BusinessObjectManager();
-
+         
         //protected readonly Dictionary<string, WeakReference> _loadedBusinessObjects =
         //    new Dictionary<string, WeakReference>();
         /// <summary> The Busienss Objects Loaded in memory. This is a <see cref="WeakReference"/> so that the objects can still be garbage collected. </summary>
@@ -102,7 +102,7 @@ namespace Habanero.BO
         /// <param name="businessObject"></param>
         public virtual void Add(IBusinessObject businessObject)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering void Add(IBusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering void Add(IBusinessObject businessObject)");
             lock (_lock)
             {
                 IBusinessObject loadedBusinessObject = GetObjectIfInManager(businessObject.ID.ObjectID);
@@ -110,7 +110,7 @@ namespace Habanero.BO
                 {
                     if (ReferenceEquals(loadedBusinessObject, businessObject))
                     {
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting void Add(IBusinessObject businessObject) (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting void Add(IBusinessObject businessObject) (exit 1)");
                         return;
                     }
 
@@ -141,7 +141,7 @@ namespace Habanero.BO
             }
             businessObject.IDUpdated += _updateIDEventHandler; //Register for ID Updated event this event is fired
             // if any of the properties that make up the primary key are changed/Updated this event is fires.
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting void Add(IBusinessObject businessObject) (exit 2)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting void Add(IBusinessObject businessObject) (exit 2)");
         }
 
         /// <summary>
@@ -152,14 +152,14 @@ namespace Habanero.BO
         /// <param name="e"></param>
         protected virtual void ObjectID_Updated_Handler(object sender, BOEventArgs e)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering ObjectID_Updated_Handler(object sender, BOEventArgs e)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering ObjectID_Updated_Handler(object sender, BOEventArgs e)");
             //if (e.BusinessObject.ID.IsGuidObjectID) return;
             lock (_lock)
             {
                 this.Remove(e.BusinessObject);
                 this.Add(e.BusinessObject);
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ObjectID_Updated_Handler(object sender, BOEventArgs e)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ObjectID_Updated_Handler(object sender, BOEventArgs e)");
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Habanero.BO
         /// <returns>Whether the busienss object is loadd or not</returns>
         public bool Contains(IBusinessObject businessObject)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Contains(IBusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Contains(IBusinessObject businessObject)");
             lock (_lock)
             {
                 Guid objectID = businessObject.ID.ObjectID;
@@ -186,7 +186,7 @@ namespace Habanero.BO
                     }
                     if (ReferenceEquals(businessObject, businessObjectFromManager))
                     {
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 1)");
                         return true;
                     }
                 }
@@ -204,12 +204,12 @@ namespace Habanero.BO
                     }
                     if (ReferenceEquals(businessObject, businessObjectFromManager))
                     {
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 2)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 2)");
                         return true;
                     }
                 }
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 3)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(IBusinessObject businessObject) (exit 3)");
             return false;
         }
 
@@ -230,7 +230,7 @@ namespace Habanero.BO
         ///<returns>Whether the business object is in the <see cref="BusinessObjectManager"/> or not.</returns>
         public bool Contains(Guid objectID)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Contains(Guid objectID)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Contains(Guid objectID)");
             lock (_lock)
             {
                 bool containsKey = _loadedBusinessObjects.ContainsKey(objectID);
@@ -239,14 +239,14 @@ namespace Habanero.BO
                     if (!BusinessObjectWeakReferenceIsAlive(objectID))
                     {
                         _loadedBusinessObjects.Remove(objectID);
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 1)");
                         return false;
                     }
-                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 2)");
+                    //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 2)");
                     return true;
                 }
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 3)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Contains(Guid objectID) (exit 3)");
             return false;
         }
 
@@ -268,12 +268,12 @@ namespace Habanero.BO
         /// <param name="businessObject">business object to be removed.</param>
         public void Remove(IBusinessObject businessObject)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Remove(IBusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Remove(IBusinessObject businessObject)");
             lock (_lock)
             {
                 if (!Contains(businessObject))
                 {
-                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(IBusinessObject businessObject) (exit 1)");
+                    //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(IBusinessObject businessObject) (exit 1)");
                     return;
                 }
 
@@ -298,7 +298,7 @@ namespace Habanero.BO
                     _compositeKeyIDs.Remove(businessObject.ID.AsString_LastPersistedValue());
                 }
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(IBusinessObject businessObject) (exit 2)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(IBusinessObject businessObject) (exit 2)");
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace Habanero.BO
         /// <param name="businessObject">The business object being removed at this position.</param>
         protected void Remove(Guid objectID, IBusinessObject businessObject)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Remove(Guid objectID, IBusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Remove(Guid objectID, IBusinessObject businessObject)");
             lock (_lock)
             {
                 if (Contains(objectID) && ReferenceEquals(businessObject, this[objectID]))
@@ -318,7 +318,7 @@ namespace Habanero.BO
                     DeregisterForIDUpdatedEvent(businessObject);
                 }
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(Guid objectID, IBusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Remove(Guid objectID, IBusinessObject businessObject)");
         }
 
         /// <summary>
@@ -339,18 +339,18 @@ namespace Habanero.BO
         {
             get
             {
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering this[Guid objectID]");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering this[Guid objectID]");
                 lock (_lock)
                 {
                     if (Contains(objectID))
                     {
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting this[Guid objectID] (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting this[Guid objectID] (exit 1)");
                         return (IBusinessObject) _loadedBusinessObjects[objectID].Target;
                     }
                 }
                 string message = "There was an attempt to retrieve the object identified by '" + objectID
                                  + "' from the object manager but it is not currently loaded.";
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting this[Guid objectID] (exit 2)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting this[Guid objectID] (exit 2)");
                 throw new HabaneroDeveloperException
                     ("There is an application error please contact your system administrator." + Environment.NewLine
                      + message, message);
@@ -374,12 +374,12 @@ namespace Habanero.BO
         /// </summary>
         public void ClearLoadedObjects()
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering ClearLoadedObjects()");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering ClearLoadedObjects()");
             lock (_lock)
             {
                 if (_loadedBusinessObjects.Count == 0)
                 {
-                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ClearLoadedObjects() (exit 1)");
+                    //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ClearLoadedObjects() (exit 1)");
                     return;
                 }
                 Guid[] keysArray = new Guid[_loadedBusinessObjects.Count];
@@ -392,7 +392,7 @@ namespace Habanero.BO
                 }
                 _compositeKeyIDs = new Dictionary<string, Guid>();
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ClearLoadedObjects() (exit 2)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting ClearLoadedObjects() (exit 2)");
         }
 
         #endregion
@@ -405,7 +405,7 @@ namespace Habanero.BO
         /// <returns>A collection of all loaded matching business objects</returns>
         public IList<T> Find<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Find<T>(Criteria criteria)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Find<T>(Criteria criteria)");
             lock (_lock)
             {
                 IList<T> collection = new List<T>();
@@ -431,7 +431,7 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Find<T>(Criteria criteria)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Find<T>(Criteria criteria)");
                 return collection;
             }
         }
@@ -443,7 +443,7 @@ namespace Habanero.BO
         /// <returns></returns>
         public IBusinessObject FindFirst<T>(Criteria criteria)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst<T>(Criteria criteria)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst<T>(Criteria criteria)");
             lock (_lock)
             {
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
@@ -459,7 +459,7 @@ namespace Habanero.BO
                     {
                         if (bo is T && (criteria == null || criteria.IsMatch(bo, false)))
                         {
-                            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": FindFirst<T>(Criteria criteria) (exit 1)");
+                            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": FindFirst<T>(Criteria criteria) (exit 1)");
                             return bo;
                         }
                     }
@@ -469,7 +469,7 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": FindFirst<T>(Criteria criteria) (exit 2)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": FindFirst<T>(Criteria criteria) (exit 2)");
                 return null;
             }
         }
@@ -511,7 +511,7 @@ namespace Habanero.BO
         /// <returns>A collection of all loaded matching business objects</returns>
         public IList Find(Criteria criteria, Type boType)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Find(Criteria criteria, Type boType)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering Find(Criteria criteria, Type boType)");
             lock (_lock)
             {
                 IList collection = new ArrayList();
@@ -538,7 +538,7 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Find(Criteria criteria, Type boType)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting Find(Criteria criteria, Type boType)");
                 return collection;
             }
         }
@@ -552,7 +552,7 @@ namespace Habanero.BO
         /// <returns></returns>
         public IBusinessObject FindFirst(BOPrimaryKey key, Type boType)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(BOPrimaryKey key, Type boType)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(BOPrimaryKey key, Type boType)");
             lock (_lock)
             {
                 string asStringCurrentValue = key.AsString_CurrentValue();
@@ -565,13 +565,13 @@ namespace Habanero.BO
                     catch (HabaneroDeveloperException ex)
                     {
                         _compositeKeyIDs.Remove(asStringCurrentValue);
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, Type boType) (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, Type boType) (exit 1)");
                         return FindFirst(key.GetKeyCriteria(), boType);
                     }
                 }
                 else
                 {
-                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, Type boType) (exit 2)");
+                    //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, Type boType) (exit 2)");
                     return null;
                 }
             }
@@ -582,11 +582,11 @@ namespace Habanero.BO
         /// so this method is far faster than the other FindFirst methods for finding objects with composite keys.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="boType"></param>
+        /// <param name="classDef"></param>
         /// <returns></returns>
         public IBusinessObject FindFirst(BOPrimaryKey key, IClassDef classDef)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(BOPrimaryKey key, IClassDef classDef)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(BOPrimaryKey key, IClassDef classDef)");
             lock (_lock)
             {
                 string asStringCurrentValue = key.AsString_CurrentValue();
@@ -599,13 +599,13 @@ namespace Habanero.BO
                     catch (HabaneroDeveloperException ex)
                     {
                         _compositeKeyIDs.Remove(asStringCurrentValue);
-                        _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 1)");
+                        //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 1)");
                         return FindFirst(key.GetKeyCriteria(), classDef);
                     }
                 }
                 else
                 {
-                    _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 2)");
+                    //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(BOPrimaryKey key, IClassDef classDef) (exit 2)");
                     return null;
                 }
             }
@@ -619,7 +619,7 @@ namespace Habanero.BO
         /// <returns></returns>
         public IBusinessObject FindFirst(Criteria criteria, Type boType)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(Criteria criteria, Type boType)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(Criteria criteria, Type boType)");
             lock (_lock)
             {
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
@@ -636,7 +636,7 @@ namespace Habanero.BO
                     {
                         if (boType.IsInstanceOfType(bo) && (criteria == null || criteria.IsMatch(bo, false)))
                         {
-                            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, Type boType) (exit 1)");
+                            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, Type boType) (exit 1)");
                             return bo;
                         }
                     }
@@ -645,7 +645,7 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, Type boType) (exit 2)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, Type boType) (exit 2)");
                 return null;
             }
         }  
@@ -658,7 +658,7 @@ namespace Habanero.BO
         /// <returns></returns>
         public IBusinessObject FindFirst(Criteria criteria, IClassDef classDef)
         {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(Criteria criteria, IClassDef classDef)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering FindFirst(Criteria criteria, IClassDef classDef)");
             lock (_lock)
             {
                 WeakReference[] valueArray = new WeakReference[_loadedBusinessObjects.Count];
@@ -675,7 +675,7 @@ namespace Habanero.BO
                     {
                         if (bo.ClassDef==classDef && (criteria == null || criteria.IsMatch(bo, false)))
                         {
-                            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, IClassDef classDef) (exit 1)");
+                            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, IClassDef classDef) (exit 1)");
                             return bo;
                         }
                     }
@@ -684,7 +684,7 @@ namespace Habanero.BO
                         //Do Nothing
                     }
                 }
-                _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, IClassDef classDef) (exit 2)");
+                //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting FindFirst(Criteria criteria, IClassDef classDef) (exit 2)");
                 return null;
             }
         }
@@ -695,8 +695,8 @@ namespace Habanero.BO
         /// origional businessObject has been made.
         ///</summary>
         ///<param name="businessObject"></param>
-        public void AddWithReplace(BusinessObject businessObject) {
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering AddWithReplace(BusinessObject businessObject)");
+        public void AddWithReplace(IBusinessObject businessObject) {
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Entering AddWithReplace(BusinessObject businessObject)");
             lock (_lock)
             {
                 if (this.Contains(businessObject.ID))
@@ -705,7 +705,7 @@ namespace Habanero.BO
                 }
                 this.Add(businessObject);
             }
-            _log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting AddWithReplace(BusinessObject businessObject)");
+            //_log.Debug(Thread.CurrentThread.ManagedThreadId + ": Exiting AddWithReplace(BusinessObject businessObject)");
         }
 
         /// <summary>
@@ -725,9 +725,8 @@ namespace Habanero.BO
                         return this[id];
                     } catch (HabaneroDeveloperException ex)
                     {
-                        _log.Debug(
-                            "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: " +
-                            ex.Message + Environment.NewLine + ex.StackTrace);
+                        _logger.Log(
+                            "Error in GetObjectIfInManager: Contains returned true but this[] threw an exception: ", ex, LogCategory.Warn);
                         return null;
                     }
                 }

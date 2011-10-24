@@ -27,7 +27,7 @@ using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 using Rhino.Mocks;
-
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
 
@@ -259,7 +259,7 @@ namespace Habanero.Test.BO
             string testPropDefault = TestUtil.GetRandomString();
             MyBO.LoadDefaultClassDefWithDefault(testPropDefault);
             MyBO bo = new MyBO();
-            Guid id = bo.MyBoID.Value;
+            Guid id = bo.MyBoID.GetValueOrDefault();
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
             bo.CancelEdits();
@@ -292,8 +292,8 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO bo = ContactPersonTestBO.CreateUnsavedContactPerson();
-            bool updatedEventFired = false;
+            var bo = ContactPersonTestBO.CreateUnsavedContactPerson();
+            var updatedEventFired = false;
             bo.IDUpdated += ((sender, e) => updatedEventFired = true);
             //---------------Assert Precondition----------------
             Assert.IsFalse(updatedEventFired);
@@ -308,9 +308,9 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
-            IBOProp boProp = bo.Props["TestProp"];
+            var classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            var bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            var boProp = bo.Props["TestProp"];
             //---------------Assert Precondition----------------
             Assert.IsTrue(boProp.IsValid);
             //---------------Execute Test ----------------------
@@ -367,7 +367,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef();
+            MyBO.LoadDefaultClassDef();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO
         {
             //--------------- Set up test pack ------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
+            MyBO.LoadDefaultClassDef_CompulsoryField_TestProp();
             MyBO myBO = new MyBO();
             //--------------- Test Preconditions ----------------
 
@@ -691,24 +691,22 @@ namespace Habanero.Test.BO
             Assert.IsFalse(bo.Status.IsValid(), "BO should not be valid with a TestProp value of 'abcdef'");
         }
 
-
-        [Ignore("Cannot figure out what this is doing and why it is suddenly failing")] //TODO Brett 07 Dec 2009: Ignored Test - Cannot figure out what this is doing and why it is suddenly failing
         [Test]
         public void TestApplyEditResetsPreviousValues()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadDefaultClassDef();
-            MockRepository mock = new MockRepository();
-            IDatabaseConnection itsConnection = mock.DynamicMock<IDatabaseConnection>();
+            var classDef = MyBO.LoadDefaultClassDef();
+            var mock = new MockRepository();
+            var itsConnection = mock.DynamicMock<IDatabaseConnection>();
             Expect.Call(itsConnection.GetConnection()).Return(DatabaseConnection.CurrentConnection.GetConnection()).
                 Repeat.Times(2);
             Expect.Call(itsConnection.ExecuteSql(null, null)).IgnoreArguments().Return(1).Repeat.Times(1);
             mock.ReplayAll();
-            MyBO bo = (MyBO) classDef.CreateNewBusinessObject();
+            var bo = (MyBO) classDef.CreateNewBusinessObject();
 
             bo.SetPropertyValue("TestProp", "Goodbye");
-            TransactionCommitterStub committer = new TransactionCommitterStub();
+            var committer = new TransactionCommitterStub();
             committer.AddBusinessObject(bo);
             //-------------Assert Preconditions -------------
             //---------------Execute Test ----------------------
@@ -1096,7 +1094,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             Assert.IsTrue(markForDeleteEventFired);
         }
@@ -1248,8 +1246,6 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(isDeletable);
         }
-        //TODO: Cascade relationships
-        //TODO: MarkForDelete when CascadeDelete
         [Test]
         public void Test_MarkForDelete_NewObjectDoesNotRaiseError()
         {
@@ -1273,7 +1269,7 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             Assert.IsTrue(markForDeleteEventFired);
         }
@@ -1290,14 +1286,14 @@ namespace Habanero.Test.BO
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
             //---------------Execute Test ----------------------
             bo.Save();
             //---------------Test Result -----------------------
             Assert.IsTrue(bo.Status.IsDeleted);
             Assert.IsTrue(bo.Status.IsNew);
-            Assert.IsTrue(bo.Status.IsDirty);
+            Assert.IsFalse(bo.Status.IsDirty);
             Assert.IsTrue(bo.Status.IsEditing);
         }
 
@@ -1582,13 +1578,13 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             BOStatus boStatus1 = new BOStatus(new Car());
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
-            boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            //boStatus1.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus1.SetBOFlagValue(BOStatus.Statuses.isNew, false);
 
             BOStatus boStatus2 = new BOStatus(new Car());
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isDeleted, true);
-            boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
+            //boStatus2.SetBOFlagValue(BOStatus.Statuses.isDirty, false);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isEditing, true);
             boStatus2.SetBOFlagValue(BOStatus.Statuses.isNew, false);
             //---------------Execute Test ----------------------
@@ -1878,28 +1874,6 @@ namespace Habanero.Test.BO
                 Assert.IsInstanceOf<ArgumentException>(ex);
                 StringAssert.Contains("testBo => (testBo.FirstName + \"123\") is not a valid property on ContactPersonTestBO", ex.Message);
             }
-        }
-
-        [Test]
-        public void Test_UpdateDirtyStatusFromProperties()
-        {
-            //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
-            BOStatus status = (BOStatus) contactPerson.Status;
-            status.SetBOFlagValue(BOStatus.Statuses.isDirty, true);
-
-            //-------------Assert Preconditions -------------
-            Assert.IsTrue(contactPerson.Status.IsDirty);
-
-            //---------------Execute Test ----------------------
-
-            contactPerson.UpdateDirtyStatusFromProperties();
-            //---------------Test Result -----------------------
-
-            Assert.IsFalse(contactPerson.Status.IsDirty);
-            //---------------Tear Down -------------------------          
         }
 
 

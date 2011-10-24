@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Globalization;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -25,6 +26,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using NUnit.Framework;
 
+// ReSharper disable InconsistentNaming
 namespace Habanero.Test.DB.InheritanceSqlGeneration
 {
     /// <summary>
@@ -65,12 +67,23 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         {
             Assert.AreEqual(ORMapping.ClassTableInheritance, Circle.GetClassDef().SuperClassDef.ORMapping);
         }
-
+        /// <summary>
+        /// This is actually an anomaly resulting from the way in which the 
+        /// CircleID is being set. The CircleID is therefore seen as dirty 
+        /// despite the fact that it is really not dirty. 
+        /// The result is that hte circle is seen as dirty since its id prop 
+        /// has been changed.
+        /// This is an anomoly of class table inheritance only other inheritance is fine.
+        /// NNB_ This reference ID must be kept as dirty since any update statements must 
+        /// correclty update this prop to the DB.
+        /// </summary>
         [Test]
-        public void TestCircleIsNotDirty()
+        public void TestNewCircle_ShouldbeDirty()
         {
-            Circle circle = new Circle();
-            Assert.IsFalse(circle.Status.IsDirty);
+            //---------------Execute Test ----------------------
+            var circle = new Circle();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(circle.Status.IsDirty);
         }
 
         [Test]
@@ -100,23 +113,24 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleInsertSql()
         {
-            Assert.AreEqual(2, itsInsertSql.Count,
+            var sqlStatements = itsInsertSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 insert sql statements when using class table inheritance");
             Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1)",
-                            itsInsertSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "Class Table inheritance: First insert Sql statement is incorrect.");
-            Assert.AreEqual(strID, itsInsertSql[0].Parameters[0].Value,
+            Assert.AreEqual(strID, sqlStatements[0].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in first insert statement using class table inheritance");
-            Assert.AreEqual("MyShape", itsInsertSql[0].Parameters[1].Value,
+            Assert.AreEqual("MyShape", sqlStatements[0].Parameters[1].Value,
                             "Parameter ShapeName has incorrect value in first insert statement using class table inheritance");
             Assert.AreEqual("INSERT INTO `circle_table` (`CircleID_field`, `Radius`, `ShapeID_field`) VALUES (?Param0, ?Param1, ?Param2)",
-                            itsInsertSql[1].Statement.ToString(),
+                            sqlStatements[1].Statement.ToString(),
                             "Class Table inheritance: Second Sql statement is incorrect.");
-            Assert.AreEqual(strID, itsInsertSql[1].Parameters[0].Value,
+            Assert.AreEqual(strID, sqlStatements[1].Parameters[0].Value,
                             "Parameter CircleID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(strID, itsInsertSql[1].Parameters[2].Value,
+            Assert.AreEqual(strID, sqlStatements[1].Parameters[2].Value,
                             "Parameter ShapeID has incorrect value in second insert statement using class table inheritance.");
-            Assert.AreEqual(10, itsInsertSql[1].Parameters[1].Value,
+            Assert.AreEqual(10, sqlStatements[1].Parameters[1].Value,
                             "Parameter Radius has incorrect value in second insert statement using class table inheritance.");
         }
 
@@ -133,38 +147,40 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestCircleUpdateSql()
         {
-            Assert.AreEqual(2, itsUpdateSql.Count,
+            var sqlStatements = itsUpdateSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 update sql statements when using class table inheritance");
             Assert.AreEqual("UPDATE `Shape_table` SET `ShapeID_field` = ?Param0, `ShapeName` = ?Param1 WHERE `ShapeID_field` = ?Param2",
-                            itsUpdateSql[0].Statement.ToString(),
+                            sqlStatements[0].Statement.ToString(),
                             "Class table inheritance: first update sql statement is incorrect.");
-            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[0].Value,
+            Assert.AreEqual(strID, sqlStatements[0].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual("MyShape", itsUpdateSql[0].Parameters[1].Value,
+            Assert.AreEqual("MyShape", sqlStatements[0].Parameters[1].Value,
                             "Parameter ShapeName has incorrect value in first update statement using class table inheritance");
-            Assert.AreEqual(strID, itsUpdateSql[0].Parameters[2].Value,
+            Assert.AreEqual(strID, sqlStatements[0].Parameters[2].Value,
                             "Parameter ShapeID in where clause has incorrect value in first update statement using class table inheritance");
             Assert.AreEqual("UPDATE `circle_table` SET `Radius` = ?Param0 WHERE `CircleID_field` = ?Param1",
-                            itsUpdateSql[1].Statement.ToString(),
+                            sqlStatements[1].Statement.ToString(),
                             "Class table inheritance: second update sql statement is incorrect.");
-            Assert.AreEqual(10, itsUpdateSql[1].Parameters[0].Value,
+            Assert.AreEqual(10, sqlStatements[1].Parameters[0].Value,
                             "Parameter Radius has incorrect value in second update statement using class table inheritance");
-            Assert.AreEqual(strID, itsUpdateSql[1].Parameters[1].Value,
+            Assert.AreEqual(strID, sqlStatements[1].Parameters[1].Value,
                             "Parameter CircleID has incorrect value in second update statement using class table inheritance");
         }
 
         [Test]
         public void TestCircleDeleteSql()
         {
-            Assert.AreEqual(2, itsDeleteSql.Count,
+            var sqlStatements = itsDeleteSql.ToList();
+            Assert.AreEqual(2, sqlStatements.Count,
                             "There should be 2 delete sql statements when using class table inheritance.");
-            Assert.AreEqual("DELETE FROM `circle_table` WHERE `CircleID_field` = ?Param0", itsDeleteSql[0].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `circle_table` WHERE `CircleID_field` = ?Param0", sqlStatements[0].Statement.ToString(),
                             "Class table inheritance: first delete sql statement is incorrect.");
-            Assert.AreEqual(strID, itsDeleteSql[0].Parameters[0].Value,
+            Assert.AreEqual(strID, sqlStatements[0].Parameters[0].Value,
                             "Parameter CircleID has incorrect value in first delete statement in where clause.");
-            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", itsDeleteSql[1].Statement.ToString(),
+            Assert.AreEqual("DELETE FROM `Shape_table` WHERE `ShapeID_field` = ?Param0", sqlStatements[1].Statement.ToString(),
                             "Class table inheritance: second delete sql statement is incorrect.");
-            Assert.AreEqual(strID, itsDeleteSql[1].Parameters[0].Value,
+            Assert.AreEqual(strID, sqlStatements[1].Parameters[0].Value,
                             "Parameter ShapeID has incorrect value in second delete statement in where clause.");
         }
 

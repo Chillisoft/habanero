@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 
 namespace Habanero.Test
@@ -52,8 +53,7 @@ namespace Habanero.Test
             KeyDefCol keysCol = new KeyDefCol();
             RelationshipDefCol relDefCol = new RelationshipDefCol();
             //ClassDef lClassDef = new ClassDef(typeof (FilledCircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol);
-            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKey), null, lPropDefCol, keysCol, relDefCol, null);
-            lClassDef.TableName = "FilledCircle_table";
+            ClassDef lClassDef = new ClassDef(typeof(FilledCircleNoPrimaryKey), null, "FilledCircle_table", lPropDefCol, keysCol, relDefCol, null);
             lClassDef.SuperClassDef = new SuperClassDef(Circle.GetClassDef(), ORMapping.ConcreteTableInheritance);
             ClassDef.ClassDefs.Add(lClassDef);
             return lClassDef;

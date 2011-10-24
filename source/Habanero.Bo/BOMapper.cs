@@ -24,8 +24,6 @@ using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 
-//using log4net;
-
 namespace Habanero.BO
 {
     /// <summary>
@@ -33,7 +31,6 @@ namespace Habanero.BO
     /// </summary>
     public class BOMapper
     {
-        //private static readonly ILog log = LogManager.GetLogger("Habanero.BO.BoMapper");
         private readonly IBusinessObject _businessObject;
 
         /// <summary>
@@ -105,6 +102,7 @@ namespace Habanero.BO
 
             return propertyMapper.GetPropertyValue();
         }
+
         /// <summary>
         /// This is a bit of a hack_ was used on a specific project some time ago.
         /// This is not generally supported throughout Habanero so has been isolated here.
@@ -127,7 +125,7 @@ namespace Habanero.BO
             if (relatedBo == null)
             {
                 return null;
-               
+                //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
             }
             BOMapper relatedBoMapper = new BOMapper(relatedBo);
             return relatedBoMapper.GetPropertyValueToDisplay(propertyName);
@@ -137,7 +135,6 @@ namespace Habanero.BO
         {
             return propertyName.IndexOf("|") != -1;
         }
-
 
         ///<summary>
         /// Sets a property of a Business Object given the property name 
@@ -151,7 +148,6 @@ namespace Habanero.BO
             var propertyMapper = BOPropMapperFactory.CreateMapper(this._businessObject, propertyName);
              propertyMapper.SetPropertyValue(value);
         }
-
 
         // ReSharper restore MemberCanBePrivate.Global
         /// <summary>
@@ -175,7 +171,6 @@ namespace Habanero.BO
                     ILookupListWithClassDef lookupList = (ILookupListWithClassDef)propDef.LookupList;
                     return lookupList.ClassDef;
                 }
-                
             }
             return null;
         }

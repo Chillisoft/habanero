@@ -273,5 +273,9 @@ namespace Habanero.BO
             return _defaultBusinessObjectLoader.GetCount(classDef, criteria);
         }
 
+        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

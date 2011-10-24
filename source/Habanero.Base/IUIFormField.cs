@@ -103,6 +103,10 @@ namespace Habanero.Base
         /// </summary>
         string Label { get; set; }
 
+        /// <summary>
+        /// Gets and sets the ClassDef for this <see cref="IUIFormField"/>
+        /// </summary>
+        IClassDef ClassDef { get; set; }
 
         ///<summary>
         /// Gets the label for this form field.

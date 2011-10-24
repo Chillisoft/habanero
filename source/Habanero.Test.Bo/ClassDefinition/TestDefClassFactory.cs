@@ -10,7 +10,7 @@ namespace Habanero.Test.BO.ClassDefinition
     [TestFixture]
     public class TestDefClassFactory
     {
-
+        // ReSharper disable InconsistentNaming
         [Test]
         public void Test_Construct_ConstructedCorrectly()
         {
@@ -104,5 +104,104 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(toolTipText, uiFormField.ToolTipText);
             Assert.AreEqual(layoutStyle, uiFormField.Layout);
         }
+
+
+        [Test]
+        public void Test_CreatePropRuleInt32_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = defFactory.CreatePropRuleInteger(expectedRuleName, "fdafasdf");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleInteger>(createdPropRule);
+            Assert.AreEqual(expectedRuleName, createdPropRule.Name);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsString_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = defFactory.CreatePropRuleString(expectedRuleName, "fdafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleString>(createdPropRule);
+            Assert.AreEqual(expectedRuleName, createdPropRule.Name);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDateTime_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = defFactory.CreatePropRuleDate("fdasfd", "fdsafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDate>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDecimalShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = defFactory.CreatePropRuleDecimal("fdasfd", "fdsafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDecimal>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsDouble_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = defFactory.CreatePropRuleDouble("fdasfd", "fdsafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleDouble>(createdPropRule);
+        }
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsSingle_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = defFactory.CreatePropRuleSingle("fdasfd", "fdsafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleSingle>(createdPropRule);
+        }
+
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsInt64_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var createdPropRule = defFactory.CreatePropRuleLong("fdasfd", "fdsafasd");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleLong>(createdPropRule);
+        }
+
     }
 }

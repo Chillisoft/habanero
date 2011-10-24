@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -58,9 +59,10 @@ namespace Habanero.Test.DB.SqlGeneration
         {
             MockBO bo = new MockBO();
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            Assert.AreEqual(1, statementCol.Count);
-            Assert.AreSame(typeof(InsertSqlStatement), statementCol[0].GetType());
+            var statementCol = gen.Generate();
+            var sqlStatements = statementCol.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            Assert.AreSame(typeof(InsertSqlStatement), sqlStatements[0].GetType());
             
         }
 
@@ -69,8 +71,8 @@ namespace Habanero.Test.DB.SqlGeneration
         {
             MockBO bo = new MockBO();
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
             Assert.AreEqual("MockBO", statement.TableName);
         }
 
@@ -79,8 +81,8 @@ namespace Habanero.Test.DB.SqlGeneration
         {
             MockBO bo = new MockBO();
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
             Assert.AreEqual(null, statement.SupportsAutoIncrementingField);
         }
 
@@ -91,8 +93,8 @@ namespace Habanero.Test.DB.SqlGeneration
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
             Assert.AreSame(typeof(SupportsAutoIncrementingFieldBO), statement.SupportsAutoIncrementingField.GetType());
         }
 
@@ -103,8 +105,8 @@ namespace Habanero.Test.DB.SqlGeneration
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
 
             Assert.AreEqual("INSERT INTO `testautoinc` (`testfield`) VALUES (?Param0)", statement.Statement.ToString());
         }
@@ -117,8 +119,8 @@ namespace Habanero.Test.DB.SqlGeneration
             MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraNonPersistableProp(newPropName);
 
             InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
-            ISqlStatementCollection statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol[0];
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
             Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
         }
 
@@ -132,10 +134,11 @@ namespace Habanero.Test.DB.SqlGeneration
             FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
             InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = gen.Generate();
+            var sqlStatementCollection = gen.Generate();
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, sqlStatementCollection.Count);
-            ISqlStatement sqlStatement = sqlStatementCollection[0];
+            var sqlStatements = sqlStatementCollection.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            ISqlStatement sqlStatement = sqlStatements[0];
             string sql = sqlStatement.Statement.ToString();
             StringAssert.Contains("ShapeType", sql);
             StringAssert.Contains("CircleType", sql);
@@ -149,10 +152,11 @@ namespace Habanero.Test.DB.SqlGeneration
             FilledCircleNoPrimaryKey filledCircle = new FilledCircleNoPrimaryKey();
             InsertStatementGenerator gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
             //---------------Execute Test ----------------------
-            ISqlStatementCollection sqlStatementCollection = gen.Generate();
+            var sqlStatementCollection = gen.Generate();
             //---------------Test Result -----------------------
-            Assert.AreEqual(1, sqlStatementCollection.Count);
-            ISqlStatement sqlStatement = sqlStatementCollection[0];
+            var sqlStatements = sqlStatementCollection.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            ISqlStatement sqlStatement = sqlStatements[0];
             string sql = sqlStatement.Statement.ToString();
             int index = sql.IndexOf("ShapeType");
             Assert.IsTrue(index > 0);
@@ -166,10 +170,11 @@ namespace Habanero.Test.DB.SqlGeneration
         public void TestInsertSql()
         {
             Shape shape = new Shape();
-            SqlStatementCollection insertSql = new InsertStatementGenerator(shape, DatabaseConnection.CurrentConnection).Generate();
-            Assert.AreEqual(1, insertSql.Count, "There should only be one insert statement.");
+            var insertSql = new InsertStatementGenerator(shape, DatabaseConnection.CurrentConnection).Generate();
+            var sqlStatements = insertSql.ToList();
+            Assert.AreEqual(1, sqlStatements.Count, "There should only be one insert statement.");
             Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1)",
-                            insertSql[0].Statement.ToString(), "Insert Sql is being created incorrectly");
+                            sqlStatements[0].Statement.ToString(), "Insert Sql is being created incorrectly");
         }
 
     }

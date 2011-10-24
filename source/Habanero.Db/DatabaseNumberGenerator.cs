@@ -17,6 +17,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
 
@@ -28,12 +29,19 @@ namespace Habanero.DB
     /// next request.  A database update transaction can also be generated
     /// to increment the number stored in the database.
     /// </summary>
+    /// <remarks>
+    /// This number generator does not implement concurrency control of any type.
+    /// It is susceptible to both lost number and to multiple users generating the 
+    /// same number. If either of these scenarious exist in your application then
+    /// please use one of the sub types of <see cref="INumberGenerator"/>. 
+    /// </remarks>
     public class DatabaseNumberGenerator : IDBNumberGenerator
     {
-        private readonly string _settingName;
+/*        private readonly string _settingName;
         private readonly string _tableName;
         private readonly int _seedValue;
-        private int _number;
+        private int _number;*/
+        private readonly NumberUpdate _numberUpdater;
 
         /// <summary>
         /// Constructor to initialise a new generator. The table name is
@@ -70,17 +78,31 @@ namespace Habanero.DB
         /// <param name="seedValue">The seed value to begin incrementing
         /// from</param>
         public DatabaseNumberGenerator(string settingName, string tableName, int seedValue)
+            : this(settingName, tableName, seedValue, "SettingName", "SettingValue")
         {
-            _settingName = settingName;
-            _tableName = tableName;
-            _seedValue = seedValue;
+        }
 
-            SqlStatement statement =
+        /// <summary>
+        /// Constructor to initialise a new generator, supplying a specific
+        /// table name and starting seed value
+        /// </summary>
+        /// <param name="settingName">The database setting name that
+        /// stores the number</param>
+        /// <param name="tableName">The database table name that
+        /// stores the number</param>
+        /// <param name="seedValue">The seed value to begin incrementing
+        /// from</param>
+        /// <param name="settingNameFieldName"></param>
+        /// <param name="settingValueFieldName"></param>
+        public DatabaseNumberGenerator(string settingName, string tableName, int seedValue, string settingNameFieldName, string settingValueFieldName)
+        {
+            var statement =
                 new SqlStatement(DatabaseConnection.CurrentConnection,
-                                 "select SettingValue from " + _tableName + " where SettingName = ");
-            statement.AddParameterToStatement(_settingName);
+                                 string.Format("select {0} from ", settingValueFieldName) + tableName + string.Format(" where {0} = ", settingNameFieldName));
+            statement.AddParameterToStatement(settingName);
             IDataReader reader = null;
-            bool hasNumber = false;
+            var hasNumber = false;
+            var number = 0;
             try
             {
                 using (reader = DatabaseConnection.CurrentConnection.LoadDataReader(statement))
@@ -88,7 +110,8 @@ namespace Habanero.DB
                     if (reader.Read())
                     {
                         hasNumber = true;
-                        _number = Convert.ToInt32(reader.GetValue(0));
+
+                        number = Convert.ToInt32(reader.GetValue(0));
                     }
                 }
             }
@@ -98,11 +121,12 @@ namespace Habanero.DB
             }
             if (!hasNumber)
             {
-                _number = _seedValue;
+                number = seedValue;
                 DatabaseConnection.CurrentConnection.ExecuteRawSql(
-                    string.Format("insert into {0} (SettingName, SettingValue) values ('{1}', {2})",
-                                  _tableName, _settingName, _seedValue));
+                    string.Format("insert into {0} ({1}, {2}) values ('{3}', {4})",
+                                  tableName, settingNameFieldName, settingValueFieldName, settingName, seedValue));
             }
+            _numberUpdater = new NumberUpdate(number, settingName, tableName, settingNameFieldName, settingValueFieldName);
         }
 
         /// <summary>
@@ -112,7 +136,7 @@ namespace Habanero.DB
         /// <returns>Returns an integer</returns>
         public int GetNextNumberInt()
         {
-            return ++_number;
+            return _numberUpdater.GetNextNumberInt();
         }
 
         /// <summary>
@@ -132,9 +156,10 @@ namespace Habanero.DB
         /// fresh increment
         /// </summary>
         /// <returns>Returns an ITransaction object</returns>
-        public ITransactional GetUpdateTransaction()
+        private ITransactional GetUpdateTransaction()
         {
-            return new NumberUpdate(_number, _settingName, _tableName);
+            
+            return _numberUpdater;
         }
 
         /// <summary>
@@ -142,23 +167,30 @@ namespace Habanero.DB
         /// </summary>
         private class NumberUpdate : ITransactionalDB
         {
-            private readonly int _newNumber;
-            private readonly string _settingName;
+            private int _currentNumber;
+            private readonly string _setting;
             private readonly string _tableName;
+            private readonly string _settingFieldName;
+            private readonly string _settingValueFieldName;
+            private int _originalNumber;
 
             /// <summary>
             /// Constructor to initialise a new update
             /// </summary>
-            /// <param name="newNumber">The new number to store</param>
-            /// <param name="settingName">The database setting name</param>
+            /// <param name="currentNumber">The new number to store</param>
+            /// <param name="setting">The database setting name</param>
             /// <param name="tableName">The database table name</param>
-            public NumberUpdate(int newNumber, string settingName, string tableName)
+            /// <param name="settingFieldName"></param>
+            /// <param name="settingValueFieldName"></param>
+            public NumberUpdate(int currentNumber, string setting, string tableName, string settingFieldName, string settingValueFieldName)
             {
-                _newNumber = newNumber;
-                _settingName = settingName;
+                _currentNumber = currentNumber;
+                _originalNumber = currentNumber;
+                _setting = setting;
                 _tableName = tableName;
+                _settingFieldName = settingFieldName;
+                _settingValueFieldName = settingValueFieldName;
             }
-
 
             #region ITransaction Members
 
@@ -168,28 +200,32 @@ namespace Habanero.DB
             /// </summary>
             /// <returns>Returns an ISqlStatementCollection containing
             /// the statement</returns>
-            public ISqlStatementCollection GetPersistSql()
+            public IEnumerable<ISqlStatement> GetPersistSql()
             {
-                SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection,
-                                                          " update " + _tableName + " set SettingValue = ");
-                statement.AddParameterToStatement(_newNumber.ToString());
-                statement.Statement.Append(" where SettingName = ");
-                statement.AddParameterToStatement(_settingName);
+                var sqlStatement = string.Format(" update {0} set {1} = ", _tableName, _settingValueFieldName);
+                var statement = new SqlStatement(DatabaseConnection.CurrentConnection,
+                                                          sqlStatement);
+                statement.AddParameterToStatement(_currentNumber.ToString());
+                statement.Statement.Append(string.Format(" where {0} = ", _settingFieldName));
+                statement.AddParameterToStatement(_setting);
 
-                return new SqlStatementCollection(statement);
+                return new [] {statement};
             }
 
             #endregion
 
             ///<summary>
+            /// This is the ID that uniquely identifies this item of the transaction.
+            /// This must be the same for the lifetime of the transaction object. 
+            /// This assumption is relied upon for certain optimisations in the Transaction Comitter.
             ///</summary>
-            ///<returns>The ID that uniquelty identifies this item of the transaction. In the case of business objects the object Id.
+            ///<returns>The ID that uniquely identifies this item of the transaction. In the case of business objects the object Id.
             /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
             /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
             /// is not added twice in error.</returns>
             public string TransactionID()
             {
-                return _settingName;
+                return _setting;
             }
 
             ///<summary>
@@ -197,6 +233,7 @@ namespace Habanero.DB
             ///</summary>
             public void UpdateStateAsCommitted()
             {
+                _originalNumber = _currentNumber;
             }
 
             ///<summary>
@@ -204,23 +241,14 @@ namespace Habanero.DB
             ///</summary>
             public void UpdateAsRolledBack()
             {
+                _currentNumber = _originalNumber;
+            }
+
+            public int GetNextNumberInt()
+            {
+                return ++_currentNumber;
             }
         }
 
-        ///<summary>
-        /// Updates the business object as committed
-        ///</summary>
-        public void UpdateStateAsCommitted()
-        {
-            throw new NotImplementedException();
-        }
-
-        ///<summary>
-        /// updates the object as rolled back
-        ///</summary>
-        public void UpdateAsRolledBack()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

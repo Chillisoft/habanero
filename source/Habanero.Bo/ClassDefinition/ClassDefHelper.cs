@@ -97,7 +97,7 @@ namespace Habanero.BO.ClassDefinition
                 ClassDef superClassClassDef = GetSuperClassClassDef(classDef.SuperClassDef, classDefCol);
                 if (superClassClassDef != null)
                 {
-                    primaryKeyDef = superClassClassDef.PrimaryKeyDef;
+                    primaryKeyDef = GetPrimaryKeyDef(superClassClassDef, classDefCol);
                 }
             }
             return primaryKeyDef;

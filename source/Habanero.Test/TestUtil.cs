@@ -31,7 +31,17 @@ namespace Habanero.Test
 
         public static string GetRandomString()
         {
-            return Guid.NewGuid().ToString("N");
+            return GetRandomString(10);
+        }
+
+        public static string GetRandomString(int length)
+        {
+            var str = "Rnd" + GetRandomInt();
+            while (str.Length < length)
+            {
+                str += GetRandomInt();
+            }
+            return str.Substring(0, length);
         }
 
         public static void WaitForGC()
@@ -224,5 +234,15 @@ namespace Habanero.Test
             Assert.IsInstanceOf(typeof(T), obj);
             return (T)obj;
         }
+
+    	public static TimeSpan GetRandomTimeSpan()
+    	{
+    		return GetRandomTimeSpan(GetRandomInt());
+    	}
+
+    	public static TimeSpan GetRandomTimeSpan(int days)
+    	{
+    		return new TimeSpan(days, GetRandomInt(0, 23), GetRandomInt(0, 59), GetRandomInt(0, 59), GetRandomInt(0, 999));
+    	}
     }
 }

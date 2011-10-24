@@ -420,6 +420,40 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreSame(form, tab.UIForm);
         }
 
+        [Test]
+        public void Test_SetClassDef_ShouldSetClassDefForUIDef()
+        {
+            //---------------Set up test pack-------------------
+            var uiForm = new UIForm();
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiForm.ClassDef);
+            //---------------Execute Test ----------------------
+            uiForm.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiForm.ClassDef);
+        }
+
+        [Test]
+        public void Test_SetClassDef_ShouldSetClassDefOnFormFields()
+        {
+            //---------------Set up test pack-------------------
+            var uiForm = new UIForm();
+            var uiFormTab = new UIFormTab();
+            var uiFormColumn = new UIFormColumn();
+            var uiFormField = new UIFormField("fdafad", "fdafasd");
+            uiForm.Add(uiFormTab);
+            uiFormTab.Add(uiFormColumn);
+            uiFormColumn.Add(uiFormField);
+            var classDef = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.IsNull(uiFormField.ClassDef);
+            //---------------Execute Test ----------------------
+            uiForm.ClassDef = classDef;
+            //---------------Test Result -----------------------
+            Assert.AreSame(classDef, uiFormField.ClassDef);
+        }
+
         private UIFormTab CreateUIFormTab()
         {
             UIFormTab uiFormTab1 = new UIFormTab();
