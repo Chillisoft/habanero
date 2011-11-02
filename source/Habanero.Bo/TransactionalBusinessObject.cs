@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
@@ -120,23 +121,6 @@ namespace Habanero.BO
             return _businessObject.Status.IsValid(out invalidReason);
         }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="boKey"></param>
-        ///<param name="classDisplayName"></param>
-        ///<returns></returns>
-        protected internal static string GetDuplicateObjectErrMsg(BOKey boKey, string classDisplayName)
-        {
-            string propNames = "";
-            foreach (BOProp prop in boKey.GetBOPropCol())
-            {
-                if (propNames.Length > 0) propNames += ", ";
-                propNames += string.Format("{0} = {1}", prop.PropertyName, prop.Value);
-            }
-            string errMsg = string.Format("A '{0}' already exists with the same identifier: {1}.",
-                                          classDisplayName, propNames);
-            return errMsg;
-        }
 
         ///<summary>
         /// Executes any custom code required by the business object before it is persisted to the database.
@@ -158,58 +142,6 @@ namespace Habanero.BO
             _businessObject.CheckConcurrencyBeforePersisting();
         }
 
-        ///<summary>
-        /// returns true if there is already an object in the database with the same primary identifier (primary key)
-        ///  or with the same alternate identifier (alternate key)
-        ///</summary>
-        ///<param name="errMsg"></param>
-        ///<returns></returns>
-        /// TODO: This uses the BORegistry.DataAccessor that is set up.  It should possibly use the same DataAccessor as the
-        /// transactioncommitter that is controlling it so that it can be added to the same transaction.
-        protected internal virtual bool HasDuplicateIdentifier(out string errMsg)
-        {
-            errMsg = "";
-            if (this.BusinessObject.GetBOKeyCol() == null) return false;
-            if (this.BusinessObject.Status.IsDeleted) return false;
-
-            List<IBOKey> allKeys = new List<IBOKey>();
-            if (this.BusinessObject.ID != null) allKeys.Add(this.BusinessObject.ID);
-            foreach (BOKey key in this.BusinessObject.GetBOKeyCol())
-            {
-                allKeys.Add(key);
-            }
-            Criteria primaryKeyCriteria = null;
-            foreach (BOKey boKey in allKeys)
-            {
-                if (boKey is BOPrimaryKey)
-                {
-                    primaryKeyCriteria = Criteria.FromPrimaryKey(boKey as IPrimaryKey);
-                }
-
-                if (!boKey.IsDirtyOrNew()) continue;
-
-                if (boKey is BOPrimaryKey)
-                {
-
-                    if (this.BusinessObject.ClassDef.HasObjectID) continue;
-                    if (this.BusinessObject.Status.IsNew && boKey.HasAutoIncrementingProperty) continue;
-                    if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, primaryKeyCriteria).Count > 0)
-                    {
-                        errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
-                    }
-                    continue;
-                }
-
-                Criteria keyCriteria = boKey.GetKeyCriteria();
-                if (primaryKeyCriteria != null)
-                    keyCriteria = new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
-
-                if (BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(this.BusinessObject.ClassDef, keyCriteria).Count > 0)
-                    errMsg += GetDuplicateObjectErrMsg(boKey, this.BusinessObject.ClassDef.DisplayName) + Environment.NewLine;
-            }
-
-            return !String.IsNullOrEmpty(errMsg);
-        }
 
         ///<summary>
         /// updates the object as rolled back

@@ -585,6 +585,8 @@ namespace Habanero.Test.BO.ClassDefinition
             set { this.SetPropertyValue("MockBOProp1", value); }
         }
     }
+
+    
     internal class FakeRelationshipDef : RelationshipDef
     {
         private bool _owningBOHasFK;

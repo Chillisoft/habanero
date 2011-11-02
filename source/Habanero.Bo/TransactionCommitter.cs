@@ -18,6 +18,7 @@
 // ---------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
@@ -128,7 +129,10 @@ namespace Habanero.BO
                 transaction.UpdateObjectBeforePersisting(this);
             }
         }
-
+        /// <summary>
+        /// Insert the Business object into the TransactionCommitter
+        /// </summary>
+        /// <param name="businessObject"></param>
         public void InsertBusinessObject(IBusinessObject businessObject)
         {
             if (businessObject == null) return;
@@ -180,6 +184,11 @@ namespace Habanero.BO
             _originalTransactions.Insert(0, transaction);
             return true;
         }
+
+
+
+
+
 
         ///<summary>
         /// Commit the transactions to the datasource e.g. the database, file, memory DB
@@ -352,25 +361,131 @@ namespace Habanero.BO
         /// </summary>
         private void CheckForDuplicateObjects()
         {
-            string allMessages = "";
+            var errorMessages = new List<string>();
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-
-                string errMsg;
-                if (trnBusObj.HasDuplicateIdentifier(out errMsg))
-                {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                }
+                var trnBusObj = (TransactionalBusinessObject) transaction;
+                CheckDuplicateIdentifier(trnBusObj.BusinessObject, errorMessages);
             }
 
-            if (!string.IsNullOrEmpty(allMessages))
+            if (errorMessages.Count > 0)
             {
+                var allMessages = String.Join(Environment.NewLine, errorMessages.ToArray());
                 throw new BusObjDuplicateConcurrencyControlException(allMessages);
             }
         }
 
+        ///<summary>
+        /// returns true if there is already an object in the database with the same primary identifier (primary key)
+        ///  or with the same alternate identifier (alternate key)
+        ///</summary>
+        ///<param name="bo"></param>
+        ///<param name="errorMessages"></param>
+        ///<returns></returns>
+        private void CheckDuplicateIdentifier(BusinessObject bo, List<string> errorMessages)
+        {
+            var boKeyCol = bo.GetBOKeyCol();
+            if (boKeyCol == null) return;
+            if (bo.Status.IsDeleted) return;
+
+            var primaryKey = bo.ID;
+            CheckDuplicatePrimaryKey(bo, primaryKey, errorMessages);
+
+            var primaryKeyCriteria = Criteria.FromPrimaryKey(primaryKey);
+            foreach (BOKey boKey in boKeyCol)
+            {
+                if (!boKey.IsDirtyOrNew()) continue;
+
+                var keyCriteria = boKey.GetKeyCriteria();
+                if (primaryKeyCriteria != null) keyCriteria = GetDuplicateKeyCriteria(keyCriteria, primaryKeyCriteria);
+
+                var duplicateObjects = GetDuplicateObjects(bo, keyCriteria);
+                if (duplicateObjects.Count > 0)
+                {
+                    foreach (IBusinessObject businessObject in duplicateObjects)
+                    {
+                        if (this._originalTransactionsByKey.ContainsKey(businessObject.ID.ObjectID.ToString()))
+                        {
+                            var transactional = this._originalTransactionsByKey[businessObject.ID.ObjectID.ToString()];
+                            if (!(transactional is TransactionalBusinessObject)) continue;
+                            var dupBO = (TransactionalBusinessObject) transactional;
+                            if(dupBO.IsDeleted) continue;
+                        }
+                        var duplicateObjectErrMsg = GetDuplicateObjectErrMsg(boKey, GetClassDisplayName(bo));
+                        if (errorMessages.Contains(duplicateObjectErrMsg)) continue;
+                        errorMessages.Add(duplicateObjectErrMsg);
+                    }
+                }
+            }
+        }
+
+        private static string GetClassDisplayName(BusinessObject bo)
+        {
+            return bo.ClassDef.DisplayName;
+        }
+
+        private IBusinessObjectCollection GetDuplicateObjects(BusinessObject bo, Criteria keyCriteria)
+        {
+            var classDef = bo.ClassDef;
+            var duplicateObjects = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(classDef, keyCriteria);
+
+            var duplicatesFromTransactions = (from transaction in OriginalTransactions
+                                              where transaction is TransactionalBusinessObject
+                                              let businessObject = ((TransactionalBusinessObject) transaction).BusinessObject
+                                              where businessObject.ClassDef == classDef
+                                              where businessObject!=bo //This is necessary for the PK check
+                                              where keyCriteria.IsMatch(businessObject, false)
+                                              select businessObject
+                                              ).ToList();
+
+            duplicatesFromTransactions.ForEach(duplicateObjects.Add);
+
+            return duplicateObjects;
+        }
+
+
+        private static Criteria GetDuplicateKeyCriteria(Criteria keyCriteria, Criteria primaryKeyCriteria)
+        {
+            return new Criteria(keyCriteria, Criteria.LogicalOp.And, new Criteria(Criteria.LogicalOp.Not, primaryKeyCriteria));
+        }
+
+        private void CheckDuplicatePrimaryKey(BusinessObject bo, IPrimaryKey primaryKey, List<string> errorMessages)
+        {
+            var primaryKeyCriteria = Criteria.FromPrimaryKey(primaryKey);
+
+            if (bo.ClassDef.HasObjectID) return;
+            if (bo.Status.IsNew && primaryKey.HasAutoIncrementingProperty) return;
+            var boKey = primaryKey as BOKey;
+            if (boKey == null) throw new HabaneroApplicationException(string.Format("The Primary key '{0}' is not a BOKEY", primaryKey));
+            if (!boKey.IsDirtyOrNew()) return;
+            if (GetDuplicateObjects(bo, primaryKeyCriteria).Count > 0)
+            {
+                var duplicateObjectErrMsg = GetDuplicateObjectErrMsg(primaryKey, GetClassDisplayName(bo));
+                if (!errorMessages.Contains(duplicateObjectErrMsg))
+                {
+                    errorMessages.Add(duplicateObjectErrMsg);
+                }
+            }
+        }
+
+        ///<summary>
+        ///</summary>
+        ///<param name="boKey"></param>
+        ///<param name="classDisplayName"></param>
+        ///<returns></returns>
+        private static string GetDuplicateObjectErrMsg(IBOKey boKey, string classDisplayName)
+        {
+            string propNames = "";
+            foreach (BOProp prop in boKey.GetBOPropCol())
+            {
+                if (propNames.Length > 0) propNames += ", ";
+                propNames += string.Format("{0} = {1}", prop.PropertyName, prop.Value);
+            }
+            var errMsg = string.Format("A '{0}' already exists with the same identifier: {1}.",
+                                          classDisplayName, propNames);
+            return errMsg;
+        }
         /// <summary>
         /// Checks any Concurrency control errors for the <see cref="TransactionalBusinessObject"/>
         /// </summary>
@@ -379,7 +494,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                var trnBusObj = (TransactionalBusinessObject) transaction;
                 trnBusObj.CheckForConcurrencyErrors();
             }
         }

@@ -84,12 +84,6 @@ namespace Habanero.Test.BO.TransactionCommitters
                 : base(businessObject)
             {
             }
-
-            protected internal override bool HasDuplicateIdentifier(out string errMsg)
-            {
-                errMsg = "";
-                return false;
-            }
         }
 
         private class FakeBOWithBeforeSaveUpdatesCompulsoryField : MockBO
@@ -401,9 +395,6 @@ namespace Habanero.Test.BO.TransactionCommitters
             //---------------Test Result -----------------------
             TransactionCommitterTestHelper.AssertBOStateIsValidAfterInsert_Updated(fakeBO);
         }
-      
-
-       
 
         [Test]
         public void TestUpdateBeforePersisting_ExecutedBeforeValidation()
@@ -422,6 +413,111 @@ namespace Habanero.Test.BO.TransactionCommitters
             Assert.AreEqual(1, committer.OriginalTransactions.Count);
         }
 
+        [Test]
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_ShouldNotThrowDuplicateError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname,BOTestUtils.RandomString);
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.CommitTransaction();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.AreEqual(surname, contactPersonTestBO.Props["Surname"].PersistedPropertyValueString);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.MarkForDelete();
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
+            committer.CommitTransaction();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDeleted);
+            newContactPersonTestBOWithSameSurname.MarkForDelete();
+            newContactPersonTestBOWithSameSurname.Save();
+        }
+
+        [Test]
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOsWithSameUniqueKey_ShouldThrowDuplicateError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(surname, contactPersonTestBO.Surname);
+            Assert.AreEqual(surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var exception = Assert.Throws<BusObjDuplicateConcurrencyControlException>(() =>
+            {
+                committer.CommitTransaction();
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), exception.Message);
+        }
+
+        [Test]
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOsWithSamePrimaryKey_ShouldThrowDuplicateError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            var surname = contactPersonTestBO.Surname;
+            var firstName = contactPersonTestBO.FirstName;
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, firstName);
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(contactPersonTestBO.FirstName, newContactPersonTestBOWithSameSurname.FirstName);
+            Assert.AreEqual(contactPersonTestBO.Surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var exception = Assert.Throws<BusObjDuplicateConcurrencyControlException>(() =>
+            {
+                committer.CommitTransaction();
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}, FirstName = {1}.", surname, firstName), exception.Message);
+        }
+
+        [Test]
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOAndUpdatedBOWithSameUniqueKey_ShouldThrowDuplicateError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(BOTestUtils.RandomString, BOTestUtils.RandomString);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.CommitTransaction();
+            contactPersonTestBO.Surname = surname;
+            committer.AddBusinessObject(contactPersonTestBO);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDirty);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(surname, contactPersonTestBO.Surname);
+            Assert.AreEqual(surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var exception = Assert.Throws<BusObjDuplicateConcurrencyControlException>(() =>
+            {
+                committer.CommitTransaction();
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), exception.Message);
+        }
       
     }
 }
