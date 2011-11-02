@@ -271,6 +271,7 @@ namespace Habanero.Test.Base
             Assert.AreEqual(expectedEndDate, dateRange.EndDate);
         }
 
+
         [Test, TestCaseSource(typeof(DateRangeConvertTestCaseSource), "DateRangeTestDataWithNoOffsets")]
         public void Test_DateRangeWithoutOffSets(DateRangeTestCase dateRangeTestCase)
         {
@@ -300,7 +301,6 @@ namespace Habanero.Test.Base
             //---------------Test Result -----------------------
             dateRangeTestCase.ShouldHaveStartAndEndDate(dateRange);
         }
-
 
 
         private static DateTime GetDateTimeCurrent(int hour)
@@ -416,13 +416,11 @@ namespace Habanero.Test.Base
 
                  //-----------------
                 dateRangeOptions = DateRangeOptions.Tommorrow;
-                var testDescription = "Tommorrow";
+                const string testDescription = "Tommorrow";
                 yield return new TestCaseData(new DateRangeTestCase(dateRangeOptions
                          , "02 June 2010 1:1:4"
                          , "03 June 2010"
                          , "03 June 2010 23:59:59.999")).SetDescription(testDescription);
-                /**/
-
             }
         }
         // Ussed by the TestCaseSource
@@ -525,12 +523,6 @@ namespace Habanero.Test.Base
                          , "02 June 2010 1:1:4.011"
                          , "02 July 2010 5:59:59.999"
                          , new TimeSpan(0, 6, 0, 0, 0), 0, 0, 0)).SetDescription(testDescription);
-                /*
-
-            _comboBox.MidnightOffset = new TimeSpan(0, -1, 0, 0, 0);
-            _comboBox.FixedNowDate = new DateTime(2006, 12, 31, 23, 30, 0, 0);
-            Assert.AreEqual(new DateTime(2005, 12, 31, 23, 0, 0, 0), _comboBox.StartDate);
-            Assert.AreEqual(new DateTime(2006, 12, 31, 22, 59, 59, 999), _comboBox.EndDate);*/
             }
 
         }

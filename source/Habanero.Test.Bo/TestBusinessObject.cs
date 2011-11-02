@@ -627,6 +627,7 @@ namespace Habanero.Test.BO
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
             BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
             bo.SetPropertyValue("TestProp2", cp);
+            Assert.IsNotNull(cp);
             Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }

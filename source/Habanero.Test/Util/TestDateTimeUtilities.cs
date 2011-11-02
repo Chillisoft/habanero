@@ -18,6 +18,8 @@
 // ---------------------------------------------------------------------------------
 using System;
 using Habanero.Base;
+using Habanero.Base.Util;
+using Habanero.Test.Base;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -25,7 +27,6 @@ namespace Habanero.Test.Util
 {
     [TestFixture]
     public class TestDateTimeUtilities
-        //:TestBase
     {
         [SetUp]
         public
@@ -50,6 +51,8 @@ namespace Habanero.Test.Util
             //runs every time any testmethod is complete
             //base.TearDownTest();
         }
+
+        #region FirstDayofFinYear
 
         [Test]
         public void Test_FirstDayOfFinYear_MonthGTStartMonth()
@@ -135,6 +138,11 @@ namespace Habanero.Test.Util
       
         }
 
+        #endregion
+
+
+        #region LastDayOfFinYear
+
         [Test]
         public void Test_LastDayOfFinYear()
         {
@@ -195,6 +203,11 @@ namespace Habanero.Test.Util
             Assert.AreEqual(2007, firstDay.Year);
         }
 
+        #endregion
+
+
+        #region CloseToDateTimeNow
+
         [Test]
         public void Test_CloseToDateTimeNow_WhenBeforeNow_WhenWithinRange_ShouldReturnTrue()
         {
@@ -246,6 +259,11 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.IsFalse(result);
         }
+
+        #endregion
+
+
+        #region TryParseDate
 
         [Test]
         public void Test_TryParseDate_WhenNull_ShouldRetTrueAndRetValueNull()
@@ -318,20 +336,7 @@ namespace Habanero.Test.Util
             Assert.IsTrue(parsed);
             Assert.AreEqual(DateTime.Today.AddDays(1), parsedValue);
         }
-        [Test]
-        public void Test_TryParseDate_WhenDateString_ShouldRetTrueAndRetDate()
-        {
-            //---------------Set up test pack-------------------
-            
-            //---------------Assert Precondition----------------
 
-            //---------------Execute Test ----------------------
-            DateTime? parsedValue;
-            bool parsed = DateTimeUtilities.TryParseDate("01/31/2010", out parsedValue);
-            //---------------Test Result -----------------------
-            Assert.IsTrue(parsed);
-            Assert.AreEqual(new DateTime(2010, 01, 31), parsedValue);
-        }
         [Test]
         public void Test_TryParseDate_WhenDateValue_ShouldRetTrueAndRetDateValue()
         {
@@ -345,6 +350,7 @@ namespace Habanero.Test.Util
             Assert.IsTrue(parsed);
             Assert.AreEqual(dateTime, parsedValue);
         }
+
         [Test]
         public void Test_TryParseDate_WhenNot_ShouldRetFalseAndNull()
         {
@@ -375,6 +381,39 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        public void Test_TryParseDate_WhenDateString_ShouldRetTrueAndRetDate()
+        {
+            //---------------Set up test pack-------------------
+            const string dateTimeToBeParsed = "01/31/2010";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            var parsed = DateTimeUtilities.TryParseDate(dateTimeToBeParsed, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed, dateTimeToBeParsed + " should be parsed but was not. Out Value was : " + parsedValue);
+            Assert.AreEqual(new DateTime(2010, 01, 31), parsedValue);
+        }
+
+        [Test]
+        public void Test_TryParseDate_WhenDateString_ddMMYYYY_ShouldRetTrueAndRetDate()
+        {
+            //---------------Set up test pack-------------------
+            const string dateTimeToBeParsed = "31/01/2010";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            var parsed = DateTimeUtilities.TryParseDate(dateTimeToBeParsed, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed, dateTimeToBeParsed + " should be parsed but was not. Out Value was : " + parsedValue);
+            Assert.AreEqual(new DateTime(2010, 01, 31), parsedValue);
+        }
+        #endregion
+
+        #region DayEnd
+
+        [Test]
         public void Test_DayEnd_WhenNoOffSet_ShouldReturnLastMillisecondOfTheday()
         {
             //---------------Set up test pack-------------------
@@ -386,6 +425,7 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDayEnd, actualDayEnd);
         }
+
         [Test]
         public void Test_DayEnd_WithOffSet_ShouldReturnLastMillisecondOfThedayPlusOffSet()
         {
@@ -403,6 +443,7 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDayEnd, actualDayEnd);
         }
+
         [Test]
         public void Test_DayEnd_WithOffSet_WithFixedDate_ShouldReturnLastMillisecondOfThedayPlusOffSet()
         {
@@ -416,6 +457,8 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDayEnd, actualDayEnd);
         }
+
+
         [Test]
         public void Test_DayEnd_WithOffSetGTNow_ShouldReturnLastMillisecondOfThedayPlusOffSet()
         {
@@ -430,6 +473,8 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDayEnd, actualDayEnd);
         }
+
+        #endregion
 
         [Test]
         public void Test_DayStart_WhenNoOffSet_ShouldReturnStartOffday()
@@ -615,8 +660,7 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedStartTime, actualMonthStart);
         }
-/*
-        [Test]
+/*        [Test]
         public void Test_MonthStart_WhenNoOffSet_WhenCurrentLastMillisecont_ShouldReturnStartOffMonth()
         {
             yield return new TestCaseData(new DateRangeTestCase(DateRangeOptions.PreviousMonth
@@ -632,8 +676,7 @@ namespace Habanero.Test.Util
             var actualMonthStart = DateTimeUtilities.MonthStart(dateTimeCurrent);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedStartTime, actualMonthStart);
-        }
-*/
+        }*/
 
         [Test]
         public void Test_MonthStart_WithOffSetLTNow_ShouldReturnStartOffMonthPlusOffSet()
