@@ -277,11 +277,11 @@ namespace Habanero.Util
                     returnValue = dateTimeOut;
                     return true;
                 }
-/*                if (DateTime.TryParse(valueToParseAsString, new DateTimeFormatInfo { FullDateTimePattern = "dd/MM/yyyy HH:mm:ss:fff" }, DateTimeStyles.AllowWhiteSpaces, out dateTimeOut))
+                if (DateTime.TryParse(valueToParseAsString, new DateTimeFormatInfo { FullDateTimePattern = "dd/MM/yyyy HH:mm:ss:fff" }, DateTimeStyles.AllowWhiteSpaces, out dateTimeOut))
                 {
-                    returnValue = dateTimeOut;
-                    return true;
-                }*/
+                     returnValue = dateTimeOut;
+                     return true;
+                }
                 if (DateTime.TryParse(valueToParseAsString, new DateTimeFormatInfo { FullDateTimePattern = "MM/dd/yyyy HH:mm:ss:fff" }, DateTimeStyles.AllowWhiteSpaces, out dateTimeOut))
                 {
                     returnValue = dateTimeOut;
