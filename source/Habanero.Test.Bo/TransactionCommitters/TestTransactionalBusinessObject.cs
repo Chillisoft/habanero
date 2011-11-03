@@ -16,6 +16,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -103,6 +104,138 @@ namespace Habanero.Test.BO.TransactionCommitters
             string transactionID = transactionalBusinessObject.TransactionID();
             //---------------Test Result -----------------------
             Assert.AreEqual(bo.ID.ObjectID.ToString(), transactionID);
+        }
+
+        [Test]
+        public void Test_CheckDuplicateIdentifier_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_WhenDeletedBOInPendingTransactions_ShouldNotReturnError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            contactPersonTestBO.Save();
+            contactPersonTestBO.MarkForDelete();
+            var transactionalBusinessObjectForDeletedDuplicate = new TransactionalBusinessObject(contactPersonTestBO);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var transactionalBusinessObject = new TransactionalBusinessObject(newContactPersonTestBOWithSameSurname);
+            var pendingTransactions = new List<ITransactional> {transactionalBusinessObject, transactionalBusinessObjectForDeletedDuplicate};
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(transactionalBusinessObjectForDeletedDuplicate.IsNew());
+            Assert.IsTrue(transactionalBusinessObjectForDeletedDuplicate.IsDeleted);
+            Assert.IsTrue(transactionalBusinessObject.IsNew());
+            Assert.IsFalse(transactionalBusinessObject.IsDeleted);
+            Assert.AreEqual(surname, contactPersonTestBO.Props["Surname"].PersistedPropertyValueString);
+            //---------------Execute Test ----------------------
+            var errorMessages = new List<string>();
+            transactionalBusinessObject.CheckDuplicateIdentifier(pendingTransactions, errorMessages);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, errorMessages.Count);
+        }
+
+        [Test]
+        public void Test_CheckDuplicateIdentifier_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_WhenDeletedBONotInPendingTransactions_ShouldReturnError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            contactPersonTestBO.Save();
+            contactPersonTestBO.MarkForDelete();
+            var transactionalBusinessObjectForDeletedDuplicate = new TransactionalBusinessObject(contactPersonTestBO);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var transactionalBusinessObject = new TransactionalBusinessObject(newContactPersonTestBOWithSameSurname);
+            var pendingTransactions = new List<ITransactional> { transactionalBusinessObject };
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(transactionalBusinessObjectForDeletedDuplicate.IsNew());
+            Assert.IsTrue(transactionalBusinessObjectForDeletedDuplicate.IsDeleted);
+            Assert.IsTrue(transactionalBusinessObject.IsNew());
+            Assert.IsFalse(transactionalBusinessObject.IsDeleted);
+            Assert.AreEqual(surname, contactPersonTestBO.Props["Surname"].PersistedPropertyValueString);
+            //---------------Execute Test ----------------------
+            var errorMessages = new List<string>();
+            transactionalBusinessObject.CheckDuplicateIdentifier(pendingTransactions, errorMessages);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, errorMessages.Count);
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), errorMessages[0]);
+        }
+
+        [Test]
+        public void Test_CheckDuplicateIdentifier_WhenTransactionCommitterHasAddedBOsWithSameUniqueKey_ShouldReturnError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var transactionalBusinessObject = new TransactionalBusinessObject(contactPersonTestBO);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var transactionalBusinessObjectDuplicate = new TransactionalBusinessObject(newContactPersonTestBOWithSameSurname);
+            var pendingTransactions = new List<ITransactional> { transactionalBusinessObject, transactionalBusinessObjectDuplicate };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(surname, contactPersonTestBO.Surname);
+            Assert.AreEqual(surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var errorMessages = new List<string>();
+            transactionalBusinessObject.CheckDuplicateIdentifier(pendingTransactions, errorMessages);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, errorMessages.Count);
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), errorMessages[0]);
+        }
+
+        [Test]
+        public void Test_CheckDuplicateIdentifier_WhenTransactionCommitterHasAddedBOsWithSamePrimaryKey_ShouldReturnError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            var surname = contactPersonTestBO.Surname;
+            var firstName = contactPersonTestBO.FirstName;
+            var transactionalBusinessObject = new TransactionalBusinessObject(contactPersonTestBO);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, firstName);
+            var transactionalBusinessObjectDuplicate = new TransactionalBusinessObject(newContactPersonTestBOWithSameSurname);
+            var pendingTransactions = new List<ITransactional> { transactionalBusinessObject, transactionalBusinessObjectDuplicate };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(contactPersonTestBO.FirstName, newContactPersonTestBOWithSameSurname.FirstName);
+            Assert.AreEqual(contactPersonTestBO.Surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var errorMessages = new List<string>();
+            transactionalBusinessObject.CheckDuplicateIdentifier(pendingTransactions, errorMessages);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, errorMessages.Count);
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}, FirstName = {1}.", surname, firstName), errorMessages[0]);
+        }
+
+        [Test]
+        public void Test_CheckDuplicateIdentifier_WhenTransactionCommitterHasAddedBOAndUpdatedBOWithSameUniqueKey_ShouldReturnError()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(BOTestUtils.RandomString, BOTestUtils.RandomString);
+            contactPersonTestBO.Save();
+            contactPersonTestBO.Surname = surname;
+
+            var transactionalBusinessObject = new TransactionalBusinessObject(contactPersonTestBO);
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            var transactionalBusinessObjectDuplicate = new TransactionalBusinessObject(newContactPersonTestBOWithSameSurname);
+            var pendingTransactions = new List<ITransactional> { transactionalBusinessObject, transactionalBusinessObjectDuplicate };
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDirty);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.AreEqual(surname, contactPersonTestBO.Surname);
+            Assert.AreEqual(surname, newContactPersonTestBOWithSameSurname.Surname);
+            //---------------Execute Test ----------------------
+            var errorMessages = new List<string>();
+            transactionalBusinessObject.CheckDuplicateIdentifier(pendingTransactions, errorMessages);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, errorMessages.Count);
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), errorMessages[0]);
         }
     }
 }

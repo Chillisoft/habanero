@@ -414,23 +414,27 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
-        public void Test_Commit_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_ShouldNotThrowDuplicateError()
+        //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_WhenDeletedBOInTransaction_ShouldNotThrowDuplicateError()
         {
             //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
             ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
             var surname = BOTestUtils.RandomString;
             var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname,BOTestUtils.RandomString);
+            contactPersonTestBO.Save();
             var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            contactPersonTestBO.MarkForDelete();
             committer.AddBusinessObject(contactPersonTestBO);
-            committer.CommitTransaction();
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
             //---------------Assert Precondition----------------
             Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDeleted);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.IsFalse(newContactPersonTestBOWithSameSurname.Status.IsDeleted);
             Assert.AreEqual(surname, contactPersonTestBO.Props["Surname"].PersistedPropertyValueString);
             //---------------Execute Test ----------------------
-            contactPersonTestBO.MarkForDelete();
-            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
-            committer.AddBusinessObject(contactPersonTestBO);
-            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
             committer.CommitTransaction();
             //---------------Test Result -----------------------
             Assert.IsFalse(newContactPersonTestBOWithSameSurname.Status.IsNew);
@@ -440,6 +444,36 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
+        public void Test_Commit_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_WhenDeletedBONotInTransaction_ShouldThrowDuplicateError()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            ContactPersonTestBO.LoadDefaultClassDefWithKeyOnSurname();
+            var surname = BOTestUtils.RandomString;
+            var contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson(surname,BOTestUtils.RandomString);
+            contactPersonTestBO.Save();
+            var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
+            contactPersonTestBO.MarkForDelete();
+            var newContactPersonTestBOWithSameSurname = ContactPersonTestBO.CreateUnsavedContactPerson(surname, BOTestUtils.RandomString);
+            committer.AddBusinessObject(newContactPersonTestBOWithSameSurname);
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(contactPersonTestBO.Status.IsNew);
+            Assert.IsTrue(contactPersonTestBO.Status.IsDeleted);
+            Assert.IsTrue(newContactPersonTestBOWithSameSurname.Status.IsNew);
+            Assert.IsFalse(newContactPersonTestBOWithSameSurname.Status.IsDeleted);
+            Assert.AreEqual(surname, contactPersonTestBO.Props["Surname"].PersistedPropertyValueString);
+            //---------------Execute Test ----------------------
+            var exception = Assert.Throws<BusObjDuplicateConcurrencyControlException>(() =>
+            {
+                committer.CommitTransaction();
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(string.Format("A 'Contact Person Test BO' already exists with the same identifier: Surname = {0}.", surname), exception.Message);
+        }
+
+        [Test]
+        //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
         public void Test_Commit_WhenTransactionCommitterHasAddedBOsWithSameUniqueKey_ShouldThrowDuplicateError()
         {
             //---------------Set up test pack-------------------
@@ -465,6 +499,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
         public void Test_Commit_WhenTransactionCommitterHasAddedBOsWithSamePrimaryKey_ShouldThrowDuplicateError()
         {
             //---------------Set up test pack-------------------
@@ -491,6 +526,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
         public void Test_Commit_WhenTransactionCommitterHasAddedBOAndUpdatedBOWithSameUniqueKey_ShouldThrowDuplicateError()
         {
             //---------------Set up test pack-------------------
