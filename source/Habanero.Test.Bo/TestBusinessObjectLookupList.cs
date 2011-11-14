@@ -40,8 +40,40 @@ namespace Habanero.Test.BO
     {
         protected abstract void SetupDataAccessor();
         protected abstract void DeleteAllContactPeople();
-        
-       
+
+        protected static string GuidToString(Guid guid)
+        {
+            return guid.ToString();//("B").ToUpperInvariant();
+        }
+        [TestFixtureSetUp]
+        public void SetupTestFixture()
+        {
+            SetupDBConnection();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+        }
+
+        [SetUp]
+        public void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            SetupDataAccessor();
+            DeleteAllContactPeople();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            ContactPersonTestBO.CreateSampleData();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            SuperClass.LoadClassDef();
+            SubClass.LoadClassDef();
+        }
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            DeleteAllContactPeople();
+        }
+
+
         [TestFixture]
         public class TestBusinessObjectLookupListMemory : TestBusinessObjectLookupList
         {
@@ -209,37 +241,7 @@ namespace Habanero.Test.BO
 #pragma warning restore 612,618
 
         }
-        protected static string GuidToString(Guid guid)
-        {
-            return guid.ToString();//("B").ToUpperInvariant();
-        }
-        [TestFixtureSetUp]
-        public void SetupTestFixture()
-        {
-            SetupDBConnection();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
-        }
 
-        [SetUp]
-        public void SetupTest()
-        {
-            ClassDef.ClassDefs.Clear();
-            SetupDataAccessor();
-            DeleteAllContactPeople();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-            ContactPersonTestBO.CreateSampleData();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
-            TestUtil.WaitForGC();
-            SuperClass.LoadClassDef();
-            SubClass.LoadClassDef();
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-            DeleteAllContactPeople();
-        }
 
         [Test]
         public void TestGetLookupList() 
@@ -696,6 +698,7 @@ namespace Habanero.Test.BO
         public void Test_CreateDisplayValueDictionary_NoSort()
         {
             //--------------- Set up test pack ------------------
+            ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();

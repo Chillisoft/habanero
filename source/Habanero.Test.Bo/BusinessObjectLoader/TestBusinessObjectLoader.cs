@@ -45,7 +45,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SetupDataAccessor();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
-            new Address();
+            //new Address();
         }
 
         [TearDown]
@@ -887,6 +887,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void TestGetRelatedBusinessObjectCollection_LoadedViaRelationship()
         {
             //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_SortOrder_AddressLine1();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
@@ -949,7 +950,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Set up test pack-------------------
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             OrganisationTestBO.LoadDefaultClassDef();
 
             OrganisationTestBO org = new OrganisationTestBO();

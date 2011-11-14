@@ -38,7 +38,7 @@ namespace Habanero.Test.BO
         public  void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
 

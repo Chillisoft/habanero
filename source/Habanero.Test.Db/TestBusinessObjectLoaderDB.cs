@@ -33,6 +33,8 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestBusinessObjectLoaderDB : TestBusinessObjectLoader
     {
+        private string _contactPersonTableName;
+
         #region Setup/Teardown
 
         [SetUp]
@@ -42,8 +44,6 @@ namespace Habanero.Test.DB
             base.SetupTest();
             ContactPersonTestBO.DeleteAllContactPeople();
         }
-
-        #endregion
 
         protected override void DeleteEnginesAndCars()
         {
@@ -62,6 +62,54 @@ namespace Habanero.Test.DB
             const string sql = "DELETE FROM bowithintid";
             if (DatabaseConnection.CurrentConnection != null) DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
+
+        protected virtual void CreateContactPersonTable()
+        {
+            _contactPersonTableName = "contact_person_" + TestUtil.GetRandomString();
+            ContactPersonTestBO.CreateContactPersonTable(GetContactPersonTableName());
+        }
+
+        public string GetContactPersonTableName()
+        {
+            return _contactPersonTableName;
+        }
+
+        private IClassDef SetupDefaultContactPersonBO()
+        {
+            CreateContactPersonTable();
+            var cpClassDef = ContactPersonTestBO.LoadDefaultClassDef();
+            //cpClassDef.TableName = "ContactPersonTable with a randomlygenerated guid";
+            cpClassDef.TableName = GetContactPersonTableName();
+            return cpClassDef;
+        }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            //runs every time any testmethod is complete
+            //base.TearDownTest();
+            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "AddressTestBO")))
+            {
+                var classDef = ClassDef.Get<AddressTestBO>();
+                string defaultCpAddressTableName = "contact_person_address";
+                if (classDef.TableName.ToLower() != defaultCpAddressTableName)
+                {
+                    AddressTestBO.DropCpAddressTable(classDef.TableName);
+                }
+            }
+
+            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO")))
+            {
+                var classDef = ClassDef.Get<ContactPersonTestBO>();
+                string defaultContactPersonTableName = "contact_person";
+                if (classDef.TableName.ToLower() != defaultContactPersonTableName)
+                {
+                    ContactPersonTestBO.DropContactPersonTable(classDef.TableName);
+                }
+            }
+        }
+
+        #endregion
 
         [Test]
         public void TestGetBusinessObjectByIDInt_ByCriteriaObject()
@@ -175,7 +223,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         public void TestAfterLoadCalled_GetBusinessObject()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             //---------------Assert Precondition----------------
@@ -192,7 +240,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         public void TestAfterLoadCalled_GetBusinessObject_Untyped()
         {
             //---------------Set up test pack-------------------
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
 
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
@@ -218,7 +266,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //------------------------------Setup Test
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
@@ -253,7 +301,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         
 
@@ -285,7 +333,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
 
             const string surname = "abc";
@@ -317,7 +365,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = SetupDefaultContactPersonBO();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
 
             const string surname = "abc";
@@ -350,7 +398,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
             cp.FirstName = Guid.NewGuid().ToString("N");
@@ -432,7 +480,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         public void TestGetTheFreshestObject_Strategy()
         {
             //------------------------------Setup Test----------------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO originalContactPerson = new ContactPersonTestBO();
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
@@ -479,7 +527,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack-------------------
             ContactPerson.DeleteAllContactPeople();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson
                 (Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
@@ -502,7 +550,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
@@ -524,7 +572,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
@@ -547,7 +595,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
@@ -579,7 +627,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         {
             //---------------Set up test pack---------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
 
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
@@ -610,7 +658,7 @@ BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a ne
         public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
         {
             //-------------Setup Test Pack------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
 

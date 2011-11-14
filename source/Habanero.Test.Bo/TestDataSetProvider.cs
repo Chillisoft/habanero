@@ -76,7 +76,7 @@ namespace Habanero.Test.BO
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
         public virtual void SetupTestData()
@@ -710,7 +710,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
 
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
@@ -749,7 +749,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
 
             var engine = new Engine();
             var car = new Car();
@@ -778,7 +778,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
 //            DateTime startDate = DateTime.Now;

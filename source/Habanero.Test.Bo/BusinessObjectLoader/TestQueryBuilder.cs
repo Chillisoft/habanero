@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
         //TODO: make the fields and order fields case insensitive

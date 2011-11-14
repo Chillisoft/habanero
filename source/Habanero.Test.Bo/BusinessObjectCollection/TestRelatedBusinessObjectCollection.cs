@@ -558,7 +558,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             
             //-----Assert Precondition------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
@@ -583,7 +583,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
 
             //-----Assert Precondition------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
@@ -610,7 +610,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
 
             //-----Assert Precondition------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
@@ -635,7 +635,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
 
             //-----Assert Precondition------------------
             Assert.AreEqual(0, contactPersonTestBO.Addresses.RemovedBusinessObjects.Count);
@@ -658,7 +658,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
 
             //-----Run tests----------------------------
             contactPersonTestBO.Addresses.Remove(address);
@@ -675,7 +675,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //-----Create Test pack---------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             RelatedBusinessObjectCollection<AddressTestBO> addresses = contactPersonTestBO.Addresses;
 
             //-----Run tests----------------------------
@@ -781,7 +781,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
             //---------------Assert Precondition----------------
             Assert.IsNull(col.TimeLastLoaded);
@@ -798,7 +798,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
             //---------------Assert Precondition----------------
             Assert.IsNull(col.TimeLastLoaded);
@@ -813,7 +813,7 @@ namespace Habanero.Test.BO.BusinessObjectCollection
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             RelatedBusinessObjectCollection<AddressTestBO> col = new RelatedBusinessObjectCollection<AddressTestBO>(contactPersonTestBO.Relationships["Addresses"]);
             //---------------Assert Precondition----------------
             Assert.IsNull(col.TimeLastLoaded);

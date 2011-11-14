@@ -63,10 +63,6 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             BORegistry.DataAccessor = new DataAccessorMultiSource(new DataAccessorInMemory());
         }
 
-        protected override void DeleteEnginesAndCars()
-        {
-
-        }
     }
 
     [TestFixture]

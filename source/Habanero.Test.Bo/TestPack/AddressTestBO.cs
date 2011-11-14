@@ -161,6 +161,49 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
+        public static void CreateContactPersonAddressTable(string cpAddressTableName, string cpTableName)
+        {
+             if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            var sql = "CREATE TABLE `" + cpAddressTableName +
+                      @"` (
+                      `AddressID` char(38) NOT NULL DEFAULT '',
+                      `ContactPersonID` char(38) NOT NULL DEFAULT '',
+                      `AddressLine1` varchar(255) DEFAULT NULL,
+                      `AddressLine2` varchar(255) DEFAULT NULL,
+                      `AddressLine3` varchar(255) DEFAULT NULL,
+                      `AddressLine4` varchar(255) DEFAULT NULL,
+                      `OrganisationID` char(38) DEFAULT NULL,
+                      PRIMARY KEY (`AddressID`),
+                      KEY `FK_" +
+                      cpAddressTableName + @"_1` (`ContactPersonID`),
+                      CONSTRAINT `FK_" +
+                      cpAddressTableName + @"_1` FOREIGN KEY (`ContactPersonID`) REFERENCES `" + cpTableName +
+                      @"` (`ContactPersonID`)
+                    )";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
+        public static void DropCpAddressTable(string cpAddressTableName)
+        {
+            if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            var sql = "DROP TABLE " + cpAddressTableName;
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
         #endregion
 
         #region ForCollections
