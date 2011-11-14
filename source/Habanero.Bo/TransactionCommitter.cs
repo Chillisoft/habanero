@@ -265,7 +265,7 @@ namespace Habanero.BO
                 foreach (ITransactional transaction in _originalTransactions.ToArray())
                 {
                     if (!(transaction is TransactionalBusinessObject)) continue;
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    var trnBusObj = (TransactionalBusinessObject) transaction;
                     trnBusObj.UpdateObjectBeforePersisting(this);
                 }
             }
