@@ -186,7 +186,7 @@ namespace Habanero.Test.BO
                       CONSTRAINT `FK_" +
                       cpAddressTableName + @"_1` FOREIGN KEY (`ContactPersonID`) REFERENCES `" + cpTableName +
                       @"` (`ContactPersonID`)
-                    )";
+                    ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

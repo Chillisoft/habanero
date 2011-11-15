@@ -1041,7 +1041,7 @@ namespace Habanero.Test.BO
                           UNIQUE KEY `Index_2` (`Surname_field`,`FirstName_field`),
                           KEY `FK_" + tableName + @"_1` (`OrganisationID`),
                           CONSTRAINT `FK_" + tableName + @"_1` FOREIGN KEY (`OrganisationID`) REFERENCES `organisation` (`OrganisationID`)
-                        ) ";
+                        ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
 
         }
