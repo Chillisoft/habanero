@@ -74,16 +74,9 @@ namespace Habanero.Test.BO
             new TestUsingDatabase().SetupDBConnection();
         }
 
-        protected virtual void CreateContactPersonTable()
-        {
-            _contactPersonTableName = "contact_person_" + TestUtil.GetRandomString();
-            ContactPersonTestBO.CreateContactPersonTable(this.ContactPersonTableName);
-        }
-
         private void CreateContactPersonTable(string tableNameExtension)
         {
-            _contactPersonTableName = "contact_person_" + tableNameExtension;
-            ContactPersonTestBO.CreateContactPersonTable(this.ContactPersonTableName);
+            _contactPersonTableName = BOTestUtils.CreateContactPersonTable(tableNameExtension);
         }
 
         public string ContactPersonTableName
@@ -93,7 +86,7 @@ namespace Habanero.Test.BO
 
         private IClassDef SetupDefaultContactPersonBO()
         {
-            CreateContactPersonTable();
+            _contactPersonTableName = BOTestUtils.CreateContactPersonTable(TestUtil.GetRandomString());
             var cpClassDef = ContactPersonTestBO.LoadDefaultClassDef();
             //cpClassDef.TableName = "ContactPersonTable with a randomlygenerated guid";
 
@@ -1401,9 +1394,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            var tableNameExt = TestUtil.GetRandomString();
-            CreateContactPersonTable(tableNameExt);
-            CreateAddressTable(tableNameExt);
+            var tableNameExt = CreateContactPersonAndAddressTables();
             ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteDoNothing(tableNameExt);
             var boMan = BusinessObjectManager.Instance;
 
@@ -1444,6 +1435,14 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedAddress, boMan[addresssID.ObjectID]);
         }
 
+        private string CreateContactPersonAndAddressTables()
+        {
+            var tableNameExt = TestUtil.GetRandomString();
+            CreateContactPersonTable(tableNameExt);
+            CreateAddressTable(tableNameExt);
+            return tableNameExt;
+        }
+
         // ReSharper restore RedundantAssignment
 
 
@@ -1454,18 +1453,8 @@ namespace Habanero.Test.BO
         public void Test_LoadObject_SingleRelationship_UpdatedObjectMan_Generic()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            new AddressTestBO();        
-            var cpAddressClassDef = ClassDef.Get<AddressTestBO>();
-            var cpClassDef = ClassDef.Get<ContactPersonTestBO>();
-            var tableNameExt  = TestUtil.GetRandomString();
-            CreateContactPersonTable(tableNameExt);
-            cpClassDef.TableName = "contact_person_" + tableNameExt;
-            var tableName = "contact_person_address_" + tableNameExt;
-            AddressTestBO.CreateContactPersonAddressTable(tableName, cpClassDef.TableName);
-            cpAddressClassDef.TableName = tableName;
-            
+            LoadContactPersonAndAddressClassDef();
+
             var boMan = BusinessObjectManager.Instance;
 
             var cp = CreateSavedCP();
@@ -1503,6 +1492,19 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedAddress, boMan[addresssID.ObjectID]);
         }
 
+        private void LoadContactPersonAndAddressClassDef()
+        {
+            ClassDef.ClassDefs.Clear();
+            var cpClassDef = ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
+            var tableNameExt  = TestUtil.GetRandomString();
+            CreateContactPersonTable(tableNameExt);
+            cpClassDef.TableName = "contact_person_" + tableNameExt;
+            var tableName = "contact_person_address_" + tableNameExt;
+            AddressTestBO.CreateContactPersonAddressTable(tableName, cpClassDef.TableName);
+            var cpAddressClassDef = AddressTestBO.LoadDefaultClassDef();  
+            cpAddressClassDef.TableName = tableName;
+        }
+
         // ReSharper restore RedundantAssignment
 
         //Testloading objects when already other objects in object manager
@@ -1511,15 +1513,7 @@ namespace Habanero.Test.BO
         public void Test_LoadObjectWhenAlreadyObjectInObjectManager()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            var cpClassDef = ContactPersonTestBO.LoadClassDefWithAddressTestBOsRelationship();
-            var tableNameExt  = TestUtil.GetRandomString();
-            CreateContactPersonTable(tableNameExt);
-            cpClassDef.TableName = "contact_person_" + tableNameExt;
-            var tableName = "contact_person_address_" + tableNameExt;
-            AddressTestBO.CreateContactPersonAddressTable(tableName, cpClassDef.TableName);
-            var cpAddressClassDef = AddressTestBO.LoadDefaultClassDef();
-            cpAddressClassDef.TableName = tableName;
+            LoadContactPersonAndAddressClassDef();
             var boMan = BusinessObjectManager.Instance;
 
             AddressTestBO address;
@@ -1608,11 +1602,9 @@ namespace Habanero.Test.BO
             OrganisationTestBO.LoadDefaultClassDef();
             TestUtil.WaitForGC();
             AddressTestBO address;
-            var tableNameExtension = TestUtil.GetRandomString();
-            CreateContactPersonTable(tableNameExtension);
-            CreateAddressTable(tableNameExtension);
+            var tableNameExt = CreateContactPersonAndAddressTables();
             var contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, tableNameExtension);
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, tableNameExt);
 
 
             var org = new OrganisationTestBO();

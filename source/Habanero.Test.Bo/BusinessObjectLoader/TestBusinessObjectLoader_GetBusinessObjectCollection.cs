@@ -2374,9 +2374,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         public void Test_GetBusinesssObjectCollection_Untyped_GtCriteriaString()
         {
             //---------------Set up test pack-------------------
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
+            var classDef = LoadContactPersonClassDefWithIntProp();
             ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
             ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
             CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
@@ -2394,6 +2392,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             Assert.Contains(cp1, col);
             Assert.Contains(cp2, col);
             Assert.IsFalse(col.Contains(cpEqual));
+        }
+
+        private IClassDef LoadContactPersonClassDefWithIntProp()
+        {
+            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
+            CreateContactPersonTable();
+            classDef.TableName = _contactPersonTableName;
+            return classDef;
         }
 
         [Test]

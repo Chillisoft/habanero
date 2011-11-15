@@ -528,10 +528,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		public void Test_RefreshLoadedCollection_Typed_LTEQCriteriaString_IntegerProperty()
 		{
 			//---------------Set up test pack-------------------
-		    var classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-		    CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
-			DateTime now = DateTime.Now;
+		    LoadContactPersonClassDefWithIntProp();
+		    DateTime now = DateTime.Now;
 			ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson(now);
 			cp1.SetPropertyValue("IntegerProperty", 0);
 			cp1.Save();
@@ -579,14 +577,20 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 			Assert.IsFalse(col.Contains(cpExcluded));
 		}
 
-		[Test]
+	    private IClassDef LoadContactPersonClassDefWithIntProp()
+	    {
+	        var classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
+	        CreateContactPersonTable();
+	        classDef.TableName = _contactPersonTableName;
+	        return classDef;
+	    }
+
+	    [Test]
 		public void Test_RefreshLoadedCollection_Typed_NotEQ_CriteriaString()
 		{
 			//---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-		    var classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-		    CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
+            LoadContactPersonClassDefWithIntProp();
 			ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 			ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
 			CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
@@ -945,9 +949,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		{
 			//---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-		    var classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
+            LoadContactPersonClassDefWithIntProp();
 		    ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
 			ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
 			CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
@@ -1151,10 +1153,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		public void Test_RefreshLoadedCollection_Untyped_GTCriteriaString()
 		{
 			//---------------Set up test pack-------------------
-			IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
-			ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
+		    var classDef = LoadContactPersonClassDefWithIntProp();
+		    ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
 			ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 4);
 			CreateSavedContactPerson(TestUtil.GetRandomString(), 1);
 			ContactPersonTestBO cpEqual = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
@@ -1285,9 +1285,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		public void Test_RefreshLoadedCollection_Untyped_LTEQCriteriaString()
 		{
 			//---------------Set up test pack-------------------
-			IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef_W_IntegerProperty();
-            CreateContactPersonTable();
-            classDef.TableName = _contactPersonTableName;
+            IClassDef classDef = LoadContactPersonClassDefWithIntProp();
 			ContactPersonTestBO cp1 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 			ContactPersonTestBO cp2 = CreateSavedContactPerson(TestUtil.GetRandomString(), 2);
 			CreateSavedContactPerson(TestUtil.GetRandomString(), 4);

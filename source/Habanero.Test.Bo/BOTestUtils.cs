@@ -73,5 +73,20 @@ namespace Habanero.Test.BO
                 }
             }
         }
+
+        public static string CreateAddressTable(string tableNameExtension)
+        {
+            var contactPersonAddressTableName = "contact_person_address_" + tableNameExtension;
+            AddressTestBO.CreateContactPersonAddressTable(contactPersonAddressTableName, "contact_person_" + tableNameExtension);
+            return contactPersonAddressTableName;
+        }
+
+        public static string CreateContactPersonTable(string tableNameExtension)
+        {
+            var contactPersonTableName = "contact_person_" + tableNameExtension;
+            ContactPersonTestBO.CreateContactPersonTable(contactPersonTableName);
+            return contactPersonTableName;
+        }
+
     }
 }

@@ -65,8 +65,7 @@ namespace Habanero.Test.DB
 
         protected virtual void CreateContactPersonTable()
         {
-            _contactPersonTableName = "contact_person_" + TestUtil.GetRandomString();
-            ContactPersonTestBO.CreateContactPersonTable(GetContactPersonTableName());
+            _contactPersonTableName = BOTestUtils.CreateContactPersonTable(TestUtil.GetRandomString());
         }
 
         public string GetContactPersonTableName()
@@ -101,7 +100,7 @@ namespace Habanero.Test.DB
             BOWithIntID.LoadClassDefWithIntID();
             BOWithIntID bo = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
             bo.Save();
-BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
         
             Criteria criteria = new Criteria("IntID", Criteria.ComparisonOp.Equals, bo.IntID.ToString());
             //---------------Execute Test ----------------------
