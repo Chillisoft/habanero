@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System.Reflection;
 
 // General Information about an assembly is controlled through the following 
@@ -23,7 +25,7 @@ using System.Reflection;
 // associated with an assembly.
 [assembly: AssemblyCompany("Chillisoft")]
 [assembly: AssemblyProduct("Habanero")]
-[assembly: AssemblyCopyright("Copyright © Chillisoft 2007-2010")]
+[assembly: AssemblyCopyright("Copyright © Chillisoft 2007-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

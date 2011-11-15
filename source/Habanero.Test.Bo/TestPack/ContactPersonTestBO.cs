@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using Habanero.Base;
 using Habanero.BO;
@@ -382,6 +384,41 @@ namespace Habanero.Test.BO
                 AddressTestBO.LoadDefaultClassDef();
             return itsClassDef;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tableSuffix">used to suffix onto the address and contact person table s.t. we do not have interacting tests</param>
+        /// <returns></returns>
+        public static IClassDef LoadClassDefWithAddressesRelationship_DeleteRelated(string tableSuffix)
+        {
+            var itsLoader = CreateXmlClassLoader();
+            var personClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" reverseRelationship=""ContactPersonTestBO"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+
+            ClassDef.ClassDefs.Add(personClassDef);
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+            {
+                var addressClassDef = AddressTestBO.LoadDefaultClassDef();
+                addressClassDef.TableName += "_" + tableSuffix;
+            }
+            personClassDef.TableName += "_" + tableSuffix;
+            return personClassDef;
+        }
 
         public static IClassDef LoadClassDefWithAddresBOsRelationship_AddressReverseRelationshipConfigured()
         {
@@ -534,6 +571,37 @@ namespace Habanero.Test.BO
 
             if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
                 AddressTestBO.LoadDefaultClassDef();
+            return itsClassDef;
+        }
+
+        public static IClassDef LoadClassDefWithAddressesRelationship_DeleteDoNothing(string tableSuffix)
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Guid"" />
+					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
+                    <property  name=""FirstName"" databaseField=""FirstName_field"" compulsory=""true"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Guid"" />
+					<primaryKey>
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+					<relationship name=""Addresses"" type=""multiple"" relatedClass=""AddressTestBO"" relatedAssembly=""Habanero.Test.BO"" deleteAction=""DoNothing"">
+						<relatedProperty property=""ContactPersonID"" relatedProperty=""ContactPersonID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+
+            if (!ClassDef.ClassDefs.Contains(typeof(AddressTestBO)))
+            {
+                var addressClassDef = AddressTestBO.LoadDefaultClassDef();
+                addressClassDef.TableName += "_" + tableSuffix;
+            }
+            itsClassDef.TableName += "_" + tableSuffix;
             return itsClassDef;
         }
 
@@ -904,6 +972,80 @@ namespace Habanero.Test.BO
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
+
+        public static void DeleteAllContactPeople(string contactPersonTableName)
+        {
+            if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            string sql = "DELETE FROM contact_person_address";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            sql = "DELETE FROM " + contactPersonTableName;
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
+        public static void DropContactPersonTable(string contactPersonTableName)
+        {
+            if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            //string sql = "DELETE FROM contact_person_address";
+            //DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            var sql = "DROP TABLE `" + contactPersonTableName + "`";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
+        public static void CreateContactPersonTable(string tableName)
+        {
+            if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            var sql = "CREATE TABLE `" + tableName + @"` (
+                          `ContactPersonID` char(38) NOT NULL DEFAULT '',
+                          `Surname_field` varchar(255) DEFAULT NULL,
+                          `FirstName_field` varchar(255) DEFAULT NULL,
+                          `EmailAddress` varchar(255) DEFAULT NULL,
+                          `PhoneNumber` varchar(255) DEFAULT NULL,
+                          `CellNumber` varchar(255) DEFAULT NULL,
+                          `DateOfBirth` datetime DEFAULT NULL,
+                          `DateLastUpdated` datetime DEFAULT NULL,
+                          `UserLastUpdated` varchar(255) DEFAULT NULL,
+                          `MachineLastUpdated` varchar(255) DEFAULT NULL,
+                          `VersionNumber` int(11) DEFAULT NULL,
+                          `PK2_Prop1` varchar(255) DEFAULT NULL,
+                          `PK2_Prop2` varchar(255) DEFAULT NULL,
+                          `PK3_Prop` varchar(255) DEFAULT NULL,
+                          `OrganisationID` char(38) DEFAULT NULL,
+                          `UserLocked` varchar(45) DEFAULT NULL,
+                          `DateTimeLocked` datetime DEFAULT NULL,
+                          `MachineLocked` varchar(45) DEFAULT NULL,
+                          `OperatingSystemUserLocked` varchar(45) DEFAULT NULL,
+                          `Locked` tinyint(1) DEFAULT NULL,
+                          `IntegerProperty` int(11) DEFAULT NULL,
+                          PRIMARY KEY (`ContactPersonID`),
+                          UNIQUE KEY `Index_2` (`Surname_field`,`FirstName_field`),
+                          KEY `FK_" + tableName + @"_1` (`OrganisationID`),
+                          CONSTRAINT `FK_" + tableName + @"_1` FOREIGN KEY (`OrganisationID`) REFERENCES `organisation` (`OrganisationID`)
+                        ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+
+        }
+
         public static void CreateSampleData()
         {
             ClassDef.ClassDefs.Clear();
@@ -931,9 +1073,9 @@ namespace Habanero.Test.BO
             return contactPersonTestBO;
         }
 
-        public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out AddressTestBO address)
+        public static ContactPersonTestBO CreateContactPersonWithOneAddress_CascadeDelete(out AddressTestBO address, string tableNameExtension)
         {
-            LoadClassDefWithAddressesRelationship_DeleteRelated();
+            LoadClassDefWithAddressesRelationship_DeleteRelated(tableNameExtension);
             return CreateContactPerson(out address);
         }
 
@@ -992,7 +1134,7 @@ namespace Habanero.Test.BO
 
         public static ContactPersonTestBO CreateSavedContactPerson()
         {
-            ContactPersonTestBO contact = CreateUnsavedContactPerson();
+            var contact = CreateUnsavedContactPerson();
             contact.Save();
             return contact;
         }

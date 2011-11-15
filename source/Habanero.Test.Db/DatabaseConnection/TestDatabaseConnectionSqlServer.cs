@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System.Data;
 using System.Linq;
 using Habanero.Base;
@@ -75,7 +77,8 @@ namespace Habanero.Test.DB
 
 		private static void SetupSQLServerConnection()
 		{
-			var databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
+			//var databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
+			var databaseConfig = new DatabaseConfig("SqlServer", @"localhost\sqlexpress", "habanero_test_branch_2_6", "sa", "sa", null);
 			DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
 		}
 

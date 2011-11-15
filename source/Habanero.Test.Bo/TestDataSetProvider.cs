@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -74,7 +76,7 @@ namespace Habanero.Test.BO
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
             this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
         public virtual void SetupTestData()
@@ -708,7 +710,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
 
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
@@ -747,7 +749,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             BORegistry.DataAccessor = new DataAccessorInMemory();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
 
             var engine = new Engine();
             var car = new Car();
@@ -776,7 +778,7 @@ namespace Habanero.Test.BO
         {
             //-------------Setup Test Pack ------------------
             ClassDef.ClassDefs.Clear();
-            new Address();//TO Load ClassDefs
+            //new Address();//TO Load ClassDefs
             new Engine();//TO Load ClassDefs
             new Car();//TO Load ClassDefs
 //            DateTime startDate = DateTime.Now;

@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using Habanero.Base;
 using Habanero.BO;
@@ -181,7 +183,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             contactPersonTestBO.MarkForDelete();
             TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
             committer.AddBusinessObject(contactPersonTestBO);

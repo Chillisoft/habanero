@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using Habanero.Base;
 using Habanero.BO;
@@ -156,6 +158,49 @@ namespace Habanero.Test.BO
         public static void DeleteAllAddresses()
         {
             string sql = "DELETE FROM contact_person_address";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
+        public static void CreateContactPersonAddressTable(string cpAddressTableName, string cpTableName)
+        {
+             if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            var sql = "CREATE TABLE `" + cpAddressTableName +
+                      @"` (
+                      `AddressID` char(38) NOT NULL DEFAULT '',
+                      `ContactPersonID` char(38) NOT NULL DEFAULT '',
+                      `AddressLine1` varchar(255) DEFAULT NULL,
+                      `AddressLine2` varchar(255) DEFAULT NULL,
+                      `AddressLine3` varchar(255) DEFAULT NULL,
+                      `AddressLine4` varchar(255) DEFAULT NULL,
+                      `OrganisationID` char(38) DEFAULT NULL,
+                      PRIMARY KEY (`AddressID`),
+                      KEY `FK_" +
+                      cpAddressTableName + @"_1` (`ContactPersonID`),
+                      CONSTRAINT `FK_" +
+                      cpAddressTableName + @"_1` FOREIGN KEY (`ContactPersonID`) REFERENCES `" + cpTableName +
+                      @"` (`ContactPersonID`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+        }
+
+        public static void DropCpAddressTable(string cpAddressTableName)
+        {
+            if (BORegistry.DataAccessor is DataAccessorInMemory)
+            {
+                return;
+            }
+            if (BORegistry.DataAccessor is DataAccessorMultiSource)
+            {
+                return;
+            }
+            var sql = "DROP TABLE " + cpAddressTableName;
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,9 +17,13 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Habanero.Base;
 using Habanero.BO;
+using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.BO.BusinessObjectLoader;
@@ -32,30 +37,44 @@ namespace Habanero.Test.DB
         TestBusinessObjectLoader_RefreshCollection
     {
         #region Setup/Teardown
+        [TestFixtureSetUp]
+        public override void TestFixtureSetup()
+        {
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            //Create a new ContactPersonTable with a randomlygenerated guid at end of name.
+            
+        }
+
+        [TearDown]
+        public override void TearDownTest()
+        {
+            //Drop the newly created ContactPersonTable (see above).
+            BOTestUtils.DropNewContactPersonAndAddressTables();
+        }
 
         [SetUp]
         public override void SetupTest()
         {
-            base.SetupTest();
+            ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.DeleteAllContactPeople();
-        }
-
-        #endregion
-
-        protected override void DeleteEnginesAndCars()
-        {
-            Engine.DeleteAllEngines();
-            Car.DeleteAllCars();
-        }
-
-        public TestBusinessObjectLoader_RefreshCollectionDB()
-        {
-            new TestUsingDatabase().SetupDBConnection();
         }
 
         protected override void SetupDataAccessor()
         {
             BORegistry.DataAccessor = new DataAccessorDB();
+        }
+
+        protected override void CreateContactPersonTable()
+        {
+            base.CreateContactPersonTable();
+            ContactPersonTestBO.CreateContactPersonTable(GetContactPersonTableName());
+        }
+
+        #endregion
+
+        public TestBusinessObjectLoader_RefreshCollectionDB()
+        {
+            new TestUsingDatabase().SetupDBConnection();
         }
 
         [Test]
@@ -65,15 +84,15 @@ namespace Habanero.Test.DB
             BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.DeleteAllContactPeople();
 
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            SetupDefaultContactPersonBO();
+            var col = new BusinessObjectCollection<ContactPersonTestBO>();
 
-            ContactPersonTestBO cp1 = ContactPersonTestBO.CreateSavedContactPerson();
+            var cp1 = ContactPersonTestBO.CreateSavedContactPerson();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO.CreateSavedContactPerson();
             col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
+            var newSurname = Guid.NewGuid().ToString();
             cp1.Surname = newSurname;
             cp1.Save();
             var secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
@@ -94,6 +113,7 @@ namespace Habanero.Test.DB
             Assert.AreEqual(newSurname, secondInstanceOfCP1.Surname);
         }
 
+
         [Test]
         public void Test_RefreshCollectionRefreshesNonDirtyObjects()
         {
@@ -101,20 +121,19 @@ namespace Habanero.Test.DB
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO.DeleteAllOrganisations();
             ContactPersonTestBO.DeleteAllContactPeople();
-            ContactPersonTestBO.LoadDefaultClassDef();
-            BusinessObjectCollection<ContactPersonTestBO> col
-                    = new BusinessObjectCollection<ContactPersonTestBO>();
+            SetupDefaultContactPersonBO();
+            var col = new BusinessObjectCollection<ContactPersonTestBO>();
 
-            ContactPersonTestBO cp1 = CreateContactPersonTestBO();
+            var cp1 = CreateContactPersonTestBO();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
 
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();
             col.LoadAll();
-            string newSurname = Guid.NewGuid().ToString();
+            var newSurname = Guid.NewGuid().ToString();
             cp1.Surname = newSurname;
             cp1.Save();
-            ContactPersonTestBO secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
+            var secondInstanceOfCP1 = col.Find(cp1.ContactPersonID);
 
             //--------------------Assert Preconditions----------
             AssertNotContains(cp1, col);
@@ -132,15 +151,16 @@ namespace Habanero.Test.DB
 
         private static void AssertNotContains(ContactPersonTestBO cp1, IEnumerable<ContactPersonTestBO> col)
         {
-            foreach (ContactPersonTestBO bo in col)
+            if(col.Where(bo => ReferenceEquals(bo, cp1)).Count() > 0)
             {
-                if (ReferenceEquals(bo, cp1)) Assert.Fail("Should not contain object");
+                Assert.Fail("Should not contain object");
             }
         }
+
         private static ContactPersonTestBO CreateContactPersonTestBO()
         {
-            ContactPersonTestBO bo = new ContactPersonTestBO();
-            string newSurname = Guid.NewGuid().ToString();
+            var bo = new ContactPersonTestBO();
+            var newSurname = Guid.NewGuid().ToString();
             bo.Surname = newSurname;
             bo.Save();
             return bo;

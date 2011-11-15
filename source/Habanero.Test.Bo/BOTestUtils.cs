@@ -1,24 +1,26 @@
-//---------------------------------------------------------------------------------
-// Copyright (C) 2009 Chillisoft Solutions
-// 
-// This file is part of the Habanero framework.
-// 
-//     Habanero is a free framework: you can redistribute it and/or modify
-//     it under the terms of the GNU Lesser General Public License as published by
-//     the Free Software Foundation, either version 3 of the License, or
-//     (at your option) any later version.
-// 
-//     The Habanero framework is distributed in the hope that it will be useful,
-//     but WITHOUT ANY WARRANTY; without even the implied warranty of
-//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//     GNU Lesser General Public License for more details.
-// 
-//     You should have received a copy of the GNU Lesser General Public License
-//     along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
-//---------------------------------------------------------------------------------
-
+#region Licensing Header
+// ---------------------------------------------------------------------------------
+//  Copyright (C) 2007-2011 Chillisoft Solutions
+//  
+//  This file is part of the Habanero framework.
+//  
+//      Habanero is a free framework: you can redistribute it and/or modify
+//      it under the terms of the GNU Lesser General Public License as published by
+//      the Free Software Foundation, either version 3 of the License, or
+//      (at your option) any later version.
+//  
+//      The Habanero framework is distributed in the hope that it will be useful,
+//      but WITHOUT ANY WARRANTY; without even the implied warranty of
+//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//      GNU Lesser General Public License for more details.
+//  
+//      You should have received a copy of the GNU Lesser General Public License
+//      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
+// ---------------------------------------------------------------------------------
+#endregion
 using System;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -48,5 +50,43 @@ namespace Habanero.Test.BO
             Assert.IsTrue(bo.Status.IsNew);
             Assert.IsTrue(bo.Status.IsDeleted);
         }
+
+        public static void DropNewContactPersonAndAddressTables()
+        {
+            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "AddressTestBO")))
+            {
+                var classDef = ClassDef.Get<AddressTestBO>();
+                string defaultCpAddressTableName = "contact_person_address";
+                if (classDef.TableName.ToLower() != defaultCpAddressTableName)
+                {
+                    AddressTestBO.DropCpAddressTable(classDef.TableName);
+                }
+            }
+
+            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO")))
+            {
+                var classDef = ClassDef.Get<ContactPersonTestBO>();
+                string defaultContactPersonTableName = "contact_person";
+                if (classDef.TableName.ToLower() != defaultContactPersonTableName)
+                {
+                    ContactPersonTestBO.DropContactPersonTable(classDef.TableName);
+                }
+            }
+        }
+
+        public static string CreateAddressTable(string tableNameExtension)
+        {
+            var contactPersonAddressTableName = "contact_person_address_" + tableNameExtension;
+            AddressTestBO.CreateContactPersonAddressTable(contactPersonAddressTableName, "contact_person_" + tableNameExtension);
+            return contactPersonAddressTableName;
+        }
+
+        public static string CreateContactPersonTable(string tableNameExtension)
+        {
+            var contactPersonTableName = "contact_person_" + tableNameExtension;
+            ContactPersonTestBO.CreateContactPersonTable(contactPersonTableName);
+            return contactPersonTableName;
+        }
+
     }
 }

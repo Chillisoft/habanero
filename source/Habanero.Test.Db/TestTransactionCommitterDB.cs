@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using Habanero.Base;
 using Habanero.BO;
@@ -54,10 +56,9 @@ namespace Habanero.Test.DB
         public void TearDownTest()
         {
             //runs every time any testmethod is complete
+            //base.TearDownTest();
+            BOTestUtils.DropNewContactPersonAndAddressTables();
         }
-
-        #endregion
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
@@ -66,6 +67,9 @@ namespace Habanero.Test.DB
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
         }
+
+        #endregion
+
 
         [Test]
         public void TestRaisesException_onError()
@@ -335,24 +339,19 @@ namespace Habanero.Test.DB
                 _rollBackExecuted = true;
             }
         }
+        // ReSharper restore RedundantAssignment
 
         [Test]
         public void Test3LayerDeleteRelated()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            AddressTestBO.LoadDefaultClassDef();
-//            ContactPersonTestBO.LoadClassDefWithAddressesRelationship_DeleteRelated();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO.LoadDefaultClassDef();
-            TestUtil.WaitForGC();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            var contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
 
-            OrganisationTestBO org = new OrganisationTestBO();
+            var org = new OrganisationTestBO();
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
             org.Save();
             contactPersonTestBO.Save();
@@ -388,19 +387,24 @@ namespace Habanero.Test.DB
             BOTestUtils.AssertBOStateIsValidAfterDelete(address);
         }
 
+        private static ContactPersonTestBO CreateContactPersonWithOneAddress(out AddressTestBO address)
+        {
+            var tableNameExtension = TestUtil.GetRandomString();
+            BOTestUtils.CreateContactPersonTable(tableNameExtension);
+            BOTestUtils.CreateAddressTable(tableNameExtension);
+            return ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, tableNameExtension);
+        }
+
         [Test]
         public void Test3LayerDeleteRelated_WithDeletedObjectChildAndGrandchild()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            AddressTestBO.LoadDefaultClassDef();
-
             OrganisationTestBO.LoadDefaultClassDef_WithMultipleRelationshipToAddress();
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            var contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
 
-            OrganisationTestBO org = new OrganisationTestBO();
+            var org = new OrganisationTestBO();
             contactPersonTestBO.SetPropertyValue("OrganisationID", org.OrganisationID);
             org.Save();
             contactPersonTestBO.Save();
@@ -611,10 +615,10 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            var contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
+
             contactPersonTestBO.MarkForDelete();
-            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            var committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
 
             //---------------Execute Test ----------------------
@@ -660,7 +664,7 @@ namespace Habanero.Test.DB
             //---------------Set up test pack-------------------
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             contactPersonTestBO.MarkForDelete();
             TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
@@ -692,9 +696,9 @@ namespace Habanero.Test.DB
         public void TestDeleteRelatedWithFailureAfter()
         {
             //---------------Set up test pack-------------------
-            AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+            AddressTestBO address;          
+            var contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
+
             contactPersonTestBO.MarkForDelete();
             TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
             committerDB.AddBusinessObject(contactPersonTestBO);
@@ -1041,9 +1045,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             AddressTestBO address;
-            ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
-
+            var contactPersonTestBO = CreateContactPersonWithOneAddress(out address);
             //---------------Execute Test ----------------------
             address.MarkForDelete();
             contactPersonTestBO.MarkForDelete();

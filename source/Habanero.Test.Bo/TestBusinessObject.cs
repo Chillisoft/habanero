@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -47,7 +49,7 @@ namespace Habanero.Test.BO
             BusinessObjectManager.Instance.ClearLoadedObjects();
             TestUtil.WaitForGC();
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
 
@@ -163,6 +165,8 @@ namespace Habanero.Test.BO
     [TestFixture]
     public class TestBusinessObject
     {
+        private string _contactPersonTableName;
+
         [TestFixtureSetUp]
         public virtual void TestFixtureSetup()
         {
@@ -181,8 +185,38 @@ namespace Habanero.Test.BO
             TestUsingDatabase.SetupDBDataAccessor();
             BORegistry.DataAccessor = new DataAccessorDB();
             ClassDef.ClassDefs.Clear();
-            new Address();
+           // new Address();
         }
+
+        [TearDown]
+        public void TearDownTest()
+        {
+            //runs every time any testmethod is complete
+            //base.TearDownTest();
+            BOTestUtils.DropNewContactPersonAndAddressTables();
+        }
+
+        protected virtual void CreateContactPersonTable()
+        {
+            _contactPersonTableName = "contact_person_" + TestUtil.GetRandomString();
+            ContactPersonTestBO.CreateContactPersonTable(GetContactPersonTableName());
+        }
+
+        public string GetContactPersonTableName()
+        {
+            return _contactPersonTableName;
+        }
+
+        private IClassDef SetupDefaultContactPersonBO()
+        {
+            CreateContactPersonTable();
+            var cpClassDef = ContactPersonTestBO.LoadDefaultClassDef();
+            //cpClassDef.TableName = "ContactPersonTable with a randomlygenerated guid";
+
+            cpClassDef.TableName = GetContactPersonTableName();
+            return cpClassDef;
+        }
+
 
         [Test]
         public void TestInstantiate()
@@ -291,7 +325,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             var bo = ContactPersonTestBO.CreateUnsavedContactPerson();
             var updatedEventFired = false;
             bo.IDUpdated += ((sender, e) => updatedEventFired = true);
@@ -613,39 +647,67 @@ namespace Habanero.Test.BO
         }
 
 
-        // This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
-        [Test]
-        public void TestGetPropertyValueToDisplayWithBOLookupList()
-        {
-            ContactPersonTestBO.CreateSampleData();
-            ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadClassDefWithBOLookup();
-            ContactPersonTestBO.LoadDefaultClassDef();
+        //// This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        //[Test]
+        //public void TestGetPropertyValueToDisplayWithBOLookupList()
+        //{
+        //    ContactPersonTestBO.CreateSampleData();
+        //    ClassDef.ClassDefs.Clear();
+        //    IClassDef classDef = MyBO.LoadClassDefWithBOLookup();
+        //    ContactPersonTestBO.LoadDefaultClassDef();
 
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
-            ContactPersonTestBO cp =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
-            bo.SetPropertyValue("TestProp2", cp);
-            Assert.IsNotNull(cp);
-            Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
-            Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
+        //    Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
+        //    ContactPersonTestBO cp =
+        //        BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+        //    BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+        //    bo.SetPropertyValue("TestProp2", cp);
+        //    Assert.IsNotNull(cp);
+        //    Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
+        //    Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
+        //}
+
+        // This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        //public void TestGetPropertyValueToDisplayWithBOLookupList()
+        [Test]
+        public void Test_WhenSetThePropertyToABusinessObject_ShouldSetThePrimaryKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            var classDef = MyBO.LoadClassDefWithBOLookup();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            var cp = new ContactPersonTestBO();
+            const string expectedSurname = "abc";
+            cp.Surname = expectedSurname;
+            var myBO = (BusinessObject)classDef.CreateNewBusinessObject();
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(expectedSurname, cp.ToString());
+            //---------------Execute Test ----------------------
+            myBO.SetPropertyValue("TestProp2", cp);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(cp.ContactPersonID, myBO.GetPropertyValue("TestProp2"), "This is the ID of the related object");
+            Assert.AreEqual(expectedSurname, myBO.GetPropertyValueToDisplay("TestProp2"), "This is the ToString of the related object");
         }
 
         [Test]
         public void TestBOLookupListWithString()
         {
-            ContactPersonTestBO.CreateSampleData();
+            //ContactPersonTestBO.CreateSampleData();
             ClassDef.ClassDefs.Clear();
-            IClassDef classDef = MyBO.LoadClassDefWithBOStringLookup();
             ContactPersonTestBO.LoadDefaultClassDef();
+            var classDef = MyBO.LoadClassDefWithBOStringLookup();
 
-            Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
-            ContactPersonTestBO cp =
-                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
-            BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+            //var criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
+            //var cp =
+            //    BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+            var cp = new ContactPersonTestBO();
+            const string expectedSurname = "abc";
+            cp.Surname = expectedSurname;
+            cp.Save();
+            var bo = (BusinessObject) classDef.CreateNewBusinessObject();
 
             bo.SetPropertyValue("TestProp2", "abc");
+            Assert.IsNotNull(cp, "ContactPerson should not be null");
             Assert.AreEqual(cp.ContactPersonID.ToString(), bo.GetPropertyValue("TestProp2"));
             Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
         }
@@ -1446,11 +1508,12 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
 
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            
             //---------------Execute Test ----------------------
             cp.Save();
             //---------------Test Result -----------------------
@@ -1522,7 +1585,7 @@ namespace Habanero.Test.BO
         public void Test_GetPropertyValue_WithExpression()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             var originalFirstName = TestUtil.GetRandomString();
             contactPersonTestBO.SetPropertyValue(bo => bo.FirstName, originalFirstName);
@@ -1539,7 +1602,7 @@ namespace Habanero.Test.BO
         public void Test_GetPropertyValue_WithExpression_ValueType()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             var originalDateTime = DateTime.Today.AddDays(-TestUtil.GetRandomInt(365));
             contactPersonTestBO.SetPropertyValue(bo => bo.DateOfBirth, originalDateTime);
@@ -1555,7 +1618,7 @@ namespace Habanero.Test.BO
         public void Test_GetPropertyValue_WithExpression_WhenInvalidProperty()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             //---------------Assert Precondition----------------
 
@@ -1714,7 +1777,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithDateTime()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             DateTime newDateTime = DateTime.Now;
             //-------------Assert Preconditions -------------
@@ -1730,7 +1793,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithDateTimeString()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             DateTime newDateTime = DateTime.Today.Add(new TimeSpan(6, 3, 2));
             //-------------Assert Preconditions -------------
@@ -1747,7 +1810,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithDateTimeString_Invalid()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             const string newDateTime = "31/11/2008";
             IBOProp prop = contactPersonTestBO.Props["DateOfBirth"];
@@ -1830,7 +1893,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithExpression()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             var firstName = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
@@ -1845,7 +1908,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithExpression_ValueType()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             var dateOfBirth = DateTime.Today;
             //---------------Assert Precondition----------------
@@ -1859,7 +1922,7 @@ namespace Habanero.Test.BO
         public void Test_SetPropertyValue_WithExpression_WhenInvalidProperty()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPersonTestBO = new ContactPersonTestBO();
             var firstName = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------

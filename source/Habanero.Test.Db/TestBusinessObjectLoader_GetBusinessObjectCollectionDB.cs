@@ -1,5 +1,6 @@
+#region Licensing Header
 // ---------------------------------------------------------------------------------
-//  Copyright (C) 2007-2010 Chillisoft Solutions
+//  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
 //  This file is part of the Habanero framework.
 //  
@@ -16,6 +17,7 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+#endregion
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -61,7 +63,7 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_Generic_Reloaded()
         {
             //---------------Set up test pack-------------------
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
@@ -83,7 +85,7 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_NonGeneric_Reloaded()
         {
             //---------------Set up test pack-------------------
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
@@ -106,7 +108,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             ContactPersonTestBO.CreateSavedContactPerson();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
@@ -131,7 +133,7 @@ namespace Habanero.Test.DB
         public void TestAfterLoadCalled_GetCollection_NonGeneric_NotReloaded()
         {
             //---------------Set up test pack-------------------
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            IClassDef classDef = SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPersonNoAddresses();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             //---------------Assert Precondition----------------
@@ -388,7 +390,7 @@ namespace Habanero.Test.DB
             const int limit = 2;
             const int expectedCount = 2;
 
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
@@ -411,7 +413,7 @@ namespace Habanero.Test.DB
             const int firstRecord = 0;
             const int limit = 2;
             const int expectedCount = 2;
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
@@ -440,7 +442,7 @@ namespace Habanero.Test.DB
             const int firstRecord = 2;
             const int limit = 2;
             const int expectedCount = 2;
-            ContactPersonTestBO.LoadDefaultClassDef();
+            SetupDefaultContactPersonBO();
             ContactPersonTestBO[] contactPersonTestBOs = CreateSavedSortedContactPeople(totalRecords);
             IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>();
             //---------------Assert Precondition----------------
