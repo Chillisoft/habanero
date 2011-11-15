@@ -57,25 +57,7 @@ namespace Habanero.Test.BO
         {
             //runs every time any testmethod is complete
             //base.TearDownTest();
-            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "AddressTestBO")))
-            {
-                var classDef = ClassDef.Get<AddressTestBO>();
-                var defaultCpAddressTableName = "contact_person_address";
-                if (classDef.TableName.ToLower() != defaultCpAddressTableName)
-                {
-                    AddressTestBO.DropCpAddressTable(classDef.TableName);
-                }
-            }
-
-            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO")))
-            {
-                var classDef = ClassDef.Get<ContactPersonTestBO>();
-                var defaultContactPersonTableName = "contact_person";
-                if (classDef.TableName.ToLower() != defaultContactPersonTableName)
-                {
-                    ContactPersonTestBO.DropContactPersonTable(classDef.TableName);
-                } 
-            }
+            BOTestUtils.DropNewContactPersonAndAddressTables();
         }
 
         protected static void SetupDataAccessor()

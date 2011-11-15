@@ -49,30 +49,7 @@ namespace Habanero.Test.DB
         public override void TearDownTest()
         {
             //Drop the newly created ContactPersonTable (see above).
-            DropNewTables();
-        }
-
-        private void DropNewTables()
-        {
-            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "AddressTestBO")))
-            {
-                var classDef = ClassDef.Get<AddressTestBO>();
-                string defaultCpAddressTableName = "contact_person_address";
-                if (classDef.TableName.ToLower() != defaultCpAddressTableName)
-                {
-                    AddressTestBO.DropCpAddressTable(classDef.TableName);
-                }
-            }
-
-            if (ClassDef.ClassDefs.Count > 0 && (ClassDef.ClassDefs.Contains("Habanero.Test.BO", "ContactPersonTestBO")))
-            {
-                var classDef = ClassDef.Get<ContactPersonTestBO>();
-                string defaultContactPersonTableName = "contact_person";
-                if (classDef.TableName.ToLower() != defaultContactPersonTableName)
-                {
-                    ContactPersonTestBO.DropContactPersonTable(classDef.TableName);
-                }
-            }
+            BOTestUtils.DropNewContactPersonAndAddressTables();
         }
 
         [SetUp]
