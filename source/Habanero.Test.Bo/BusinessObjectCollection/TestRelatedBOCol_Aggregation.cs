@@ -1,4 +1,4 @@
-﻿#region Licensing Header
+#region Licensing Header
 // ---------------------------------------------------------------------------------
 //  Copyright (C) 2007-2011 Chillisoft Solutions
 //  

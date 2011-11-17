@@ -620,6 +620,26 @@ namespace Habanero.Test.BO
             StringAssert.AreEqualIgnoringCase("MyBOID = '" + myBO.MyBoID.GetValueOrDefault().ToString("B") + "'", criteria.ToString());
             //---------------Tear Down -------------------------          
         }
+        [Test]
+        public void TestFromIPrimaryKey_WhenPrimaryKeyIsNull_ShouldThrowException()
+        {
+            //---------------Set up test pack-------------------
+            IPrimaryKey primaryKey =null;
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            try
+            {
+                Criteria.FromPrimaryKey(primaryKey);
+                Assert.Fail("expected ArgumentNullException");
+            }
+                //---------------Test Result -----------------------
+            catch (ArgumentNullException ex)
+            {
+                StringAssert.Contains("Value cannot be null", ex.Message);
+                StringAssert.Contains("primaryKey", ex.ParamName);
+            }
+   
+        }
 
         [Test]
         public void TestFromIPrimaryKey_MultipleProp()
@@ -627,17 +647,17 @@ namespace Habanero.Test.BO
             //---------------Set up test pack-------------------
             ContactPersonTestBO.LoadClassDefWithCompositePrimaryKeyNameSurname();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            string surnameValue = Guid.NewGuid().ToString();
+            var surnameValue = Guid.NewGuid().ToString();
             cp.Surname = surnameValue;
-            string firstNameValue = Guid.NewGuid().ToString();
+            var firstNameValue = Guid.NewGuid().ToString();
             cp.FirstName = firstNameValue;
-            IPrimaryKey primaryKey = cp.ID;
+            var primaryKey = cp.ID;
 
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = Criteria.FromPrimaryKey(primaryKey);
+            var criteria = Criteria.FromPrimaryKey(primaryKey);
             //---------------Test Result -----------------------
-            string expectedString = string.Format("(Surname = '{0}') AND (FirstName = '{1}')", surnameValue, firstNameValue);
+            var expectedString = string.Format("(Surname = '{0}') AND (FirstName = '{1}')", surnameValue, firstNameValue);
             StringAssert.AreEqualIgnoringCase(expectedString, criteria.ToString());
             //---------------Tear Down -------------------------          
         }

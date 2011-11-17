@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
@@ -145,7 +146,10 @@ namespace Habanero.BO
                 transaction.UpdateObjectBeforePersisting(this);
             }
         }
-
+        /// <summary>
+        /// Insert the Business object into the TransactionCommitter
+        /// </summary>
+        /// <param name="businessObject"></param>
         private static bool MustBOBeAdded(IBusinessObject businessObject)
         {
             if (businessObject == null) return false;
@@ -190,6 +194,11 @@ namespace Habanero.BO
             _originalTransactionsByKey.Add(transactionID, transaction);
             return true;
         }
+
+
+
+
+
 
         ///<summary>
         /// Commit the transactions to the datasource e.g. the database, file, memory DB
@@ -258,7 +267,7 @@ namespace Habanero.BO
                 foreach (ITransactional transaction in _originalTransactions.ToArray())
                 {
                     if (!(transaction is TransactionalBusinessObject)) continue;
-                    TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                    var trnBusObj = (TransactionalBusinessObject) transaction;
                     trnBusObj.UpdateObjectBeforePersisting(this);
                 }
             }
@@ -365,24 +374,21 @@ namespace Habanero.BO
         /// </summary>
         private void CheckForDuplicateObjects()
         {
-            string allMessages = "";
+            var errorMessages = new List<string>();
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
-
-                string errMsg;
-                if (trnBusObj.HasDuplicateIdentifier(out errMsg))
-                {
-                    allMessages = Util.StringUtilities.AppendMessage(allMessages, errMsg);
-                }
+                var transactionalBusinessObject = (TransactionalBusinessObject) transaction;
+                transactionalBusinessObject.CheckDuplicateIdentifier(OriginalTransactions, errorMessages);
             }
 
-            if (!string.IsNullOrEmpty(allMessages))
+            if (errorMessages.Count > 0)
             {
+                var allMessages = String.Join(Environment.NewLine, errorMessages.ToArray());
                 throw new BusObjDuplicateConcurrencyControlException(allMessages);
             }
         }
+
 
         /// <summary>
         /// Checks any Concurrency control errors for the <see cref="TransactionalBusinessObject"/>
@@ -392,7 +398,7 @@ namespace Habanero.BO
             foreach (ITransactional transaction in _originalTransactions)
             {
                 if (!(transaction is TransactionalBusinessObject)) continue;
-                TransactionalBusinessObject trnBusObj = (TransactionalBusinessObject) transaction;
+                var trnBusObj = (TransactionalBusinessObject) transaction;
                 trnBusObj.CheckForConcurrencyErrors();
             }
         }

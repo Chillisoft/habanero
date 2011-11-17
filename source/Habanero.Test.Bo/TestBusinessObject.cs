@@ -647,6 +647,27 @@ namespace Habanero.Test.BO
         }
 
 
+        //// This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        //[Test]
+        //public void TestGetPropertyValueToDisplayWithBOLookupList()
+        //{
+        //    ContactPersonTestBO.CreateSampleData();
+        //    ClassDef.ClassDefs.Clear();
+        //    IClassDef classDef = MyBO.LoadClassDefWithBOLookup();
+        //    ContactPersonTestBO.LoadDefaultClassDef();
+
+        //    Criteria criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, "abc");
+        //    ContactPersonTestBO cp =
+        //        BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(criteria);
+        //    BusinessObject bo = (BusinessObject) classDef.CreateNewBusinessObject();
+        //    bo.SetPropertyValue("TestProp2", cp);
+        //    Assert.IsNotNull(cp);
+        //    Assert.AreEqual(cp.ContactPersonID, bo.GetPropertyValue("TestProp2"));
+        //    Assert.AreEqual("abc", bo.GetPropertyValueToDisplay("TestProp2"));
+        //}
+
+        // This test is duplicated in TestBOMapper.TestGetPropertyValueToDisplay_BusinessObjectLookupList()
+        //public void TestGetPropertyValueToDisplayWithBOLookupList()
         [Test]
         public void Test_WhenSetThePropertyToABusinessObject_ShouldSetThePrimaryKey()
         {
@@ -657,7 +678,7 @@ namespace Habanero.Test.BO
             var cp = new ContactPersonTestBO();
             const string expectedSurname = "abc";
             cp.Surname = expectedSurname;
-            var myBO = (BusinessObject) classDef.CreateNewBusinessObject();
+            var myBO = (BusinessObject)classDef.CreateNewBusinessObject();
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(expectedSurname, cp.ToString());
@@ -665,7 +686,7 @@ namespace Habanero.Test.BO
             myBO.SetPropertyValue("TestProp2", cp);
             //---------------Test Result -----------------------
             Assert.AreEqual(cp.ContactPersonID, myBO.GetPropertyValue("TestProp2"), "This is the ID of the related object");
-            Assert.AreEqual(expectedSurname, myBO.GetPropertyValueToDisplay("TestProp2"),"This is the ToString of the related object");
+            Assert.AreEqual(expectedSurname, myBO.GetPropertyValueToDisplay("TestProp2"), "This is the ToString of the related object");
         }
 
         [Test]

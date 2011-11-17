@@ -229,7 +229,8 @@ namespace Habanero.Test.BO.Relationship
             IBusinessObjectCollection collection = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection(organisation.ClassDef, null, "");
             //---------------Assert Precondition -----------------------
             Assert.IsNotNull(organisation.OrganisationID);
-            Assert.Contains(organisation, collection);
+            Assert.IsTrue(collection.Contains(organisation));
+            //Assert.Contains(organisation, collection);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisation;
             //---------------Test Result -----------------------

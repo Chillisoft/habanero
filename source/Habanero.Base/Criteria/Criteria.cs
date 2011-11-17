@@ -604,19 +604,21 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Creates a Criteria from an IPrimaryKey object. For each property in the primary key an Equals criteria is created, and these
+        /// Creates a Criteria from an IPrimaryKey object. For each property in the primary primaryKey an Equals criteria is created, and these
         /// are all chained together with AND clauses to build up a composite Criteria representing the IPrimaryKey
         /// </summary>
-        /// <param name="key">The IPrimaryKey to create Criteria for</param>
+        /// <param name="primaryKey">The IPrimaryKey to create Criteria for</param>
         /// <returns>The Criteria this IPrimaryKey instance is defined by</returns>
-        public static Criteria FromPrimaryKey(IPrimaryKey key)
+        public static Criteria FromPrimaryKey(IPrimaryKey primaryKey)
         {
-            if (key.Count == 1)
+            if (primaryKey == null) throw new ArgumentNullException("primaryKey");
+
+            if (primaryKey.Count == 1)
             {
-                return new Criteria(key[0].PropertyName, ComparisonOp.Equals, key[0].Value);
+                return new Criteria(primaryKey[0].PropertyName, ComparisonOp.Equals, primaryKey[0].Value);
             }
             Criteria lastCriteria = null;
-            foreach (IBOProp prop in key)
+            foreach (IBOProp prop in primaryKey)
             {
                 Criteria propCriteria = new Criteria(prop.PropertyName, ComparisonOp.Equals, prop.Value);
                 lastCriteria = lastCriteria == null
@@ -627,7 +629,7 @@ namespace Habanero.Base
         }
 
         /// <summary>
-        /// Creates a Criteria from an IRelationship object. For each relationship property in the relationship's key a simple 
+        /// Creates a Criteria from an IRelationship object. For each relationship property in the relationship's primaryKey a simple 
         /// Equals Criteria object is created, and these are chained together with AND clauses to build up a composite criteria
         /// representing the relationship.
         /// </summary>
@@ -832,4 +834,5 @@ namespace Habanero.Base
         }
 
     }
+
 }

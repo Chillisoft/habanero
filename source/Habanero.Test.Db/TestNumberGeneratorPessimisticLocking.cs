@@ -39,8 +39,9 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//ensure that a new BOManagager.Instance is used
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();//ensure that a new BOManagager.Instance is used
+//            BORegistry.DataAccessor = new DataAccessorInMemory();
+            SetupDBDataAccessor();
         }
 
         [TestFixtureSetUp]
@@ -55,8 +56,14 @@ namespace Habanero.Test.DB
         {
             //runs every time any testmethod is complete
             //base.TearDownTest();
+            //BORegistry.DataAccessor = null;
         }
 
+        private static void SetupDBDataAccessor()
+        {
+            TestUsingDatabase.SetupDBDataAccessor();
+            //BORegistry.DataAccessor = new DataAccessorDB();
+        }
         [Test]
         public void Test_Construct_ShouldLoadClassDefs_ForBOSequenceNumberLocking()
         {
@@ -83,6 +90,58 @@ namespace Habanero.Test.DB
             Assert.IsNotNull(numberGenerator2);
             Assert.AreEqual(1, classDefCol.Count);
             Assert.IsTrue(classDefCol.Contains(typeof(BOSequenceNumberLocking)), "ClassDef should contain Def for number gen");
+        }
+
+        [Test]
+        public void ReleaseLocks_WhenHasLock_ShouldReleaseTheLocks_FixBugBug_2136()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
+            var numberType = "SomeType" + TestUtil.GetRandomInt();  
+            var numberGenerator = new NumberGeneratorPessimisticLockingStub2(numberType);
+            numberGenerator.CallReleaseLocks();
+            numberGenerator.NextNumber();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(numberGenerator.IsLocked,"Should be locked");
+            //---------------Execute Test ----------------------
+            numberGenerator.CallReleaseLocks();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(numberGenerator.IsLocked, "Should not be locked");
+        }
+
+        [Test]
+        public void ReleaseLocks_WhenHasLock_ShouldReleaseTheLocksInDatabase_FixBugBug_2136()
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
+            var numberType = "SomeType" + TestUtil.GetRandomInt();
+            var numberGenerator = new NumberGeneratorPessimisticLockingStub2(numberType);
+            numberGenerator.CallReleaseLocks();
+            var nextNumber = numberGenerator.NextNumber();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(numberGenerator.IsLocked, "Should be locked");
+            var numberGenerator2 = new NumberGeneratorPessimisticLockingStub2(numberType);
+            Assert.IsTrue(numberGenerator2.IsLocked, "Newly loaded one from the DB should be unlocked");
+            //---------------Execute Test ----------------------
+            numberGenerator.CallReleaseLocks();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(numberGenerator.IsLocked, "Should not be locked");
+
+            // Check that newly loaded number Gen is unlocked
+            var numberGenerator3 = new NumberGeneratorPessimisticLockingStub2(numberType);
+            Assert.IsFalse(numberGenerator3.IsLocked, "Newly loaded number Gen from the DB should be unlocked");
+        }
+
+        private class NumberGeneratorPessimisticLockingStub2 : NumberGeneratorPessimisticLocking
+        {
+            public NumberGeneratorPessimisticLockingStub2(string numberType)
+                : base(numberType, 1)
+            {
+            }
+            public void CallReleaseLocks()
+            {
+                base.ReleaseLocks();
+            }
         }
     }
 }
