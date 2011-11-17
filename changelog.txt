@@ -1,5 +1,127 @@
 Habanero Change Log
 
+ Habanero v2.6.0 - 17 November 2011
+   This version is built against .NET 4.0
+   
+Major changes/enhancements
+
+#1068: Logging: You can now set your IHabaneroLoggerFactory on the GlobalRegistry so there is no more direct dependancy on log4net. 
+#1703: Ability to use an expression in a Criteria. This allows you to build Criteria objects using lambdas. Use Criteria.Expr<> to create these.
+#1734: Create a criteria from an expression tree. See above.
+#1729: Serialising/deserialising to/from custom xml - when going across tiers. Created an ObjectTreeXmlReader class which is a copy of the DataStoreInMemoryXmlReader for use with deserialising a stream that consists of unpersisted objects.
+#2069: Add support for Sql Server Compact Edition
+#1723: Load a result set directly using an ISelectQuery (without using a BusinessObjectCollection)
+    Added a GetResultSet method to IBusinessObjectLoader and implemented this in BusinessObjectLoaderDB and BusinessObjectLoaderInMemory.
+    Extracted a CreateQueryField method in QueryBuilder to help with adding your own fields to a SelectQuery. 
+    Created a ResultSet class to store the result set returned by IBusinessObjectLoader.GetResultSet()
+    Added support for sorting when using the BusinessObjectLoaderInMemory
+    Refactored OrderCriteria a little - changed the FromString method to be static like it is for Criteria, Source etc.
+
+Minor enhancements
+
+#1375: Performance degrades upon adding a large amount of Transactions to a Transaction Committer
+#1443: Add Support for Setting the ClassDef onto the UIFormField Directly
+#1474: Replace all usaged of Log4Net LogManager.Create with new loggerfactory stuffs. Created a new ConsoleLoggerFactory as the default logger.
+#1710: Add a RelationshipType property to IRelationship
+#1473: HabaneroApplicationException does not have constructor taking in the Developer message
+#1470: PropRules : IPropRuleComparable<T>: IPropRule (IPropRuleComparable should inherit from IPropRule)
+#1708: Xml export methods on BusinessObject and DataStoreInMemory are not used or correct. These were removed (see
+#1709: DataStoreInMemoryXmlWriter/Reader is difficult to get to read to/from a string
+    Marked the following methods on BusinessObject as obsolete:
+     - XmlSchema GetSchema()
+     - void ReadXml(XmlReader reader)
+     - void WriteXml(XmlWriter writer)
+
+    Marked the following methods on DataStoreInMemory as obsolete:
+     - void SaveToXml(string fullFileName)
+     - void LoadFromXml(string fullFileName, Type typeToLoad)
+
+    These methods will probably be gone in 2.7 and later. Rather use the DataStoreInMemoryXmlWriter to write BusinessObjects to an xml stream and DataStoreInMemoryXmlReader to read them.
+
+    Added a WriteToString method on DataStoreInMemoryXmlWriter
+    Added a ReadFromString method on DataStoreInMemoryXmlReader
+#1711: AsEnumerable<T> on IBusinessObjectCollection and ForEach extension method on IEnumerable<T>
+#1722: Support for xml serializing Image properties. Added a new mapper(BOPropImageDataMapper) for images to serialise/deserialise them
+#1724: BOPropDataMapper classes should be decoupled from PropDef, BOProp and ClassDef.
+#1725: ISqlStatementCollection can be replaced with IEnumerable<ISqlStatement>
+#1726: Add CreateSqlStatement method on IDatabaseConnection
+#1740: byte[] is not supported by the data mappers. Added a ByteArrayDataMapper
+#1741: byte[] : if byte is null for sql server get an error)
+#1742: Improve speed of BusinessObjectCollection Constructor
+#1743: Improve speed of creating a Multiple Relationship
+#1778: Add a Crypter and a Hasher to GlobalRegistry for easy access/setup
+#1783: Need a way to get all keys for classdef including inherited keys
+#1784: Add AddRange method on KeyDefCol
+#1785: Improve relationship validation error messages in ClassDefValidator
+#2048: Criteria IsMatch is slow due to attempted conversions to DateTime
+#2078: Performance issue with Multiple relationships when BO persisted
+#2079: The AddWithReplace method on the IBusinessObjectManager interface should take an IBusinessObject
+#2080: NumberGeneratorDB does not implement Rolling Back and Commiting logic
+#2082: TransactionLogTable constructor is missing an overload
+#2086: CriteriaB - add support for bitwise And and Or  
+
+Bugs
+
+#1336: DataStoreInMemoryXmlReader - All exceptions that occur when SetupProperty is called are logged in a propertyReadExceptions collection
+#1360: Habanero.BO : Bug with CustomProperty cannot set default
+#1361: Habanero.BO : Bug with CustomPropType that uses a TypeConverter)
+#1401: BOStatus.IsValid is returning carriage return and line feed when it should return null string
+#1568: I am regularly having the issue that a business object status isdirty but all its properties are not dirty
+#1707: XmlRuleLoader is creating an Integer Rule instead of a Long Rule
+#1720: Error when loading a collection with a criteria object specifying cross relationship calls
+#1738: The SQL Formatter is dropping day information from TimeSpans
+#1739: When a Timespan value is loaded from the database, the day information is lost
+#1748: Problem with parsing a DateTime from a string created by the serialiser
+#1751: Loading a single business object via properties on a related business object with In MemoryDataBase
+#1794: ClassDef : GetPropDef losing inner exception
+#1795: ClassDefHelper : GetPrimaryKey not dealing with 3 layers of inheritance
+#1796: ClassDef.GetPropDef throwing an error when GetPropDef from sub class
+#1798: BOPrimaryKey.CreateWithValue using ClassDef does not deal with inheritance
+#1860: Clone of PropDefCol doesn't set the ClassDef
+#1960: Add locks for opening a connection to prevent multiple threads getting the same connection.
+#1717: Loading objects using DataStoreInMemoryXmlReader should update already existing objects
+#2084: TimeSpan values are losing their milliseconds when persisted
+#2129: Transaction committer with added bo's with same key does not throw error
+#2130: TransactionCommitter causes error on Added and Deleted BO's
+#2136: NumberGeneratorPessimisticLocking does not release the lock in the database when transaction fails
+
+ 
+ Habanero v2.5.1 - 29 November 2010
+
+This is mainly a bug fix release with a few small enhancements. New features are planned for the 2.6 release.
+
+Enhancements
+
+#1000: Extract an IBusinessObjectManager interface and make BusinessObjectManagerNull truly empty. 
+- If you're doing an ASP.NET based application it is highly recommended that this BusinessObjectManagerNull is used. This can be done by setting the BusinessObjectManager.Instance in your startup code.
+#730: Support for multiple schemas (simply added support for a . in table names)
+#941: Add Ability to GetPropertyValue and SetPropertyValue via Lambdas
+
+Minor Changes
+
+#956: Extract Common Interface for SingleRelationshipDef and IPropDef
+#946: RelationshipDef.OwningClassName : Add this Property Get
+#907: Relationship: Made internal method GetReverseRelationship public
+#1146: ToString: Composite Primary Key.ToString is not returning a sensible value
+#1298: Remove SqlFormattingHelper - this has been replaced by SqlFormatter
+
+Bugs
+
+#252: Set the discriminator property when using In-Memory
+#582: Get error when searching a self referencing object three or more levels deeps in a search grid control.
+#741: RelationshipDef.IsOneToOne is not working
+#759: Improve error message for duplicates in collection when reloading
+#816: Add BOPropDataMapper fro Int64
+#867: Error when loading lookup list where the type is a sub class and inherits its parents PrimaryKey
+#908: Support for circular relationships in criteria
+#944: RelationshipDef.IsManyToOne is not working
+#970: Reflection Utils : SetPropertyValue when property throws Exception not rethrowing exception correctly
+#1048: Use IRelationshipDef for creating relationships
+#1058: BOCol<T> Add(IEnumerable<T> does not check for a null collection
+#1091: Change methods in Habanero.Base\HabaneroApp.cs to protected
+#1109: BusinessObjectCollection.CopyTo(Array ... ) has bug.
+
+
  Habanero v2.5.0 - 30 August 2010
 
 Major Changes
