@@ -43,7 +43,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
             _testFolderName = Path.Combine(Environment.CurrentDirectory, "TestFolder");
             if (!Directory.Exists(_testFolderName)) Directory.CreateDirectory(_testFolderName);
         }

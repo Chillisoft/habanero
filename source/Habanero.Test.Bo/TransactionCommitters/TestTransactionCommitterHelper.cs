@@ -77,27 +77,10 @@ namespace Habanero.Test.BO.TransactionCommitters
             return true;
         }
 
-        /// <summary>
-        /// Indicates whether there is a duplicate of this object in the data store
-        /// eg. for a database this will select from the table to find an object
-        /// that matches this object's primary key. In this case this object would be
-        /// a duplicate.
-        /// </summary>
-        /// <param name="errMsg">The description of the duplicate</param>
-        /// <returns>Whether a duplicate of this object exists in the data store (based on the ID/primary key)</returns>
-        protected internal override bool HasDuplicateIdentifier(out string errMsg)
-        {
-            errMsg = "";
-            return false;
-        }
-
-
         public bool Committed
         {
             get { return _committed; }
         }
 
     }
-
-    
 }

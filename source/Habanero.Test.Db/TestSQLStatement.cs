@@ -121,23 +121,41 @@ namespace Habanero.Test.DB
                             "SqlStatement constructor does not set the statement correctly.");
         }
 
-        [Test]
-        public void AddParameter_WithNullValueAndType()
-        {
-            //---------------Set up test pack-------------------
-            const string startSql = "select * from bob WHERE name = ";
-            var builder = new SqlStatement(_connection, startSql);
-            const string paramName = "@Param0";
-            var paramType = typeof (string);
-            const DbType expectedParamType = DbType.String;
-            //---------------Execute Test ----------------------
-            var param = builder.AddParameter(paramName, null, paramType);
-            var actual = builder.Statement.ToString();
-            //---------------Test Result -----------------------
-            Assert.AreEqual(expectedParamType, param.DbType);
-            Assert.AreEqual(1, builder.Parameters.Count);
-            Assert.AreEqual(startSql, actual);
-        }
+		[Test]
+		public void AddParameter_WithNullValueAndType()
+		{
+			//---------------Set up test pack-------------------
+			const string startSql = "select * from bob WHERE name = ";
+			var builder = new SqlStatement(_connection, startSql);
+			const string paramName = "@Param0";
+			var paramType = typeof(string);
+			const DbType expectedParamType = DbType.String;
+			//---------------Execute Test ----------------------
+			var param = builder.AddParameter(paramName, null, paramType);
+			var actual = builder.Statement.ToString();
+			//---------------Test Result -----------------------
+			Assert.AreEqual(expectedParamType, param.DbType);
+			Assert.AreEqual(1, builder.Parameters.Count);
+			Assert.AreEqual(startSql, actual);
+		}
+
+		[Test]
+		public void AddParameter_WithNullValueAndTimeSpanType_ShouldBeDateTimeDbType()
+		{
+			//---------------Set up test pack-------------------
+			const string startSql = "select * from bob WHERE name = ";
+			var builder = new SqlStatement(_connection, startSql);
+			const string paramName = "@Param0";
+			var paramType = typeof(TimeSpan);
+			const DbType expectedParamType = DbType.DateTime;
+			//---------------Execute Test ----------------------
+			var param = builder.AddParameter(paramName, null, paramType);
+			var actual = builder.Statement.ToString();
+			//---------------Test Result -----------------------
+			Assert.AreEqual(expectedParamType, param.DbType);
+			Assert.AreEqual(1, builder.Parameters.Count);
+			Assert.AreEqual(startSql, actual);
+		}
 
         [Test]
         public void AddParameter_WithOnlyValue()

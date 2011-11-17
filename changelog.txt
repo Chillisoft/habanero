@@ -1,6 +1,6 @@
 Habanero Change Log
 
- Habanero v2.6.0 - 24 October 2011
+ Habanero v2.6.0 - 17 November 2011
    This version is built against .NET 4.0
    
 Major changes/enhancements
@@ -80,6 +80,10 @@ Bugs
 #1860: Clone of PropDefCol doesn't set the ClassDef
 #1960: Add locks for opening a connection to prevent multiple threads getting the same connection.
 #1717: Loading objects using DataStoreInMemoryXmlReader should update already existing objects
+#2084: TimeSpan values are losing their milliseconds when persisted
+#2129: Transaction committer with added bo's with same key does not throw error
+#2130: TransactionCommitter causes error on Added and Deleted BO's
+#2136: NumberGeneratorPessimisticLocking does not release the lock in the database when transaction fails
 
  
  Habanero v2.5.1 - 29 November 2010
@@ -116,6 +120,7 @@ Bugs
 #1058: BOCol<T> Add(IEnumerable<T> does not check for a null collection
 #1091: Change methods in Habanero.Base\HabaneroApp.cs to protected
 #1109: BusinessObjectCollection.CopyTo(Array ... ) has bug.
+
 
  Habanero v2.5.0 - 30 August 2010
 

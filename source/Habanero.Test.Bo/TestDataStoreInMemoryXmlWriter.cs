@@ -39,7 +39,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
         }
 
         [TearDown]

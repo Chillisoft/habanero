@@ -45,7 +45,7 @@ namespace Habanero.Test.DB
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
             DatabaseConnection.CurrentConnection = new DatabaseConnectionStub();
             ClassDef.ClassDefs.Clear();
-            new Address();
+           // new Address();
         }
 
         public class DatabaseConnectionStub : DatabaseConnection

@@ -130,6 +130,7 @@ namespace Habanero.DB
         private DbType GetParamTypeForType(Type paramType)
         {
             if (paramType == typeof(DateTime)) return DbType.DateTime;
+            if (paramType == typeof(TimeSpan)) return DbType.DateTime;
             if (paramType == typeof(Decimal)) return DbType.Decimal;
             if (paramType == typeof(Double)) return DbType.Double;
             if (paramType == typeof(int)) return DbType.Int32;

@@ -9,7 +9,6 @@ require 'albacore'
 # deeper in the repo you will need to add another ..
 bs = File.dirname(__FILE__)
 bs = File.join(bs, "..") if bs.index("branches") != nil
-bs = File.join(bs, "..") if bs.index("tags") != nil
 bs = File.join(bs, "../../HabaneroCommunity/BuildScripts")
 $buildscriptpath = File.expand_path(bs)
 $:.unshift($buildscriptpath) unless
@@ -28,6 +27,7 @@ msbuild_settings = {
 #------------------------dependency settings---------------------
 
 #------------------------project settings------------------------
+$basepath = 'http://delicious:8080/svn/habanero/Habanero/trunk'
 $solution = 'source/Habanero.sln'
 
 #______________________________________________________________________________

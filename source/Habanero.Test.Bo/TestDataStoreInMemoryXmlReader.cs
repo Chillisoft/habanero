@@ -38,7 +38,7 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
         }

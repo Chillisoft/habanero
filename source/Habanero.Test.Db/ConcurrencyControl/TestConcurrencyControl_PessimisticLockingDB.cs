@@ -30,7 +30,7 @@ using Habanero.DB.ConcurrencyControl;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB.ConcurrencyControl
-{
+{ // ReSharper disable InconsistentNaming
 	[TestFixture]
 	public class TestConcurrencyControl_PessimisticLockingDB : TestUsingDatabase
 	{
@@ -175,7 +175,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			var cp = CreateSavedContactPersonPessimisticLocking();
 			//---------------Execute Test ----------------------
 			//execute CheckConcurrencyControl Begin Edit.
-			var concurrCntrl = cp.concurrencyControl();
+			var concurrCntrl = cp.ConcurrencyControl();
 			concurrCntrl.CheckConcurrencyBeforeBeginEditing();
 			//---------------Test Result -----------------------
 			//Test that locked.
@@ -209,7 +209,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		{
 			//---------------Set up test pack-------------------
 			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-			IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+			IConcurrencyControl concurrCntrl = cp.ConcurrencyControl();
 			//Create Lock
 			concurrCntrl.CheckConcurrencyBeforeBeginEditing();
 			int lockDuration = 15;
@@ -245,7 +245,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			//---------------Set up test pack-------------------
 			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
 			//---------------Execute Test ----------------------
-			IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+			IConcurrencyControl concurrCntrl = cp.ConcurrencyControl();
 			concurrCntrl.CheckConcurrencyBeforeBeginEditing();
 			try
 			{
@@ -270,7 +270,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			ContactPerson.DeleteAllContactPeople();
 			try
 			{
-				IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+				IConcurrencyControl concurrCntrl = cp.ConcurrencyControl();
 				concurrCntrl.CheckConcurrencyBeforeBeginEditing();
 				Assert.Fail();
 			}
@@ -287,9 +287,9 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		public void Test_ThrowErrorIfSecondInstanceOfContactPersonBeginEdit()
 		{
 			//---------------Set up test pack-------------------
-			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+			var cp = CreateSavedContactPersonPessimisticLocking();
 			BusinessObjectManager.Instance.ClearLoadedObjects();
-			ContactPersonPessimisticLockingDB cp2 =
+			var cp2 =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
 			//---------------Execute Test ----------------------
 			string surname = cp.Surname;
@@ -310,17 +310,20 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		}
 
 		[Test]
-		public void Test_UnLocking_WhenCancelEditsCalled()
+		public void Test_CancelEdits_WhenLocked_ShouldUnlock()
 		{
 			//---------------Set up test pack-------------------
-			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-			IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+			var cp = CreateSavedContactPersonPessimisticLocking();
+		    AssertIsNotLocked(cp);
+		    var concurrCntrl = cp.ConcurrencyControl();
 			//Create Lock
-			concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+		    concurrCntrl.CheckConcurrencyBeforeBeginEditing();
+            //---------------Assert Precondition----------------
+            AssertIsLocked(cp);
 			//---------------Execute Test ----------------------
 
 			cp.CancelEdits();
-
+		    //concurrCntrl.ReleaseWriteLocks();
 			//---------------Test Result -----------------------
 			//Test that locked.
 			AssertIsNotLocked(cp);
@@ -330,8 +333,8 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		public void Test_UnLocking_WhenReleaseWriteLocksIsCalled()
 		{
 			//---------------Set up test pack-------------------
-			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
-			IConcurrencyControl concurrCntrl = cp.concurrencyControl();
+			var cp = CreateSavedContactPersonPessimisticLocking();
+			var concurrCntrl = cp.ConcurrencyControl();
 			//Create Lock
 			concurrCntrl.CheckConcurrencyBeforeBeginEditing();
 			//---------------Execute Test ----------------------
@@ -348,7 +351,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		{
 			//---------------Set up test pack-------------------
 			BusinessObjectManager.Instance.ClearLoadedObjects();
-			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+			var cp = CreateSavedContactPersonPessimisticLocking();
 			object value = cp.ID.GetAsValue();
 			//---------------Execute Test ----------------------
 
@@ -361,7 +364,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			//---------------Test Result -----------------------
 			BusinessObjectManager.Instance.ClearLoadedObjects();
 			TestUtil.WaitForGC();
-			ContactPersonPessimisticLockingDB cp2 =
+			var cp2 =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<ContactPersonPessimisticLockingDB>(value);
 			AssertIsNotLocked(cp2);
 		}
@@ -369,7 +372,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		public void Test_WhenContactPersonsavedReleaseLocks()
 		{
 			//---------------Set up test pack-------------------
-			ContactPersonPessimisticLockingDB cp = CreateSavedContactPersonPessimisticLocking();
+			var cp = CreateSavedContactPersonPessimisticLocking();
 			//---------------Execute Test ----------------------
 
 			cp.Surname = Guid.NewGuid().ToString();
@@ -479,7 +482,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			return Surname;
 		}
 
-		public IConcurrencyControl concurrencyControl()
+		public IConcurrencyControl ConcurrencyControl()
 		{
 			return _concurrencyControl;
 		}

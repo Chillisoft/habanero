@@ -25,7 +25,7 @@ using System.Reflection;
 // associated with an assembly.
 [assembly: AssemblyCompany("Chillisoft")]
 [assembly: AssemblyProduct("Habanero")]
-[assembly: AssemblyCopyright("Copyright © Chillisoft 2007-2010")]
+[assembly: AssemblyCopyright("Copyright © Chillisoft 2007-2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -39,4 +39,3 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("2.6.0.0")]
-[assembly: AssemblyFileVersion("2.6.0.0")]

@@ -42,15 +42,26 @@ namespace Habanero.DB
 	/// </summary>
 	public class NumberGeneratorPessimisticLocking : INumberGenerator
 	{
-		private readonly BOSequenceNumberLocking _boSequenceNumber;
+	    private int LockDurationInMinutes { get; set; }
+	    private readonly BOSequenceNumberLocking _boSequenceNumber;
 
 		///<summary>
 		/// Creates a number generator with Pesssimistic locking.
 		///</summary>
 		///<param name="numberType"></param>
-		public NumberGeneratorPessimisticLocking(string numberType)
+		public NumberGeneratorPessimisticLocking(string numberType): this(numberType, 15)
 		{
-			if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumberLocking)))
+		}
+
+	    ///<summary>
+	    /// Creates a number generator with Pesssimistic locking.
+	    ///</summary>
+	    ///<param name="numberType"></param>
+	    ///<param name="lockDurationInMinutes"></param>
+	    public NumberGeneratorPessimisticLocking(string numberType, int lockDurationInMinutes)
+		{
+	        LockDurationInMinutes = lockDurationInMinutes;
+	        if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumberLocking)))
 			{
 				BOSequenceNumberLocking.LoadNumberGenClassDef();
 			}
@@ -63,7 +74,7 @@ namespace Habanero.DB
 		}
 
 		/// <summary>
-		/// Returns the next number in the sequence
+		/// Returns the next numbers in the sequence
 		/// </summary>
 		public long NextNumber()
 		{
@@ -71,23 +82,23 @@ namespace Habanero.DB
 			return BoSequenceNumber.SequenceNumber.GetValueOrDefault();
 		}
 
-		private static BOSequenceNumberLocking LoadSequenceNumber(string numberType)
+		private BOSequenceNumberLocking LoadSequenceNumber(string numberType)
 		{
-			string searchCriteria = string.Format("NumberType = '{0}'", numberType);
-			Criteria criteria = CriteriaParser.CreateCriteria(searchCriteria);
+			var searchCriteria = string.Format("NumberType = '{0}'", numberType);
+			var criteria = CriteriaParser.CreateCriteria(searchCriteria);
 			var sequenceBOSequenceNumber =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumberLocking>(criteria);
 
 			if (sequenceBOSequenceNumber == null)
 			{
-				sequenceBOSequenceNumber = CreateSequenceForType(numberType);
+                sequenceBOSequenceNumber = CreateSequenceForType(numberType);
 			}
 			return sequenceBOSequenceNumber;
 		}
 
-		private static BOSequenceNumberLocking CreateSequenceForType(string numberType)
+		private BOSequenceNumberLocking CreateSequenceForType(string numberType)
 		{
-			var sequenceBOSequenceNumber = new BOSequenceNumberLocking {NumberType = numberType, SequenceNumber = 0};
+            var sequenceBOSequenceNumber = new BOSequenceNumberLocking(LockDurationInMinutes) { NumberType = numberType, SequenceNumber = 0};
 			sequenceBOSequenceNumber.Save();
 			return sequenceBOSequenceNumber;
 		}
@@ -101,7 +112,7 @@ namespace Habanero.DB
 			BoSequenceNumber.Save();
 		}
 
-		private BusinessObject GetTransactionalBO()
+		private BusinessObject GetBOSequenceNumberLocking()
 		{
 			return BoSequenceNumber;
 		}
@@ -113,7 +124,7 @@ namespace Habanero.DB
 		/// for the persistence environment</param>
 		public void AddToTransaction(ITransactionCommitter transactionCommitter)
 		{
-			BusinessObject busObject = this.GetTransactionalBO();
+			var busObject = this.GetBOSequenceNumberLocking();
 			transactionCommitter.AddBusinessObject(busObject);
 		}
 		/// <summary>
@@ -124,25 +135,40 @@ namespace Habanero.DB
 			var concurrencyControl = this._boSequenceNumber.ConcurrencyControl();
 			concurrencyControl.ReleaseWriteLocks();
 		}
+	    ///<summary>
+	    /// Is this pessimistic number generator currently locked.
+	    ///</summary>
+	    public bool IsLocked
+	    {
+            get { return this.BoSequenceNumber.IsLocked; }
+	    }
 	}
 
-	/// <summary>
-	/// Manages locking for sequence number control
+    /// <summary>
+	/// Manages locking for sequence number control. This is used by <see cref="NumberGeneratorPessimisticLocking"/> to implement the locking
+	/// strategy.
 	/// </summary>
 	internal class BOSequenceNumberLocking : BusinessObject
 	{
-		public BOSequenceNumberLocking()
-		{
-			SetConcurrencyControl(new PessimisticLockingDB(
-									  this, 15,
-									  this.Props["DateTimeLocked"],
-									  this.Props["UserLocked"],
-									  this.Props["MachineLocked"],
-									  this.Props["OperatingSystemUserLocked"],
-									  this.Props["Locked"]));
-		}
+        private readonly PessimisticLockingDB _pessimisticLockingDB;
 
-		internal static void LoadNumberGenClassDef()
+        public BOSequenceNumberLocking():this(15)
+        {
+
+        }
+        public BOSequenceNumberLocking(int lockDurationInMinutes)
+        {
+            _pessimisticLockingDB = new PessimisticLockingDB(
+                this, lockDurationInMinutes,
+                this.Props["DateTimeLocked"],
+                this.Props["UserLocked"],
+                this.Props["MachineLocked"],
+                this.Props["OperatingSystemUserLocked"],
+                this.Props["Locked"]);
+            SetConcurrencyControl(_pessimisticLockingDB);
+        }
+
+        internal static void LoadNumberGenClassDef()
 		{
 			var itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
 			var itsClassDef =
@@ -179,12 +205,24 @@ namespace Habanero.DB
 		/// </summary>
 		public virtual long? SequenceNumber
 		{
-			get { return ((long?) (base.GetPropertyValue("SequenceNumber"))); }
+			get
+			{
+			    return ((long?) (base.GetPropertyValue("SequenceNumber")));
+			}
 			set { base.SetPropertyValue("SequenceNumber", value); }
 		}
-		internal IConcurrencyControl ConcurrencyControl()
+        public bool IsLocked{get { return _pessimisticLockingDB.IsLocked; }}
+
+
+        internal IConcurrencyControl ConcurrencyControl()
 		{
 			return _concurrencyControl;
 		}
+
+        protected override void UpdateAsTransactionRolledBack()
+        {
+            base.UpdateAsTransactionRolledBack();
+            this.CancelEdits();
+        }
 	}
 }

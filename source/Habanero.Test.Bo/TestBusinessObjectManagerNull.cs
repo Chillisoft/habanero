@@ -41,7 +41,7 @@ namespace Habanero.Test.BO
             //Runs every time that any testmethod is executed
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
-            new Address();
+            //new Address();
             BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
         }

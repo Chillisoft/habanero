@@ -183,7 +183,7 @@ namespace Habanero.Test.BO.TransactionCommitters
             BORegistry.DataAccessor = new DataAccessorInMemory(dataStore);
             AddressTestBO address;
             ContactPersonTestBO contactPersonTestBO =
-                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address);
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_CascadeDelete(out address, TestUtil.GetRandomString());
             contactPersonTestBO.MarkForDelete();
             TransactionCommitterInMemory committer = new TransactionCommitterInMemory(dataStore);
             committer.AddBusinessObject(contactPersonTestBO);
