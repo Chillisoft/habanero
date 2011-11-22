@@ -85,7 +85,7 @@ namespace Habanero.DB.ConcurrencyControl
         /// if the object has been edited by another process/user</exception>
         public void CheckConcurrencyBeforePersisting()
         {
-            if (IsLocked() && LockDurationExceeded())
+            if (IsLocked && LockDurationExceeded())
             {
                 throw new BusObjPessimisticConcurrencyControlException(
                     string.Format(
@@ -104,9 +104,9 @@ namespace Habanero.DB.ConcurrencyControl
             return Convert.ToDateTime(this._boPropDateLocked.Value);
         }
 
-        private bool IsLocked()
+        internal bool IsLocked
         {
-            return Convert.ToBoolean(this._boPropLocked.Value);
+            get { return Convert.ToBoolean(this._boPropLocked.Value); }
         }
 
         /// <summary>
@@ -121,29 +121,30 @@ namespace Habanero.DB.ConcurrencyControl
         public void CheckConcurrencyBeforeBeginEditing()
         {
             if (_busObj.Status.IsNew) return;
-            IDatabaseConnection connection = DatabaseConnection.CurrentConnection;
+            var connection = DatabaseConnection.CurrentConnection;
             if (connection == null) return;
 
             if (!(BORegistry.DataAccessor.BusinessObjectLoader is BusinessObjectLoaderDB)) return;
-            ISqlStatement statement = GetSQLStatement();
-            using (IDataReader dr = connection.LoadDataReader(statement))
+            var statement = GetSQLStatement();
+            using (var dr = connection.LoadDataReader(statement))
             {
                 // If this object no longer exists in the database
                 // then we have a concurrency conflict since it has been deleted by another process.
                 // If our objective was to delete it as well then no worries else throw error.
-                bool drHasData = dr.Read();
+                var drHasData = dr.Read();
                 if (!(drHasData))
                 {
                     //The object you are trying to edit has been deleted by another user.
                     throw new BusObjDeleteConcurrencyControlException(_busObj.ClassDef.ClassName, 
                                                                       _busObj.ID.ToString(), _busObj);
                 }
-                var locked = !(dr[_boPropLocked.DatabaseFieldName] == DBNull.Value) && Convert.ToBoolean(dr[_boPropLocked.DatabaseFieldName]);
+                var lockedValue = dr[_boPropLocked.DatabaseFieldName];
+                var locked = lockedValue != DBNull.Value && Convert.ToBoolean(lockedValue);
                 var dateLocked = CastToDateTime(dr, this._boPropDateLocked.DatabaseFieldName);
                 if (locked && (LockDurationValid(dateLocked)))
                 {
-                    string userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
-                    string machineLocked = (string)dr[this._boPropMachineLocked.DatabaseFieldName];
+                    var userLocked = (string)dr[this._boPropUserLocked.DatabaseFieldName];
+                    var machineLocked = (string)dr[this._boPropMachineLocked.DatabaseFieldName];
                     throw new BusObjPessimisticConcurrencyControlException(_busObj.ClassDef.ClassName, userLocked,
                                                                            machineLocked, dateLocked,
                                                                            this._busObj.ID.ToString(),
@@ -161,7 +162,7 @@ namespace Habanero.DB.ConcurrencyControl
         private ISqlStatement GetSQLStatement()
         {
             var boLoaderDB = (BusinessObjectLoaderDB)BORegistry.DataAccessor.BusinessObjectLoader;
-            ISelectQuery selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
+            var selectQuery = boLoaderDB.GetSelectQuery(_busObj.ClassDef, _busObj.ID);
 
             var selectQueryDB = new SelectQueryDB(selectQuery, boLoaderDB.DatabaseConnection);
             return selectQueryDB.CreateSqlStatement();
@@ -185,6 +186,9 @@ namespace Habanero.DB.ConcurrencyControl
             var sql = GetUpdateSql();
             if (sql == null) return;
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
+
+            var value = _boPropLocked.Value;
+            _boPropLocked.BackupPropValue();
         }
 
         private void ReleaseLockingFromDB()
@@ -285,10 +289,12 @@ namespace Habanero.DB.ConcurrencyControl
                 if ((bool) _boPropLocked.Value)
                 {
                     _boPropLocked.Value = false;
-                    ReleaseLockingFromDB();               
+                    ReleaseLockingFromDB();
+                    _boPropLocked.BackupPropValue();
                 }
             }
         }
+
 
 
         ///<summary>

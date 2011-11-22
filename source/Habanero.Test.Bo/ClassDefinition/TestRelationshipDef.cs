@@ -503,6 +503,15 @@ namespace Habanero.Test.BO.ClassDefinition
             return lPropDefCol;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual string MockBOProp2
+        {
+            get { return ((string) (base.GetPropertyValue("MockBOProp2"))); }
+            set { base.SetPropertyValue("MockBOProp2", value); }
+        }
+
         #region forTesting
 
         internal IPropDefCol PropDefCol

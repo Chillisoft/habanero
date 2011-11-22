@@ -25,6 +25,7 @@ using Habanero.Test.BO;
 using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.BO.TransactionCommitters;
 using Habanero.Test.Structure;
+using Habanero.Testing.Base;
 using Habanero.Util;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -159,6 +160,47 @@ namespace Habanero.Test.DB
                 Assert.IsFalse(transactional1.Committed);
                 Assert.IsFalse(transactional2.Committed);
             }
+        }
+
+
+        [Test]
+        public void CommitTransaction_WhenBoHasStringPropWithLengthGreaterThanDbField_ShouldRollbackConcurrencyStrategy_FixBugBug_2136()
+        {
+            //---------------Set up test pack-------------------
+            TransactionCommitter committer = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            var temp = new NumberGeneratorPessimisticLockingImpl("tmp");
+            temp.CallReleaseLocks();
+            var pessimisticLocking = new NumberGeneratorPessimisticLockingImpl("tmp");
+
+            var mockBO = new MockBO
+                             {
+                                 // force a database write exception as MockBOProp2 only allows varchar(50)
+                                 MockBOProp2 = RandomValueGen.GetRandomString(51, 55)
+                             };
+            committer.AddBusinessObject(mockBO);
+            pessimisticLocking.AddToTransaction(committer);
+            var nextNumber = pessimisticLocking.NextNumber();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(pessimisticLocking.BoSequenceNumber.Status.IsDirty);
+            Assert.IsFalse(pessimisticLocking.BoSequenceNumber.Props["Locked"].IsDirty);
+            Assert.Greater(nextNumber, 0);
+            Assert.Greater(mockBO.MockBOProp2.Length, 50);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committer.CommitTransaction();
+                //---------------Test Result -----------------------
+                Assert.Fail("Expected to throw an DatabaseWriteException");
+            }
+            catch (DatabaseWriteException ex)
+            {
+                StringAssert.Contains("There was an error writing to the database", ex.Message);
+            }
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual(nextNumber, pessimisticLocking.NextNumber());
+
+
         }
 
 
@@ -1099,6 +1141,19 @@ namespace Habanero.Test.DB
                 }
                 base.UpdateObjectBeforePersisting(transactionCommitter);
             }
+        }
+    }
+
+    internal class NumberGeneratorPessimisticLockingImpl : NumberGeneratorPessimisticLocking
+    {
+        public NumberGeneratorPessimisticLockingImpl(string numberType) : base(numberType)
+        {
+            
+        }
+
+        public void CallReleaseLocks()
+        {
+            base.ReleaseLocks();
         }
     }
 }
