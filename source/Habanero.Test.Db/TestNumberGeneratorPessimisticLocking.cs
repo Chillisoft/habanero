@@ -74,6 +74,7 @@ namespace Habanero.Test.DB
         public void ReleaseLocks_WhenHasLock_ShouldReleaseTheLocks_FixBugBug_2136()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             var numberType = "SomeType" + TestUtil.GetRandomInt();  
             var numberGenerator = new NumberGeneratorPessimisticLockingStub2(numberType);
             numberGenerator.CallReleaseLocks();
@@ -90,6 +91,7 @@ namespace Habanero.Test.DB
         public void ReleaseLocks_WhenHasLock_ShouldReleaseTheLocksInDatabase_FixBugBug_2136()
         {
             //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorDB();
             var numberType = "SomeType" + TestUtil.GetRandomInt();
             var numberGenerator = new NumberGeneratorPessimisticLockingStub2(numberType);
             numberGenerator.CallReleaseLocks();
