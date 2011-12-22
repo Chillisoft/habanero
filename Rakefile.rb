@@ -37,7 +37,12 @@ desc "Runs the build task"
 task :default => [:build]
 
 desc "Builds Habanero, including tests"
-task :build => [:clean, :msbuild, :test]
+task :build => [:build_only, :test]
+
+task :build_only => [:clean, :msbuild]
+
+desc "Builds Habanero, including running tests with dotcover"
+task :build_with_coverage => [:build_only, :test_with_coverage]
 
 #------------------------build habanero --------------------
 
@@ -57,5 +62,16 @@ end
 desc "Runs the tests"
 nunit :test do |nunit|
 	puts cyan("Running tests")
-	nunit.assemblies 'bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll'
+	nunit.assemblies testassemblies
+end
+
+def testassemblies
+	['bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll']
+end
+
+desc "Runs the tests with dotcover"
+dotcover :test_with_coverage do |dc|
+	puts cyan("Running tests with dotcover")
+	dc.assemblies testassemblies
+    dc.filters '+:module=*;class=*;function=*;-:Habanero.Test;-:Habanero.Test.*'
 end
