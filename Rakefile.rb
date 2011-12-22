@@ -73,5 +73,5 @@ desc "Runs the tests with dotcover"
 dotcover :test_with_coverage do |dc|
 	puts cyan("Running tests with dotcover")
 	dc.assemblies testassemblies
-    dc.filters '+:module=*;class=*;function=*;-:Habanero.Test;-:Habanero.Test.*'
+    dc.filters '+:module=*;class=*;function=*'
 end
