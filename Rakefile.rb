@@ -36,14 +36,20 @@ $solution = 'source/Habanero.sln'
 desc "Runs the build task"
 task :default => [:build]
 
-desc "Builds Habanero, including tests"
-task :build => [:build_only, :test]
+desc "Builds Habanero, including tests and pushes to local nuget folder"
+task :build => [:build_only, :test, :nuget]
 
+desc "Builds Habanero, including tests"
+task :build_test => [:clean, :msbuild, :test]
+
+desc "Builds Habanero"
 task :build_only => [:clean, :msbuild]
 
 desc "Builds Habanero, including running tests with dotcover"
 task :build_with_coverage => [:build_only, :test_with_coverage]
 
+desc "Pushes Habanero into the local nuget folder"
+task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
 #------------------------build habanero --------------------
 
 desc "Cleans the bin folder"
@@ -74,4 +80,37 @@ dotcover :test_with_coverage do |dc|
 	puts cyan("Running tests with dotcover")
 	dc.assemblies testassemblies
     dc.filters '+:module=*;class=*;function=*'
+end
+
+
+desc "Publish the Habanero.Base nuget package"
+pushnugetpackages :publishBaseNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Base.dll"
+  package.Nugetid = "Habanero.Base.Trunk"
+  package.Version = "Trunk"
+  package.Description = "Habanero.Base"
+end
+
+desc "Publish the Habanero.BO nuget package"
+pushnugetpackages :publishBONugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.BO.dll"
+  package.Nugetid = "Habanero.BO.Trunk"
+  package.Version = "Trunk"
+  package.Description = "Habanero.BO"
+end
+
+desc "Publish the Habanero.Console nuget package"
+pushnugetpackages :publishConsoleNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Console.dll"
+  package.Nugetid = "Habanero.Console.Trunk"
+  package.Version = "Trunk"
+  package.Description = "Habanero.Console"
+end
+
+desc "Publish the Habanero.DB nuget package"
+pushnugetpackages :publishDBNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.DB.dll"
+  package.Nugetid = "Habanero.DB.Trunk"
+  package.Version = "Trunk"
+  package.Description = "Habanero.DB"
 end
