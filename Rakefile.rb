@@ -36,8 +36,11 @@ $solution = 'source/Habanero.sln'
 desc "Runs the build task"
 task :default => [:build]
 
+desc "Builds Habanero, including tests and pushes to local nuget folder"
+task :build => [:clean, :msbuild, :test, :nuget]
+
 desc "Builds Habanero, including tests"
-task :build => [:clean, :msbuild, :test :nuget]
+task :build_test => [:clean, :msbuild, :test]
 
 desc "Pushes Habanero into the local nuget folder"
 task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
