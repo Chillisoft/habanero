@@ -45,8 +45,8 @@ task :build_test => [:clean, :msbuild, :test]
 desc "Builds Habanero"
 task :build_only => [:clean, :msbuild]
 
-desc "Builds Habanero, including running tests with dotcover"
-task :build_with_coverage => [:build_only, :test_with_coverage]
+desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
+task :build_with_coverage => [:build_only, :test_with_coverage, :nuget]
 
 desc "Pushes Habanero into the local nuget folder"
 task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
