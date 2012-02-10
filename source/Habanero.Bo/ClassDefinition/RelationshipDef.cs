@@ -243,7 +243,7 @@ namespace Habanero.BO.ClassDefinition
         /// Provides specific instructions with regards to deleting a parent
         /// object.  See the <see cref="DeleteParentAction"/> enumeration for more detail.
         /// </summary>
-        public DeleteParentAction DeleteParentAction { get; protected internal set; }
+        public DeleteParentAction DeleteParentAction { get; set; }
 
         ///<summary>
         /// Provides the specific instruction when a new object is added to an association relationship.
