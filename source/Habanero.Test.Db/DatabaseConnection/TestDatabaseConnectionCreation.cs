@@ -164,7 +164,7 @@ namespace Habanero.Test.DB
 			//---------------Execute Test ----------------------
 			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
 			//---------------Test Result -----------------------
-			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			Assert.IsInstanceOf(typeof(SqlFormatterForSqlServerCe), defaultSqlFormatter);
 			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
 			Assert.IsNotNull(sqlFormatter);
 			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);
@@ -190,7 +190,7 @@ namespace Habanero.Test.DB
 			//---------------Execute Test ----------------------
 			ISqlFormatter defaultSqlFormatter = dbConn.SqlFormatter;
 			//---------------Test Result -----------------------
-			Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
+			Assert.IsInstanceOf(typeof(SqlFormatterForSqlServerCe), defaultSqlFormatter);
 			SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
 			Assert.IsNotNull(sqlFormatter);
 			Assert.AreEqual("[", sqlFormatter.LeftFieldDelimiter);

@@ -265,6 +265,7 @@
     <Compile Include="TestSingleRelationship_Composition_DB.cs" />
     <Compile Include="TestSourceDB.cs" />
     <Compile Include="TestSqlFormatterForAccess.cs" />
+    <Compile Include="TestSqlFormatterForSqlServerCe.cs" />
     <Compile Include="TestSQLStatement.cs">
       <SubType>Code</SubType>
     </Compile>
