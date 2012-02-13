@@ -1,4 +1,4 @@
-USE [habanero_test_trunk]
+USE [habanero_test_branch_2_6_20110824]
 GO
 
 /****** Object:  Table [dbo].[MyBO]    Script Date: 05/20/2011 12:03:23 ******/
@@ -6,7 +6,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MyBO]
 DROP TABLE [dbo].[MyBO]
 GO
 
-USE [habanero_test_trunk]
+USE [habanero_test_branch_2_6_20110824]
 GO
 
 /****** Object:  Table [dbo].[MyBO]    Script Date: 05/20/2011 12:03:24 ******/
