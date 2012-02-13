@@ -114,7 +114,7 @@ namespace Habanero.Base
         /// <param name="limit">The limit - the maximum number of rows that
         /// can be affected by the action</param>
         /// <returns>Returns a string</returns>
-        public string GetLimitClauseCriteriaForEnd(int limit)
+		public virtual string GetLimitClauseCriteriaForEnd(int limit)
         {
             return string.IsNullOrEmpty(LimitClauseAtEnd)?"": LimitClauseAtEnd + " " + limit;
         }
@@ -123,7 +123,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="limit">The limit</param>
         /// <returns>Returns a string</returns>
-        public string GetLimitClauseCriteriaForBegin(int limit)
+		public virtual string GetLimitClauseCriteriaForBegin(int limit)
         {
             return string.IsNullOrEmpty(LimitClauseAtBeginning) ? "" : LimitClauseAtBeginning + " " + limit;
         }

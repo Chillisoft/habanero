@@ -222,6 +222,7 @@
     <Compile Include="SelectQueryDB.cs" />
     <Compile Include="SourceDB.cs" />
     <Compile Include="SqlFormatterForAccess.cs" />
+    <Compile Include="SqlFormatterForSqlServerCe.cs" />
     <Compile Include="SqlStatement.cs">
       <SubType>Code</SubType>
     </Compile>

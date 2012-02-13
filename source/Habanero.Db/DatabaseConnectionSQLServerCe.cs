@@ -36,9 +36,8 @@ namespace Habanero.DB
         /// <param name="assemblyName">The assembly name</param>
         /// <param name="className">The class name</param>
         public DatabaseConnectionSqlServerCe(string assemblyName, string className) : base(assemblyName, className)
-        {
-            
-            
+		{
+			_sqlFormatter = new SqlFormatterForSqlServerCe("[", "]", "TOP", "");
         }
 
         /// <summary>
@@ -52,7 +51,8 @@ namespace Habanero.DB
         /// </param>
 		public DatabaseConnectionSqlServerCe(string assemblyName, string className, string connectString)
             : base(assemblyName, className, connectString)
-        {
+		{
+			_sqlFormatter = new SqlFormatterForSqlServerCe("[", "]", "TOP", "");
         }
 
         /// <summary>

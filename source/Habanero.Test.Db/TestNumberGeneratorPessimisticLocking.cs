@@ -62,7 +62,6 @@ namespace Habanero.Test.DB
         private static void SetupDBDataAccessor()
         {
             TestUsingDatabase.SetupDBDataAccessor();
-            //BORegistry.DataAccessor = new DataAccessorDB();
         }
         [Test]
         public void Test_Construct_ShouldLoadClassDefs_ForBOSequenceNumberLocking()
@@ -132,6 +131,16 @@ namespace Habanero.Test.DB
             Assert.IsFalse(numberGenerator3.IsLocked, "Newly loaded number Gen from the DB should be unlocked");
         }
 
+        private class NumberGeneratorPessimisticLockingStub : NumberGeneratorPessimisticLocking
+        {
+            public NumberGeneratorPessimisticLockingStub() : base("SomeType",1)
+            {
+            }
+            public void CallReleaseLocks()
+            {
+                base.ReleaseLocks();
+            }
+        }
         private class NumberGeneratorPessimisticLockingStub2 : NumberGeneratorPessimisticLocking
         {
             public NumberGeneratorPessimisticLockingStub2(string numberType)
