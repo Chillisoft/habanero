@@ -15,11 +15,11 @@
 
 
 --
--- Create schema habanero_test_trunk
+-- Create schema habanero_test_branch_2_6_1
 --
 
-CREATE DATABASE IF NOT EXISTS habanero_test_trunk;
-USE habanero_test_trunk;
+CREATE DATABASE IF NOT EXISTS habanero_test_branch_2_6_1;
+USE habanero_test_branch_2_6_1;
 
 --
 -- Definition of table `another_number_generator`
