@@ -27,16 +27,23 @@ msbuild_settings = {
 #------------------------dependency settings---------------------
 
 #------------------------project settings------------------------
+$basepath = 'http://delicious:8080/svn/habanero/Habanero/branches/v2.6'
 $solution = 'source/Habanero.sln'
-
 #______________________________________________________________________________
 #---------------------------------TASKS----------------------------------------
 
 desc "Runs the build task"
 task :default => [:build]
 
+desc "Builds Habanero, including tests and pushes to local nuget folder"
+task :build => [:clean, :msbuild, :test, :nuget]
+
 desc "Builds Habanero, including tests"
 task :build => [:clean, :msbuild, :test]
+
+desc "Pushes Habanero into the local nuget folder"
+task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
+
 
 #------------------------build habanero --------------------
 
@@ -57,4 +64,36 @@ desc "Runs the tests"
 nunit :test do |nunit|
 	puts cyan("Running tests")
 	nunit.assemblies 'bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll'
+end
+
+desc "Publish the Habanero.Base nuget package"
+pushnugetpackages :publishBaseNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Base.dll"
+  package.Nugetid = "Habanero.Base.V2.6"
+  package.Version = "2.6"
+  package.Description = "Habanero.Base"
+end
+
+desc "Publish the Habanero.BO nuget package"
+pushnugetpackages :publishBONugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.BO.dll"
+  package.Nugetid = "Habanero.BO.V2.6"
+  package.Version = "2.6"
+  package.Description = "Habanero.BO"
+end
+
+desc "Publish the Habanero.Console nuget package"
+pushnugetpackages :publishConsoleNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Console.dll"
+  package.Nugetid = "Habanero.Console.V2.6"
+  package.Version = "2.6"
+  package.Description = "Habanero.Console"
+end
+
+desc "Publish the Habanero.DB nuget package"
+pushnugetpackages :publishDBNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.DB.dll"
+  package.Nugetid = "Habanero.DB.V2.6"
+  package.Version = "2.6"
+  package.Description = "Habanero.DB"
 end
