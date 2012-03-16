@@ -27,7 +27,6 @@ msbuild_settings = {
 #------------------------dependency settings---------------------
 
 #------------------------project settings------------------------
-$basepath = 'http://delicious:8080/svn/habanero/Habanero/branches/v2.6'
 $solution = 'source/Habanero.sln'
 #______________________________________________________________________________
 #---------------------------------TASKS----------------------------------------
