@@ -20,9 +20,12 @@
 #endregion
 using System;
 using System.Data;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using Habanero.Base;
 using Habanero.DB;
+using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -241,6 +244,28 @@ namespace Habanero.Test.DB
             test1.AddParameter("param0", 1);
             //---------------Test Result -----------------------
             Assert.IsFalse(test1.Equals(test2));
+        }
+
+
+        private static IDatabaseConnection GetSQLServerCeConnection()
+        {
+            var uri = new Uri(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) ?? "");
+            var databaseFile = Path.Combine(uri.LocalPath, "sqlserverce-testdb.sdf");
+            var databaseConfig = new DatabaseConfig(DatabaseConfig.SqlServerCe, "", databaseFile, "", "", null);
+            return databaseConfig.GetDatabaseConnection();
+        }
+
+        [Test]
+        public void AddParameter_WhenSqlServerCE_ByteArray_ShouldReturnSqlServerImageType()
+        {
+            //---------------Set up test pack-------------------
+            var sqlStatement = new SqlStatement(GetSQLServerCeConnection(), "some statement");
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var parameter = sqlStatement.AddParameter("imageParam", new byte[8001]);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(SqlDbType.Image,ReflectionUtilities.GetPropertyValue(parameter,"SqlDbType"));
         }
     }
 

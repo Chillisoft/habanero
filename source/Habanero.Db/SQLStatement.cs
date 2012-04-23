@@ -155,19 +155,41 @@ namespace Habanero.DB
         private void databaseSpecificParameterSettings(IDbDataParameter newParameter, object paramValue)
         {
             string connectionNamespace = _idbConnection.GetType().Namespace;
-            if (connectionNamespace == "System.Data.OracleClient")
-            {
-                if (paramValue.GetType().Name == "LongText")
-                {
-                    ReflectionUtilities.SetEnumPropertyValue(newParameter,"OracleType","Clob");
-                }
-            }
+            UpdateParameterTypeForOracleLongText(connectionNamespace, paramValue, newParameter);
+            UpdateParameterTypeForSqlServerCEImage(connectionNamespace, paramValue, newParameter);
+            UpdateParameterTypeForOleDBDateTime(paramValue, newParameter);
+        }
+
+        private void UpdateParameterTypeForOleDBDateTime(object paramValue, IDbDataParameter newParameter)
+        {
             if (_idbConnection is OleDbConnection)
             {
                 OleDbParameter oleDbParameter = newParameter as OleDbParameter;
                 if (oleDbParameter != null && paramValue is DateTime && oleDbParameter.OleDbType == OleDbType.DBTimeStamp)
                 {
                     oleDbParameter.OleDbType = OleDbType.Date;
+                }
+            }
+        }
+
+        private void UpdateParameterTypeForSqlServerCEImage(string connectionNamespace, object paramValue, IDbDataParameter newParameter)
+        {
+            if (connectionNamespace == "System.Data.SqlServerCe")
+            {
+                if (paramValue is byte[])
+                {
+                    ReflectionUtilities.SetEnumPropertyValue(newParameter, "SqlDbType", "Image");
+                }
+            }
+        }
+
+        private void UpdateParameterTypeForOracleLongText(string connectionNamespace, object paramValue, IDbDataParameter newParameter)
+        {
+            if (connectionNamespace == "System.Data.OracleClient")
+            {
+                if (paramValue.GetType().Name == "LongText")
+                {
+                    ReflectionUtilities.SetEnumPropertyValue(newParameter,"OracleType","Clob");
                 }
             }
         }
