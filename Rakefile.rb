@@ -40,7 +40,7 @@ desc "Builds Habanero, including tests and pushes to local nuget folder"
 task :build => [:clean, :msbuild, :test, :nuget]
 
 desc "Pushes Habanero into the local nuget folder"
-task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
+task :nuget => [:publishBaseNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
 
 #------------------------build habanero --------------------
 
