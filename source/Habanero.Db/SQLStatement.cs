@@ -172,6 +172,7 @@ namespace Habanero.DB
             }
         }
 
+
         private void UpdateParameterTypeForSqlServerCEImage(string connectionNamespace, object paramValue, IDbDataParameter newParameter)
         {
             if (connectionNamespace == "System.Data.SqlServerCe")
@@ -179,6 +180,11 @@ namespace Habanero.DB
                 if (paramValue is byte[])
                 {
                     ReflectionUtilities.SetEnumPropertyValue(newParameter, "SqlDbType", "Image");
+                }
+
+                if (paramValue is string && Encoding.Default.GetByteCount((string)paramValue) > 4000)
+                {
+                    ReflectionUtilities.SetEnumPropertyValue(newParameter, "SqlDbType", "NText");
                 }
             }
         }

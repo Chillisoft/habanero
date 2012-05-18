@@ -267,6 +267,20 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.AreEqual(SqlDbType.Image,ReflectionUtilities.GetPropertyValue(parameter,"SqlDbType"));
         }
+
+        [Test]
+        public void AddParameter_WhenSqlServerCE_StringGreaterThan4000_ShouldReturnSqlServerNTextType()
+        {
+            //---------------Set up test pack-------------------
+            var sqlStatement = new SqlStatement(GetSQLServerCeConnection(), "some statement");
+            var bigTextValue = TestUtil.GetRandomString(4001);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var parameter = sqlStatement.AddParameter("ntextParam", bigTextValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(SqlDbType.NText,ReflectionUtilities.GetPropertyValue(parameter,"SqlDbType"));
+        }
     }
 
 }
