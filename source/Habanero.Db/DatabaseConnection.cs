@@ -728,6 +728,90 @@ namespace Habanero.DB
             return ExecuteSql(new[] { sql });
         }
 
+        public int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params)
+        {
+            return ExecuteStoredProcNonQuery(procName, @params, _timeoutPeriod);
+        }
+
+        public int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params, int timeout)
+        {
+            ArgumentValidationHelper.CheckArgumentNotNull(procName, "procName");
+            ArgumentValidationHelper.CheckArgumentNotNull(@params, "params");
+            IDbConnection con = null;
+            try
+            {
+                con = OpenConnection;
+                var cmd = CreateCommand(con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = procName;
+                if (timeout > 0) cmd.CommandTimeout = timeout;
+
+                foreach (var param in @params)
+                {
+                    var dbParam = cmd.CreateParameter();
+                    dbParam.DbType = param.DbType;
+                    dbParam.ParameterName = param.ParamName;
+                    dbParam.Value = param.ParamValue;
+                    cmd.Parameters.Add(dbParam);
+                }
+
+                return cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Log.Log
+                    ("Error executing stored procedure : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Stored procedure: " + procName, LogCategory.Exception);
+                throw new DatabaseWriteException
+                    ("There was an error writing to the database. Please contact your system administrator."
+                     + Environment.NewLine + "A stored procedure command could not be completed.",
+                     "A stored procedure command could not be completed: " + procName, ex, procName + String.Join(", ", @params), ErrorSafeConnectString());
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        public object ExecuteRawSqlScalar(string sql)
+        {
+            ArgumentValidationHelper.CheckArgumentNotNull(sql, "sql");
+            IDbConnection con = null;
+            try
+            {
+                con = OpenConnection;
+                var cmd = CreateCommand(con);
+                cmd.CommandText = sql;
+                return cmd.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                Log.Log
+                    ("Error reading database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
+                Log.Log("Sql: " + sql, LogCategory.Exception);
+                Console.WriteLine
+                    ("Error reading database : " + Environment.NewLine
+                     + ExceptionUtilities.GetExceptionString(ex, 10, true));
+                Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
+                throw new DatabaseReadException
+                    ("There was an error reading the database. Please contact your system administrator.",
+                     "The command ExecuteScalar could not be completed.", ex, sql, ErrorSafeConnectString());
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed)
+                {
+                    con.Close();
+                }
+            }
+        }
+
+
         /// <summary>
         /// Returns a left field delimiter appropriate for the database (based on the <see cref="SqlFormatter"/> setup for
         ///   connection

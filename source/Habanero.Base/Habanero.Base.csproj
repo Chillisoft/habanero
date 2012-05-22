@@ -184,6 +184,7 @@
     <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="NullSecurityController.cs" />
     <Compile Include="OrderCriteriaField.cs" />
+    <Compile Include="Param.cs" />
     <Compile Include="RecordingExceptionNotifier.cs" />
     <Compile Include="Exceptions\InvalidKeyException.cs" />
     <Compile Include="Exceptions\ReflectionException.cs" />

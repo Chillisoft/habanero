@@ -179,5 +179,9 @@ namespace Habanero.Base
         /// <param name="openConnection"></param>
         /// <returns></returns>
         IDbTransaction BeginTransaction(IDbConnection openConnection);
+
+        int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params);
+        int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params, int timeout);
+        object ExecuteRawSqlScalar(string sql);
     }
 }

@@ -10,7 +10,7 @@ namespace Habanero.Test.DB
 		public void GetLimitClauseCriteriaForBegin_ShouldFormatTopWithBrackets()
 		{
 			//---------------Set up test pack-------------------
-			SqlFormatterForSqlServerCe sqlFormatter = new SqlFormatterForSqlServerCe("[", "]", "TOP", "");
+			var sqlFormatter = new SqlFormatterForSqlServerCe("[", "]", "TOP", "");
 			int limit = TestUtil.GetRandomInt();
 			//---------------Assert Precondition----------------
 			Assert.AreEqual("TOP", sqlFormatter.LimitClauseAtBeginning);

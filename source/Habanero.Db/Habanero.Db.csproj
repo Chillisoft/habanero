@@ -157,6 +157,7 @@
     <Compile Include="InsertSqlStatement.cs" />
     <Compile Include="InsertStatementGenerator.cs" />
     <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />
+    <Compile Include="Param.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

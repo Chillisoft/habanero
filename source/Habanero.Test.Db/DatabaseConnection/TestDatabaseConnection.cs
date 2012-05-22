@@ -290,6 +290,55 @@ namespace Habanero.Test.DB
             Assert.AreSame(db, sqlStatement.DatabaseConnection);
         }
 
+        [Test]
+        public void ExecuteRawSqlScalar()
+        {
+            //---------------Set up test pack-------------------
+            const string sql = "DELETE from TestTableRead";
+            var dc = DatabaseConnection.CurrentConnection;
+            dc.ExecuteRawSql(sql);
+            dc.ExecuteRawSql("Insert into testtableread (testtablereaddata) values ('test')");
+            //---------------Execute Test ----------------------
+            var count = dc.ExecuteRawSqlScalar("select count(*) from TestTableRead");
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, count);
+        }
+
+        [Test]
+        public void ExecuteStoredProcNonQuery_WithTimeout()
+        {
+            //---------------Set up test pack-------------------
+            var db = DatabaseConnection.CurrentConnection;
+            const string sql = "DELETE from TestTableRead";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            var @params = new[] {new Param(DbType.String, "str", TestUtil.GetRandomString(10))};
+            //---------------Assert preconditions---------------
+            var count = DatabaseConnection.CurrentConnection.ExecuteRawSqlScalar("select count(*) from TestTableRead");
+            Assert.AreEqual(0, count);
+            //---------------Execute Test ----------------------
+            db.ExecuteStoredProcNonQuery("TestStoredProc", @params, 30);
+            //---------------Test Result -----------------------
+            var count2 = DatabaseConnection.CurrentConnection.ExecuteRawSqlScalar("select count(*) from TestTableRead");
+            Assert.AreEqual(1, count2);
+        }
+
+        [Test]
+        public void ExecuteStoredProcNonQuery()
+        {
+            //---------------Set up test pack-------------------
+            var db = DatabaseConnection.CurrentConnection;
+            const string sql = "DELETE from TestTableRead";
+            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            var @params = new[] {new Param(DbType.String, "str", TestUtil.GetRandomString(10))};
+            //---------------Assert preconditions---------------
+            var count = DatabaseConnection.CurrentConnection.ExecuteRawSqlScalar("select count(*) from TestTableRead");
+            Assert.AreEqual(0, count);
+            //---------------Execute Test ----------------------
+            db.ExecuteStoredProcNonQuery("TestStoredProc", @params);
+            //---------------Test Result -----------------------
+            var count2 = DatabaseConnection.CurrentConnection.ExecuteRawSqlScalar("select count(*) from TestTableRead");
+            Assert.AreEqual(1, count2);
+        }
 
         private class DatabaseConnection_Stub : DatabaseConnection
         {
