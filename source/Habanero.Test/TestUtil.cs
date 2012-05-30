@@ -19,7 +19,9 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Habanero.DB;
@@ -246,5 +248,16 @@ namespace Habanero.Test
     	{
     		return new TimeSpan(days, GetRandomInt(0, 23), GetRandomInt(0, 59), GetRandomInt(0, 59), GetRandomInt(0, 999));
     	}
+
+        public static void ExecuteInParallelThreads(int numberOfThreads, ThreadStart threadStart)
+        {
+            var threads = new List<Thread>();
+            for (int i = 0; i < numberOfThreads; i++)
+            {
+                threads.Add(new Thread(threadStart));
+            }
+            threads.AsParallel().ForAll(thread => thread.Start());
+            threads.AsParallel().ForAll(thread => thread.Join());
+        }
     }
 }

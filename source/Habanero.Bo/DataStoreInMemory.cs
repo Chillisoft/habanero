@@ -37,6 +37,7 @@ namespace Habanero.BO
     {
         private Dictionary<Guid, IBusinessObject> _objects = new Dictionary<Guid, IBusinessObject>();
         private Dictionary<IClassDef, INumberGenerator> _autoIncrementNumberGenerators = new Dictionary<IClassDef, INumberGenerator>();
+        private readonly object _lockFor_autoIncrementNumberGenerators = new object();
 
         ///<summary>
         /// Returns the number of objects in the memory store.
@@ -311,7 +312,7 @@ namespace Habanero.BO
         ///<summary>
         /// The <see cref="INumberGenerator"/>s used to produce the AutoIncremented values for Classes in this DataStore.
         ///</summary>
-        public Dictionary<IClassDef, INumberGenerator> AutoIncrementNumberGenerators
+        protected internal Dictionary<IClassDef, INumberGenerator> AutoIncrementNumberGenerators
         {
             get { return _autoIncrementNumberGenerators; }
         }
@@ -324,9 +325,14 @@ namespace Habanero.BO
         ///<returns>The next AutoIncrement value for the ClassDef specified.</returns>
         public virtual long GetNextAutoIncrementingNumber(IClassDef classDef)
         {
-            if(!AutoIncrementNumberGenerators.ContainsKey(classDef))
-                AutoIncrementNumberGenerators.Add(classDef, new NumberGenerator(string.Format("AutoIncrement({0})", classDef.ClassName)));
-            return AutoIncrementNumberGenerators[classDef].NextNumber();
+            lock (_lockFor_autoIncrementNumberGenerators)
+            {
+                if (!_autoIncrementNumberGenerators.ContainsKey(classDef))
+                    _autoIncrementNumberGenerators.Add(classDef,
+                                                       new NumberGenerator(string.Format("AutoIncrement({0})",
+                                                                                         classDef.ClassName)));
+                return _autoIncrementNumberGenerators[classDef].NextNumber();
+            }
         }
     }
 }

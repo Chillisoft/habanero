@@ -20,11 +20,14 @@
 #endregion
 using System;
 using System.IO;
+using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 using Rhino.Mocks;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Habanero.Test.BO
 {
@@ -529,12 +532,42 @@ namespace Habanero.Test.BO
             //---------------Execute Test ----------------------
             long defaultNumber = dataStoreInMemory.GetNextAutoIncrementingNumber(classDef2);
             //---------------Test Result -----------------------
-            Assert.AreEqual(2,dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            Assert.AreEqual(2, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
             numberGenerator.AssertWasNotCalled(t => t.NextNumber());
             Assert.AreEqual(1, defaultNumber);
             INumberGenerator createdNumberGenerator = dataStoreInMemory.AutoIncrementNumberGenerators[classDef2];
             Assert.IsNotNull(createdNumberGenerator);
             TestUtil.AssertIsInstanceOf<NumberGenerator>(createdNumberGenerator);
+        }
+
+        [Test]
+        public void Test_GetNextAutoIncrementingNumber_ShouldCreateNumberGenerators_BUGFIX_ShouldBeThreadSafe()
+        {
+            //---------------Set up test pack-------------------
+            var dataStoreInMemory = new DataStoreInMemory();
+            BORegistry.DataAccessor = new DataAccessorInMemory(dataStoreInMemory);
+            var classDef1 = MockRepository.GenerateStub<IClassDef>();
+            var classDef2 = MockRepository.GenerateStub<IClassDef>();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
+            Assert.IsFalse(dataStoreInMemory.AutoIncrementNumberGenerators.ContainsKey(classDef1));
+            Assert.IsFalse(dataStoreInMemory.AutoIncrementNumberGenerators.ContainsKey(classDef2));
+            //---------------Execute Test ----------------------
+            var exceptions = new List<Exception>();
+            TestUtil.ExecuteInParallelThreads(2, () =>
+            {
+                try
+                {
+                    dataStoreInMemory.GetNextAutoIncrementingNumber(classDef1);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            });
+            //---------------Test Result -----------------------
+            Assert.AreEqual(0, exceptions.Count);
+            Assert.AreEqual(1, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
         }
 
         [Test]
