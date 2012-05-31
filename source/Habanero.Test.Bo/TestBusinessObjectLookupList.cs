@@ -233,8 +233,48 @@ namespace Habanero.Test.BO
                 //---------------Test Result -----------------------
                 Assert.IsNotNull(valueCollection);
                 Assert.AreEqual(3, valueCollection.Count);
-                Assert.AreEqual("abcd", valueCollection[0]);
-                Assert.AreEqual("abc", valueCollection[1]);
+                Assert.AreEqual("abc", valueCollection[0]);
+                Assert.AreEqual("abcd", valueCollection[1]);
+                Assert.AreEqual("zzz", valueCollection[2]);
+            }
+            [Test]
+            public void Test_GetValueCollection_When3Items_AndOrderCriteriaIsNotNull_WithReverseOrder_ShouldReturnAValueListCollectionForTheBusinessObjects()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();//Clear any other loaded data (See Test Setup)
+                new ContactPersonTestBO { Surname = "zzz" }.Save();
+                new ContactPersonTestBO { Surname = "abc" }.Save();
+                new ContactPersonTestBO { Surname = "abcd" }.Save();
+                var lookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO), "", "Surname desc", true);
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(lookupList.OrderCriteria);
+                //---------------Execute Test ----------------------
+                var valueCollection = lookupList.GetValueCollection() as ArrayList;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(valueCollection);
+                Assert.AreEqual(3, valueCollection.Count);
+                Assert.AreEqual("zzz", valueCollection[0]);
+                Assert.AreEqual("abcd", valueCollection[1]);
+                Assert.AreEqual("abc", valueCollection[2]);
+            }
+            [Test]
+            public void Test_GetValueCollection_When3Items_AndCriteriaIsNotNull_ShouldStillReturnAllBusinessObjects()
+            {
+                //---------------Set up test pack-------------------
+                SetupDataAccessor();//Clear any other loaded data (See Test Setup)
+                new ContactPersonTestBO { Surname = "zzz" }.Save();
+                new ContactPersonTestBO { Surname = "abc" }.Save();
+                new ContactPersonTestBO { Surname = "abcd" }.Save();
+                var lookupList = new BusinessObjectLookupList(typeof(ContactPersonTestBO), "Surname like 'abc'", "Surname", true);
+                //---------------Assert Precondition----------------
+                Assert.IsNotNull(lookupList.OrderCriteria);
+                //---------------Execute Test ----------------------
+                var valueCollection = lookupList.GetValueCollection() as ArrayList;
+                //---------------Test Result -----------------------
+                Assert.IsNotNull(valueCollection);
+                Assert.AreEqual(3, valueCollection.Count);
+                Assert.AreEqual("abc", valueCollection[0]);
+                Assert.AreEqual("abcd", valueCollection[1]);
                 Assert.AreEqual("zzz", valueCollection[2]);
             }
 

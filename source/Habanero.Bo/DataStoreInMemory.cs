@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,9 +36,10 @@ namespace Habanero.BO
     ///</summary>
     public class DataStoreInMemory
     {
-        private Dictionary<Guid, IBusinessObject> _objects = new Dictionary<Guid, IBusinessObject>();
-        private Dictionary<IClassDef, INumberGenerator> _autoIncrementNumberGenerators = new Dictionary<IClassDef, INumberGenerator>();
-        private readonly object _lockFor_autoIncrementNumberGenerators = new object();
+        private ConcurrentDictionary<Guid, IBusinessObject> _objects = new ConcurrentDictionary<Guid, IBusinessObject>();
+        //private Dictionary<Guid, IBusinessObject> _objects = new Dictionary<Guid, IBusinessObject>();
+        private ConcurrentDictionary<IClassDef, INumberGenerator> _autoIncrementNumberGenerators = new ConcurrentDictionary<IClassDef, INumberGenerator>();
+        private readonly object _lock = new object();
 
         ///<summary>
         /// Returns the number of objects in the memory store.
@@ -50,7 +52,7 @@ namespace Habanero.BO
         ///<summary>
         /// Returns a Dictionary of all the objects in the memory store.
         ///</summary>
-        public Dictionary<Guid, IBusinessObject> AllObjects
+        public ConcurrentDictionary<Guid, IBusinessObject> AllObjects
         {
             get { return _objects; }
             set { _objects = value;  }
@@ -62,7 +64,7 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void Add(IBusinessObject businessObject)
         {
-            AllObjects.Add(businessObject.ID.ObjectID, businessObject);
+            AllObjects.TryAdd(businessObject.ID.ObjectID, businessObject);
         }
 
         ///<summary>
@@ -114,10 +116,11 @@ namespace Habanero.BO
         ///<exception cref="HabaneroDeveloperException">Error if more than one BO matches criteria</exception>
         public virtual IBusinessObject Find(IClassDef classDef, Criteria criteria)
         {
+            Type boType = classDef.ClassType;
             IBusinessObject currentBO = null;
-            foreach (IBusinessObject bo in AllObjects.Values)
+            foreach (IBusinessObject bo in GetAllObjectsSnapshot())
             {
-                if (bo.ClassDef != classDef && !classDef.ClassType.IsInstanceOfType(bo))
+                if (bo.ClassDef != classDef && !boType.IsInstanceOfType(bo))
                 {
                     continue;
                 }
@@ -137,6 +140,15 @@ namespace Habanero.BO
             return currentBO;
         }
 
+        private IEnumerable<IBusinessObject> GetAllObjectsSnapshot()
+        {
+            return AllObjects.Values;
+            var values = AllObjects.Values;
+            var valuesSnapshot = new IBusinessObject[values.Count];
+            values.CopyTo(valuesSnapshot, 0);
+            return valuesSnapshot;
+        }
+
         ///<summary>
         /// Finds an object of type T that has the primary key primaryKey.
         ///</summary>
@@ -154,7 +166,8 @@ namespace Habanero.BO
         ///<param name="businessObject"></param>
         public virtual void Remove(IBusinessObject businessObject)
         {
-            AllObjects.Remove(businessObject.ID.ObjectID);
+            IBusinessObject value;
+            AllObjects.TryRemove(businessObject.ID.ObjectID, out value);
         }
 
         ///<summary>
@@ -232,14 +245,26 @@ namespace Habanero.BO
             Type boType = classDef.ClassType;
             IBusinessObjectCollection col = CreateGenericCollection(boType);
             col.ClassDef = classDef;
-            foreach (IBusinessObject bo in AllObjects.Values)
+            //var objectsMatchingType = FindObjectsMatchingType(classDef);
+            //var objectsMatchingCriteria = criteria == null ? objectsMatchingType : objectsMatchingType.Where(criteria.IsMatch);
+            //objectsMatchingCriteria.ToArray().ForEach(col.Add);
+            foreach (IBusinessObject bo in GetAllObjectsSnapshot()) //AllObjects.Values.ToArray())
             {
-                if (!boType.IsInstanceOfType(bo)) continue;
+                if (bo.ClassDef != classDef && !boType.IsInstanceOfType(bo)) continue;
                 if (classDef.TypeParameter != bo.ClassDef.TypeParameter) continue;
                 if (criteria == null || criteria.IsMatch(bo)) col.Add(bo);
             }
             col.SelectQuery.Criteria = criteria;
             return col;
+        }
+
+        private IEnumerable<IBusinessObject> FindObjectsMatchingType(IClassDef classDef)
+        {
+            var boType = classDef.ClassType;
+            var objectsMatchingType = AllObjects.Values.Where(bo =>
+                                                              !(bo.ClassDef != classDef && !boType.IsInstanceOfType(bo))
+                                                              && classDef.TypeParameter == bo.ClassDef.TypeParameter);
+            return objectsMatchingType;
         }
 
         /// <summary>
@@ -299,7 +324,7 @@ namespace Habanero.BO
                 try
                 {
                     IBusinessObject bo = (IBusinessObject) xs.Deserialize(stream);
-                    this.AllObjects.Add(bo.ID.GetAsGuid(), bo);
+                    this.AllObjects.TryAdd(bo.ID.GetAsGuid(), bo);
                 }
                 catch (Exception ex)
                 {
@@ -312,7 +337,7 @@ namespace Habanero.BO
         ///<summary>
         /// The <see cref="INumberGenerator"/>s used to produce the AutoIncremented values for Classes in this DataStore.
         ///</summary>
-        protected internal Dictionary<IClassDef, INumberGenerator> AutoIncrementNumberGenerators
+        protected internal IDictionary<IClassDef, INumberGenerator> AutoIncrementNumberGenerators
         {
             get { return _autoIncrementNumberGenerators; }
         }
@@ -325,13 +350,11 @@ namespace Habanero.BO
         ///<returns>The next AutoIncrement value for the ClassDef specified.</returns>
         public virtual long GetNextAutoIncrementingNumber(IClassDef classDef)
         {
-            lock (_lockFor_autoIncrementNumberGenerators)
+            lock (_lock)
             {
-                if (!_autoIncrementNumberGenerators.ContainsKey(classDef))
-                    _autoIncrementNumberGenerators.Add(classDef,
-                                                       new NumberGenerator(string.Format("AutoIncrement({0})",
-                                                                                         classDef.ClassName)));
-                return _autoIncrementNumberGenerators[classDef].NextNumber();
+                var numberGenerator = _autoIncrementNumberGenerators.GetOrAdd(classDef,
+                    def => new NumberGenerator(string.Format("AutoIncrement({0})", classDef.ClassName)));
+                return numberGenerator.NextNumber();
             }
         }
     }

@@ -52,13 +52,13 @@ namespace Habanero.BO
             Write(writer, dataStore.AllObjects);
         }
 
-        public void Write(Stream stream, Dictionary<Guid, IBusinessObject> businessObjects)
+        public void Write(Stream stream, IDictionary<Guid, IBusinessObject> businessObjects)
         {
             var writer = XmlWriter.Create(stream, _settings);
             Write(writer, businessObjects);
         }
 
-        public void Write(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects)
+        public void Write(XmlWriter writer, IDictionary<Guid, IBusinessObject> businessObjects)
         {
             var boWriter = new BusinessObjectXmlWriter();
             boWriter.Write(writer, businessObjects.Values);

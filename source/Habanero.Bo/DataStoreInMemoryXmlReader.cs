@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -115,13 +116,13 @@ namespace Habanero.BO
         public DataStoreInMemory Read(XmlReader xmlReader, IBusinessObjectXmlReader boReader)
         {
             BOSequenceNumber.LoadNumberGenClassDef();
-            var objects = new Dictionary<Guid, IBusinessObject>();
+            var objects = new ConcurrentDictionary<Guid, IBusinessObject>();
             var bos = boReader.Read(xmlReader);
             bos.ForEach(
                 bo =>
                     {
                         var objectToAdd = ConfigureObjectAfterLoad(bo);
-                        objects.Add(objectToAdd.ID.GetAsGuid(), objectToAdd);
+                        objects.TryAdd(objectToAdd.ID.GetAsGuid(), objectToAdd);
                     });
  
             ReadResult = boReader.PropertyReadExceptions.Count() == 0 ? 

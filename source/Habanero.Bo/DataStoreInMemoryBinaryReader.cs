@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -35,11 +36,16 @@ namespace Habanero.BO
             _stream = stream;
         }
 
-        public Dictionary<Guid, IBusinessObject> Read()
+        public ConcurrentDictionary<Guid, IBusinessObject> Read()
         {
-            BinaryFormatter formatter = new BinaryFormatter();
-            Dictionary<Guid, IBusinessObject> objects = (Dictionary<Guid, IBusinessObject>)formatter.Deserialize(_stream);
-            return objects;
+            var formatter = new BinaryFormatter();
+            var deserializedObject = formatter.Deserialize(_stream);
+            if (deserializedObject is ConcurrentDictionary<Guid, IBusinessObject>)
+            {
+                return (ConcurrentDictionary<Guid, IBusinessObject>)deserializedObject;
+            }
+            var deserialisedEnumerable = (IEnumerable<KeyValuePair<Guid, IBusinessObject>>) deserializedObject;
+            return new ConcurrentDictionary<Guid, IBusinessObject>(deserialisedEnumerable);
         }
     }
 }

@@ -636,6 +636,20 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestBeginEdit_ShouldStartEdits()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = MyBO.LoadDefaultClassDef();
+            var myBO = (MyBO)classDef.CreateNewBusinessObject();
+            //---------------Assert Precondition----------------
+            Assert.IsFalse(myBO.Status.IsEditing);
+            //---------------Execute Test ----------------------
+            myBO.BeginEdit();
+            //---------------Test Result -----------------------
+            Assert.IsTrue(myBO.Status.IsEditing);
+        }
+
+        [Test]
         public void TestGetPropertyValueToDisplay()
         {
             ClassDef.ClassDefs.Clear();

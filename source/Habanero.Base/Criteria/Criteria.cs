@@ -246,7 +246,7 @@ namespace Habanero.Base
         ///<returns></returns>
         ///<exception cref="ArgumentNullException"></exception>
         ///<exception cref="InvalidOperationException"></exception>
-        public bool IsMatch<T>(T businessObject, bool usePersistedValue) where T : class, IBusinessObject 
+        public virtual bool IsMatch<T>(T businessObject, bool usePersistedValue) where T : class, IBusinessObject 
         {
             if (businessObject == null) throw new ArgumentNullException("businessObject", "The IsMatch cannot be called for null object");
 
@@ -343,7 +343,7 @@ namespace Habanero.Base
         /// <typeparam name="T">The type of BusinessObject</typeparam>
         /// <param name="businessObject">The businessobject to check for a match against the criteria</param>
         /// <returns>True if the businessobject matches the criteria, false if it does not</returns>
-        public bool IsMatch<T>(T businessObject) where T : class, IBusinessObject 
+        public virtual bool IsMatch<T>(T businessObject) where T : class, IBusinessObject 
         {
             return IsMatch(businessObject, true);
         }
@@ -353,7 +353,7 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="dto">The <see cref="BusinessObjectDTO"/> to check for a match against the criteria</param>
         /// <returns>True if the <see cref="BusinessObjectDTO"/> matches the criteria, false if it does not</returns>
-        public bool IsMatch(BusinessObjectDTO dto) 
+        public virtual bool IsMatch(BusinessObjectDTO dto) 
         {
             if (IsComposite())
             {

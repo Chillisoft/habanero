@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -75,16 +76,33 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_Write_WithConcurrentDictionary()
+        {
+            //---------------Set up test pack-------------------
+            var dataStore = new DataStoreInMemory();
+            dataStore.Add(new Car());
+            var businessObjects = dataStore.AllObjects;
+            var stream = new MemoryStream();
+            var writer = new DataStoreInMemoryBinaryWriter(stream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(businessObjects);
+            //---------------Test Result -----------------------
+            Assert.AreNotEqual(0, stream.Length);
+        }
+
+        [Test]
         public void Test_Write_WithDictionary()
         {
             //---------------Set up test pack-------------------
-            DataStoreInMemory dataStore = new DataStoreInMemory();
-            dataStore.Add(new Car());
-            Dictionary<Guid, IBusinessObject> businessObjects = dataStore.AllObjects;
-            MemoryStream stream = new MemoryStream();
-            DataStoreInMemoryBinaryWriter writer = new DataStoreInMemoryBinaryWriter(stream);
+            var car = new Car();
+            var businessObjects = new Dictionary<Guid, IBusinessObject> {{car.ID.GetAsGuid(), car}};
+            var stream = new MemoryStream();
+            var writer = new DataStoreInMemoryBinaryWriter(stream);
             //---------------Assert Precondition----------------
-            Assert.AreEqual(1, dataStore.Count);
+            Assert.AreEqual(1, businessObjects.Count);
             Assert.AreEqual(0, stream.Length);
             //---------------Execute Test ----------------------
             writer.Write(businessObjects);
@@ -109,6 +127,51 @@ namespace Habanero.Test.BO
             DataStoreInMemoryBinaryReader reader = new DataStoreInMemoryBinaryReader(writeStream);
             //---------------Assert Precondition----------------
             Assert.AreEqual(1, savedDataStore.Count);
+            //---------------Execute Test ----------------------
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+        }
+
+        [Test]
+        public void Test_Read_WhenWrittenWithDictionary_ShouldStillReturnEquivalentConcurrentDictionary()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            var myBo = new MyBO();
+            var businessObjects = new Dictionary<Guid, IBusinessObject> { { myBo.ID.GetAsGuid(), myBo } };
+            var writeStream = new MemoryStream();
+            var writer = new DataStoreInMemoryBinaryWriter(writeStream);
+            writer.Write(businessObjects);
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            var loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            var reader = new DataStoreInMemoryBinaryReader(writeStream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, businessObjects.Count);
+            //---------------Execute Test ----------------------
+            loadedDataStore.AllObjects = reader.Read();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, loadedDataStore.Count);
+        }
+
+        [Test]
+        public void Test_Read_WhenWrittenWithListOfKeyValuePairs_ShouldStillReturnEquivalentConcurrentDictionary()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefsNoUIDef();
+            var myBo = new MyBO();
+            var businessObjects = new List<KeyValuePair<Guid, IBusinessObject>> { new KeyValuePair<Guid, IBusinessObject>(myBo.ID.GetAsGuid(), myBo) };
+            var writeStream = new MemoryStream();
+            new BinaryFormatter().Serialize(writeStream, businessObjects);
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
+            var loadedDataStore = new DataStoreInMemory();
+            writeStream.Seek(0, SeekOrigin.Begin);
+            var reader = new DataStoreInMemoryBinaryReader(writeStream);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(1, businessObjects.Count);
             //---------------Execute Test ----------------------
             loadedDataStore.AllObjects = reader.Read();
             //---------------Test Result -----------------------

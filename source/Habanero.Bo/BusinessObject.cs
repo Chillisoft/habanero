@@ -957,27 +957,20 @@ namespace Habanero.BO
 		/// be restored with Restore() and changes can be committed to the
 		/// database by calling Save().
 		/// </summary>
-		private bool _beginEditRunning;
-
+		private readonly object _beginEditLock = new object();
 		private void BeginEdit(bool delete)
 		{
-			if (_beginEditRunning) return;
-			try
-			{
-				_beginEditRunning = true;
-				string message;
-				if (!IsEditable(out message) && !delete)
-				{
-					throw new BusObjEditableException(this, message);
-				}
-				CheckNotEditing();
-				CheckConcurrencyBeforeBeginEditing();
-				_boStatus.IsEditing = true;
-			}
-			finally
-			{
-				_beginEditRunning = false;
-			}
+            lock (_beginEditLock)
+		    {
+                string message;
+                if (!IsEditable(out message) && !delete)
+                {
+                    throw new BusObjEditableException(this, message);
+                }
+                CheckNotEditing();
+                CheckConcurrencyBeforeBeginEditing();
+                _boStatus.IsEditing = true;
+		    }
 		}
 
 		/// <summary>

@@ -534,7 +534,7 @@ namespace Habanero.BO
         {
             IClassDef classDef = LookupBoClassDef;
             IBusinessObjectCollection col = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectCollection
-                (classDef, "", "");
+                (classDef, "", _sortString);
             return CreateValueList(col);
         }
 

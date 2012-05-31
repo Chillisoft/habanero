@@ -40,7 +40,7 @@ namespace Habanero.BO
             Write(dataStore.AllObjects);
         }
 
-        public void Write(Dictionary<Guid, IBusinessObject> businessObjects)
+        public void Write(IDictionary<Guid, IBusinessObject> businessObjects)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(_stream, businessObjects);

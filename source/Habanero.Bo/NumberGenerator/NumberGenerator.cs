@@ -105,10 +105,7 @@ namespace Habanero.BO
 
         private BOSequenceNumber LoadSequenceNumber(string numberType)
         {
-            if (!ClassDef.ClassDefs.Contains(typeof (BOSequenceNumber)))
-            {
-                BOSequenceNumber.LoadNumberGenClassDef(_tableName);
-            }
+            BOSequenceNumber.LoadNumberGenClassDef(_tableName);
             var criteria = new Criteria("NumberType", Criteria.ComparisonOp.Equals, numberType);
             var sequenceBOSequenceNumber =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<BOSequenceNumber>(criteria);
@@ -183,32 +180,35 @@ namespace Habanero.BO
             set { base.SetPropertyValue("SequenceNumber", value); }
         }
 
+        private static readonly object _loadClassDefLock = new object();
         internal static void LoadNumberGenClassDef()
         {
-            if (!ClassDef.ClassDefs.Contains(typeof(BOSequenceNumber)))
-            {
-                LoadNumberGenClassDef(null);
-            }
+            LoadNumberGenClassDef(null);
         }
 
         internal static void LoadNumberGenClassDef(string tableName)
         {
-            if (string.IsNullOrEmpty(tableName))
+            lock (_loadClassDefLock)
             {
-                tableName = "NumberGenerator";
+                if (ClassDef.ClassDefs.Contains(typeof (BOSequenceNumber))) return;
+                if (string.IsNullOrEmpty(tableName))
+                {
+                    tableName = "NumberGenerator";
+                }
+                _tableName = tableName;
+                var itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+                string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName +
+                                  "\">" +
+                                  "<property  name=\"SequenceNumber\" type=\"Int64\" />" +
+                                  "<property  name=\"NumberType\"/>" +
+                                  "<primaryKey isObjectID=\"false\">" +
+                                  "<prop name=\"NumberType\" />" +
+                                  "</primaryKey>" +
+                                  "</class>";
+                var itsClassDef = itsLoader.LoadClass(classDef);
+                ClassDef.ClassDefs.Add(itsClassDef);
+                return;
             }
-            _tableName = tableName;
-            var itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-            string classDef = "<class name=\"BOSequenceNumber\" assembly=\"Habanero.BO\" table=\"" + _tableName + "\">" +
-                              "<property  name=\"SequenceNumber\" type=\"Int64\" />" +
-                              "<property  name=\"NumberType\"/>" +
-                              "<primaryKey isObjectID=\"false\">" +
-                              "<prop name=\"NumberType\" />" +
-                              "</primaryKey>" +
-                              "</class>";
-            var itsClassDef = itsLoader.LoadClass(classDef);
-            ClassDef.ClassDefs.Add(itsClassDef);
-            return;
         }
     }
 }

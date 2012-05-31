@@ -25,6 +25,7 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Habanero.Test.BO
 {
@@ -308,6 +309,50 @@ namespace Habanero.Test.BO
 			Assert.AreEqual(2, nextNum);
 
 		}
+
+        [Test]
+        public void TestLoadNumberGenClassDef_ShouldAddClassDef()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, ClassDef.ClassDefs.Count);
+            //---------------Execute Test ----------------------
+            BOSequenceNumber.LoadNumberGenClassDef();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, ClassDef.ClassDefs.Count);
+            Assert.IsNotNull(ClassDef.Get<BOSequenceNumber>());
+        }
+
+        [Test]
+        public void TestLoadNumberGenClassDef_ShouldAddClassDef_BUGFIX_ShouldBeThreadSafe()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, ClassDef.ClassDefs.Count);
+            //---------------Execute Test ----------------------
+            var exceptions = new List<Exception>();
+            TestUtil.ExecuteInParallelThreads(2, () =>
+            {
+                try
+                {
+                    BOSequenceNumber.LoadNumberGenClassDef();
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add(ex);
+                }
+            });
+            
+            //---------------Test Result -----------------------
+            if (exceptions.Count > 0)
+            {
+                Assert.Fail(exceptions[0].ToString());
+            }
+            Assert.AreEqual(1, ClassDef.ClassDefs.Count);
+            Assert.IsNotNull(ClassDef.Get<BOSequenceNumber>());
+        }
 
 		private static void SetNumberGeneratorSeedZero(string numberType)
 		{

@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
@@ -363,6 +364,84 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [TestCase("1")]
+        [TestCase("2")]
+        [TestCase("3")]
+        [TestCase("4")]
+        [TestCase("5")]
+        [TestCase("6")]
+        [TestCase("7")]
+        [TestCase("8")]
+        public void TestFindAll_UsingClassDef_BUGFIX_ShouldBeThreadsafe(string aaa)
+        {
+            //---------------Set up test pack-------------------
+            BORegistry.DataAccessor = new DataAccessorInMemory(new DataStoreInMemory());
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
+            var dataStore = new DataStoreInMemory();
+            var now = DateTime.Now;
+            var cp1 = new ContactPersonTestBO {DateOfBirth = now, Surname = TestUtil.GetRandomString()};
+            cp1.Save();
+            dataStore.Add(cp1);
+            var cp2 = new ContactPersonTestBO {DateOfBirth = now, Surname = TestUtil.GetRandomString()};
+            cp2.Save();
+            dataStore.Add(cp2);
+            //var criteria = MockRepository.GenerateStub<Criteria>("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+            //criteria.Stub(o => o.IsMatch(Arg<IBusinessObject>.Is.Anything)).WhenCalled(invocation =>
+            //{
+            //    Thread.Sleep(100);
+            //    invocation.ReturnValue = true;
+            //}).Return(true);
+            var criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
+
+            for (int i1 = 0; i1 < 1000; i1++)
+            {
+                dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
+            }
+
+            var threads = new List<Thread>();
+            threads.Add(new Thread(() =>
+            {
+                for (int i1 = 0; i1 < 1000; i1++)
+                {
+                    dataStore.Add(OrganisationTestBO.CreateSavedOrganisation());
+                }
+            }));
+
+            var exceptions = new List<Exception>();
+            threads.Add(new Thread(() =>
+            {
+                try
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        dataStore.FindAll(ClassDef.Get<ContactPersonTestBO>(), criteria);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exceptions.Add( ex);
+                }
+            }));
+            
+            
+            //---------------Execute Test ----------------------
+            threads.AsParallel().ForAll(thread => thread.Start());
+            threads.AsParallel().ForAll(thread => thread.Join());
+            //Assert.DoesNotThrow(() =>
+            //{
+                //var col = dataStore.FindAll(ClassDef.Get<ContactPersonTestBO>(), criteria);
+                //thread.Join();
+            //});
+            //---------------Test Result -----------------------
+            if (exceptions.Count > 0)
+            {
+                Assert.Fail("Has an Exception: " + exceptions[0].ToString());
+            }
+        }
+
+        [Test]
         public void TestFindAll_ClassDef_NullCriteria()
         {
             //---------------Set up test pack-------------------
@@ -566,7 +645,10 @@ namespace Habanero.Test.BO
                 }
             });
             //---------------Test Result -----------------------
-            Assert.AreEqual(0, exceptions.Count);
+            if (exceptions.Count > 0)
+            {
+                Assert.Fail(exceptions[0].ToString());
+            }
             Assert.AreEqual(1, dataStoreInMemory.AutoIncrementNumberGenerators.Count);
         }
 
