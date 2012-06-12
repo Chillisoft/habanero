@@ -77,8 +77,7 @@ namespace Habanero.Test.DB
 
 		private static void SetupSQLServerConnection()
 		{
-			var databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
-			//var databaseConfig = new DatabaseConfig("SqlServer", @"localhost\sqlexpress", "habanero_test_branch_2_6", "sa", "sa", null);
+            var databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_branch_2_6_20120612", "sa", "sa", null);
 			DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
 		}
 
