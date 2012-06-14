@@ -358,7 +358,8 @@ namespace Habanero.Test.Base
 
                  //-----------------
                  dateRangeOptions = DateRangeOptions.Previous365Days;
-                 expectedStartDateTime = DateTimeUtilities.DayStart(currentDateTime.AddYears(-1));
+                 // Changed to AddDays(-365) from AddYears(-1) as AddYears(-1) fails for leap years
+                 expectedStartDateTime = DateTimeUtilities.DayStart(currentDateTime.AddDays(-365));
                  yield return new TestCaseData(new DateRangeTestCase(dateRangeOptions, currentDateTime, expectedStartDateTime, expectedEndDateTime));
                  //-----------------
                  dateRangeOptions = DateRangeOptions.Current2Years;
