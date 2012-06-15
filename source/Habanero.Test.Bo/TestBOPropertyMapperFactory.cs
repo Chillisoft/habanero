@@ -18,6 +18,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -42,6 +44,7 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();
         }
+
         [SetUp]
         public void SetupTest()
         {
@@ -97,6 +100,31 @@ namespace Habanero.Test.BO
             Assert.AreEqual(propNameWithoutDash, propMapper.PropertyName);
             Assert.AreSame(bo, propMapper.BusinessObject);
         }
+
+        [Test]
+        public void Test_Create_WhenReflectiveProp_WithTwoRelationshipLevels_ShouldCreateReflectivePropMapper()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "MyName";
+            var propNameWithDashes = string.Format("-{0}-", propName);
+
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyBO();
+            var myRelatedBo = new MyRelatedBo();
+            bo.MyRelationship = myRelatedBo;
+            bo.MyRelationship.MyRelationship = new MyBO();
+            var propertyPath = "MyRelationship.MyRelationship." + propNameWithDashes;
+            //---------------Assert Precondition----------------
+            Assert.IsNotNull(ReflectionUtilities.GetPropertyInfo(bo.MyRelationship.MyRelationship.GetType(), propName));
+            //---------------Execute Test ----------------------
+            IBOPropertyMapper propMapper = BOPropMapperFactory.CreateMapper(bo, propertyPath);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<ReflectionPropertyMapper>(propMapper);
+            Assert.AreEqual(propName, propMapper.PropertyName);
+            Assert.AreSame(bo.MyRelationship.MyRelationship, propMapper.BusinessObject);
+        }
+
         [Test]
         public void Test_Create_WhenReflectiveProp_WhenNotDefinedWithDash_ShouldCreateReflectivePropMapper()
         {
