@@ -115,6 +115,10 @@ namespace Habanero.Test
 			{
                 return this.Relationships.GetRelatedObject<MyRelatedBo>("MyRelationship");
 			}
+			set
+			{
+                this.Relationships.SetRelatedObject("MyRelationship", value);
+			}
 		}
 
 		public virtual Shape Shape
@@ -1808,10 +1812,14 @@ namespace Habanero.Test
 		}
 
 		public MyBO MyRelationship
-		{
-			get
+        {
+            get
+            {
+                return this.Relationships.GetRelatedObject<MyBO>("MyRelationship");
+            }
+			set
 			{
-				return this.Relationships.GetRelatedObject<MyBO>("MyRelationship");
+				this.Relationships.SetRelatedObject("MyRelationship", value);
 			}
 		}
         public string MyRelatedTestProp

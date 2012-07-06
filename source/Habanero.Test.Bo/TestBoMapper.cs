@@ -368,6 +368,48 @@ namespace Habanero.Test.BO
 			Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("MyRelationship.-MyName-"));
 		}
 
+	    [Test]
+        public void TestVirtualPropertyValueWithDot_TwoLevels()
+	    {
+	        //---------------Set up test pack-------------------
+			ClassDef.ClassDefs.Clear();
+		    var myBoClassDef = MyBO.LoadClassDefWithRelationship();
+		    var myRelatedBoClassDef = MyRelatedBo.LoadClassDef();
+	        var bo = new MyBO();
+	        var myRelatedBo = new MyRelatedBo();
+            bo.MyRelationship = myRelatedBo;
+            bo.MyRelationship.MyRelationship = new MyBO();
+	        //---------------Assert Precondition----------------
+
+	        //---------------Execute Test ----------------------
+			BOMapper mapper = new BOMapper(bo);
+	        var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.MyRelationship.-MyName-");
+	        //---------------Test Result -----------------------
+	        Assert.AreEqual("MyNameIsMyBo", propertyValueToDisplay);
+	    }
+
+	    [Test]
+        public void TestVirtualPropertyValueWithDot_ManyLevels()
+	    {
+	        //---------------Set up test pack-------------------
+			ClassDef.ClassDefs.Clear();
+		    var myBoClassDef = MyBO.LoadClassDefWithRelationship();
+		    var myRelatedBoClassDef = MyRelatedBo.LoadClassDef();
+	        var bo = new MyBO();
+	        var myRelatedBo = new MyRelatedBo();
+            bo.MyRelationship = myRelatedBo;
+            bo.MyRelationship.MyRelationship = new MyBO();
+            bo.MyRelationship.MyRelationship.MyRelationship = new MyRelatedBo();
+            bo.MyRelationship.MyRelationship.MyRelationship.MyRelationship = new MyBO();
+	        //---------------Assert Precondition----------------
+
+	        //---------------Execute Test ----------------------
+			BOMapper mapper = new BOMapper(bo);
+            var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.MyRelationship.MyRelationship.MyRelationship.-MyName-");
+	        //---------------Test Result -----------------------
+	        Assert.AreEqual("MyNameIsMyBo", propertyValueToDisplay);
+	    }
+
 
 	}
 }
