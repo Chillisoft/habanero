@@ -63,7 +63,11 @@ desc "Pushes Habanero into the local nuget folder"
 task :nuget => [:publishBaseNugetPackage, 
 				:publishConsoleNugetPackage, 
 				:publishDBNugetPackage, 
-				:publishBONugetPackage ]
+				:publishBONugetPackage,
+				:publishTestNugetPackage,
+				:publishTestBONugetPackage,
+				:publishTestStructureNugetPackage,
+				:publishTestDBNugetPackage]
 #------------------------build habanero --------------------
 
 desc "Cleans the bin folder"
@@ -134,3 +138,36 @@ pushnugetpackages :publishDBNugetPackage do |package|
   package.Version = $nuget_publish_version_id
   package.Description = "Habanero.DB"
 end
+
+desc "Publish the Habanero.Test nuget package"
+pushnugetpackages :publishTestNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Test.dll"
+  package.Nugetid = "Habanero.Test.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
+  package.Description = "Habanero.Test"
+end
+
+desc "Publish the Habanero.Test.BO nuget package"
+pushnugetpackages :publishTestBONugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Test.BO.dll"
+  package.Nugetid = "Habanero.Test.BO.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
+  package.Description = "Habanero.Test.BO"
+end
+
+desc "Publish the Habanero.Test.Structure nuget package"
+pushnugetpackages :publishTestStructureNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Test.Structure.dll"
+  package.Nugetid = "Habanero.Test.Structure.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
+  package.Description = "Habanero.Test.Structure"
+end
+
+desc "Publish the Habanero.Test.DB nuget package"
+pushnugetpackages :publishTestDBNugetPackage do |package|
+  package.InputFileWithPath = "bin/Habanero.Test.DB.dll"
+  package.Nugetid = "Habanero.Test.DB.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
+  package.Description = "Habanero.Test.DB"
+end
+
