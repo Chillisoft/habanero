@@ -14,6 +14,17 @@ $buildscriptpath = File.expand_path(bs)
 $:.unshift($buildscriptpath) unless
     $:.include?(bs) || $:.include?($buildscriptpath)
 
+if (bs.index("branches") == nil)	
+	nuget_version = 'Trunk'
+	nuget_version_id = '9.9.999'
+	
+	$nuget_publish_version = nuget_version
+	$nuget_publish_version_id = nuget_version_id
+else
+	$nuget_publish_version = 'v2.6-13_02_2012'
+	$nuget_publish_version_id = '2.6'
+end		
+	
 #------------------------build settings--------------------------
 require 'rake-settings.rb'
 
@@ -27,7 +38,6 @@ msbuild_settings = {
 #------------------------dependency settings---------------------
 
 #------------------------project settings------------------------
-$basepath = 'http://delicious:8080/svn/habanero/Habanero/trunk'
 $solution = 'source/Habanero.sln'
 
 #______________________________________________________________________________
@@ -37,19 +47,22 @@ desc "Runs the build task"
 task :default => [:build]
 
 desc "Builds Habanero, including tests and pushes to local nuget folder"
-task :build => [:build_only, :test, :nuget]
+task :build => [:installNugetPackages, :build_only, :test, :nuget]
 
 desc "Builds Habanero, including tests"
-task :build_test => [:clean, :msbuild, :test]
+task :build_test => [:clean, :installNugetPackages, :msbuild, :test]
 
 desc "Builds Habanero"
 task :build_only => [:clean, :msbuild]
 
 desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
-task :build_with_coverage => [:build_only, :test_with_coverage, :nuget]
+task :build_with_coverage => [:installNugetPackages, :build_only, :test_with_coverage, :nuget]
 
 desc "Pushes Habanero into the local nuget folder"
-task :nuget => [:publishBaseNugetPackage, :publishConsoleNugetPackage, :publishDBNugetPackage, :publishBONugetPackage ]
+task :nuget => [:publishBaseNugetPackage, 
+				:publishConsoleNugetPackage, 
+				:publishDBNugetPackage, 
+				:publishBONugetPackage ]
 #------------------------build habanero --------------------
 
 desc "Cleans the bin folder"
@@ -72,7 +85,9 @@ nunit :test do |nunit|
 end
 
 def testassemblies
-	['bin\Habanero.Test.dll','bin\Habanero.Test.Bo.dll','bin\Habanero.Test.Db.dll']
+	['bin\Habanero.Test.dll',
+	'bin\Habanero.Test.Bo.dll',
+	'bin\Habanero.Test.Db.dll']
 end
 
 desc "Runs the tests with dotcover"
@@ -82,34 +97,39 @@ dotcover :test_with_coverage do |dc|
     dc.filters '+:module=*;class=*;function=*'
 end
 
+desc "Install nuget packages"
+getnugetpackages :installNugetPackages do |ip|
+    ip.package_names = ["nunit.framework"]
+end
+
 desc "Publish the Habanero.Base nuget package"
 pushnugetpackages :publishBaseNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.Base.dll"
-  package.Nugetid = "Habanero.Base.Trunk"
-  package.Version = "9.9.999"
+  package.Nugetid = "Habanero.Base.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
   package.Description = "Habanero.Base"
 end
 
 desc "Publish the Habanero.BO nuget package"
 pushnugetpackages :publishBONugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.BO.dll"
-  package.Nugetid = "Habanero.BO.Trunk"
-  package.Version = "9.9.999"
+  package.Nugetid = "Habanero.BO.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
   package.Description = "Habanero.BO"
 end
 
 desc "Publish the Habanero.Console nuget package"
 pushnugetpackages :publishConsoleNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.Console.dll"
-  package.Nugetid = "Habanero.Console.Trunk"
-  package.Version = "9.9.999"
+  package.Nugetid = "Habanero.Console.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
   package.Description = "Habanero.Console"
 end
 
 desc "Publish the Habanero.DB nuget package"
 pushnugetpackages :publishDBNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.DB.dll"
-  package.Nugetid = "Habanero.DB.Trunk"
-  package.Version = "9.9.999"
+  package.Nugetid = "Habanero.DB.#{$nuget_publish_version}"
+  package.Version = $nuget_publish_version_id
   package.Description = "Habanero.DB"
 end
