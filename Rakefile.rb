@@ -69,7 +69,7 @@ end
 desc "Publish the Habanero.Base nuget package"
 pushnugetpackages :publishBaseNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.Base.dll"
-  package.Nugetid = "Habanero.Base.V2.6-2012-06-12"
+  package.Nugetid = "Habanero.Base.v2.6-2012-06-12"
   package.Version = "2.6"
   package.Description = "Habanero.Base"
 end
@@ -77,7 +77,7 @@ end
 desc "Publish the Habanero.BO nuget package"
 pushnugetpackages :publishBONugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.BO.dll"
-  package.Nugetid = "Habanero.BO.V2.6-2012-06-12"
+  package.Nugetid = "Habanero.BO.v2.6-2012-06-12"
   package.Version = "2.6"
   package.Description = "Habanero.BO"
 end
@@ -85,7 +85,7 @@ end
 desc "Publish the Habanero.Console nuget package"
 pushnugetpackages :publishConsoleNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.Console.dll"
-  package.Nugetid = "Habanero.Console.V2.6-2012-06-12"
+  package.Nugetid = "Habanero.Console.v2.6-2012-06-12"
   package.Version = "2.6"
   package.Description = "Habanero.Console"
 end
@@ -93,7 +93,7 @@ end
 desc "Publish the Habanero.DB nuget package"
 pushnugetpackages :publishDBNugetPackage do |package|
   package.InputFileWithPath = "bin/Habanero.DB.dll"
-  package.Nugetid = "Habanero.DB.V2.6-2012-06-12"
+  package.Nugetid = "Habanero.DB.v2.6-2012-06-12"
   package.Version = "2.6"
   package.Description = "Habanero.DB"
 end
