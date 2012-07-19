@@ -70,6 +70,44 @@ namespace Habanero.Test.BO
             Assert.AreNotEqual(0, stream.Length);
         }
 
+        [Test]
+        public void Test_Write_IncludesStartDocumentElement()
+        {
+            //---------------Set up test pack-------------------
+            var stream = new MemoryStream();
+            var xmlWriter = CreateXmlWriter(stream);
+            var writer = new BusinessObjectXmlWriter();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(xmlWriter, new[] { new Car()});
+            //---------------Test Result -----------------------
+            stream.Seek(0, 0);
+            var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            Assert.That(xml, Is.StringStarting("<?xml"));
+        }
+
+        [Test]
+        public void Test_Write_WhenIncludeStartDocumentIsFalse_ShouldNotClose()
+        {
+            //---------------Set up test pack-------------------
+            var stream = new MemoryStream();
+            var xmlWriter = CreateXmlWriter(stream);
+            var writer = new BusinessObjectXmlWriter();
+            xmlWriter.WriteStartDocument();
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, stream.Length);
+            //---------------Execute Test ----------------------
+            writer.Write(xmlWriter, new[] { new Car()}, false);
+            xmlWriter.Close();
+            //---------------Test Result -----------------------
+            stream.Seek(0, 0);
+            var reader = new StreamReader(stream);
+            var xml = reader.ReadToEnd();
+            Assert.That(xml, Is.StringStarting("<?xml"));
+        }
+
 
         private XmlWriter CreateXmlWriter(MemoryStream stream)
         {

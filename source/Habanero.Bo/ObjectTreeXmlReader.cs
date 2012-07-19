@@ -143,29 +143,42 @@ namespace Habanero.BO
         protected virtual IBusinessObject ConfigureObjectAfterLoad(IBusinessObject bo)
         {
             BusinessObjectManager.Instance.Remove(bo);
+            var existingBo = TryGetUpdatedExistingBo(bo);
+            if (existingBo != null) return existingBo; 
+            
+            ConfigureNewBo(bo);
+            return bo;
+        }
+
+        private IBusinessObject TryGetUpdatedExistingBo(IBusinessObject bo)
+        {
             var existingBo = GetExistingBo(bo.ClassDef, bo);
-            if (existingBo != null)
+            if (existingBo == null) return null;
+            UpdateExistingBo(bo, existingBo);
+            return existingBo;
+        }
+
+        private static void ConfigureNewBo(IBusinessObject bo)
+        {
+            BusinessObjectLoaderBase.CallAfterLoad(bo);
+            try
             {
-                foreach (var prop in existingBo.Props)
-                {
-                    existingBo.SetPropertyValue(prop.PropertyName, bo.GetPropertyValue(prop.PropertyName));
-                }
-                return existingBo;
+                BusinessObjectManager.Instance.Add(bo);
             }
-            else
+            catch (HabaneroDeveloperException ex)
             {
-                BusinessObjectLoaderBase.CallAfterLoad(bo);
-                try
-                {
-                    BusinessObjectManager.Instance.Add(bo);
-                } catch (HabaneroDeveloperException ex)
-                {
-                    // object already exists - this is a possible circumstance so we can let it go
-                    if (!ex.DeveloperMessage.Contains("Two copies of the business object"))
-                        throw;
-                }
-                bo.Props.BackupPropertyValues();
-                return bo;
+                // object already exists - this is a possible circumstance so we can let it go
+                if (!ex.DeveloperMessage.Contains("Two copies of the business object"))
+                    throw;
+            }
+            bo.Props.BackupPropertyValues();
+        }
+
+        private void UpdateExistingBo(IBusinessObject bo, IBusinessObject existingBo)
+        {
+            foreach (var prop in existingBo.Props)
+            {
+                existingBo.SetPropertyValue(prop.PropertyName, bo.GetPropertyValue(prop.PropertyName));
             }
         }
 

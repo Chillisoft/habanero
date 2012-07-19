@@ -38,11 +38,26 @@ namespace Habanero.BO
     public interface IBusinessObjectXmlWriter
     {
         /// <summary>
-        /// Writes the given business objects to the xml writer.
+        /// Writes the given business objects to the xml writer.Writes the start document
+        /// element and end document element, as well as closes the XmlWriter. Make sure the
+        /// <see cref="ConformanceLevel"/> of the <see cref="XmlWriter"/> is set to Auto.
         /// </summary>
         /// <param name="writer">The writer to write to</param>
         /// <param name="businessObjects">The business objects to write</param>
         void Write(XmlWriter writer, IEnumerable<IBusinessObject> businessObjects);
+
+        /// <summary>
+        /// Writes the given business objects to the xml writer. If includeStartDocument is true,
+        /// this method writes the start document element and end document element, as well as 
+        /// closes the XmlWriter. If it's set to false it doesn't include start/end document elements
+        /// and leaves the writer open. Make sure the
+        /// <see cref="ConformanceLevel"/> of the <see cref="XmlWriter"/> is set to Auto.
+        /// </summary>
+        /// <param name="writer">The writer to write to</param>
+        /// <param name="businessObjects">The business objects to write</param>
+        /// <param name="includeStartDocument">If true the StartDocument element and EndDocument elements will be included, and the writer will be closed </param>
+
+        void Write(XmlWriter writer, IEnumerable<IBusinessObject> businessObjects, bool includeStartDocument);
     }
 
     /// <summary>
@@ -64,7 +79,22 @@ namespace Habanero.BO
         /// <param name="businessObjects">The business objects to write</param>
         public void Write(XmlWriter writer, IEnumerable<IBusinessObject> businessObjects)
         {
-            writer.WriteStartDocument();
+            Write(writer, businessObjects, true);
+        }
+
+        /// <summary>
+        /// Writes the given business objects to the xml writer. If includeStartDocument is true,
+        /// this method writes the start document element and end document element, as well as 
+        /// closes the XmlWriter. If it's set to false it doesn't include start/end document elements
+        /// and leaves the writer open. Make sure the
+        /// <see cref="ConformanceLevel"/> of the <see cref="XmlWriter"/> is set to Auto.
+        /// </summary>
+        /// <param name="writer">The writer to write to</param>
+        /// <param name="businessObjects">The business objects to write</param>
+        /// <param name="includeStartDocument">If true the StartDocument element and EndDocument elements will be included, and the writer will be closed </param>
+        public void Write(XmlWriter writer, IEnumerable<IBusinessObject> businessObjects,bool includeStartDocument)
+        {
+            if (includeStartDocument) writer.WriteStartDocument();
             writer.WriteStartElement("BusinessObjects");
             foreach (var o in businessObjects)
             {
@@ -78,8 +108,11 @@ namespace Habanero.BO
                 writer.WriteEndElement();
             }
             writer.WriteEndElement();
-            writer.WriteEndDocument();
-            writer.Close();
+            if (includeStartDocument)
+            {
+                writer.WriteEndDocument();
+                writer.Close();
+            }
         }
     }
 }

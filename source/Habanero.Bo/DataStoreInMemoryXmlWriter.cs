@@ -58,10 +58,19 @@ namespace Habanero.BO
             Write(writer, businessObjects);
         }
 
-        public void Write(XmlWriter writer, IDictionary<Guid, IBusinessObject> businessObjects)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="businessObjects"></param>
+        /// <param name="includeStartDocument">If true, starts a new xml doc and will close the writer 
+        /// after completion. If false, will act as if the write already has a doc started 
+        /// (ie, won't add the startdoc element or close the writer). Defaults to true</param>
+        public void Write(XmlWriter writer, Dictionary<Guid, IBusinessObject> businessObjects, bool includeStartDocument = true)
         {
             var boWriter = new BusinessObjectXmlWriter();
-            boWriter.Write(writer, businessObjects.Values);
+            boWriter.Write(writer, businessObjects.Values, includeStartDocument);
         }
+
     }
 }
