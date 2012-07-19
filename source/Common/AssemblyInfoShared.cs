@@ -38,6 +38,5 @@ using System.Reflection;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// note the revision number has been set to the svn revision number for when this branch was created
-[assembly: AssemblyVersion("2.6.0.21354")]
-[assembly: AssemblyFileVersion("2.6.0.21354")]
+[assembly: AssemblyVersion("2.6.0.0")]
+[assembly: AssemblyFileVersion("2.6.0.0")]
