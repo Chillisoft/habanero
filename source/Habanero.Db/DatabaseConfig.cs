@@ -51,6 +51,11 @@ namespace Habanero.DB
         public const string SqlServer = "SQLSERVER";
 
         /// <summary>
+        /// Microsoft Sql Server Compact Edition - the built in SqlClient data provider will be used
+        /// </summary>
+        public const string SqlServerCe = "SQLSERVERCE";
+
+        /// <summary>
         /// Oracle - the built in Oracle data provider will be used
         /// </summary>
         public const string Oracle = "ORACLE";
@@ -91,18 +96,19 @@ namespace Habanero.DB
 	    private static readonly Dictionary<string, string> 
             VendorToConnectionStringFactoryNameMap = 
                 new Dictionary<string, string>
-                       {
-                           {MySql, "MySql"},
-                           {DB4O, "DB4O"},
-                           {SqlServer, "SqlServer"},
-                           {Oracle, "Oracle"},
-                           {Access, "Access"},
-                           {PostgreSql, "PostgreSql"},
-                           {SQLite, "SQLite"},
-                           {Firebird, "Firebird"},
-                           {FirebirdEmbedded, "FirebirdEmbedded"},
-                           {Access2007, "Access2007"}
-                       };
+                    {
+                        {MySql, "MySql"},
+                        {DB4O, "DB4O"},
+                        {SqlServer, "SqlServer"},
+                        {SqlServerCe, "SqlServerCe"},
+                        {Oracle, "Oracle"},
+                        {Access, "Access"},
+                        {PostgreSql, "PostgreSql"},
+                        {SQLite, "SQLite"},
+                        {Firebird, "Firebird"},
+                        {FirebirdEmbedded, "FirebirdEmbedded"},
+                        {Access2007, "Access2007"}
+                    };
 
         private String _vendor;
         private String _server;
@@ -284,14 +290,10 @@ namespace Habanero.DB
 	    /// <summary>
         /// Sets the private key to use to decrypt the password.  The private key is in xml format.   
         /// </summary>
-        /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>
-        public void SetPrivateKey(string xmlPrivateKey)
+        /// <param name="keyContainerName">The name of the CSP container to use</param>
+        public void SetPrivateKey(string keyContainerName)
         {
-            throw  new NotImplementedException("CF: Does not support System.Security - see OpenNetCF for possible solution");
-            //RSA rsa = RSA.Create();
-            //rsa.FromXmlString(xmlPrivateKey);
-            //SetPrivateKey(rsa);
-
+            _passwordCrypter = new RSAPasswordCrypter(keyContainerName);
         }
 
         /// <summary>

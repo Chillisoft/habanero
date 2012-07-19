@@ -33,11 +33,11 @@ namespace Habanero.Test.DB
     public class TestDatabaseConfig
     {
         private IDictionary settingsMySql;
-        private RSA rsa;
-        private RSAPasswordCrypter crypter;
-        private string password;
-        private string encryptedPassword;
-        private DatabaseConfig encryptedConfig;
+        //private RSA rsa;
+        //private RSAPasswordCrypter crypter;
+        //private string password;
+        //private string encryptedPassword;
+        //private DatabaseConfig encryptedConfig;
         
         [TestFixtureSetUp]
         public void FixtureSetup()
@@ -50,10 +50,10 @@ namespace Habanero.Test.DB
             settingsMySql.Add("password", "e");
             settingsMySql.Add("port", "f");
 
-            rsa = RSA.Create();
-            crypter = new RSAPasswordCrypter(rsa);
-            password = "password";
-            encryptedPassword = crypter.EncryptString(password);
+            //rsa = RSA.Create();
+            //crypter = new RSAPasswordCrypter(rsa);
+            //password = "password";
+            //encryptedPassword = crypter.EncryptString(password);
 
             
         }
@@ -61,7 +61,7 @@ namespace Habanero.Test.DB
         [SetUp]
         public void Setup()
         {
-            encryptedConfig = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
+            //encryptedConfig = new DatabaseConfig(DatabaseConfig.MySql, "a", "b", "c", encryptedPassword, "e");
         }
 
         [Test]

@@ -28,15 +28,15 @@ namespace Habanero.Base
     /// </summary>
     public class RSAPasswordCrypter : ICrypter
     {
-        private readonly RSA _rsa;
+        private readonly string _keyContainerName;
 
         ///<summary>
         /// Constructor
         ///</summary>
         ///<param name="rsa"></param>
-        public RSAPasswordCrypter(RSA rsa)
+        public RSAPasswordCrypter(string keyContainerName)
         {
-            _rsa = rsa;
+            _keyContainerName = keyContainerName;
         }
 
         /// <summary>
@@ -44,37 +44,37 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="value">The string to decrypt</param>
         /// <returns>Returns the unaltered string provided</returns>
-        public string DecryptString(string value)
+        public string DecryptString(string data)
         {
-            throw new NotImplementedException();
-            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            //provider.FromXmlString(_rsa.ToXmlString(true));
-            // byte[] passwordBytes = new byte[value.Length/2];
-            //        for (int i = 0; i < passwordBytes.Length; i++) {
-            //            passwordBytes[i] = Convert.ToByte(value.Substring(i * 2, 2), 16);
-            //        }
-            //        byte[] decryptedBytes = provider.Decrypt(passwordBytes, false);
-            //       return Encoding.ASCII.GetString(decryptedBytes);
+            byte[] dataToDecrypt = Convert.FromBase64String(data);
+            byte[] decryptedData = Decrypt(dataToDecrypt, _keyContainerName);
+            return Encoding.ASCII.GetString(decryptedData, 0, decryptedData.Length);
         }
 
         /// <summary>
         /// Returns the given string without carrying out any changes.
         /// </summary>
-        /// <param name="value">The string to encrypt</param>
+        /// <param name="data">The string to encrypt</param>
         /// <returns>Returns the unaltered string provided</returns>
-        public string EncryptString(string value)
+        public string EncryptString(string data)
         {
-            throw new NotImplementedException();
-            //RSACryptoServiceProvider provider = new RSACryptoServiceProvider();
-            //provider.FromXmlString(_rsa.ToXmlString(false));
-            //byte[] passwordBytes = Encoding.ASCII.GetBytes(value);
-            //byte[] encryptedByes = provider.Encrypt(passwordBytes, false);
-            //string text = "";
-            //foreach (byte bye in encryptedByes)
-            //{
-            //    text += String.Format("{0:x2}", bye);
-            //}
-            //return text;
+            var dataToEncrypt = Encoding.ASCII.GetBytes(data);
+            var encryptedData = Encrypt(dataToEncrypt, _keyContainerName);
+            return Convert.ToBase64String(encryptedData);
+        }
+
+        private byte[] Encrypt(byte[] data, string keyContainerName)
+        {
+            var csp = new CspParameters {KeyContainerName = keyContainerName};
+            var rsa = new RSACryptoServiceProvider(csp);
+            return rsa.Encrypt(data, false);
+        }
+
+        private byte[] Decrypt(byte[] data, string keyContainerName)
+        {
+            var csp = new CspParameters {KeyContainerName = keyContainerName};
+            var rsa = new RSACryptoServiceProvider(csp);
+            return rsa.Decrypt(data, false);
         }
     }
 }

@@ -97,6 +97,7 @@
     <Compile Include="ConnectionStringOracleFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
     <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="ConnectionStringSQLServerCeFactory.cs" />
     <Compile Include="ConnectionStringSQLServerFactory.cs" />
     <Compile Include="CriteriaDB.cs" />
     <Compile Include="DataAccessorDB.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="DatabaseConnectionPostgreSql.cs" />
     <Compile Include="DatabaseConnectionSQLite.cs" />
     <Compile Include="DatabaseConnectionSQLServer.cs" />
+    <Compile Include="DatabaseConnectionSQLServerCe.cs" />
     <Compile Include="DatabaseLookupList.cs" />
     <Compile Include="DatabaseNumberGenerator.cs" />
     <Compile Include="DatabaseReadException.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="SelectQueryDB.cs" />
     <Compile Include="SourceDB.cs" />
     <Compile Include="SqlFormatterForAccess.cs" />
+    <Compile Include="SqlFormatterForSqlServerCe.cs" />
     <Compile Include="SQLStatement.cs" />
     <Compile Include="SqlStatementBuilder.cs" />
     <Compile Include="SqlStatementCollection.cs" />

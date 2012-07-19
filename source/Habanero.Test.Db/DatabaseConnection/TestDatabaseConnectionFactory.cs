@@ -83,6 +83,24 @@ namespace Habanero.Test.DB
 
         #endregion
 
+        #region SqlServerCe
+
+        [Test]
+        public void TestCreateConnectionSqlServerCe()
+        {
+            //---------------Set up test pack-------------------
+            DatabaseConfig config = new DatabaseConfig(DatabaseConfig.SqlServerCe, "test", "test", "test", "test", "1000");
+
+            //---------------Execute Test ----------------------
+            IDatabaseConnection connection = new DatabaseConnectionFactory().CreateConnection(config);
+            IDbConnection dbConnection = connection.GetConnection();
+
+            //---------------Test Result -----------------------
+            Assert.AreEqual("System.Data.SqlServerCe", dbConnection.GetType().Namespace);
+        }
+
+        #endregion
+
         #region Oracle
 
         [Test]

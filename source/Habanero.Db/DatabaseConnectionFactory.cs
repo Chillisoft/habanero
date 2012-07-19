@@ -44,13 +44,19 @@ namespace Habanero.DB
                 return String.IsNullOrEmpty(config.AssemblyName)
                     ? new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection", config.GetConnectionString())
                     : new DatabaseConnectionMySql(config.AssemblyName, config.FullClassName, config.GetConnectionString());
-            }
-            if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
-            {
-                return String.IsNullOrEmpty(config.AssemblyName)
-                    ? new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection", config.GetConnectionString())
-                    : new DatabaseConnectionSqlServer(config.AssemblyName, config.FullClassName, config.GetConnectionString());
-            }
+			}
+			if (string.Compare(config.Vendor, DatabaseConfig.SqlServer, true) == 0)
+			{
+				return String.IsNullOrEmpty(config.AssemblyName)
+					? new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection", config.GetConnectionString())
+					: new DatabaseConnectionSqlServer(config.AssemblyName, config.FullClassName, config.GetConnectionString());
+			}
+			if (string.Compare(config.Vendor, DatabaseConfig.SqlServerCe, true) == 0)
+			{
+				return String.IsNullOrEmpty(config.AssemblyName)
+					? new DatabaseConnectionSqlServerCe("System.Data.SqlServerCe", "System.Data.SqlServerCe.SqlCeConnection", config.GetConnectionString())
+					: new DatabaseConnectionSqlServerCe(config.AssemblyName, config.FullClassName, config.GetConnectionString());
+			}
             if (string.Compare(config.Vendor, DatabaseConfig.Oracle, true) == 0)
             {
                 return String.IsNullOrEmpty(config.AssemblyName)
