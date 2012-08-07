@@ -1089,7 +1089,66 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             //---------------Test Result -----------------------
             Assert.AreEqual(3, count);
         }
-       
+
+        private class BusinessObjectLoaderBaseSpy : BusinessObjectLoaderBase
+        {
+            public BusinessObjectLoaderBaseSpy()
+            {
+            }
+
+            protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
+            {
+                throw new NotImplementedException(); // not required
+            }
+
+            protected override void DoRefresh(IBusinessObjectCollection collection)
+            {
+                throw new NotImplementedException();    // not required
+            }
+
+            public static new IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
+            {
+                return BusinessObjectLoaderBase.GetObjectFromObjectManager(key, boType);
+            }
+        }
+
+        [Test]
+        [Ignore("Work in progress")]
+        public void Test_WhenTwoObjectsOfDifferentTypeShareGuidID_ShouldThrowErrorIfObjectManagerReturnsIncorrectType()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            var contactPersonClassDef = ContactPersonTestBO.LoadDefaultClassDef();
+            var organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            TestUtil.WaitForGC();
+            var conflictingID = Guid.NewGuid();
+            var organisation = new OrganisationTestBO() 
+            {
+                OrganisationID = conflictingID,
+                Name = "Organisation"
+            };
+            organisation.Save();
+            var person = new ContactPersonTestBO()
+            {
+                ContactPersonID = conflictingID,
+                FirstName = "Contact",
+                Surname = "Person",
+                OrganisationID = conflictingID
+            };
+            person.Save();
+
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(organisation.OrganisationID, conflictingID, "Organisation doesn't have crafted conflicting GUID");
+            Assert.AreEqual(person.ContactPersonID, conflictingID, "ContactPerson doesn't have crafted conflicting GUID");
+
+            //---------------Execute Test ----------------------
+            Assert.Throws<Exception>(() =>
+                {
+                    var retrievedOrganisation = BusinessObjectLoaderBaseSpy.GetObjectFromObjectManager(organisation.ID, organisation.GetType());
+                }, "Should throw an exception here");
+            //---------------Test Result -----------------------
+        }
     }
 
 }
