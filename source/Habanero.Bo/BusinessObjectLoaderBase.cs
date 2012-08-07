@@ -811,10 +811,13 @@ namespace Habanero.BO
         {
             IBusinessObjectManager businessObjectManager = BORegistry.BusinessObjectManager;
             var businessObject = businessObjectManager.GetBusinessObject(key);
-            if (businessObject.GetType() != boType)
+            var returnType = (businessObject == null) ? null : businessObject.GetType();
+
+            if ((returnType != null) && (!boType.IsAssignableFrom(returnType) && !returnType.IsAssignableFrom(boType))) //  businessObject.GetType().IsAssignableFrom(boType)))
             {
                 throw new HabaneroApplicationException(
-                     "Incorrect Business Object type returned for passed in key: perhaps you have conflicting GUID keys? (conflicting key: " + key + ")"
+                     "Incorrect Business Object type returned for passed in key: perhaps you have conflicting GUID keys? (conflicting key: " + key + 
+                     "; expected type: " + boType + "; got type: " + businessObject.GetType() + ")"
                      );
             }
             return businessObject;

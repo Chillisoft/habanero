@@ -42,6 +42,8 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
         protected abstract void DeleteEnginesAndCars();
 
+        private IBusinessObjectManager _originalBusinessObjectManager;
+
         [SetUp]
         public virtual void SetupTest()
         {
@@ -49,12 +51,14 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             SetupDataAccessor();
             BORegistry.BusinessObjectManager.ClearLoadedObjects();
             TestUtil.WaitForGC();
+            _originalBusinessObjectManager = BORegistry.BusinessObjectManager;
             //new Address();
         }
 
         [TearDown]
         public virtual void TearDownTest()
         {
+            BORegistry.BusinessObjectManager = _originalBusinessObjectManager;
         }
 
         [Test]
@@ -1127,11 +1131,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             var manager = Substitute.For<IBusinessObjectManager>();
             var obj = new ContactPersonTestBO();
             manager.GetBusinessObject(Arg.Any<IPrimaryKey>()).Returns(new ContactPersonTestBO());
+            var oldManager = BORegistry.BusinessObjectManager;
             BORegistry.BusinessObjectManager = manager;
             //---------------Execute Test ----------------------
             try
             {
-                BusinessObjectLoaderBaseSpy.CallGetObjectFromObjectManager(obj.ID, typeof (OrganisationTestBO));
+                BusinessObjectLoaderBaseSpy.CallGetObjectFromObjectManager(obj.ID, typeof(OrganisationTestBO));
                 Assert.Fail("Should throw an exception here");
             }
             //---------------Test Result -----------------------
