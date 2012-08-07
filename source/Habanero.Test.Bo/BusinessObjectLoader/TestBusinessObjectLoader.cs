@@ -1122,13 +1122,12 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
-            var contactPersonClassDef = ContactPersonTestBO.LoadDefaultClassDef();
-            var organisationClassDef = OrganisationTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            OrganisationTestBO.LoadDefaultClassDef();
             var manager = Substitute.For<IBusinessObjectManager>();
             var obj = new ContactPersonTestBO();
             manager.GetBusinessObject(Arg.Any<IPrimaryKey>()).Returns(new ContactPersonTestBO());
             BORegistry.BusinessObjectManager = manager;
-            //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             try
             {
