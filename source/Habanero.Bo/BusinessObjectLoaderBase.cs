@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
+using Habanero.Base.Exceptions;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -809,7 +810,14 @@ namespace Habanero.BO
         protected static IBusinessObject GetObjectFromObjectManager(IPrimaryKey key, Type boType)
         {
             IBusinessObjectManager businessObjectManager = BORegistry.BusinessObjectManager;
-            return businessObjectManager.GetBusinessObject(key);
+            var businessObject = businessObjectManager.GetBusinessObject(key);
+            if (businessObject.GetType() != boType)
+            {
+                throw new HabaneroApplicationException(
+                     "Incorrect Business Object type returned for passed in key: perhaps you have conflicting GUID keys? (conflicting key: " + key + ")"
+                     );
+            }
+            return businessObject;
 /*            if (key.IsGuidObjectID)
             {
                 return BORegistry.BusinessObjectManager.GetObjectIfInManager(key.ObjectID);

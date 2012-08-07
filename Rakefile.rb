@@ -30,7 +30,7 @@ require 'rake-settings.rb'
 
 puts cyan("Nuget Details #{$nuget_publish_version }, #{$nuget_publish_version_id} ")	
 msbuild_settings = {
-  :properties => {:configuration => :release},
+  :properties => {:configuration => :debug},
   :targets => [:clean, :rebuild],
   :verbosity => :quiet,
   #:use => :net35  ;uncomment to use .net 3.5 - default is 4.0
