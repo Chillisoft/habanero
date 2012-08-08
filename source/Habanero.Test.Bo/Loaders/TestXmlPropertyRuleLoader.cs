@@ -439,6 +439,7 @@ namespace Habanero.Test.BO.Loaders
     }
 
 // ReSharper disable UnusedMember.Global
+// This is loaded via the XmLPropertyRuleLoader
     public class MyRule : PropRuleBase
 
     {
@@ -467,7 +468,7 @@ namespace Habanero.Test.BO.Loaders
         {
             get
             {
-                List<string> parameters = new List<string>();
+                var parameters = new List<string>();
                 parameters.Add("bob");
                 return parameters;
             }
