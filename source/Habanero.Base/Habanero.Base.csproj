@@ -167,6 +167,8 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Exceptions\InvalidDefinitionException.cs" />
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />
+    <Compile Include="HabaneroBackgroundWorker.cs" />
+    <Compile Include="IActionDispatcher.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="Encryption\IHasher.cs" />
