@@ -1843,7 +1843,7 @@ namespace Habanero.BO
         /// </summary>
         public virtual void CancelEdits()
         {
-            foreach (TBusinessObject bo in this.Clone())
+            foreach (TBusinessObject bo in this.ToArray())
             {
                 bo.CancelEdits();
             }

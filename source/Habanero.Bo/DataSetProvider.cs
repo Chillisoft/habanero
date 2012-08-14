@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
@@ -122,7 +123,8 @@ namespace Habanero.BO
             {
                 AddColumn(uiProperty, classDef);
             }
-            foreach (BusinessObject businessObject in _collection.Clone())
+            var copiedBoCollection = new List<BusinessObject>( (IEnumerable<BusinessObject>) _collection);
+            foreach (BusinessObject businessObject in copiedBoCollection)
             {
                 LoadBusinessObject(businessObject);
             }
