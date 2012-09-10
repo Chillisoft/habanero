@@ -33,7 +33,7 @@ namespace Habanero.Base
         ///<summary>
         /// Constructor
         ///</summary>
-        ///<param name="rsa"></param>
+        ///<param name="keyContainerName"></param>
         public RSAPasswordCrypter(string keyContainerName)
         {
             _keyContainerName = keyContainerName;

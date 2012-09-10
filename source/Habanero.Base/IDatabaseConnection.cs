@@ -16,6 +16,8 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+
+using System;
 using System.Data;
 
 namespace Habanero.Base
@@ -24,7 +26,7 @@ namespace Habanero.Base
     /// An interface to model a class that manages a database connection 
     /// and executes sql commands
     /// </summary>
-    public interface IDatabaseConnection
+    public interface IDatabaseConnection: IDisposable
     {
         /// <summary>
         /// Gets and sets the database connection string

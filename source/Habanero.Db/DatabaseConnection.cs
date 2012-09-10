@@ -81,7 +81,7 @@ namespace Habanero.DB
         /// </summary>
         protected DatabaseConnection()
         {
-            _connections = new List<IDbConnection>(5);
+            _connections = new List<IDbConnection>(2);
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
 
@@ -927,6 +927,16 @@ namespace Habanero.DB
             throw new NotImplementedException
                 ("GetLastAutoIncrementingID is not implemented on DatabaseConnection of type " + _className
                  + " in assembly " + _assemblyName);
+        }
+
+        public void Dispose()
+        {
+            foreach (var dbConnection in _connections)
+            {
+                if (dbConnection == null) continue;
+                if (dbConnection.State == ConnectionState.Open) dbConnection.Close();
+                dbConnection.Dispose();
+            }
         }
     }
 }
