@@ -81,7 +81,7 @@ namespace Habanero.DB
         /// </summary>
         protected DatabaseConnection()
         {
-            _connections = new List<IDbConnection>(2);
+            _connections = new List<IDbConnection>(1);
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
 
@@ -200,7 +200,7 @@ namespace Habanero.DB
                         //log.Warn("Error closing and disposing connection", ex);
                     }
                 }
-                _connections = new List<IDbConnection>(5);
+                _connections = new List<IDbConnection>(1);
                 _connectString = value;
             }
         }
