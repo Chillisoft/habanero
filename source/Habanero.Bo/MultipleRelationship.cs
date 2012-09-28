@@ -412,11 +412,14 @@ namespace Habanero.BO
             IBusinessObjectCollection collection = this.BusinessObjectCollection;
             int noRelatedObjects = collection.Count;
             if (noRelatedObjects <= 0) return true;
-            message = string.Format(
-                    "You cannot delete {0} identified by {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
-                    this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), this._owningBo.ToString(),
-                    noRelatedObjects,
-                    this.RelationshipName);
+            if (!String.IsNullOrEmpty(this._relDef.PreventDeleteMessage))
+                message = String.Format(this._relDef.PreventDeleteMessage, this._owningBo.ToString());
+            else
+                message = string.Format(
+                        "You cannot delete {0} identified by {1} or {2} since it is related to {3} Business Objects via the {4} relationship",
+                        this._owningBo.ClassDef.ClassName, this._owningBo.ID.AsString_CurrentValue(), this._owningBo.ToString(),
+                        noRelatedObjects,
+                        this.RelationshipName);
             return false;
         }
     }

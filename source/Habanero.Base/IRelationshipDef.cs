@@ -167,6 +167,14 @@ namespace Habanero.Base
         DeleteParentAction DeleteParentAction { get; }
 
         /// <summary>
+        /// Custom string to use when throwing an exception preventing deletion of an object
+        /// This is meant to be supplied for friendlier user interaction. You may put the placeholder
+        /// {0} into your custom message to have the .ToString() value of the BusinessObject placed
+        /// into your custom message.
+        /// </summary>
+        string PreventDeleteMessage { get; set;  }
+
+        /// <summary>
         /// Provides specific instructions with regards to inserting a new related
         /// Business object.  See the <see cref="InsertParentAction"/> enumeration for more detail.
         /// </summary>

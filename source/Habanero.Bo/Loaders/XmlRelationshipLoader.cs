@@ -38,6 +38,7 @@ namespace Habanero.BO.Loaders
         private IRelKeyDef _relKeyDef;
         private string _name;
         private string _type;
+        private string _preventDeleteMessage;
         private bool _keepReferenceToRelatedObject;
         private string _orderBy;
         private DeleteParentAction _deleteParentAction;
@@ -113,6 +114,7 @@ namespace Habanero.BO.Loaders
                      _deleteParentAction, _insertParentAction, _relationshipType, _timeout);
                 relationshipDef.ReverseRelationshipName = _reverseRelationshipName;
                 relationshipDef.RelatedObjectTypeParameter = _typeParameter;
+                relationshipDef.PreventDeleteMessage = _preventDeleteMessage;
                 return relationshipDef;
             }
             throw new InvalidXmlDefinitionException
@@ -141,6 +143,7 @@ namespace Habanero.BO.Loaders
             _relatedAssemblyName = _reader.GetAttribute("relatedAssembly");
             _name = _reader.GetAttribute("name");
             _type = _reader.GetAttribute("type");
+            _preventDeleteMessage = _reader.GetAttribute("preventDeleteMessage");
 
             string relationshipTypeString = _reader.GetAttribute("relationshipType");
 

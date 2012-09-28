@@ -245,6 +245,8 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public DeleteParentAction DeleteParentAction { get; set; }
 
+        public string PreventDeleteMessage { get; set; }
+
         ///<summary>
         /// Provides the specific instruction when a new object is added to an association relationship.
         /// See <see cref="InsertParentAction"/> enumeration for more details

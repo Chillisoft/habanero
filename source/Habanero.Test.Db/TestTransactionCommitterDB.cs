@@ -976,6 +976,35 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        public void TestPreventDelete_WhenPreventDeleteMessageIsSpecified_OuterExceptionMessageIsSpecifiedPreventDeleteMessage()
+        {
+            //---------------Set up test pack-------------------
+            AddressTestBO address;
+            ContactPersonTestBO contactPersonTestBO =
+                ContactPersonTestBO.CreateContactPersonWithOneAddress_PreventDelete(out address);
+//            contactPersonTestBO.MarkForDelete();
+            var customMessageStart = TestUtil.GetRandomString(30);
+            var specialString = customMessageStart + " :: {0}";
+            var expectedMessage = String.Format(specialString, contactPersonTestBO.ToString());
+            contactPersonTestBO.Relationships["Addresses"].RelationshipDef.PreventDeleteMessage = specialString;
+            ReflectionUtilities.SetPropertyValue(contactPersonTestBO.Status, "IsDeleted", true);
+
+            TransactionCommitterDB committerDB = new TransactionCommitterDB(DatabaseConnection.CurrentConnection);
+            committerDB.AddBusinessObject(contactPersonTestBO);
+            //---------------Execute Test ----------------------
+            try
+            {
+                committerDB.CommitTransaction();
+                Assert.Fail("Expected to throw an BusObjPersistException");
+            }
+                //---------------Test Result -----------------------
+            catch (BusObjPersistException ex)
+            {
+                Assert.AreEqual(expectedMessage, ex.Message);
+            }
+        }
+
+        [Test]
         public void TestPreventDelete_ThreeLevels()
         {
             //---------------Set up test pack-------------------
@@ -1003,7 +1032,8 @@ namespace Habanero.Test.DB
                 //---------------Test Result -----------------------
             catch (BusObjDeleteException ex)
             {
-                StringAssert.Contains("as the IsDeletable is set to false for the object", ex.Message);
+                Assert.IsNotNull(ex.InnerException, "BusObjDeleteException should have an inner exception with more information");
+                StringAssert.Contains("as the IsDeletable is set to false for the object", ex.InnerException.Message);
                 StringAssert.Contains("since it is related to 1 Business Objects via the Addresses relationship", ex.Message);
             }
             finally

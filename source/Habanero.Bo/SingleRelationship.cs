@@ -289,7 +289,10 @@ namespace Habanero.BO
             IBusinessObject relatedObject = this.GetRelatedObject();
             if (relatedObject != null && !relatedObject.Status.IsDeleted)
             {
-                message =
+                if (!String.IsNullOrEmpty(this._relDef.PreventDeleteMessage))
+                    message = this._relDef.PreventDeleteMessage.Replace("$(object)", this._owningBo.ToString());
+                else
+                    message =
                     string.Format(
                         "You cannot delete {0} identified by {1} or {2} since it is related to a Business Object via the {3} relationship",
                         this.OwningBO.ClassDef.ClassName, this.OwningBO.ID.AsString_CurrentValue(), this.OwningBO.ToString(),

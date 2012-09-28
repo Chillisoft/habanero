@@ -403,7 +403,9 @@
     <Content Include="Loaders\DTDs\primaryKey.dtd" />
     <Content Include="Loaders\DTDs\Prop.dtd" />
     <Content Include="Loaders\DTDs\property.dtd" />
-    <Content Include="Loaders\DTDs\relationship.dtd" />
+    <Content Include="Loaders\DTDs\relationship.dtd">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Loaders\DTDs\simpleLookupList.dtd" />
     <Content Include="Loaders\DTDs\superClass.dtd" />
     <Content Include="Loaders\DTDs\tab.dtd" />

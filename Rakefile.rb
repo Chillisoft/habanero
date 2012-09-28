@@ -74,6 +74,8 @@ desc "Cleans the bin folder"
 task :clean do
 	puts cyan("Cleaning bin folder")
 	FileUtils.rm_rf 'bin'
+  FileSystem.ensure_dir_exists 'bin/Debug'
+  FileSystem.ensure_dir_exists 'bin/Release'
 end
 
 desc "Builds the solution with msbuild"
@@ -170,4 +172,3 @@ pushnugetpackages :publishTestDBNugetPackage do |package|
   package.Version = $nuget_publish_version_id
   package.Description = "Habanero.Test.DB"
 end
-
