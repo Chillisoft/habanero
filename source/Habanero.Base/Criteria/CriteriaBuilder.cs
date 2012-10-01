@@ -28,6 +28,9 @@ using System.Text;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Assistant class to generate criteria for database queries
+    /// </summary>
     public class CriteriaBuilder
     {
         private readonly Expression _expression;

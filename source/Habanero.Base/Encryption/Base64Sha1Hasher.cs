@@ -28,6 +28,11 @@ namespace Habanero.Base
     ///</summary>
     public class Base64Sha1Hasher : IHasher
     {
+        /// <summary>
+        /// Hashes a string to its base64 representation
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public string HashString(string value)
         {
             if (value == null) value = "";

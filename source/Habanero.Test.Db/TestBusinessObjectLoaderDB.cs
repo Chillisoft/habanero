@@ -83,7 +83,7 @@ namespace Habanero.Test.DB
         }
 
         [TearDown]
-        public void TearDownTest()
+        public override void TearDownTest()
         {
             //runs every time any testmethod is complete
             //base.TearDownTest();

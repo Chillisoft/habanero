@@ -101,7 +101,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.In;
             var values = new [] { 1, 5, 10 };
             var expectedCriteria = new Criteria("TestInt", Criteria.ComparisonOp.In, values); 
             //---------------Execute Test ----------------------
@@ -322,7 +321,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.GreaterThan, 5),
@@ -341,7 +339,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.GreaterThan, 5),
@@ -360,7 +357,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.LessThan, 5),
@@ -379,7 +375,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     Criteria.Create<MyBO, int>(bo => bo.TestInt, Criteria.ComparisonOp.LessThan, 5),
@@ -398,7 +393,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     new Criteria(
@@ -509,7 +503,6 @@ namespace Habanero.Test.BO.CriteriaManager
         {
             //---------------Set up test pack-------------------
             MyBO.LoadDefaultClassDef();
-            var op = Criteria.ComparisonOp.GreaterThan;
             var expectedCriteria =
                 new Criteria(
                     null, Criteria.LogicalOp.Not, new Criteria(

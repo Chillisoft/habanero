@@ -23,6 +23,9 @@ using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {
+    /// <summary>
+    /// Data mapper for boolean types
+    /// </summary>
     public class BoolDataMapper : DataMapper
     {
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
