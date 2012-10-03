@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -101,13 +102,169 @@ namespace Habanero.Test.DB
         }
         
         [Test]
-        public void TestMigrate() {
+        public void TestMigrate()
+        {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new [] { new SqlStatement(itsConn, "migration2;") }});
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new[] { new SqlStatement(itsConn, "migration2;") } });
             itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
             itsConnMock.Verify();
             itsSettingsMock.Verify();
+        }
+
+        [Test]
+        public void Event_WhenMigrationStartsAndMigrationIsRequired_OnMigrationStartedEventRaised()
+        {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            DBMigrator eventMigrator = null;
+            DBMigratorEventArgs eventArgs = null;
+            itsDbMigrator.OnDbMigrationStarted += (s, e) =>
+                {
+                    eventMigrator = s as DBMigrator;
+                    eventArgs = e;
+                };
+            
+            //---------------Assert Precondition----------------
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+
+            //---------------Execute Test ----------------------
+            itsDbMigrator.MigrateTo(2);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(eventMigrator);
+            Assert.AreEqual(itsDbMigrator, eventMigrator);
+            Assert.IsNotNull(eventArgs);
+            Assert.AreEqual(2, eventArgs.CurrentStep);
+        }
+
+        [Test]
+        public void Event_WhenMigrationStartsAndNoMigrationRequired_OnMigrationStartedEventNotRaised()
+        {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            DBMigrator eventMigrator = null;
+            DBMigratorEventArgs eventArgs = null;
+            var onDbMigrationStartedEventCalled = false;
+            itsDbMigrator.OnDbMigrationStarted += (s, e) =>
+                {
+                    onDbMigrationStartedEventCalled = true;
+                    eventMigrator = s as DBMigrator;
+                    eventArgs = e;
+                };
+            
+            //---------------Assert Precondition----------------
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+            //---------------Execute Test ----------------------
+            itsDbMigrator.MigrateTo(2);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(onDbMigrationStartedEventCalled);
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+        }
+        
+        [Test]
+        public void Event_WhenMigrationCompletesAndMigrationIsRequired_OnMigrationCompletedEventRaised()
+        {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            DBMigrator eventMigrator = null;
+            DBMigratorEventArgs eventArgs = null;
+            itsDbMigrator.OnDbMigrationCompleted += (s, e) =>
+                {
+                    eventMigrator = s as DBMigrator;
+                    eventArgs = e;
+                };
+            
+            //---------------Assert Precondition----------------
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+
+            //---------------Execute Test ----------------------
+            itsDbMigrator.MigrateTo(2);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(eventMigrator);
+            Assert.AreEqual(itsDbMigrator, eventMigrator);
+            Assert.IsNotNull(eventArgs);
+            Assert.AreEqual(2, eventArgs.CurrentStep);
+        }
+
+        [Test]
+        public void Event_WhenMigrationCompletesAndNoMigrationRequired_OnMigrationCompletedEventNotRaised()
+        {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            DBMigrator eventMigrator = null;
+            DBMigratorEventArgs eventArgs = null;
+            var onDbMigrationCompletedCalled = false;
+            itsDbMigrator.OnDbMigrationCompleted += (s, e) =>
+                {
+                    onDbMigrationCompletedCalled = true;
+                    eventMigrator = s as DBMigrator;
+                    eventArgs = e;
+                };
+            
+            //---------------Assert Precondition----------------
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+            Assert.IsFalse(onDbMigrationCompletedCalled);
+            //---------------Execute Test ----------------------
+            itsDbMigrator.MigrateTo(2);
+
+            //---------------Test Result -----------------------
+            Assert.IsFalse(onDbMigrationCompletedCalled);
+            Assert.IsNull(eventMigrator);
+            Assert.IsNull(eventArgs);
+        }
+
+        [Test]
+        public void Event_WhenMigratorRunsStep_OnMigrationProgressEventRaised()
+        {
+            //---------------Set up test pack-------------------
+            itsDbMigrator.SetSettingsStorer(_itsSettings);
+            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
+            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
+
+            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            statements = new [] {new SqlStatement(itsConn, "migration3;")};
+            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+
+            var progressValues = new List<decimal>();
+            itsDbMigrator.OnDbMigrationProgress += (s, e) =>
+                {
+                    progressValues.Add(e.PercentageComplete);
+                };
+            
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(0, progressValues.Count());
+            //---------------Execute Test ----------------------
+            itsDbMigrator.MigrateTo(3);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(2, progressValues.Count());
+            Assert.AreEqual(50, progressValues[0]);
+            Assert.AreEqual(100, progressValues[1]);
         }
         
         [Test]

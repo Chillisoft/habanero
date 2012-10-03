@@ -4,10 +4,30 @@ using System.Threading;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Helper class to facilitate asynchronous workers on pre-dotnet-4.5 machines,
+    /// using the native system threading model and an abstraction for synchronisation
+    /// with the UI thread for user feedback on completion and exception
+    /// </summary>
     public class HabaneroBackgroundWorker
     {
+        /// <summary>
+        /// The delegate method type to be called to do the long-running background work
+        /// </summary>
+        /// <param name="data">ConcurrentDictionary containing data which will be passed through 
+        ///                     all phases of the worker (background, success, abort, exception)</param>
+        /// <returns></returns>
         public delegate bool BackgroundWorkerMethodDelegate(ConcurrentDictionary<string, object> data);
+        /// <summary>
+        /// The delegate method type to be called to do UI feedback when asynchronous code completes or aborts.
+        /// </summary>
+        /// <param name="data">ConcurrentDictionary containing data which will be passed through 
+        ///                     all phases of the worker (background, success, abort, exception)</param>
         public delegate void UIWorkerMethodDelegate(ConcurrentDictionary<string, object> data);
+        /// <summary>
+        /// The delegate method type to be called when the background thread hits an exception
+        /// </summary>
+        /// <param name="ex">Exception hit in the background thread</param>
         public delegate void BackgroundWorkerExceptionHandlerDelegate(Exception ex);
 
         public IActionDispatcher ActionDispatcher { get; protected set; }

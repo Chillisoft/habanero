@@ -22,8 +22,8 @@ if (bs.index("branches") == nil)
 	$nuget_publish_version_id = nuget_version_id
 else
 
-	$nuget_publish_version = 'v2.6-13_02_2012'
-	$nuget_publish_version_id = '2.6'
+	$nuget_publish_version = 'v3.0'
+	$nuget_publish_version_id = '3.0'
 end		
 #------------------------build settings--------------------------
 require 'rake-settings.rb'

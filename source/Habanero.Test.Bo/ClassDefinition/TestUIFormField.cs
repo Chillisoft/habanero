@@ -83,7 +83,8 @@ namespace Habanero.Test.BO.ClassDefinition
             uiFormField.SetClassDef(classDef);
             //---------------Assert Precondition----------------
             Assert.IsNotNull(classDef.GetPropDef(uiFormField.PropertyName));
-            Assert.AreSame(classDef, uiFormField.GetClassDef());
+            //Assert.AreSame(classDef, uiFormField.GetClassDef());
+            Assert.AreSame(classDef, uiFormField.ClassDef);
             Assert.IsNull(uiFormField.Label);
             //---------------Execute Test ----------------------
             var actualLabel = uiFormField.GetLabel();
@@ -1018,6 +1019,8 @@ namespace Habanero.Test.BO.ClassDefinition
             {
                 _classDef = classDef;
             }
+            // suppress the warning that this overrides an obsolete member
+#pragma warning disable 672
             public override IClassDef GetClassDef()
             {
                 return _classDef;

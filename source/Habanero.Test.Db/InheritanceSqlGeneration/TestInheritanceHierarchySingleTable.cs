@@ -78,10 +78,6 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
 
         #endregion
 
-        private IClassDef _classDefCircleNoPrimaryKey;
-        private IClassDef _classDefShape;
-        private IClassDef _classDefFilledCircleNoPrimaryKey;
-
         protected override void SetupInheritanceSpecifics()
         {
             ClassDef.ClassDefs.Clear();

@@ -39,6 +39,12 @@ namespace Habanero.DB
     /// </summary>
     public class DBMigrator
     {
+        // events to be raised by DBMigrator
+        public delegate void DBMigrationEvent(DBMigrator sender, DBMigratorEventArgs args);
+        public DBMigrationEvent OnDbMigrationStarted { get; set; }
+        public DBMigrationEvent OnDbMigrationProgress { get; set; }
+        public DBMigrationEvent OnDbMigrationCompleted { get; set; }
+        public DBMigrationEvent OnDbMigrationException { get; set; }
         /// <summary>
         /// The string for the version of the Database.
         /// </summary>
@@ -116,22 +122,39 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="startAfterVersion">The start version (exclusive)</param>
         /// <param name="endVersion">The end version (inclusive)</param>
-        public void Migrate(int startAfterVersion, int endVersion) {
+        public void Migrate(int startAfterVersion, int endVersion)
+        {
             //Each migration should be done separately because changes to DDL does not support rollback.
-            for (int i = startAfterVersion + 1; i <= endVersion; i++)
+            var stepsToRun = endVersion - startAfterVersion;
+            startAfterVersion++;
+            if (stepsToRun > 0 && this.OnDbMigrationStarted != null)
+                this.OnDbMigrationStarted(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)startAfterVersion, (uint)endVersion));
+            for (int i = startAfterVersion; i <= endVersion; i++)
             {
-                _connection.ExecuteSql(GetMigrationSql(i - 1, i).ToArray());
+                try
+                {
+                    _connection.ExecuteSql(GetMigrationSql(i - 1, i).ToArray());
+                }
+                catch (Exception ex)
+                {
+                    if (this.OnDbMigrationException != null)
+                        this.OnDbMigrationException(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)i, (uint)endVersion));
+                    throw ex;
+                }
                 SetCurrentVersion(i);
+                if (this.OnDbMigrationProgress != null)
+                    this.OnDbMigrationProgress(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)i, (uint)endVersion));
             }
-            //_connection.ExecuteSql(GetMigrationSql(startAfterVersion, endVersion));
-            //SetCurrentVersion(endVersion);
+            if (stepsToRun > 0 && this.OnDbMigrationCompleted != null)
+                this.OnDbMigrationCompleted(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)endVersion, (uint)endVersion));
         }
 
         /// <summary>
         /// Sets this instance's settings storer to that specified
         /// </summary>
         /// <param name="storer">The settings storer</param>
-        public void SetSettingsStorer(ISettings storer) {
+        public void SetSettingsStorer(ISettings storer)
+        {
             _settings = storer;
         }
 
@@ -139,8 +162,9 @@ namespace Habanero.DB
         /// Sets the current version number to that specified
         /// </summary>
         /// <param name="version">The version number to set to</param>
-        public void SetCurrentVersion(int version) {
-            _settings.SetString(DatabaseVersionSetting, version.ToString( ));
+        public void SetCurrentVersion(int version)
+        {
+            _settings.SetString(DatabaseVersionSetting, version.ToString());
         }
 
         /// <summary>
@@ -173,7 +197,6 @@ namespace Habanero.DB
         /// </summary>
         /// <param name="version">The version number to migrate to (inclusive)</param>
         public void MigrateTo(int version) {
-
             Migrate(CurrentVersion(), version);
         }
 
@@ -197,8 +220,9 @@ namespace Habanero.DB
         /// specific control.
         /// </summary>
         public void MigrateToLatestVersion() {
-            if (CurrentVersion() < LatestVersion()) {
-                MigrateTo(LatestVersion() );
+            var latestVersion = this.LatestVersion();
+            if (CurrentVersion() < latestVersion) {
+                MigrateTo(latestVersion);
             }
         }
 

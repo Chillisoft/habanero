@@ -27,6 +27,9 @@ namespace Habanero.Base
     ///</summary>
     public class NullSecurityController : ISecurityController
     {
+        /// <summary>
+        /// Logon of the current user
+        /// </summary>
         public string CurrentUserName
         {
             get { return Environment.UserName; }

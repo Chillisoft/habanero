@@ -26,6 +26,9 @@ using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {
+    /// <summary>
+    /// Mapper to map image types between bytes, base64 string and Image
+    /// </summary>
     public class ImageDataMapper : DataMapper
     {
         public override bool TryParsePropValue(object valueToParse, out object returnValue)

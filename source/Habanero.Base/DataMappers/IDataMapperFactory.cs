@@ -22,9 +22,22 @@ using System;
 
 namespace Habanero.Base.DataMappers
 {
+    /// <summary>
+    /// Interface to be used for a data mapper factory
+    /// </summary>
     public interface IDataMapperFactory
     {
+        /// <summary>
+        /// Gets the data mapper for a type
+        /// </summary>
+        /// <param name="targetType">type to retrieve data mapper for</param>
+        /// <returns></returns>
         IDataMapper GetDataMapper(Type targetType);
+        /// <summary>
+        /// Sets the data mapper for a type
+        /// </summary>
+        /// <param name="targetType">Type to map for</param>
+        /// <param name="dataMapper">Mapper to use</param>
         void SetDataMapper(Type targetType, IDataMapper dataMapper);
     }
 }

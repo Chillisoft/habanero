@@ -24,6 +24,9 @@ using System.Linq;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Database result set container
+    /// </summary>
     public class ResultSet
     {
         private readonly List<Row> _rows;
