@@ -152,6 +152,7 @@
     <Compile Include="DatabaseConnectionPostgreSql.cs" />
     <Compile Include="DatabaseConnectionSQLite.cs" />
     <Compile Include="DatabaseLookupList.cs" />
+    <Compile Include="DBMigratorEventArgs.cs" />
     <Compile Include="DeleteStatementGenerator.cs" />
     <Compile Include="IDatabaseConnectionCreator.cs" />
     <Compile Include="InsertSqlStatement.cs" />
