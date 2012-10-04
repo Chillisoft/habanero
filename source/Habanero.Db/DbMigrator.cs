@@ -131,7 +131,16 @@ namespace Habanero.DB
                 this.OnDbMigrationStarted(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)startAfterVersion, (uint)endVersion));
             for (int i = startAfterVersion; i <= endVersion; i++)
             {
-                _connection.ExecuteSql(GetMigrationSql(i - 1, i).ToArray());
+                try
+                {
+                    _connection.ExecuteSql(GetMigrationSql(i - 1, i).ToArray());
+                }
+                catch (Exception ex)
+                {
+                    if (this.OnDbMigrationException != null)
+                        this.OnDbMigrationException(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)i, (uint)endVersion));
+                    throw ex;
+                }
                 SetCurrentVersion(i);
                 if (this.OnDbMigrationProgress != null)
                     this.OnDbMigrationProgress(this, new DBMigratorEventArgs((uint)startAfterVersion, (uint)i, (uint)endVersion));
