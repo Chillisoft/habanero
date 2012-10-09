@@ -221,18 +221,23 @@ namespace Habanero.BO
 
         private TBusinessObject GetRelatedObject(bool isInternalAdd)
         {
+            Criteria newKeyCriteria = RelKey.Criteria;
             if (!HasRelatedObject())
             {
-                _relatedBo = null;
-                return null;
+                if (_relatedBo == null) return null;
+                if (!newKeyCriteria.IsMatch(_relatedBo, false))
+                {
+                    SetRelatedBoReferenceInternal(null);
+                }
+                return _relatedBo;
             }
             if ((RelatedBoForeignKeyHasChanged() || _relatedBo == null))
             {
-                _relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
+                var relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
+                SetRelatedBoReferenceInternal(relatedBo);
                 AddToReverseRelationship(_relatedBo, isInternalAdd);
                 if (_relatedBo != null) return _relatedBo;
             }
-			Criteria newKeyCriteria = RelKey.Criteria;
             if (_relatedBo != null && newKeyCriteria.IsMatch(_relatedBo, false))
             {
                 return _relatedBo;
@@ -243,15 +248,16 @@ namespace Habanero.BO
             {
                 if (HasRelatedObject())
                 {
-                    _relatedBo =
+                    var relatedBo =
                         (TBusinessObject)
                         BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship) this);
                         // use non-generic one because of type parameters
+                    SetRelatedBoReferenceInternal(relatedBo);
                     _storedKeyCriteria = newKeyCriteria;
                 }
                 else
                 {
-                    _relatedBo = null;
+                    SetRelatedBoReferenceInternal(null);
                     _storedKeyCriteria = null;
                 }
             }
@@ -262,6 +268,41 @@ namespace Habanero.BO
                 return _relatedBo;
             }
             return null;
+        }
+
+        private void SetRelatedBoReferenceInternal(TBusinessObject relatedBo)
+        {
+            UnRegisterForRelatedKeyPropChangeEvents();
+            _relatedBo = relatedBo;
+            RegisterForRelatedKeyPropChangeEvents();
+        }
+
+        private void RegisterForRelatedKeyPropChangeEvents()
+        {
+            if (!OwningBOHasForeignKey) return;
+            ForEachRelatedBoKeyProp(boProp => boProp.Updated += RelatedBoKeyPropUpdated);
+        }
+
+        private void UnRegisterForRelatedKeyPropChangeEvents()
+        {
+            if (!OwningBOHasForeignKey) return;
+            ForEachRelatedBoKeyProp(boProp => boProp.Updated -= RelatedBoKeyPropUpdated);
+        }
+
+        private void ForEachRelatedBoKeyProp(Action<IBOProp> action)
+        {
+            if (action == null) return;
+            if (_relatedBo == null) return;
+            foreach (IRelProp prop in this.RelKey)
+            {
+                var boProp = _relatedBo.Props[prop.RelatedClassPropName];
+                action(boProp);
+            }
+        }
+
+        private void RelatedBoKeyPropUpdated(object sender, BOPropEventArgs boPropEventArgs)
+        {
+            UpdateForeignKeyAndStoredRelationshipExpression();
         }
 
         private TBusinessObject GetRelatedBusinessObjectFromBusinessObjectManager()
@@ -366,11 +407,11 @@ namespace Habanero.BO
 
             RemoveFromReverseRelationship(_relatedBo);
 
-            _relatedBo = relatedObject;
+            SetRelatedBoReferenceInternal(relatedObject);
 
             AddToReverseRelationship(relatedObject, isInternalAdd);
 
-            UpdatedForeignKeyAndStoredRelationshipExpression();
+            UpdateForeignKeyAndStoredRelationshipExpression();
 
             FireUpdatedEvent();
         }
@@ -391,8 +432,8 @@ namespace Habanero.BO
             {
                 reverseRelationship.RelationshipDef.CheckCanAddChild(this.OwningBO);
             }
-            
-            _relatedBo = relatedObject;
+
+            SetRelatedBoReferenceInternal(relatedObject);
 
             AddToMultipleReverseRelationship(reverseRelationship, isInternalAdd);
             AddToSingleReverseRelationship(reverseRelationship);
@@ -432,8 +473,9 @@ namespace Habanero.BO
             {
                 reverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
 
-                _relatedBo = null;
-                UpdatedForeignKeyAndStoredRelationshipExpression();
+                SetRelatedBoReferenceInternal(null);
+
+                UpdateForeignKeyAndStoredRelationshipExpression();
 
                 RemoveFromMultipleReverseRelationship(reverseRelationship);
                 RemoveFromSingleReverseRelationship(reverseRelationship);
@@ -466,7 +508,7 @@ namespace Habanero.BO
             if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
         }
 
-        private void UpdatedForeignKeyAndStoredRelationshipExpression()
+        private void UpdateForeignKeyAndStoredRelationshipExpression()
         {
         	var relKey = RelKey;
         	if (this.OwningBOHasForeignKey)

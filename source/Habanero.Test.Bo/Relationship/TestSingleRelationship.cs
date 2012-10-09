@@ -39,6 +39,7 @@ namespace Habanero.Test.BO.Relationship
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            BusinessObjectManager.Instance.ClearLoadedObjects();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
@@ -116,7 +117,7 @@ namespace Habanero.Test.BO.Relationship
 
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = null;
-            alternatecontactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            CopyOrganisationID(organisationTestBO, alternatecontactPerson);
             
             //---------------Test Result -----------------------
             Assert.AreSame(organisationTestBO, alternatecontactPerson.Organisation);
@@ -124,7 +125,7 @@ namespace Habanero.Test.BO.Relationship
         }
         
         [Test]
-        public void Test_SetByID_InBOManager()
+        public virtual void Test_SetByID_InBOManager()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
@@ -134,7 +135,7 @@ namespace Habanero.Test.BO.Relationship
             contactPerson.Surname = TestUtil.GetRandomString();
             contactPerson.FirstName = TestUtil.GetRandomString();
             //---------------Assert preconditions --------------
-            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(2);
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
             //---------------Test Result -----------------------
@@ -153,13 +154,18 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(contactPerson.Status.IsNew);
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(2);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
 
             //---------------Test Result -----------------------
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+        }
+
+        protected virtual void AssertBusinessObjectManagerCountIs(int expected)
+        {
+            Assert.AreEqual(expected, BORegistry.BusinessObjectManager.Count);
         }
 
         [Test]
@@ -179,14 +185,14 @@ namespace Habanero.Test.BO.Relationship
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNotNullOn(contactPerson);
             Assert.IsNotNull(contactPerson.Organisation);
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
         }
 
         [Test]
-        public void Test_SetbyObject_NotInBOManager_NotSaved()
+        public virtual void Test_SetbyObject_NotInBOManager_NotSaved()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
@@ -196,14 +202,14 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert preconditions---------------
             Assert.IsTrue(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNullOn(contactPerson);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(1);
             //---------------Execute Test ----------------------
             contactPerson.Organisation = organisationTestBO;
 
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNotNullOn(contactPerson);
             Assert.IsNotNull(contactPerson.Organisation);
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
@@ -218,102 +224,14 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert preconditions---------------
             Assert.IsFalse(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNullOn(contactPerson);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(2);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
-        }
-        [Test]
-        public void Test_SetCPbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
-            OrganisationTestBO.LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            //---------------Assert preconditions---------------
-            Assert.IsFalse(organisationTestBO.Status.IsNew);
-            Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
-            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
-            //---------------Execute Test ----------------------
-            organisationTestBO.ContactPerson = contactPerson;
-            //---------------Test Result -----------------------
-            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
-            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
-        }
-
-        [Test]
-        public void Test_SetOrgNullbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined_OwningBOHasForeignKey() 
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse();
-            OrganisationTestBO.LoadDefaultClassDef_WithNoContactPersonRelationship();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            contactPerson.Organisation = organisationTestBO;
-            //---------------Assert preconditions---------------
-            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
-            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
-            Assert.IsNotNull(contactPerson.ContactPersonID);
-            Assert.IsNotNull(organisationTestBO.OrganisationID);
-
-            //---------------Execute Test ----------------------
-            contactPerson.Organisation = null;
-            //---------------Test Result -----------------------
-            Assert.IsNull(contactPerson.Organisation);
-            Assert.IsNull(contactPerson.OrganisationID);
-            Assert.IsNotNull(contactPerson.ContactPersonID);
-            Assert.IsNotNull(organisationTestBO.OrganisationID);
-        }
-
-        [Test]
-        public void Test_SetOrgbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined_OwningBOHasForeignKey() 
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse();
-            OrganisationTestBO.LoadDefaultClassDef_WithNoContactPersonRelationship();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            //---------------Assert preconditions---------------
-            Assert.IsFalse(organisationTestBO.Status.IsNew);
-            Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
-            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
-            //---------------Execute Test ----------------------
-            contactPerson.Organisation = organisationTestBO;
-            //---------------Test Result -----------------------
-            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
-            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
-            Assert.IsNotNull(contactPerson.ContactPersonID);
-            Assert.IsNotNull(organisationTestBO.OrganisationID);
-        }
-
-        [Test]
-        public void Test_SetCPToNullbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
-            OrganisationTestBO.LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship();
-            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
-            organisationTestBO.ContactPerson = contactPerson;
-            //---------------Assert preconditions---------------
-            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
-            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
-            //---------------Execute Test ----------------------
-            organisationTestBO.ContactPerson = null;
-            //---------------Test Result -----------------------
-            Assert.IsNull(organisationTestBO.ContactPerson);
-            Assert.IsNull(contactPerson.OrganisationID);
         }
 
         [Test]
@@ -327,13 +245,13 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert preconditions---------------
             Assert.IsFalse(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNullOn(contactPerson);
             Assert.IsNull(contactPerson.Organisation);
             Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNotNullOn(contactPerson);
             Assert.IsNotNull(contactPerson.Organisation);
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
@@ -349,17 +267,51 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert preconditions---------------
             Assert.IsTrue(organisationTestBO.Status.IsNew);
             Assert.IsTrue(contactPerson.Status.IsNew);
-            Assert.IsNull(contactPerson.OrganisationID);
+            AssertOrganisationIDIsNullOn(contactPerson);
             Assert.IsNull(contactPerson.Organisation);
             Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
             organisationTestBO.ContactPerson = contactPerson;
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID);
+            AssertOrganisationIDPropsAreEqual(organisationTestBO, contactPerson);
             Assert.IsNotNull(contactPerson.Organisation);
             Assert.AreSame(organisationTestBO, contactPerson.Organisation);
             Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
         }
+
+        protected void AssertOrganisationIDPropsAreEqual(IBusinessObject expected, IBusinessObject actual)
+        {
+            Assert.AreEqual(GetOrganisationID(expected), GetOrganisationID(actual));
+        }
+
+        private void AssertOrganisationIDIsNotNullOn(IBusinessObject contactPerson)
+        {
+            Assert.IsNotNull(GetOrganisationID(contactPerson));
+        }
+
+        private void AssertOrganisationIDIsNullOn(IBusinessObject contactPerson)
+        {
+            Assert.IsNull(GetOrganisationID(contactPerson));
+        }
+
+
+        protected object GetOrganisationID(IBusinessObject businessObject)
+        {
+            if (businessObject == null) return null;
+            return businessObject.GetPropertyValue("OrganisationID");
+        }
+
+        protected void CopyOrganisationID(OrganisationTestBO fromBO, ContactPersonTestBO toBO)
+        {
+            SetOrganisationID(toBO, GetOrganisationID(fromBO));
+        }
+
+        protected void SetOrganisationID(IBusinessObject businessObject, object value)
+        {
+            if (businessObject == null) return;
+            businessObject.SetPropertyValue("OrganisationID", value);
+        }
+
         [Test]
         public void Test_SetParentNull_NewChild_BotRelationshipSetUpAsOwning()
         {
@@ -374,7 +326,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Assert Preconditon-----------------
             Assert.IsNull(organisation.ContactPerson);
             Assert.IsNull(contactPerson.Organisation);
-            Assert.IsNotNull(organisation.OrganisationID);
+            AssertOrganisationIDIsNotNullOn(organisation);
             //---------------Execute Test ----------------------
             try
             {
@@ -389,7 +341,7 @@ namespace Habanero.Test.BO.Relationship
             }
         }
         [Test]
-        public void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship_HasOwningForeighKeyFalse()
+        public virtual void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship_HasOwningForeighKeyFalse()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
@@ -402,8 +354,8 @@ namespace Habanero.Test.BO.Relationship
                     };
             //---------------Execute Test ----------------------
             contactPerson.OrganisationID = organisationTestBO.OrganisationID;
-            OrganisationTestBO returnedOrg = contactPerson.Organisation;
             //---------------Test Result -----------------------
+            OrganisationTestBO returnedOrg = contactPerson.Organisation;
             Assert.AreSame(organisationTestBO, returnedOrg);
         }
 
@@ -421,12 +373,12 @@ namespace Habanero.Test.BO.Relationship
                 FirstName = TestUtil.GetRandomString()
             };
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(1);
             Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
-            OrganisationTestBO returnedOrg = contactPerson.Organisation;
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Test Result -----------------------
+            OrganisationTestBO returnedOrg = contactPerson.Organisation;
             Assert.AreSame(organisationTestBO, returnedOrg);
         }
         [Test]
@@ -442,19 +394,19 @@ namespace Habanero.Test.BO.Relationship
                 Surname = TestUtil.GetRandomString(),
                 FirstName = TestUtil.GetRandomString()
             };
-            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            CopyOrganisationID(organisationTestBO, contactPerson);
             contactPerson.Save();
             OrganisationTestBO origOrganisation = contactPerson.Organisation;
             //---------------Assert Preconditions --------------
-            Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
+            AssertBusinessObjectManagerCountIs(1);
             Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             Assert.AreSame(organisationTestBO, origOrganisation);
             Assert.IsNotNull(origOrganisation.ContactPerson);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = null;
+            CopyOrganisationID(null, contactPerson);
+            //---------------Test Result -----------------------
             OrganisationTestBO returnedOrg = contactPerson.Organisation;
             ContactPersonTestBO returnedContactP = origOrganisation.ContactPerson;
-            //---------------Test Result -----------------------
             Assert.IsNull(contactPerson.OrganisationID);
             Assert.IsNull(returnedOrg);
             Assert.IsNull(returnedContactP);
@@ -473,18 +425,18 @@ namespace Habanero.Test.BO.Relationship
                 Surname = TestUtil.GetRandomString(),
                 FirstName = TestUtil.GetRandomString()
             };
-            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
+            CopyOrganisationID(organisationTestBO, contactPerson);
             OrganisationTestBO origOrganisation = contactPerson.Organisation;
             //---------------Assert Preconditions --------------
             Assert.AreEqual(1, BORegistry.BusinessObjectManager.Count);
             Assert.IsTrue(BORegistry.BusinessObjectManager.Contains(contactPerson));
             Assert.AreSame(organisationTestBO, origOrganisation);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
-            OrganisationTestBO returnedOrg = contactPerson.Organisation;
+            CopyOrganisationID(organisationTestBO2, contactPerson);
             //---------------Test Result -----------------------
-            Assert.IsNotNull(contactPerson.OrganisationID);
-            Assert.AreEqual(organisationTestBO2.OrganisationID,  returnedOrg.OrganisationID);
+            OrganisationTestBO returnedOrg = contactPerson.Organisation;
+            AssertOrganisationIDIsNotNullOn(contactPerson);
+            AssertOrganisationIDPropsAreEqual(organisationTestBO2, returnedOrg);
         }
 
         [Test]
@@ -499,19 +451,20 @@ namespace Habanero.Test.BO.Relationship
                         {
                             Surname = TestUtil.GetRandomString(),
                             FirstName = TestUtil.GetRandomString(),
-                            OrganisationID = organisationTestBO.OrganisationID
                         };
+
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Assert Preconditions --------------
             Assert.AreNotSame(contactPerson, organisationTestBO2.ContactPerson);
             Assert.AreNotSame(contactPerson.Organisation, organisationTestBO2);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
+            CopyOrganisationID(organisationTestBO2, contactPerson);
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson.Organisation, organisationTestBO2);
             Assert.AreSame(contactPerson, organisationTestBO2.ContactPerson);
         }
         [Test]
-        public void Test_SetByID_ToAnotherOrgID_InBOManager_UnSavedOrganisation()
+        public virtual void Test_SetByID_ToAnotherOrgID_InBOManager_UnSavedOrganisation()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
@@ -522,13 +475,13 @@ namespace Habanero.Test.BO.Relationship
                         {
                             Surname = TestUtil.GetRandomString(),
                             FirstName = TestUtil.GetRandomString(),
-                            OrganisationID = organisationTestBO.OrganisationID
                         };
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Assert Preconditions --------------
             Assert.AreNotSame(contactPerson, organisationTestBO2.ContactPerson);
             Assert.AreNotSame(contactPerson.Organisation, organisationTestBO2);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
+            CopyOrganisationID(organisationTestBO2, contactPerson);
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson.Organisation, organisationTestBO2);
             Assert.AreSame(contactPerson, organisationTestBO2.ContactPerson);
@@ -548,20 +501,20 @@ namespace Habanero.Test.BO.Relationship
                         {
                             Surname = TestUtil.GetRandomString(),
                             FirstName = TestUtil.GetRandomString(),
-                            OrganisationID = organisationTestBO.OrganisationID
                         };
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Assert Preconditions --------------
             Assert.AreNotSame(contactPerson.Organisation, organisationTestBO2);
             Assert.AreEqual(0, organisationTestBO2.ContactPeople.Count);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO2.OrganisationID;
+            CopyOrganisationID(organisationTestBO2, contactPerson);
             //---------------Test Result -----------------------
             Assert.AreSame(contactPerson.Organisation, organisationTestBO2);
             Assert.AreEqual(1, organisationTestBO2.ContactPeople.Count);
         }
 
         [Test]
-        public void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship()
+        public virtual void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship()
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
@@ -574,9 +527,9 @@ namespace Habanero.Test.BO.Relationship
                         };
             SetReverseRelationshipOwningBoHasFKFalse(contactPerson);
             //---------------Execute Test ----------------------
-            contactPerson.OrganisationID = organisationTestBO.OrganisationID;
-            OrganisationTestBO returnedOrg = contactPerson.Organisation;
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Test Result -----------------------
+            OrganisationTestBO returnedOrg = contactPerson.Organisation;
             Assert.AreSame(organisationTestBO, returnedOrg);
         }
 
@@ -671,7 +624,7 @@ namespace Habanero.Test.BO.Relationship
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisation);
             relationship.OwningBOHasForeignKey = true;
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateUnsavedContactPerson();
-            contactPerson.OrganisationID = organisation.OrganisationID;
+            CopyOrganisationID(organisation, contactPerson);
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
             try
@@ -702,13 +655,13 @@ namespace Habanero.Test.BO.Relationship
             bool updatedFired = false;
             OrganisationTestBO boReceivedByEvent = null;
             OrganisationTestBO currentOrganisationInEvent = null;
-            Guid? organisationidInEvent = null;
+            object organisationidInEvent = null;
 
             organisationRelationship.Updated += delegate(object sender, BOEventArgs<OrganisationTestBO> e)
                                                     {
                                                         updatedFired = true;
                                                         boReceivedByEvent = e.BusinessObject;
-                                                        organisationidInEvent = contactPersonTestBO.OrganisationID;
+                                                        organisationidInEvent = GetOrganisationID(contactPersonTestBO);
                                                         currentOrganisationInEvent = contactPersonTestBO.Organisation;
                                                     };
 
@@ -724,7 +677,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(updatedFired);
             Assert.AreSame(organisationTestBO, boReceivedByEvent);
             Assert.AreSame(organisationTestBO, currentOrganisationInEvent);
-            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
+            Assert.AreEqual(GetOrganisationID(organisationTestBO), organisationidInEvent);
         }
 
         [Test]
@@ -738,13 +691,13 @@ namespace Habanero.Test.BO.Relationship
             bool updatedFired = false;
             ContactPersonTestBO boReceivedByEvent = null;
             ContactPersonTestBO currentContactPersonInEvent = null;
-            Guid? organisationidInEvent = null;
+            object organisationidInEvent = null;
 
             contactPersonRelationship.Updated += delegate(object sender, BOEventArgs<ContactPersonTestBO> e)
                                                      {
                                                          updatedFired = true;
                                                          boReceivedByEvent = e.BusinessObject;
-                                                         organisationidInEvent = boReceivedByEvent.OrganisationID;
+                                                         organisationidInEvent = GetOrganisationID(boReceivedByEvent);
                                                          currentContactPersonInEvent = organisationTestBO.ContactPerson;
                                                      };
 
@@ -761,7 +714,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsTrue(updatedFired);
             Assert.AreSame(contactPersonTestBO, boReceivedByEvent);
             Assert.AreSame(contactPersonTestBO, currentContactPersonInEvent);
-            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
+            Assert.AreEqual(GetOrganisationID(organisationTestBO), organisationidInEvent);
         }
 
         [Test]
@@ -774,13 +727,13 @@ namespace Habanero.Test.BO.Relationship
                 contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation");
             bool updatedFired = false;
             OrganisationTestBO boReceivedByEvent = null;
-            Guid? organisationidInEvent = null;
+            object organisationidInEvent = null;
 
             organisationRelationship.Updated += delegate(object sender, BOEventArgs<OrganisationTestBO> e)
                                                     {
                                                         updatedFired = true;
                                                         boReceivedByEvent = e.BusinessObject;
-                                                        organisationidInEvent = contactPersonTestBO.OrganisationID;
+                                                        organisationidInEvent = GetOrganisationID(contactPersonTestBO);
                                                     };
 
             //---------------Assert Precondition----------------
@@ -794,7 +747,166 @@ namespace Habanero.Test.BO.Relationship
             //---------------Test Result -----------------------
             Assert.IsTrue(updatedFired);
             Assert.AreSame(organisationTestBO, boReceivedByEvent);
-            Assert.AreEqual(organisationTestBO.OrganisationID, organisationidInEvent);
+            Assert.AreEqual(GetOrganisationID(organisationTestBO), organisationidInEvent);
+        }
+
+        [Test]
+        public void Test_UpdateRelatedObject_ShouldRaiseEvent()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
+            OrganisationTestBO.LoadDefaultClassDef();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
+            bool eventCalled = false;
+            relationship.RelatedBusinessObjectChanged += delegate { eventCalled = true; };
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
+            Assert.IsFalse(eventCalled);
+            //---------------Execute Test ----------------------
+            contactPersonTestBO.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(eventCalled);
+            Assert.IsTrue(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
+        }
+
+
+        protected static SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
+        {
+            const RelationshipType relationshipType = RelationshipType.Association;
+            return GetRelationship(organisationTestBO, relationshipType);
+        }
+        private static SingleRelationship<OrganisationTestBO> GetAssociationRelationshipOrganisation(ContactPersonTestBO contactPersonTestBo)
+        {
+            const RelationshipType relationshipType = RelationshipType.Association;
+            SingleRelationship<OrganisationTestBO> relationship =
+                contactPersonTestBo.Relationships.GetSingle<OrganisationTestBO>("Organisation");
+            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            relationshipDef.RelationshipType = relationshipType;
+            return relationship;
+        }
+
+        private static SingleRelationship<ContactPersonTestBO> GetRelationship(OrganisationTestBO organisationTestBO, RelationshipType relationshipType)
+        {
+            SingleRelationship<ContactPersonTestBO> relationship =
+                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
+            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            relationshipDef.RelationshipType = relationshipType;
+            return relationship;
+        }
+        private static MultipleRelationship<ContactPersonTestBO> GetMultipleRelationship(OrganisationTestBO organisationTestBO, RelationshipType relationshipType)
+        {
+            MultipleRelationship<ContactPersonTestBO> relationship =
+                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
+            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
+            relationshipDef.RelationshipType = relationshipType;
+            return relationship;
+        }
+    }
+
+    [TestFixture]
+    public class TestSingleRelationship_NoReverseRelationshipDefined
+    {
+        [SetUp]
+        public virtual void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy(); //Ensures a new BOMan is created and used for each test
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
+        }
+
+        [Test]
+        public void Test_SetCPbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
+            OrganisationTestBO.LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            //---------------Assert preconditions---------------
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = contactPerson;
+            //---------------Test Result -----------------------
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
+        }
+
+        [Test]
+        public void Test_SetOrgNullbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined_OwningBOHasForeignKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithNoContactPersonRelationship();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Organisation = organisationTestBO;
+            //---------------Assert preconditions---------------
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
+            Assert.IsNotNull(contactPerson.ContactPersonID);
+            Assert.IsNotNull(organisationTestBO.OrganisationID);
+
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(contactPerson.Organisation);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.IsNotNull(contactPerson.ContactPersonID);
+            Assert.IsNotNull(organisationTestBO.OrganisationID);
+        }
+
+        [Test]
+        public void Test_SetOrgbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined_OwningBOHasForeignKey()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithNoContactPersonRelationship();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            //---------------Assert preconditions---------------
+            Assert.IsFalse(organisationTestBO.Status.IsNew);
+            Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsNull(contactPerson.OrganisationID);
+            Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
+            Assert.IsNotNull(contactPerson.ContactPersonID);
+            Assert.IsNotNull(organisationTestBO.OrganisationID);
+        }
+
+        [Test]
+        public void Test_SetCPToNullbyObject_InBOManager_AndSaved_NoReverseRelationshipDefined()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadClassDef_NoOrganisationRelationship();
+            OrganisationTestBO.LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship();
+            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            organisationTestBO.ContactPerson = contactPerson;
+            //---------------Assert preconditions---------------
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPerson.OrganisationID);
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = null;
+            //---------------Test Result -----------------------
+            Assert.IsNull(organisationTestBO.ContactPerson);
+            Assert.IsNull(contactPerson.OrganisationID);
         }
         [Test]
         public void Test_SetRelatedObjectNoReverseRelationship_Referenced()
@@ -814,7 +926,7 @@ namespace Habanero.Test.BO.Relationship
             contactPersonTestBO.Save();
             //---------------Test Result -----------------------
             Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
-            Assert.AreEqual(organisationTestBO.OrganisationID,  contactPersonTestBO.OrganisationID);
+            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
         }
         [Test]
         public void Test_UpdateRelatedObjectNoReverseRelationship_Referenced()
@@ -834,7 +946,7 @@ namespace Habanero.Test.BO.Relationship
             contactPersonTestBO.Save();
             //---------------Test Result -----------------------
             Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
-            Assert.AreNotEqual(organisationTestBO.OrganisationID,  contactPersonTestBO.OrganisationID);
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
         }
         [Test]
         public void Test_UpdateWIDRelatedObjectNoReverseRelationship_Referenced()
@@ -854,7 +966,7 @@ namespace Habanero.Test.BO.Relationship
             contactPersonTestBO.Save();
             //---------------Test Result -----------------------
             Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
-            Assert.AreNotEqual(organisationTestBO.OrganisationID,  contactPersonTestBO.OrganisationID);
+            Assert.AreNotEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
         }
         [Test]
         public void Test_SetRelatedObjectNoReverseRelationship_UnReferenced()
@@ -894,82 +1006,151 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
         }
 
+        //        [Test]
+        //        public void Test_UpdateUsingIDRelatedObjectNoReverseRelationship_UnReferenced()
+        //        {
+        //            //---------------Set up test pack-------------------
+        //            ClassDef.ClassDefs.Clear();
+        //            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
+        //            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
+        //            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
+        //            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
+        //            organisationTestBO.ContactPerson = contactPersonTestBO;
+        //            //---------------Assert Precondition----------------
+        //            Assert.IsFalse(organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson").OwningBOHasForeignKey);
+        //            //---------------Execute Test ----------------------
+        //            organisationTestBO.Props["] = contactPersonTestBO;
+        //            organisationTestBO.Save();
+        //            //---------------Test Result -----------------------
+        //            Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
+        //            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
+        //        }
+    }
+
+    [TestFixture]
+    public class TestSingleRelationship_AutoIncrementingPrimaryKey : TestSingleRelationship
+    {
+        [SetUp]
+        public override void SetupTest()
+        {
+            ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_WithAutoIncrementingPK_SingleReverse();
+            OrganisationTestBO.LoadDefaultClassDef_WithAutoIncrementingPK_WithSingleRelationship();
+        }
+
+        protected override void AssertBusinessObjectManagerCountIs(int expected)
+        {
+            // When Using an AutoIncrementing Primary Key with an in-memory DB, there will always be objects for the auto incrementing Bos
+            //var boSequenceNumbers = BusinessObjectManager.Instance.Find<BOSequenceNumber>(null);
+            //Assert.AreEqual(expected, BORegistry.BusinessObjectManager.Count - boSequenceNumbers.Count);
+        }
+
         [Test]
-        public void Test_UpdateRelatedObject_ShouldRaiseEvent()
+        public override void Test_SetByID_InBOManager()
         {
             //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
-            OrganisationTestBO.LoadDefaultClassDef();
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
-            ISingleRelationship relationship = (ISingleRelationship)contactPersonTestBO.Relationships["Organisation"];
-            bool eventCalled = false;
-            relationship.RelatedBusinessObjectChanged += delegate { eventCalled = true; };
-            //---------------Assert Precondition----------------
-            Assert.IsTrue(contactPersonTestBO.Relationships.GetSingle<OrganisationTestBO>("Organisation").OwningBOHasForeignKey);
-            Assert.IsFalse(eventCalled);
+            SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
+            relationship.OwningBOHasForeignKey = false;
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Surname = TestUtil.GetRandomString();
+            contactPerson.FirstName = TestUtil.GetRandomString();
+            //---------------Assert preconditions --------------
             //---------------Execute Test ----------------------
-            contactPersonTestBO.Organisation = organisationTestBO;
+            CopyOrganisationID(organisationTestBO, contactPerson);
             //---------------Test Result -----------------------
-            Assert.IsTrue(eventCalled);
-            Assert.IsTrue(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
-            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
         }
 
-
-
-
-//        [Test]
-//        public void Test_UpdateUsingIDRelatedObjectNoReverseRelationship_UnReferenced()
-//        {
-//            //---------------Set up test pack-------------------
-//            ClassDef.ClassDefs.Clear();
-//            OrganisationTestBO.LoadDefaultClassDef_SingleRel_NoReverseRelationship();
-//            ContactPersonTestBO.LoadDefaultClassDef_WOrganisationID();
-//            OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-//            ContactPersonTestBO contactPersonTestBO = ContactPersonTestBO.CreateUnsavedContactPerson();
-//            organisationTestBO.ContactPerson = contactPersonTestBO;
-//            //---------------Assert Precondition----------------
-//            Assert.IsFalse(organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson").OwningBOHasForeignKey);
-//            //---------------Execute Test ----------------------
-//            organisationTestBO.Props["] = contactPersonTestBO;
-//            organisationTestBO.Save();
-//            //---------------Test Result -----------------------
-//            Assert.IsFalse(contactPersonTestBO.Props["OrganisationID"].IsDirty, "This prop should be updated");
-//            Assert.AreEqual(organisationTestBO.OrganisationID, contactPersonTestBO.OrganisationID);
-//        }
-        private static SingleRelationship<ContactPersonTestBO> GetAssociationRelationship(OrganisationTestBO organisationTestBO)
+        [Test]
+        public void Test_WhenReferencedBOKeyIsNull_ShouldStillReturnReferencedBO()
         {
-            const RelationshipType relationshipType = RelationshipType.Association;
-            return GetRelationship(organisationTestBO, relationshipType);
-        }
-        private static SingleRelationship<OrganisationTestBO> GetAssociationRelationshipOrganisation(ContactPersonTestBO contactPersonTestBo)
-        {
-            const RelationshipType relationshipType = RelationshipType.Association;
-            SingleRelationship<OrganisationTestBO> relationship =
-                contactPersonTestBo.Relationships.GetSingle<OrganisationTestBO>("Organisation");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
-            relationshipDef.RelationshipType = relationshipType;
-            return relationship;
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = new OrganisationTestBO();
+            SetOrganisationID(organisationTestBO, null);
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            //---------------Assert preconditions---------------
+            Assert.IsNull(GetOrganisationID(organisationTestBO));
+            Assert.IsNull(GetOrganisationID(contactPerson));
+            Assert.IsNull(contactPerson.Organisation);
+            //---------------Execute Test ----------------------
+            contactPerson.Organisation = organisationTestBO;
+            //---------------Test Result -----------------------
+            Assert.IsNull(GetOrganisationID(organisationTestBO));
+            Assert.IsNull(GetOrganisationID(contactPerson));
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
         }
 
-        private static SingleRelationship<ContactPersonTestBO> GetRelationship(OrganisationTestBO organisationTestBO, RelationshipType relationshipType)
+        [Test]
+        public void Test_WhenReferencedBOKeyIsNull_WithReverseOfOneToOne_ShouldStillReturnReferencedBO()
         {
-            SingleRelationship<ContactPersonTestBO> relationship =
-                organisationTestBO.Relationships.GetSingle<ContactPersonTestBO>("ContactPerson");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
-            relationshipDef.RelationshipType = relationshipType;
-            return relationship;
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = new OrganisationTestBO();
+            SetOrganisationID(organisationTestBO, null);
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            //---------------Assert preconditions---------------
+            Assert.IsNull(GetOrganisationID(organisationTestBO));
+            Assert.IsNull(GetOrganisationID(contactPerson));
+            Assert.IsNull(organisationTestBO.ContactPerson);
+            //---------------Execute Test ----------------------
+            organisationTestBO.ContactPerson = contactPerson;
+            //---------------Test Result -----------------------
+            Assert.IsNull(GetOrganisationID(organisationTestBO));
+            Assert.IsNull(GetOrganisationID(contactPerson));
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
         }
-        private static MultipleRelationship<ContactPersonTestBO> GetMultipleRelationship(OrganisationTestBO organisationTestBO, RelationshipType relationshipType)
+
+        [Test]
+        public void Test_WhenReferencedBOKeyChanges_ShouldChangeFK()
         {
-            MultipleRelationship<ContactPersonTestBO> relationship =
-                organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
-            RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
-            relationshipDef.RelationshipType = relationshipType;
-            return relationship;
+            //---------------Set up test pack-------------------
+            OrganisationTestBO organisationTestBO = new OrganisationTestBO();
+            SetOrganisationID(organisationTestBO, null);
+            ContactPersonTestBO contactPerson = new ContactPersonTestBO();
+            contactPerson.Organisation = organisationTestBO;
+            //---------------Assert preconditions---------------
+            //Assert.IsFalse(organisationTestBO.Status.IsNew);
+            //Assert.IsTrue(contactPerson.Status.IsNew);
+            Assert.IsNull(GetOrganisationID(organisationTestBO));
+            Assert.IsNull(GetOrganisationID(contactPerson));
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            //Assert.AreEqual(2, BORegistry.BusinessObjectManager.Count);
+            //---------------Execute Test ----------------------
+            var newOrganisationIDValue = 123456;
+            SetOrganisationID(organisationTestBO, newOrganisationIDValue);
+            //---------------Test Result -----------------------
+            Assert.AreSame(organisationTestBO, contactPerson.Organisation);
+            Assert.AreSame(contactPerson, organisationTestBO.ContactPerson);
+            Assert.AreEqual(newOrganisationIDValue, GetOrganisationID(organisationTestBO));
+            Assert.AreEqual(newOrganisationIDValue, GetOrganisationID(contactPerson));
         }
+
+        #region Ignored Tests against unsaved Bos
+        //These tests do not apply because the ID of an unsaved object with an autoincrementing ID will be null.
+        // therefore, setting the FK property will always result in a null reference.
+
+        [Test]
+        [Ignore("This does not apply to AutoIncrementingIDs")]
+        public override void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship() { }
+
+        [Test]
+        [Ignore("This does not apply to AutoIncrementingIDs")]
+        public override void Test_SetbyObject_NotInBOManager_NotSaved() { }
+
+        [Test]
+        [Ignore("This does not apply to AutoIncrementingIDs")]
+        public override void Test_SetByID_InBOManager_UnsavedOrganisation_NoReverseRelationship_HasOwningForeighKeyFalse() { }
+
+        [Test]
+        [Ignore("This does not apply to AutoIncrementingIDs")]
+        public override void Test_SetByID_ToAnotherOrgID_InBOManager_UnSavedOrganisation() { }
+
+        #endregion Ignored Tests against unsaved Bos
     }
 
     [TestFixture]

@@ -821,6 +821,37 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
+        public static IClassDef LoadClassDefOrganisationTestBORelationship_WithAutoIncrementingPK_SingleReverse()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""ContactPersonTestBO"" assembly=""Habanero.Test.BO"" table=""contact_person"">
+					<property  name=""ContactPersonID"" type=""Int32"" autoIncrementing=""true"" />
+					<property  name=""Surname"" compulsory=""true"" databaseField=""Surname_field"" />
+                    <property  name=""FirstName"" compulsory=""true"" databaseField=""FirstName_field"" />
+					<property  name=""DateOfBirth"" type=""DateTime"" />
+                    <property  name=""OrganisationID"" type=""Int32""  >
+                      <businessObjectLookupList class=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" />
+                    </property>
+					<primaryKey isObjectID=""false"">
+						<prop name=""ContactPersonID"" />
+					</primaryKey>
+                    <relationship name=""Organisation"" type=""single"" relatedClass=""OrganisationTestBO"" relatedAssembly=""Habanero.Test.BO"" reverseRelationship=""ContactPerson"" deleteAction=""DoNothing"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+					<ui>
+						<grid>
+							<column heading=""OrganisationID"" property=""OrganisationID"" type=""DataGridViewComboBoxColumn"" />
+						</grid>
+                    </ui>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
         public static IClassDef LoadClassDefOrganisationTestBORelationship_SingleReverse_NoReverse()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();
@@ -851,6 +882,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+
         public static IClassDef LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse()
         {
             XmlClassLoader itsLoader = CreateXmlClassLoader();

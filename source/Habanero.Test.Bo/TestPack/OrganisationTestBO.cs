@@ -126,6 +126,29 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Add(itsClassDef);
             return itsClassDef;
         }
+        
+        public static IClassDef LoadDefaultClassDef_WithAutoIncrementingPK_WithSingleRelationship()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""OrganisationTestBO"" assembly=""Habanero.Test.BO"" table=""organisation"">
+					<property  name=""OrganisationID"" type=""Int32"" autoIncrementing=""true"" />
+                    <property name=""Name"" />
+					<primaryKey isObjectID=""false"">
+						<prop name=""OrganisationID"" />
+					</primaryKey>
+					<relationship name=""ContactPerson"" type=""single"" relatedClass=""ContactPersonTestBO"" 
+                        relatedAssembly=""Habanero.Test.BO"" deleteAction=""DeleteRelated"" owningBOHasForeignKey=""false""
+                        reverseRelationship=""Organisation"">
+						<relatedProperty property=""OrganisationID"" relatedProperty=""OrganisationID"" />
+					</relationship>
+			    </class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
 
         public static IClassDef LoadDefaultClassDef_WithContactPersonRelationship_NoReverseRelationship()
         {
