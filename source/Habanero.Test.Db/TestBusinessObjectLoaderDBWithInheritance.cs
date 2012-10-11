@@ -222,6 +222,30 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        public void TestLoad_SingleTableInheritance__GetBOAsParent_ThenGetBOAsShape_ThenGetAsCircle_ShouldLoadCircle()
+        {
+            //---------------Set up test pack-------------------
+            CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
+            CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            //---------------Assert Preconditions---------------
+            //---------------Execute Test ----------------------
+            Shape circleLoadedAsShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>("ShapeID = " + circle.ShapeID);
+            CircleNoPrimaryKey loadedCircle =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<CircleNoPrimaryKey>(circle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(circleLoadedAsShape);
+            Assert.AreEqual(circle.ShapeName, circleLoadedAsShape.ShapeName);
+
+            Assert.IsNotNull(loadedCircle);
+            Assert.AreNotSame(loadedCircle, circle);
+            Assert.AreSame(loadedCircle, circleLoadedAsShape);
+            Assert.AreEqual(circle.Radius, loadedCircle.Radius);
+            Assert.AreEqual(circle.ShapeName, loadedCircle.ShapeName);
+        }
+
+        [Test]
         public void TestLoad_ClassTableInheritance__GetBOAsParent_ThenGetBOAsShape_ThenGetAsCircle_ShouldLoadCircle()
         {
             //---------------Set up test pack-------------------
@@ -240,7 +264,32 @@ namespace Habanero.Test.DB
 
             Assert.IsNotNull(loadedCircle);
             Assert.AreNotSame(loadedCircle, circle);
-            Assert.AreNotSame(loadedCircle, circleLoadedAsShape);
+            Assert.AreNotSame(loadedCircle, circleLoadedAsShape, "This assertion is wrong, but represents the current way that the loader works");
+            Assert.AreEqual(circle.Radius, loadedCircle.Radius);
+            Assert.AreEqual(circle.ShapeName, loadedCircle.ShapeName);
+        }
+
+        [Test]
+        [Ignore("This does not work for Habanero at this stage")] 
+        public void TestLoad_ConcreteTableInheritance__GetBOAsParent_ThenGetBOAsShape_ThenGetAsCircle_ShouldLoadCircle()
+        {
+            //---------------Set up test pack-------------------
+            Circle.GetClassDefWithConcreteTableInheritance();
+            Circle circle = Circle.CreateSavedCircle();
+            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            //---------------Assert Preconditions---------------
+            //---------------Execute Test ----------------------
+            Shape circleLoadedAsShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>("ShapeID = " + circle.CircleID);
+            Circle loadedCircle =
+                BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Circle>(circle.ID);
+
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(circleLoadedAsShape);
+            Assert.AreEqual(circle.ShapeName, circleLoadedAsShape.ShapeName);
+
+            Assert.IsNotNull(loadedCircle);
+            Assert.AreNotSame(loadedCircle, circle);
+            Assert.AreSame(loadedCircle, circleLoadedAsShape);
             Assert.AreEqual(circle.Radius, loadedCircle.Radius);
             Assert.AreEqual(circle.ShapeName, loadedCircle.ShapeName);
         }

@@ -372,75 +372,11 @@ namespace Habanero.DB
                 BOColLoaderHelper.ClearCurrentCollection(collection);
                 //ReflectionUtilities.ExecuteMethod(collection, "ClearCurrentCollection");
 
-                // store the original persisted collection and pass it through. This is to improve performance
-                // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
-                Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
-                
-                IList loadedBos = new ArrayList();
-                List<bool> updatedObjects = new List<bool>();
-                List<bool> freshlyLoadedObjects = new List<bool>();
-                bool isFirstLoad = collection.TimeLastLoaded == null;
-                if (isFirstLoad)
-                {
-                    collection.PersistedBusinessObjects.Clear();
-                } else {
-                    foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
-                    {
-                        try
-                        {
-                            originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
-                        } catch (ArgumentException)
-                        {
-                            throw new HabaneroDeveloperException(String.Format("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload. This is usually indicative of duplicate items being returned in your original query. " + 
-                                "This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " + 
-                                "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement.ToString()));
-                        }
-                    }
-                }
-                bool objectUpdatedInLoading;
-                using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
-                {
-                    while (dr.Read())
-                    {
-                        T loadedBo = (T) LoadBOFromReader(collection.ClassDef, dr, selectQuery, out objectUpdatedInLoading);
-                        //Checks to see if the loaded object is the base of a single table inheritance structure
-                        // and has a sub type
-                        IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
-                        // loads an object of the correct sub type (for single table inheritance)
-                        loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
-                       
-                        // these collections are used to determine which objects should the AfterLoad and FireUpdatedEvent methods be called on
-                        freshlyLoadedObjects.Add(loadedBo.Status.IsNew);
-                        SetStatusAfterLoad(loadedBo);
-                        loadedBos.Add(loadedBo);
-                        updatedObjects.Add(objectUpdatedInLoading);
-                        //If the origional collection had the new business object then
-                        // use add internal this adds without any events being raised etc.
-                        //else adds via the Add method (normal add) this raises events such that the 
-                        // user interface can be updated.
-                        if (isFirstLoad)
-                        {
-                            collection.AddWithoutEvents(loadedBo);
-                            collection.PersistedBusinessObjects.Add(loadedBo);
-                        }
-                        else
-                        {
-                            AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
-                        }
-                    }
-                }
-                for (int i = 0; i < loadedBos.Count; i++ )
-                {
-                    if (updatedObjects[i])
-                    {
-                        CallAfterLoad((IBusinessObject) loadedBos[i]);
+                Dictionary<string, IBusinessObject> originalPersistedCollection = GetOriginalPersistedCollection<T>(collection, statement, selectQuery);
 
-                        if (!freshlyLoadedObjects[i])
-                        {
-                            FireUpdatedEvent((IBusinessObject)loadedBos[i]);
-                        }
-                    }
-                }
+                List<LoadedBoInfo> loadedBoInfos = LoadBusinessObjectsFromDBIntoCollection<T>(collection, statement, selectQuery, originalPersistedCollection);
+
+                FinaliseLoad(loadedBoInfos);
                 RestoreEditedLists(collection, originalPersistedCollection);
             }
             else
@@ -466,6 +402,113 @@ namespace Habanero.DB
             collection.TimeLastLoaded = DateTime.Now;
             BOColLoaderHelper.FireRefreshedEvent(collection);
             //ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+        }
+
+        private void FinaliseLoad(List<LoadedBoInfo> loadedBoInfos)
+        {
+            for (int i = 0; i < loadedBoInfos.Count; i++)
+            {
+                LoadedBoInfo loadedBoInfo = loadedBoInfos[i];
+                if (loadedBoInfo.IsUpdatedInLoading)
+                {
+                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
+                    CallAfterLoad(loadedBo);
+
+                    if (!loadedBoInfo.IsFreshlyLoaded)
+                    {
+                        FireUpdatedEvent(loadedBo);
+                    }
+                }
+            }
+        }
+
+        private Dictionary<string, IBusinessObject> GetOriginalPersistedCollection<T>(IBusinessObjectCollection collection, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
+        {
+// store the original persisted collection and pass it through. This is to improve performance
+            // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
+            Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
+
+            //IList loadedBos = new ArrayList();
+            //List<bool> updatedObjects = new List<bool>();
+            //List<bool> freshlyLoadedObjects = new List<bool>();
+            bool isFirstLoad = collection.TimeLastLoaded == null;
+            if (isFirstLoad)
+            {
+                collection.PersistedBusinessObjects.Clear();
+            }
+            else
+            {
+                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
+                {
+                    try
+                    {
+                        originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
+                    }
+                    catch (ArgumentException)
+                    {
+                        throw new HabaneroDeveloperException(String.Format("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload. This is usually indicative of duplicate items being returned in your original query. " +
+                                                                           "This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " +
+                                                                           "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement.ToString()));
+                    }
+                }
+            }
+            return originalPersistedCollection;
+        }
+
+        protected class LoadedBoInfo
+        {
+            public bool IsFreshlyLoaded { get; set; }
+            public IBusinessObject LoadedBo { get; set; }
+            public bool IsUpdatedInLoading { get; set; }
+        }
+
+        protected virtual List<LoadedBoInfo> LoadBusinessObjectsFromDBIntoCollection<T>(IBusinessObjectCollection collection, ISqlStatement statement, SelectQueryDB selectQuery, Dictionary<string, IBusinessObject> originalPersistedCollection) where T : IBusinessObject
+        {
+            bool isFirstLoad = collection.TimeLastLoaded == null;
+            IClassDef classDef = collection.ClassDef;
+            List<LoadedBoInfo> loadedBoInfos = new List<LoadedBoInfo>();
+            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            {
+                while (dr.Read())
+                {
+                    var loadedBoInfo = LoadCorrectlyTypedBOFromReader<T>(dr, classDef, selectQuery);
+                    loadedBoInfos.Add(loadedBoInfo);
+                    var loadedBo = loadedBoInfo.LoadedBo;
+                    //If the origional collection had the new business object then
+                    // use add internal this adds without any events being raised etc.
+                    //else adds via the Add method (normal add) this raises events such that the 
+                    // user interface can be updated.
+                    if (isFirstLoad)
+                    {
+                        collection.AddWithoutEvents(loadedBo);
+                        collection.PersistedBusinessObjects.Add(loadedBo);
+                    }
+                    else
+                    {
+                        AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
+                    }
+                }
+            }
+            return loadedBoInfos;
+        }
+
+        private LoadedBoInfo LoadCorrectlyTypedBOFromReader<T>(IDataReader dr, IClassDef classDef, SelectQueryDB selectQuery) where T : IBusinessObject
+        {
+            bool objectUpdatedInLoading;
+            T loadedBo = (T) LoadBOFromReader(classDef, dr, selectQuery, out objectUpdatedInLoading);
+            //Checks to see if the loaded object is the base of a single table inheritance structure
+            // and has a sub type
+            IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+            // loads an object of the correct sub type (for single table inheritance)
+            loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
+
+            // these collections are used to determine which objects should the AfterLoad and FireUpdatedEvent methods be called on
+            var loadedBoInfo = new LoadedBoInfo();
+            loadedBoInfo.IsFreshlyLoaded = loadedBo.Status.IsNew;
+            SetStatusAfterLoad(loadedBo);
+            loadedBoInfo.LoadedBo = loadedBo;
+            loadedBoInfo.IsUpdatedInLoading = objectUpdatedInLoading;
+            return loadedBoInfo;
         }
 
         private int GetTotalNoOfRecordsIfNeeded(IClassDef classDef, ISelectQuery selectQuery)
