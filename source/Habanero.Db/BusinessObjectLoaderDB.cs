@@ -374,7 +374,15 @@ namespace Habanero.DB
 
                 Dictionary<string, IBusinessObject> originalPersistedCollection = GetOriginalPersistedCollection<T>(collection, statement, selectQuery);
 
-                List<LoadedBoInfo> loadedBoInfos = LoadBusinessObjectsFromDBIntoCollection<T>(collection, statement, selectQuery, originalPersistedCollection);
+                List<LoadedBoInfo> loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQuery);
+
+                bool isFirstLoad = collection.TimeLastLoaded == null;
+                foreach (var loadedBoInfo in loadedBoInfos)
+                {
+                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
+                    AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection, isFirstLoad);
+                }
+
 
                 FinaliseLoad(loadedBoInfos);
                 RestoreEditedLists(collection, originalPersistedCollection);
@@ -462,10 +470,8 @@ namespace Habanero.DB
             public bool IsUpdatedInLoading { get; set; }
         }
 
-        protected virtual List<LoadedBoInfo> LoadBusinessObjectsFromDBIntoCollection<T>(IBusinessObjectCollection collection, ISqlStatement statement, SelectQueryDB selectQuery, Dictionary<string, IBusinessObject> originalPersistedCollection) where T : IBusinessObject
+        protected virtual List<LoadedBoInfo> GetLoadedBusinessObjectsFromDB<T>(IClassDef classDef, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
         {
-            bool isFirstLoad = collection.TimeLastLoaded == null;
-            IClassDef classDef = collection.ClassDef;
             List<LoadedBoInfo> loadedBoInfos = new List<LoadedBoInfo>();
             using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
             {
@@ -473,23 +479,26 @@ namespace Habanero.DB
                 {
                     var loadedBoInfo = LoadCorrectlyTypedBOFromReader<T>(dr, classDef, selectQuery);
                     loadedBoInfos.Add(loadedBoInfo);
-                    var loadedBo = loadedBoInfo.LoadedBo;
-                    //If the origional collection had the new business object then
-                    // use add internal this adds without any events being raised etc.
-                    //else adds via the Add method (normal add) this raises events such that the 
-                    // user interface can be updated.
-                    if (isFirstLoad)
-                    {
-                        collection.AddWithoutEvents(loadedBo);
-                        collection.PersistedBusinessObjects.Add(loadedBo);
-                    }
-                    else
-                    {
-                        AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
-                    }
                 }
             }
             return loadedBoInfos;
+        }
+
+        private static void AddBusinessObjectToCollection(IBusinessObjectCollection collection, IBusinessObject loadedBo, Dictionary<string, IBusinessObject> originalPersistedCollection, bool isFirstLoad)
+        {
+            //If the origional collection had the new business object then
+            // use add internal this adds without any events being raised etc.
+            //else adds via the Add method (normal add) this raises events such that the 
+            // user interface can be updated.
+            if (isFirstLoad)
+            {
+                collection.AddWithoutEvents(loadedBo);
+                collection.PersistedBusinessObjects.Add(loadedBo);
+            }
+            else
+            {
+                AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
+            }
         }
 
         private LoadedBoInfo LoadCorrectlyTypedBOFromReader<T>(IDataReader dr, IClassDef classDef, SelectQueryDB selectQuery) where T : IBusinessObject
