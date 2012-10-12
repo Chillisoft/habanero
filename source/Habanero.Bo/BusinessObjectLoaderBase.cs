@@ -141,17 +141,59 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="collection"></param>
-        protected abstract void DoRefresh<T>(BusinessObjectCollection<T> collection) where T : class, IBusinessObject, new();
+        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
+        /// <param name="collection">The collection to refresh</param> 
+        protected virtual void DoRefresh<T>(BusinessObjectCollection<T> collection) 
+            where T : class, IBusinessObject, new()
+        {
+            DoRefreshShared<T>(collection);
+        }
 
         /// <summary>
-        /// Actual Executes the Refresh this method is impleemented by the inherited classes of the business object loader base.
+        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
+        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
+        /// only fire for the new objects added to the collection, not for the ones that already existed).
         /// </summary>
-        /// <param name="collection"></param>
-        protected abstract void DoRefresh(IBusinessObjectCollection collection);
+        /// <param name="collection">The collection to refresh</param>
+        protected virtual void DoRefresh(IBusinessObjectCollection collection)
+        {
+            DoRefreshShared<IBusinessObject>(collection);
+        }
+
+        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
+            where T : IBusinessObject
+        {
+            IClassDef classDef = collection.ClassDef;
+            ISelectQuery selectQuery = collection.SelectQuery;
+            LoaderResult loaderResult = GetObjectsFromDataStore<T>(classDef, selectQuery);
+
+            collection.TotalCountAvailableForPaging = loaderResult.TotalCountAvailableForPaging;
+            string duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, loaderResult.LoadMechanismDescription);
+            LoadBOCollection(collection, loaderResult.LoadedBoInfos, duplicatePersistedObjectsErrorMessage);
+
+            // NOTES from the original DB loader...
+            //The collection should show all loaded object less removed or deleted object not yet persisted
+            //     plus all created or added objects not yet persisted.
+            //Note_: This behaviour is fundamentally different than the business objects behaviour which 
+            //  throws and error if any of the items are dirty when it is being refreshed.
+            //Should a refresh be allowed on a dirty collection (what do we do with BO's
+        }
+
+        /// <summary>
+        /// Load the Business Objects from the specific DataStore type that applies to this loader.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classDef"></param>
+        /// <param name="selectQuery"></param>
+        /// <returns></returns>
+        protected abstract LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery) 
+            where T : IBusinessObject;
+
+        protected abstract string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription);
 
         /// <summary>
         /// Loads a BusinessObjectCollection using the searchCriteria an given. It's important to make sure that the ClassDef given
@@ -664,6 +706,13 @@ namespace Habanero.BO
             public IBusinessObject LoadedBo { get; set; }
             public bool IsFreshlyLoaded { get; set; }
             public bool IsUpdatedInLoading { get; set; }
+        }
+
+        protected class LoaderResult
+        {
+            public List<LoadedBoInfo> LoadedBoInfos { get; set; }
+            public int TotalCountAvailableForPaging { get; set; }
+            public string LoadMechanismDescription { get; set; }
         }
 
         protected void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos, string duplicatePersistedObjectsErrorMessage = "")

@@ -1115,6 +1115,16 @@ namespace Habanero.Test.BO.BusinessObjectLoader
                 throw new NotImplementedException(); // not required
             }
 
+            protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery)
+            {
+                throw new NotImplementedException(); // not required
+            }
+
+            protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
+            {
+                throw new NotImplementedException(); // not required
+            }
+
             public static IBusinessObject CallGetObjectFromObjectManager(IPrimaryKey key, Type boType)
             {
                 return BusinessObjectLoaderBase.GetObjectFromObjectManager(key, boType);

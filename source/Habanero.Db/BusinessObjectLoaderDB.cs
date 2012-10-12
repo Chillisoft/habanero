@@ -335,77 +335,43 @@ namespace Habanero.DB
 
         #region GetBusinessObjectCollection
 
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="collection">The collection to refresh</param> 
-        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
+        protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery) 
         {
-            DoRefreshShared<T>(collection);
-        }
-
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh(IBusinessObjectCollection collection)
-        {
-            DoRefreshShared<IBusinessObject>(collection);
-        }
-
-        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
-            where T : IBusinessObject
-        {
-            IClassDef classDef = collection.ClassDef;
-            ISelectQuery query = collection.SelectQuery;
-            string duplicatePersistedObjectsErrorMessage;
             int totalCountAvailableForPaging;
-            var loadedBoInfos = GetObjectsFromDataStore<T>(classDef, query, out duplicatePersistedObjectsErrorMessage, out totalCountAvailableForPaging);
+            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
 
-            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-            LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
-
-            //The collection should show all loaded object less removed or deleted object not yet persisted
-            //     plus all created or added objects not yet persisted.
-            //Note_: This behaviour is fundamentally different than the business objects behaviour which 
-            //  throws and error if any of the items are dirty when it is being refreshed.
-            //Should a refresh be allowed on a dirty collection (what do we do with BO's
-        }
-
-        private List<LoadedBoInfo> GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery query, out string duplicatePersistedObjectsErrorMessage, out int totalCountAvailableForPaging) where T : IBusinessObject
-        {
-            SelectQueryDB selectQuery = new SelectQueryDB(query, _databaseConnection);
-
-            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
+            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQueryDB);
             List<LoadedBoInfo> loadedBoInfos;
-            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
+            string loadMechanismDescription;
+            if (IsLoadNecessary(selectQueryDB, totalNoOfRecords))
             {
-                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
+                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQueryDB, totalNoOfRecords);
 
-                loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQuery);
+                loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQueryDB);
 
                 totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBoInfos.Count : totalNoOfRecords;
-                duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, statement);
+                loadMechanismDescription = statement.ToString();
             }
             else
             {
-                // you ARE concerned about limits, and it is past the end of the total, or the limit is 0
+                // The load you ARE concerned about limits, and it is past the end of the total, or the limit is 0
                 loadedBoInfos = new List<LoadedBoInfo>();
                 totalCountAvailableForPaging = totalNoOfRecords;
-                duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, null);
+                loadMechanismDescription = "[No SQL query due to request of a load past the end of the dataset or of a zero sized limit]";
             }
-            return loadedBoInfos;
+            
+            return new LoaderResult
+                {
+                    LoadedBoInfos = loadedBoInfos,
+                    TotalCountAvailableForPaging = totalCountAvailableForPaging,
+                    LoadMechanismDescription = loadMechanismDescription,
+                };
         }
 
-        private static string GetDuplicatePersistedObjectsErrorMessage(SelectQueryDB selectQuery, ISqlStatement statement)
+        protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
         {
             return String.Format("This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " 
-                + "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement);
+                + "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, loadMechanismDescription);
         }
 
         protected virtual List<LoadedBoInfo> GetLoadedBusinessObjectsFromDB<T>(IClassDef classDef, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
@@ -826,4 +792,6 @@ namespace Habanero.DB
         }
 
     }
+
+    
 }

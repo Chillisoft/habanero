@@ -224,20 +224,8 @@ namespace Habanero.BO
         /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
         /// <param name="collection">The collection to refresh</param>
         protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
-            //where T : class, IBusinessObject, new()
         {
-            DoRefresh((IBusinessObjectCollection) collection);
-            //ISelectQuery selectQuery = collection.SelectQuery;
-            //Criteria criteria = selectQuery.Criteria;
-            //OrderCriteria orderCriteria = selectQuery.OrderCriteria;
-
-            //QueryBuilder.PrepareCriteria(collection.ClassDef, criteria);
-
-            //IBusinessObjectCollection loadedBos = _dataStore.FindAll(collection.ClassDef, criteria);
-            //loadedBos.Sort(orderCriteria);
-            //collection.TotalCountAvailableForPaging = loadedBos.Count;
-            //ApplyLimitsToList(selectQuery, loadedBos);
-            //LoadBOCollection(collection, (ICollection) loadedBos);
+            DoRefreshShared<T>(collection);
         }
 
         /// <summary>
@@ -248,17 +236,22 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
-            IClassDef classDef = collection.ClassDef;
-            ISelectQuery selectQuery = collection.SelectQuery;
-            int totalCountAvailableForPaging;
-            string duplicatePersistedObjectsErrorMessage;
-            var loadedBoInfos = GetObjectsFromDataStore(classDef, selectQuery, out totalCountAvailableForPaging, out duplicatePersistedObjectsErrorMessage);
-
-            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-            LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
+            DoRefreshShared<IBusinessObject>(collection);
         }
 
-        private List<LoadedBoInfo> GetObjectsFromDataStore(IClassDef classDef, ISelectQuery selectQuery, out int totalCountAvailableForPaging, out string duplicatePersistedObjectsErrorMessage)
+        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
+            where T : IBusinessObject
+        {
+            IClassDef classDef = collection.ClassDef;
+            ISelectQuery selectQuery = collection.SelectQuery;
+            LoaderResult loaderResult = GetObjectsFromDataStore<T>(classDef, selectQuery);
+
+            collection.TotalCountAvailableForPaging = loaderResult.TotalCountAvailableForPaging;
+            string duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, loaderResult.LoadMechanismDescription);
+            LoadBOCollection(collection, loaderResult.LoadedBoInfos, duplicatePersistedObjectsErrorMessage);
+        }
+
+        protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery)
         {
             Criteria criteria = selectQuery.Criteria;
             IOrderCriteria orderCriteria = selectQuery.OrderCriteria;
@@ -269,24 +262,27 @@ namespace Habanero.BO
             loadedBos.Sort(orderCriteria);
 
             int totalNoOfRecords = -1;
-            totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBos.Count : totalNoOfRecords;
+            int totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBos.Count : totalNoOfRecords;
 
             ApplyLimitsToList(selectQuery, loadedBos);
-            var loadedBoInfos1 = new List<LoadedBoInfo>();
+            var loadedBoInfos = new List<LoadedBoInfo>();
             foreach (var loadedBo in loadedBos)
             {
-                loadedBoInfos1.Add(new LoadedBoInfo {LoadedBo = (IBusinessObject) loadedBo});
+                loadedBoInfos.Add(new LoadedBoInfo {LoadedBo = (IBusinessObject) loadedBo});
             }
-            var loadedBoInfos = loadedBoInfos1;
-            duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery);
-            return loadedBoInfos;
+            return new LoaderResult
+            {
+                LoadedBoInfos = loadedBoInfos,
+                TotalCountAvailableForPaging = totalCountAvailableForPaging,
+                LoadMechanismDescription = Convert.ToString(selectQuery.Criteria),
+            };
         }
 
 
-        private static string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery)
+        protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
         {
             return String.Format("This can be caused by the data store returning duplicates or where the primary key of your object is incorrectly defined. "
-                + "The source used for loading this collections was '{0}' and the criteria was '{1}'", selectQuery.Source, selectQuery.Criteria);
+                + "The source used for loading this collections was '{0}' and the criteria was '{1}'", selectQuery.Source, loadMechanismDescription);
         }
 
 //        private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
