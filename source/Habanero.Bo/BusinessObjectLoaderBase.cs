@@ -659,48 +659,21 @@ namespace Habanero.BO
             return relatedCol;
         }
 
-        /// <summary>
-        /// Adds all the business objects from the <paramref name="loadedBOs"/> collection to the
-        /// <see cref="IBusinessObjectCollection"/>
-        /// </summary>
-        /// <param name="collection">the collection being added to</param>
-        /// <param name="loadedBOs">the collection of loaded BOs to add</param>
-        protected static void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBOs)
+        protected class LoadedBoInfo
         {
-            // if the collection is fresh (ie. being loaded for the first time
-            // then load without events.
-            if (collection.TimeLastLoaded == null)
+            public IBusinessObject LoadedBo { get; set; }
+            public bool IsFreshlyLoaded { get; set; }
+            public bool IsUpdatedInLoading { get; set; }
+        }
+
+        protected void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos, string duplicatePersistedObjectsErrorMessage = "")
+        {
+            var loadedBoInfos = new List<LoadedBoInfo>();
+            foreach (var loadedBo in loadedBos)
             {
-                collection.PersistedBusinessObjects.Clear();
-                foreach (IBusinessObject loadedBo in loadedBOs)
-                {
-                    collection.AddWithoutEvents(loadedBo);
-                    collection.PersistedBusinessObjects.Add(loadedBo);
-                }
-                collection.TimeLastLoaded = DateTime.Now;
-            }  else {
-
-                var boColInternal = ((IBusinessObjectCollectionInternal)collection);
-                boColInternal.ClearCurrentCollection();
-                //ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-
-                // store the original persisted collection and pass it through. This is to improve performance
-                // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
-                Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
-                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
-                {
-                    originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
-                }
-                foreach (IBusinessObject loadedBo in loadedBOs)
-                {
-                    AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
-                }
-                RestoreEditedLists(collection, originalPersistedCollection);
-                collection.TimeLastLoaded = DateTime.Now;
-                
-                boColInternal.FireRefreshedEvent();               
-//                ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
+                loadedBoInfos.Add(new LoadedBoInfo{ LoadedBo = (IBusinessObject)loadedBo });
             }
+            LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
         }
 
         /// <summary>
@@ -709,11 +682,103 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection">the collection being added to</param>
         /// <param name="loadedBOs">the collection of loaded BOs to add</param>
-        protected static void LoadBOCollection<T>(IBusinessObjectCollection collection, IList<T> loadedBOs)
+        protected void LoadBOCollection<T>(IBusinessObjectCollection collection, IList<T> loadedBOs)
         {
             IList col = new ArrayList();
             foreach (T loadedBO in loadedBOs) col.Add(loadedBO);
             LoadBOCollection(collection, col);
+        }
+
+        /// <summary>
+        /// Adds all the business objects from the <paramref name="loadedBoInfos"/> collection to the
+        /// <see cref="IBusinessObjectCollection"/>
+        /// </summary>
+        /// <param name="collection">the collection being added to</param>
+        /// <param name="loadedBoInfos">the collection of loaded BOs to add</param>
+        protected void LoadBOCollection(IBusinessObjectCollection collection, List<LoadedBoInfo> loadedBoInfos, string duplicatePersistedObjectsErrorMessage = "")
+        {
+            
+            // if the collection is fresh (ie. being loaded for the first time
+            // then load without events.
+            if (collection.TimeLastLoaded == null)
+            {
+                collection.PersistedBusinessObjects.Clear();
+                foreach (LoadedBoInfo loadedBoInfo in loadedBoInfos)
+                {
+                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
+                    collection.AddWithoutEvents(loadedBo);
+                    collection.PersistedBusinessObjects.Add(loadedBo);
+                }
+                FinaliseLoad(loadedBoInfos);
+
+                //RestoreEditedLists(collection, originalPersistedCollection); TEST THIS
+            }  else 
+            {
+                BOColLoaderHelper.ClearCurrentCollection(collection);
+
+                // store the original persisted collection and pass it through. This is to improve performance
+                // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
+                Dictionary<string, IBusinessObject> originalPersistedCollection;
+                originalPersistedCollection = GetOriginalPersistedCollection(collection, duplicatePersistedObjectsErrorMessage);
+                foreach (LoadedBoInfo loadedBoInfo in loadedBoInfos)
+                {
+                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
+                    AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
+                }
+                FinaliseLoad(loadedBoInfos);
+                RestoreEditedLists(collection, originalPersistedCollection);
+            }
+            collection.TimeLastLoaded = DateTime.Now;
+            BOColLoaderHelper.FireRefreshedEvent(collection);
+        }
+
+
+
+        private Dictionary<string, IBusinessObject> GetOriginalPersistedCollection(IBusinessObjectCollection collection, string duplicatePersistedObjectsErrorMessage) 
+        {
+            // store the original persisted collection and pass it through. This is to improve performance
+            // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
+            Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
+            
+            bool isFirstLoad = collection.TimeLastLoaded == null;
+            if (isFirstLoad)
+            {
+                collection.PersistedBusinessObjects.Clear();
+            }
+            else
+            {
+                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
+                {
+                    try
+                    {
+                        originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
+                    }
+                    catch (ArgumentException)
+                    {
+                        throw new HabaneroDeveloperException("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload. This is usually indicative of duplicate items being returned in your original query. " +
+                                                                           duplicatePersistedObjectsErrorMessage);
+                    }
+                }
+            }
+            return originalPersistedCollection;
+        }
+
+        private void FinaliseLoad(List<LoadedBoInfo> loadedBoInfos)
+        {
+            for (int i = 0; i < loadedBoInfos.Count; i++)
+            {
+                LoadedBoInfo loadedBoInfo = loadedBoInfos[i];
+                if (loadedBoInfo.IsUpdatedInLoading)
+                {
+                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
+                    CallAfterLoad(loadedBo);
+
+                    if (!loadedBoInfo.IsFreshlyLoaded)
+                    {
+                        FireUpdatedEvent(loadedBo);
+                    }
+                }
+            }
         }
 
         /// <summary>

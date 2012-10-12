@@ -362,112 +362,58 @@ namespace Habanero.DB
             where T : IBusinessObject
         {
             IClassDef classDef = collection.ClassDef;
-            SelectQueryDB selectQuery = new SelectQueryDB(collection.SelectQuery, _databaseConnection);
+            ISelectQuery query = collection.SelectQuery;
+            SelectQueryDB selectQuery = new SelectQueryDB(query, _databaseConnection);
 
             int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
             if (IsLoadNecessary(selectQuery, totalNoOfRecords))
             {
                 ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
-                //var boColInternal = ((IBusinessObjectCollectionInternal)collection);
-                BOColLoaderHelper.ClearCurrentCollection(collection);
-                //ReflectionUtilities.ExecuteMethod(collection, "ClearCurrentCollection");
-
-                Dictionary<string, IBusinessObject> originalPersistedCollection = GetOriginalPersistedCollection<T>(collection, statement, selectQuery);
 
                 List<LoadedBoInfo> loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQuery);
 
-                bool isFirstLoad = collection.TimeLastLoaded == null;
-                foreach (var loadedBoInfo in loadedBoInfos)
-                {
-                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
-                    AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection, isFirstLoad);
-                }
+                int totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBoInfos.Count : totalNoOfRecords;
 
-
-                FinaliseLoad(loadedBoInfos);
-                RestoreEditedLists(collection, originalPersistedCollection);
+                collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+                var duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, statement);
+                LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
             }
             else
             {
-                //The first record is past the end of the available records, so return an empty collection.
-                BOColLoaderHelper.ClearCurrentCollection(collection);
-                //ReflectionUtilities.ExecutePrivateMethod(collection, "ClearCurrentCollection");
-                RestoreEditedLists(collection, null);
+                // you ARE concerned about limits, and it is past the end of the total, or the limit is 0
+
+                if (true)
+                {
+                    List<LoadedBoInfo> loadedBoInfos = new List<LoadedBoInfo>();
+
+                    int totalCountAvailableForPaging = totalNoOfRecords;
+
+                    collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+                    var duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, null);
+                    LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
+                } else
+                {
+                    //The first record is past the end of the available records, so return an empty collection.
+                    BOColLoaderHelper.ClearCurrentCollection(collection);
+                    RestoreEditedLists(collection, null);
+                    int totalCountAvailableForPaging = totalNoOfRecords;
+                    collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+                    collection.TimeLastLoaded = DateTime.Now;
+                    BOColLoaderHelper.FireRefreshedEvent(collection);
+                }
             }
-            int totalCountAvailableForPaging = totalNoOfRecords == -1 ? collection.Count : totalNoOfRecords;
-            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
 
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
             //Note_: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
-            // I think this could be done via reflection instead of having all these public methods.
-            //   especially where done via the interface.
-            //  the other option would be for the business object collection to have another method (other than clone)
-            //   that returns another type of object that has these methods to eliminate all these 
-            //   public accessors
-            collection.TimeLastLoaded = DateTime.Now;
-            BOColLoaderHelper.FireRefreshedEvent(collection);
-            //ReflectionUtilities.ExecutePrivateMethod(collection, "FireRefreshedEvent");
         }
 
-        private void FinaliseLoad(List<LoadedBoInfo> loadedBoInfos)
+        private static string GetDuplicatePersistedObjectsErrorMessage(SelectQueryDB selectQuery, ISqlStatement statement)
         {
-            for (int i = 0; i < loadedBoInfos.Count; i++)
-            {
-                LoadedBoInfo loadedBoInfo = loadedBoInfos[i];
-                if (loadedBoInfo.IsUpdatedInLoading)
-                {
-                    IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
-                    CallAfterLoad(loadedBo);
-
-                    if (!loadedBoInfo.IsFreshlyLoaded)
-                    {
-                        FireUpdatedEvent(loadedBo);
-                    }
-                }
-            }
-        }
-
-        private Dictionary<string, IBusinessObject> GetOriginalPersistedCollection<T>(IBusinessObjectCollection collection, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
-        {
-// store the original persisted collection and pass it through. This is to improve performance
-            // within the AddBusinessObjectToCollection method when amount of BO's being loaded is big.
-            Dictionary<string, IBusinessObject> originalPersistedCollection = new Dictionary<string, IBusinessObject>();
-
-            //IList loadedBos = new ArrayList();
-            //List<bool> updatedObjects = new List<bool>();
-            //List<bool> freshlyLoadedObjects = new List<bool>();
-            bool isFirstLoad = collection.TimeLastLoaded == null;
-            if (isFirstLoad)
-            {
-                collection.PersistedBusinessObjects.Clear();
-            }
-            else
-            {
-                foreach (IBusinessObject businessObject in collection.PersistedBusinessObjects)
-                {
-                    try
-                    {
-                        originalPersistedCollection.Add(businessObject.ID.AsString_CurrentValue(), businessObject);
-                    }
-                    catch (ArgumentException)
-                    {
-                        throw new HabaneroDeveloperException(String.Format("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload. This is usually indicative of duplicate items being returned in your original query. " +
-                                                                           "This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " +
-                                                                           "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement.ToString()));
-                    }
-                }
-            }
-            return originalPersistedCollection;
-        }
-
-        protected class LoadedBoInfo
-        {
-            public bool IsFreshlyLoaded { get; set; }
-            public IBusinessObject LoadedBo { get; set; }
-            public bool IsUpdatedInLoading { get; set; }
+            return String.Format("This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " 
+                + "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, statement);
         }
 
         protected virtual List<LoadedBoInfo> GetLoadedBusinessObjectsFromDB<T>(IClassDef classDef, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject

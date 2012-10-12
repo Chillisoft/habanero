@@ -248,19 +248,43 @@ namespace Habanero.BO
         /// <param name="collection">The collection to refresh</param>
         protected override void DoRefresh(IBusinessObjectCollection collection)
         {
+            IClassDef classDef = collection.ClassDef;
             ISelectQuery selectQuery = collection.SelectQuery;
+            int totalCountAvailableForPaging;
+            var loadedBoInfos = GetObjectsFromDataStore(classDef, selectQuery, out totalCountAvailableForPaging);
+
+            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+            string duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery);
+            LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
+        }
+
+        private List<LoadedBoInfo> GetObjectsFromDataStore(IClassDef classDef, ISelectQuery selectQuery, out int totalCountAvailableForPaging)
+        {
             Criteria criteria = selectQuery.Criteria;
             IOrderCriteria orderCriteria = selectQuery.OrderCriteria;
 
-            IClassDef classDef = collection.ClassDef;
             QueryBuilder.PrepareCriteria(classDef, criteria);
 
             IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef, criteria);
             loadedBos.Sort(orderCriteria);
 
-            collection.TotalCountAvailableForPaging = loadedBos.Count;
+            int totalNoOfRecords = -1;
+            totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBos.Count : totalNoOfRecords;
+
             ApplyLimitsToList(selectQuery, loadedBos);
-            LoadBOCollection(collection, loadedBos);
+            var loadedBoInfos = new List<LoadedBoInfo>();
+            foreach (var loadedBo in loadedBos)
+            {
+                loadedBoInfos.Add(new LoadedBoInfo {LoadedBo = (IBusinessObject) loadedBo});
+            }
+            return loadedBoInfos;
+        }
+
+
+        private static string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery)
+        {
+            return String.Format("This can be caused by the data store returning duplicates or where the primary key of your object is incorrectly defined. "
+                + "The source used for loading this collections was '{0}' and the criteria was '{1}'", selectQuery.Source, selectQuery.Criteria);
         }
 
 //        private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)

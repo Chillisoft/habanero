@@ -21,6 +21,7 @@
 using System;
 using Habanero.Base;
 using Habanero.BO;
+using Habanero.Base.Exceptions;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.BusinessObjectLoader
@@ -100,6 +101,35 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             cp1.Surname = Guid.NewGuid().ToString("N");
             cp1.Save();
             return cp1;
+        }
+
+        [Test]
+        public void Test_Refresh_WithDuplicateObjectsInPersistedCollection_ShouldThrowHabaneroDeveloperException()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            MyBO bo = new MyBO();
+            bo.Save();
+            BusinessObjectCollection<MyBO> collection = new BusinessObjectCollection<MyBO>();
+            collection.Load("MyBoID = '" + bo.MyBoID + "'", "");
+            collection.PersistedBusinessObjects.Add(bo);
+            //---------------Assert Precondition----------------
+            Assert.AreEqual(2, collection.PersistedBusinessObjects.Count);
+            Assert.AreSame(collection.PersistedBusinessObjects[0], collection.PersistedBusinessObjects[1]);
+            //---------------Execute Test ----------------------
+            try
+            {
+                collection.Refresh();
+                //---------------Test Result -----------------------
+            }
+            catch (Exception ex)
+            {
+                Assert.IsInstanceOf<HabaneroDeveloperException>(ex, "Should have thrown a HabaneroDeveloperException because of the duplicate item in the PersistedBusinessObjects collection");
+                StringAssert.Contains("A duplicate Business Object was found in the persisted objects collection of the BusinessObjectCollection during a reload", ex.Message);
+                StringAssert.Contains("MyBO", ex.Message);
+                StringAssert.Contains(bo.MyBoID.Value.ToString("B"), ex.Message);
+            }
+
         }
 
     }
