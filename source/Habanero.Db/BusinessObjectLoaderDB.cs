@@ -363,51 +363,43 @@ namespace Habanero.DB
         {
             IClassDef classDef = collection.ClassDef;
             ISelectQuery query = collection.SelectQuery;
-            SelectQueryDB selectQuery = new SelectQueryDB(query, _databaseConnection);
+            string duplicatePersistedObjectsErrorMessage;
+            int totalCountAvailableForPaging;
+            var loadedBoInfos = GetObjectsFromDataStore<T>(classDef, query, out duplicatePersistedObjectsErrorMessage, out totalCountAvailableForPaging);
 
-            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
-            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
-            {
-                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
-
-                List<LoadedBoInfo> loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQuery);
-
-                int totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBoInfos.Count : totalNoOfRecords;
-
-                collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-                var duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, statement);
-                LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
-            }
-            else
-            {
-                // you ARE concerned about limits, and it is past the end of the total, or the limit is 0
-
-                if (true)
-                {
-                    List<LoadedBoInfo> loadedBoInfos = new List<LoadedBoInfo>();
-
-                    int totalCountAvailableForPaging = totalNoOfRecords;
-
-                    collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-                    var duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, null);
-                    LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
-                } else
-                {
-                    //The first record is past the end of the available records, so return an empty collection.
-                    BOColLoaderHelper.ClearCurrentCollection(collection);
-                    RestoreEditedLists(collection, null);
-                    int totalCountAvailableForPaging = totalNoOfRecords;
-                    collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-                    collection.TimeLastLoaded = DateTime.Now;
-                    BOColLoaderHelper.FireRefreshedEvent(collection);
-                }
-            }
+            collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
+            LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
 
             //The collection should show all loaded object less removed or deleted object not yet persisted
             //     plus all created or added objects not yet persisted.
             //Note_: This behaviour is fundamentally different than the business objects behaviour which 
             //  throws and error if any of the items are dirty when it is being refreshed.
             //Should a refresh be allowed on a dirty collection (what do we do with BO's
+        }
+
+        private List<LoadedBoInfo> GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery query, out string duplicatePersistedObjectsErrorMessage, out int totalCountAvailableForPaging) where T : IBusinessObject
+        {
+            SelectQueryDB selectQuery = new SelectQueryDB(query, _databaseConnection);
+
+            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQuery);
+            List<LoadedBoInfo> loadedBoInfos;
+            if (IsLoadNecessary(selectQuery, totalNoOfRecords))
+            {
+                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQuery, totalNoOfRecords);
+
+                loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQuery);
+
+                totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBoInfos.Count : totalNoOfRecords;
+                duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, statement);
+            }
+            else
+            {
+                // you ARE concerned about limits, and it is past the end of the total, or the limit is 0
+                loadedBoInfos = new List<LoadedBoInfo>();
+                totalCountAvailableForPaging = totalNoOfRecords;
+                duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, null);
+            }
+            return loadedBoInfos;
         }
 
         private static string GetDuplicatePersistedObjectsErrorMessage(SelectQueryDB selectQuery, ISqlStatement statement)

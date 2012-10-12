@@ -251,14 +251,14 @@ namespace Habanero.BO
             IClassDef classDef = collection.ClassDef;
             ISelectQuery selectQuery = collection.SelectQuery;
             int totalCountAvailableForPaging;
-            var loadedBoInfos = GetObjectsFromDataStore(classDef, selectQuery, out totalCountAvailableForPaging);
+            string duplicatePersistedObjectsErrorMessage;
+            var loadedBoInfos = GetObjectsFromDataStore(classDef, selectQuery, out totalCountAvailableForPaging, out duplicatePersistedObjectsErrorMessage);
 
             collection.TotalCountAvailableForPaging = totalCountAvailableForPaging;
-            string duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery);
             LoadBOCollection(collection, loadedBoInfos, duplicatePersistedObjectsErrorMessage);
         }
 
-        private List<LoadedBoInfo> GetObjectsFromDataStore(IClassDef classDef, ISelectQuery selectQuery, out int totalCountAvailableForPaging)
+        private List<LoadedBoInfo> GetObjectsFromDataStore(IClassDef classDef, ISelectQuery selectQuery, out int totalCountAvailableForPaging, out string duplicatePersistedObjectsErrorMessage)
         {
             Criteria criteria = selectQuery.Criteria;
             IOrderCriteria orderCriteria = selectQuery.OrderCriteria;
@@ -272,11 +272,13 @@ namespace Habanero.BO
             totalCountAvailableForPaging = totalNoOfRecords == -1 ? loadedBos.Count : totalNoOfRecords;
 
             ApplyLimitsToList(selectQuery, loadedBos);
-            var loadedBoInfos = new List<LoadedBoInfo>();
+            var loadedBoInfos1 = new List<LoadedBoInfo>();
             foreach (var loadedBo in loadedBos)
             {
-                loadedBoInfos.Add(new LoadedBoInfo {LoadedBo = (IBusinessObject) loadedBo});
+                loadedBoInfos1.Add(new LoadedBoInfo {LoadedBo = (IBusinessObject) loadedBo});
             }
+            var loadedBoInfos = loadedBoInfos1;
+            duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery);
             return loadedBoInfos;
         }
 
