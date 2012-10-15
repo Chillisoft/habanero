@@ -41,7 +41,12 @@ namespace Habanero.BO
 			return CriteriaParser.CreateCriteria(criteriaString);
         }
 
-		private static void PrepareForRefresh(IBusinessObjectCollection col)
+        /// <summary>
+        /// This protected method will prepare the select query of the collection for the refresh operation.
+        /// This will include preparing the criteria so that the sources are correctly linked.
+        /// </summary>
+        /// <param name="col"></param>
+		protected virtual void PrepareForRefresh(IBusinessObjectCollection col)
 		{
 			var classDef = col.ClassDef;
 			Criteria criteria = col.SelectQuery.Criteria;
@@ -164,7 +169,13 @@ namespace Habanero.BO
             DoRefreshShared<IBusinessObject>(collection);
         }
 
-        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
+        /// <summary>
+        /// This protected method is the common method used for all collection refreshes and loads
+        /// (Directly through the loader, through the relationships, or through the Load or Refresh method on the <see cref="BusinessObjectCollection{TBusinessObject}">BusinessObjectCollection</see>). 
+        /// </summary>
+        /// <typeparam name="T">The specific or general type of the collection being refreshed.</typeparam>
+        /// <param name="collection"></param>
+        protected virtual void DoRefreshShared<T>(IBusinessObjectCollection collection)
             where T : IBusinessObject
         {
             IClassDef classDef = collection.ClassDef;

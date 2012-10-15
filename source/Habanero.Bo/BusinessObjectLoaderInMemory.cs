@@ -216,47 +216,10 @@ namespace Habanero.BO
 
         #region GetBusinessObjectCollection Members
 
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh<T>(BusinessObjectCollection<T> collection)
-        {
-            DoRefreshShared<T>(collection);
-        }
-
-        /// <summary>
-        /// Reloads a BusinessObjectCollection using the criteria it was originally loaded with.  You can also change the criteria or order
-        /// it loads with by editing its SelectQuery object. The collection will be cleared as such and reloaded (although Added events will
-        /// only fire for the new objects added to the collection, not for the ones that already existed).
-        /// </summary>
-        /// <param name="collection">The collection to refresh</param>
-        protected override void DoRefresh(IBusinessObjectCollection collection)
-        {
-            DoRefreshShared<IBusinessObject>(collection);
-        }
-
-        private void DoRefreshShared<T>(IBusinessObjectCollection collection)
-            where T : IBusinessObject
-        {
-            IClassDef classDef = collection.ClassDef;
-            ISelectQuery selectQuery = collection.SelectQuery;
-            LoaderResult loaderResult = GetObjectsFromDataStore<T>(classDef, selectQuery);
-
-            collection.TotalCountAvailableForPaging = loaderResult.TotalCountAvailableForPaging;
-            string duplicatePersistedObjectsErrorMessage = GetDuplicatePersistedObjectsErrorMessage(selectQuery, loaderResult.LoadMechanismDescription);
-            LoadBOCollection(collection, loaderResult.LoadedBoInfos, duplicatePersistedObjectsErrorMessage);
-        }
-
         protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery)
         {
             Criteria criteria = selectQuery.Criteria;
             IOrderCriteria orderCriteria = selectQuery.OrderCriteria;
-
-            QueryBuilder.PrepareCriteria(classDef, criteria);
 
             IBusinessObjectCollection loadedBos = _dataStore.FindAll(classDef, criteria);
             loadedBos.Sort(orderCriteria);
@@ -278,39 +241,11 @@ namespace Habanero.BO
             };
         }
 
-
         protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
         {
             return String.Format("This can be caused by the data store returning duplicates or where the primary key of your object is incorrectly defined. "
                 + "The source used for loading this collections was '{0}' and the criteria was '{1}'", selectQuery.Source, loadMechanismDescription);
         }
-
-//        private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
-//        {
-//            int firstRecordToLoad = selectQuery.FirstRecordToLoad;
-//            if (firstRecordToLoad < 0)
-//            {
-//                throw new IndexOutOfRangeException("FirstRecordToLoad should not be negative.");
-//            }
-//            if (firstRecordToLoad > loadedBos.Count)
-//            {
-//                loadedBos.Clear();
-//                return;
-//            }
-//            if (firstRecordToLoad > 0)
-//            {
-//                for (int i = 0; i < firstRecordToLoad; i++)
-//                {
-//                    loadedBos.RemoveAt(0);
-//                }
-//            }
-//            if (selectQuery.Limit < 0) return;
-//            while (loadedBos.Count > selectQuery.Limit)
-//            {
-//                loadedBos.RemoveAt(selectQuery.Limit);
-//            }
-//        }
-
 
         private static void ApplyLimitsToList(ISelectQuery selectQuery, IList loadedBos)
         {
