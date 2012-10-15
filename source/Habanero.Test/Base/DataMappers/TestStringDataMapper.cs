@@ -32,7 +32,7 @@ namespace Habanero.Test.Base.DataMappers
     {
         private PropDef _propDef;
         private DataMapper _dataMapper;
-        private const string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        private const string _standardDateTimeFormat = "s";
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
