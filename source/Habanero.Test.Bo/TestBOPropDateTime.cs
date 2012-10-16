@@ -32,7 +32,7 @@ namespace Habanero.Test.BO
     public class TestBoPropDateTime 
     {
         private PropDef _propDef;
-        private const string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        private const string _standardDateTimeFormat = "s";
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()

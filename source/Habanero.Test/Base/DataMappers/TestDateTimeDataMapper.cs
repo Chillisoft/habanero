@@ -31,7 +31,7 @@ namespace Habanero.Test.Base.DataMappers
     {
         private PropDef _propDef;
         private DateTimeDataMapper _dataMapper;
-        private const string _standardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        private const string _standardDateTimeFormat = "s";
 
         [TestFixtureSetUp]
         public void TestFixtureSetup()
@@ -461,7 +461,7 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            string parsedValue = _dataMapper.ConvertValueToString(expectedDateTime.ToString("d"));
+            string parsedValue = _dataMapper.ConvertValueToString(expectedDateTime.ToString("s"));
 
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDateTime.ToString(_standardDateTimeFormat), parsedValue);

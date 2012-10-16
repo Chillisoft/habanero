@@ -37,7 +37,7 @@ namespace Habanero.Util
         /// <summary>
         /// The standard date Time Format to use.
         /// </summary>
-        public const string StandardDateTimeFormat = "dd MMM yyyy HH:mm:ss:fff";
+        public const string StandardDateTimeFormat = "s";
         private static IFormatProvider _dateTimeFormatProvider = new DateTimeFormatInfo { FullDateTimePattern = StandardDateTimeFormat};
                     
         /// <summary>
