@@ -141,7 +141,7 @@ namespace Habanero.DB
         ///<param name="classDef">The class definition.</param>
         ///<param name="criteria">The load criteria.</param>
         ///<returns></returns>
-        private static ISelectQuery GetSelectQuery(IClassDef classDef, Criteria criteria)
+        protected ISelectQuery GetSelectQuery(IClassDef classDef, Criteria criteria)
         {
             ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             QueryBuilder.PrepareCriteria(classDef, criteria);
@@ -199,14 +199,12 @@ namespace Habanero.DB
             return loadedBo;
         }
 
-        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
-    where T : class, IBusinessObject, new()
+        private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading) 
+                where T : class, IBusinessObject, new()
         {
             // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
             // is stored in a dictionary and reused as the object populated to perform a search on the business object
             // manager.
-
-            objectUpdatedInLoading = false;
 
             T bo = GetTempBO<T>();
 
@@ -732,7 +730,7 @@ namespace Habanero.DB
 
                 IClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
 
-                if (subClassDef != null && subClassDef != bo.ClassDef) return subClassDef;
+                if (subClassDef != null && !object.ReferenceEquals(subClassDef, classDef)) return subClassDef;
             }
             return null;
         }

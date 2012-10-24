@@ -1831,7 +1831,7 @@ namespace Habanero.BO
 		{
 			var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
 			committer.AddBusinessObject(this);
-			committer.CommitTransaction();
+		    committer.CommitTransaction();
 			return this;
 		}
 	}

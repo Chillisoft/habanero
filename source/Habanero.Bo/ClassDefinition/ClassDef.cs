@@ -1021,8 +1021,7 @@ namespace Habanero.BO.ClassDefinition
                     return false;
                 }
             }
-            if (this._className != otherClsDef._className) return false;
-            return true;
+            return this._className == otherClsDef._className;
             //return Equals(otherClsDef._className, _className) && Equals(otherClsDef._classType, _classType) && Equals(otherClsDef._primaryKeyDef, _primaryKeyDef) && Equals(otherClsDef._propDefCol, _propDefCol) && Equals(otherClsDef.TypeParameter, TypeParameter);
         }
 
