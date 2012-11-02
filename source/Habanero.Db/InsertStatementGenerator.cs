@@ -280,10 +280,7 @@ namespace Habanero.DB
 
             IBOPropCol propsToInclude = new BOPropCol();
             
-            foreach (BOProp prop in propsToIncludeTemp)
-            {
-                if (prop.PropDef.Persistable)  propsToInclude.Add(prop);
-            }
+            AddPersistableProps(propsToInclude, propsToIncludeTemp);
 
             if (currentClassDef.IsUsingClassTableInheritance())
             {
@@ -293,11 +290,20 @@ namespace Habanero.DB
             while (((ClassDef)currentClassDef).IsUsingSingleTableInheritance() ||
                    ((ClassDef)currentClassDef).IsUsingConcreteTableInheritance())
             {
-                propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
+                var boPropertyCol = currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true);
+                AddPersistableProps(propsToInclude, boPropertyCol);
                 currentClassDef = currentClassDef.SuperClassClassDef;
             }
 
             return propsToInclude;
+        }
+
+        private static void AddPersistableProps(IBOPropCol propsToInclude, IBOPropCol propsToIncludeTemp)
+        {
+            foreach (BOProp prop in propsToIncludeTemp)
+            {
+                if (prop.PropDef.Persistable) propsToInclude.Add(prop);
+            }
         }
     }
 }

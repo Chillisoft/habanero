@@ -79,6 +79,15 @@ namespace Habanero.Test
             filledCircleClassDef.SuperClassDef.Discriminator = "ShapeType_field";
             return filledCircleClassDef;
         }
+        public static IClassDef GetClassDefWithSingleInheritanceHierarchy_NonPersistableProp(string nonPersistablePropertyName)
+        {
+            var filledCircleClassDef = GetClassDefWithSingleInheritanceHierarchy();
+            var nonPersistablePropDef = new PropDef(nonPersistablePropertyName, typeof(string), PropReadWriteRule.ReadWrite,
+                                                   "");
+            nonPersistablePropDef.Persistable = false;
+            filledCircleClassDef.SuperClassClassDef.PropDefcol.Add(nonPersistablePropDef);
+            return filledCircleClassDef;
+        }
 
         public static IClassDef GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators()
         {

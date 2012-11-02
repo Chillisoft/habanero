@@ -124,6 +124,24 @@ namespace Habanero.Test.DB.SqlGeneration
             var statementCol = gen.Generate();
             InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
             Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+        }       
+        
+        [Test]
+        public void TestInsertStatementExcludesNonPersistable_InheritanceProps()
+        {
+            //---------------Set up test pack-------------------
+            const string nonPersistablePropertyName = "NonPersistableProp";
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy_NonPersistableProp(nonPersistablePropertyName);
+            var filledCircle = new FilledCircleNoPrimaryKey();
+            var gen = new InsertStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            var sqlStatementCollection = gen.Generate();
+            //---------------Test Result -----------------------
+            var sqlStatements = sqlStatementCollection.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            var sqlStatement = sqlStatements[0];
+            var sql = sqlStatement.Statement.ToString();
+            Assert.IsFalse(sql.Contains(nonPersistablePropertyName));
         }
 
 
