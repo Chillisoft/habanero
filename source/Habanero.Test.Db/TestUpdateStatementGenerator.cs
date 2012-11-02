@@ -138,5 +138,25 @@ namespace Habanero.Test.DB.SqlGeneration
 
             //---------------Tear Down -------------------------                  
         }
+
+
+        [Test]
+        public void TestUpdateStatementExcludesNonPersistable_InheritanceProps()
+        {
+            //---------------Set up test pack-------------------
+            const string nonPersistablePropertyName = "NonPersistableProp";
+            FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy_NonPersistableProp(nonPersistablePropertyName);
+            var filledCircle = new FilledCircleNoPrimaryKey();
+            filledCircle.Props[nonPersistablePropertyName].Value = TestUtil.GetRandomString();
+            var gen = new UpdateStatementGenerator(filledCircle, DatabaseConnection.CurrentConnection);
+            //---------------Execute Test ----------------------
+            var sqlStatementCollection = gen.Generate();
+            //---------------Test Result -----------------------
+            var sqlStatements = sqlStatementCollection.ToList();
+            Assert.AreEqual(1, sqlStatements.Count);
+            var sqlStatement = sqlStatements[0];
+            var sql = sqlStatement.Statement.ToString();
+            Assert.IsFalse(sql.Contains(nonPersistablePropertyName));
+        }
     }
 }

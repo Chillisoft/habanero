@@ -32,7 +32,7 @@ namespace Habanero.DB
     /// Generates "insert" sql statements to insert a specified business
     /// object's properties into the database
     /// </summary>
-    public class InsertStatementGenerator
+    public class InsertStatementGenerator : ModifyStatementGenerator
     {
         private readonly BusinessObject _bo;
         private StringBuilder _dbFieldList;
@@ -274,36 +274,15 @@ namespace Habanero.DB
         /// Builds a collection of properties to include in the insertion,
         /// depending on the inheritance type.
         /// </summary>
-        private IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
+        protected override IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
         {
-            IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
-
-            IBOPropCol propsToInclude = new BOPropCol();
-            
-            AddPersistableProps(propsToInclude, propsToIncludeTemp);
-
+            var propsToInclude = base.GetPropsToInclude(currentClassDef);
             if (currentClassDef.IsUsingClassTableInheritance())
             {
                 AddParentID(propsToInclude);
             }
 
-            while (((ClassDef)currentClassDef).IsUsingSingleTableInheritance() ||
-                   ((ClassDef)currentClassDef).IsUsingConcreteTableInheritance())
-            {
-                var boPropertyCol = currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true);
-                AddPersistableProps(propsToInclude, boPropertyCol);
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-
             return propsToInclude;
-        }
-
-        private static void AddPersistableProps(IBOPropCol propsToInclude, IBOPropCol propsToIncludeTemp)
-        {
-            foreach (BOProp prop in propsToIncludeTemp)
-            {
-                if (prop.PropDef.Persistable) propsToInclude.Add(prop);
-            }
         }
     }
 }

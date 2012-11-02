@@ -30,7 +30,7 @@ namespace Habanero.DB
     /// Generates "update" sql statements to update a specified business
     /// object's properties in the database
     /// </summary>
-    public class UpdateStatementGenerator
+    public class UpdateStatementGenerator : ModifyStatementGenerator
     {
         private readonly BusinessObject _bo;
         private readonly IDatabaseConnection _connection;
@@ -127,30 +127,10 @@ namespace Habanero.DB
             }
         }
 
-        /// <summary>
-        /// Builds a collection of properties to include in the update,
-        /// depending on the inheritance type
-        /// </summary>
-        protected virtual IBOPropCol GetPropsToInclude(IClassDef currentClassDef)
-        {
-            IBOPropCol propsToIncludeTemp = currentClassDef.PropDefcol.CreateBOPropertyCol(true);
 
-            IBOPropCol propsToInclude = new BOPropCol();
 
-            foreach (BOProp prop in propsToIncludeTemp)
-            {
-                if (prop.PropDef.Persistable) propsToInclude.Add(prop);
-            }
 
-            while (((ClassDef)currentClassDef).IsUsingSingleTableInheritance() ||
-                   ((ClassDef)currentClassDef).IsUsingConcreteTableInheritance())
-            {
-                propsToInclude.Add(currentClassDef.SuperClassClassDef.PropDefcol.CreateBOPropertyCol(true));
-                currentClassDef = currentClassDef.SuperClassClassDef;
-            }
-
-            return propsToInclude;
-        }
+       
 
         ///<summary>
         /// Generate SqlStatementCollection for the Relationsp
@@ -177,5 +157,4 @@ namespace Habanero.DB
             return _statements;
         }
     }
-
 }
