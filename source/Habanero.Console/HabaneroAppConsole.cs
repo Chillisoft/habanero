@@ -49,7 +49,7 @@ namespace Habanero.Console
     /// </summary>
     public class HabaneroAppConsole : HabaneroApp
     {
-        private DatabaseConfig _databaseConfig;
+        private IDatabaseConfig _databaseConfig;
         private string _privateKey;
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Habanero.Console
         /// connection information along with the database vendor name 
         /// (eg. MySql, Oracle).
         /// </summary>
-        public DatabaseConfig DatabaseConfig
+        public IDatabaseConfig DatabaseConfig
         {
             set { _databaseConfig = value; }
         }
@@ -136,14 +136,15 @@ namespace Habanero.Console
         protected override void SetupDatabaseConnection()
         {
             if (DatabaseConnection.CurrentConnection != null) return;
-            if (_databaseConfig == null) _databaseConfig = DatabaseConfig.ReadFromConfigFile();
-            if (_databaseConfig.IsInMemoryDB)
+            if (_databaseConfig == null) _databaseConfig = Habanero.DB.DatabaseConfig.ReadFromConfigFile();
+            if (_databaseConfig.IsInMemoryDB())
             {
                 BORegistry.DataAccessor = new DataAccessorInMemory();
             }
             else
             {
-                if (_privateKey != null) _databaseConfig.SetPrivateKey(_privateKey);
+                ISupportsRSADecryption encryptedDatabaseConfig = _databaseConfig as ISupportsRSADecryption;
+                if (_privateKey != null && encryptedDatabaseConfig != null) encryptedDatabaseConfig.SetPrivateKeyFromXML(_privateKey);
                 DatabaseConnection.CurrentConnection = _databaseConfig.GetDatabaseConnection();
                 BORegistry.DataAccessor = new DataAccessorDB();
             }

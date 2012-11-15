@@ -33,7 +33,7 @@ namespace Habanero.DB
     /// Stores database configuration settings and creates connections
     /// using these settings
     /// </summary>
-    public class DatabaseConfig : IDatabaseConfig
+    public class DatabaseConfig : IDatabaseConfig, ISupportsRSADecryption
     {
         /// <summary>
         /// MySql - the MySql .NET data provider will be used
@@ -287,6 +287,15 @@ namespace Habanero.DB
         }
 
         /// <summary>
+        /// Sets the private key to use to decrypt the password.  The private key is in xml format.   
+        /// </summary>
+        /// <param name="xmlPrivateKey">The xml format of the RSA key (RSA.ToXmlString(true))</param>
+        void ISupportsRSADecryption.SetPrivateKeyFromXML(string xmlPrivateKey)
+        {
+            SetPrivateKey(xmlPrivateKey);
+        }
+
+        /// <summary>
         /// Sets the private key to use to decrypt password. The private key is an RSA object.
         /// </summary>
         /// <param name="privateKey">The RSA object which has the private key</param>
@@ -403,8 +412,7 @@ namespace Habanero.DB
         {
             get
             {
-                var vendor = this.Vendor;
-                return string.IsNullOrEmpty(vendor) || vendor.ToLower().Contains("memory");
+                return this.IsInMemoryDB();
             }
         }
     }
