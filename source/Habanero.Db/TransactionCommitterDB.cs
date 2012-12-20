@@ -115,11 +115,27 @@ namespace Habanero.DB
             if (_transactionsExecutingToDataSource.ContainsKey(transactionID)) return;
             _transactionsExecutingToDataSource.Add(transactionID, transaction);
 
-            var transactionDB = (ITransactionalDB)transaction;
+            if (!ExecuteTransactionToDB(transaction)) return;
 
-            if (transaction is TransactionalBusinessObjectDB)
+            base.ExecuteTransactionToDataSource(transaction);
+        }
+
+        /// <summary>
+        /// This does the actual execution of the <see cref="ITransactional"/> object to the DB.
+        /// This is an injection point to handle alternate persistance options for the <see cref="ITransactional"/> object.
+        /// For example, an alternate <see cref="ITransactional"/> object type for bulk operations could be handled here using some 
+        /// other mechanism than the <see cref="ITransactionalDB"/>.<see cref="ITransactionalDB.GetPersistSql"/> being executed on the DB.
+        /// </summary>
+        /// <param name="transactional">The <see cref="ITransactional"/> object to execute to the DB</param>
+        /// <returns>True if the transaction was executed, or False if it could not be executed.</returns>
+        protected virtual bool ExecuteTransactionToDB(ITransactional transactional)
+        {
+            var transactionDB = (ITransactionalDB) transactional;
+
+            var transactionalBusinessObjectDB = transactional as TransactionalBusinessObjectDB;
+            if (transactionalBusinessObjectDB != null)
             {
-                var businessObject = ((TransactionalBusinessObjectDB) transaction).BusinessObject;
+                var businessObject = transactionalBusinessObjectDB.BusinessObject;
                 if (businessObject.Status.IsDeleted)
                 {
                     DeleteRelatedChildren(businessObject);
@@ -128,10 +144,10 @@ namespace Habanero.DB
             }
 
             var sql = transactionDB.GetPersistSql();
-            if (sql == null) return;
+            if (sql == null) return false;
             var databaseConnection = _databaseConnection;
             databaseConnection.ExecuteSql(sql, _dbTransaction);
-            base.ExecuteTransactionToDataSource(transaction);
+            return true;
         }
 
         /// <summary>
