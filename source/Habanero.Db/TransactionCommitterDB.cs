@@ -39,9 +39,9 @@ namespace Habanero.DB
     [Serializable]
     public class TransactionCommitterDB : TransactionCommitter
     {
-        private readonly IDatabaseConnection _databaseConnection;
-        private IDbConnection _dbConnection;
-        private IDbTransaction _dbTransaction;
+        protected readonly IDatabaseConnection _databaseConnection;
+        protected IDbConnection _dbConnection;
+        protected IDbTransaction _dbTransaction;
         private Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
 
         ///<summary>
