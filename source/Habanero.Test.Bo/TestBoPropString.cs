@@ -175,7 +175,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        public void Test_SetValue_NullString()
+        public void Test_SetValue_EmptyString()
         {
             //---------------Set up test pack-------------------
             BOProp boProp = new BOProp(_propDef);

@@ -209,12 +209,12 @@ namespace Habanero.Base
         bool IsReadable(out string message);
 
         /// <summary>
-        /// is the <paramref name="compareToValue"/> equal to the 
+        /// is the <paramref name="value"/> equal to the 
         /// current Value of the BOProp. 
         /// </summary>
-        /// <param name="compareToValue"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        bool CurrentValueEquals(object compareToValue);
+        bool CurrentValueEquals(object value);
     }
 
 }

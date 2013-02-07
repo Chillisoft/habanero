@@ -1119,7 +1119,7 @@ namespace Habanero.BO.ClassDefinition
         {
             try
             {
-                _propDataMapper = GetBOPropDataMapper();
+                _propDataMapper = DataMapper;
                 return _propDataMapper.TryParsePropValue(valueToParse, out returnValue);
             }
             catch (Exception ex)
@@ -1147,13 +1147,16 @@ namespace Habanero.BO.ClassDefinition
         /// <returns>The converted string.</returns>
         public string ConvertValueToString(object value)
         {
-            _propDataMapper = GetBOPropDataMapper();
+            _propDataMapper = DataMapper;
             return _propDataMapper == null ? value.ToString() : _propDataMapper.ConvertValueToString(value);
         }
 
-        private IDataMapper GetBOPropDataMapper()
+        /// <summary>
+        /// The <see cref="IDataMapper"/> used to parse, compare and convert values to the associated <see cref="PropertyType"/>.
+        /// </summary>
+        public IDataMapper DataMapper
         {
-        	return _propDataMapper ?? (_propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType));
+            get { return _propDataMapper ?? (_propDataMapper = GlobalRegistry.DataMapperFactory.GetDataMapper(PropertyType)); }
         }
     }
 }

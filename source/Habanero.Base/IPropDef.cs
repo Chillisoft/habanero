@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System.Collections.Generic;
+using Habanero.Base.DataMappers;
 
 namespace Habanero.Base
 {
@@ -98,6 +99,11 @@ namespace Habanero.Base
         /// This will prevent the property from being persisted in the usual manner.
         ///</summary>
         bool Persistable { get; set; }
+
+        /// <summary>
+        /// The <see cref="IDataMapper"/> used to parse, compare and convert values to the associated <see cref="PropertyType"/>.
+        /// </summary>
+        IDataMapper DataMapper { get; }
 
         /// <summary>
         /// Creates a new Business Object property (BOProp)

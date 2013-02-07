@@ -55,5 +55,13 @@ namespace Habanero.Base.DataMappers
         /// <returns>True if the parsing was succesful, false if this mapper was unable to 
         /// parse the valueToParse.</returns>
         bool TryParsePropValue(object valueToParse, out object returnValue);
+
+        /// <summary>
+        /// Compares two values as the appropriate type, applying the conversion conventions that this <see cref="IDataMapper"/> includes.
+        /// </summary>
+        /// <param name="compareToValue">The value to compare to. This usually an already parsed value.</param>
+        /// <param name="value">The value that is being compared. This may be an unparsed value.</param>
+        /// <returns>The result of the comparison. True if the values are equal, False if not.</returns>
+        bool CompareValues(object compareToValue, object value);
     }
 }

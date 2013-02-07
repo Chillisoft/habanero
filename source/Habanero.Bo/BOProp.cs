@@ -305,33 +305,30 @@ namespace Habanero.BO
             }
         }
         /// <summary>
-        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// Is the <paramref name="value"/> equal to the 
         /// current Value of the BOProp. 
         /// </summary>
-        /// <param name="compareToValue"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public bool CurrentValueEquals(object compareToValue)
+        public bool CurrentValueEquals(object value)
         {
-            return CompareValues(_currentValue, compareToValue);
+            return CompareValues(_currentValue, value);
         }
 
-        private bool CompareValues(object compareFromValue, object compareToValue)
+        private bool CompareValues(object compareToValue, object value)
         {
-            if (compareFromValue == compareToValue) return true;
-            if (compareFromValue != null) return compareFromValue.Equals(compareToValue);
-            if (compareToValue == null) return true;
-            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(compareToValue)));
+            return _propDef.DataMapper.CompareValues(compareToValue, value);
         }
 
         /// <summary>
-        /// Is the <paramref name="compareToValue"/> equal to the 
+        /// Is the <paramref name="value"/> equal to the 
         /// persisted Value of the BOProp. 
         /// </summary>
-        /// <param name="compareToValue"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        private bool PersistedValueEquals(object compareToValue)
+        private bool PersistedValueEquals(object value)
         {
-            return CompareValues(_persistedValue, compareToValue);
+            return CompareValues(_persistedValue, value);
         }
         /// <summary>
         /// Raises an Erorr if the Incorrect type of property is being set to this BOProp.

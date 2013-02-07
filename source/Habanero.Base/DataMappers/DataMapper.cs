@@ -42,6 +42,28 @@ namespace Habanero.Base.DataMappers
     public abstract class DataMapper : IDataMapper
     {
         /// <summary>
+        /// This value represents how the data mapper will treat an empty string.
+        /// If this is set to true (default) then empty string values will be set to null, and will be found to be equivalent to null.
+        /// </summary>
+        protected bool _convertEmptyStringToNull = true;
+
+        /// <summary>
+        /// Compares two values as the appropriate type, applying the conversion conventions that this <see cref="IDataMapper"/> includes.
+        /// These values are not parsed as part of this comparison operation.
+        /// This is meant to be a quick check of two possibly recognisable types.
+        /// </summary>
+        /// <param name="compareToValue">The value to compare to. This usually an already parsed value.</param>
+        /// <param name="value">The value that is being compared. This may be an unparsed value.</param>
+        /// <returns>The result of the comparison. True if the values are equal, False if not.</returns>
+        public bool CompareValues(object compareToValue, object value)
+        { 
+            if (compareToValue == value) return true;
+            if (compareToValue != null) return compareToValue.Equals(value);
+            if (value == null) return true;
+            return _convertEmptyStringToNull && (string.IsNullOrEmpty(Convert.ToString(value)));
+        }
+
+        /// <summary>
         ///  Converts the value of a valid type for this property definition to a string relevant.
         ///  A null value will be oonverted to a zero length string.
         ///  </summary><param name="value">The value to be converted</param><returns>The converted string.</returns>
@@ -63,7 +85,7 @@ namespace Habanero.Base.DataMappers
         public virtual bool TryParsePropValue(object valueToParse, out object returnValue)
         {
             returnValue = null;
-            if (valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
+            if (_convertEmptyStringToNull && valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
 
             return valueToParse == null || valueToParse == DBNull.Value;
         }

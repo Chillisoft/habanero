@@ -132,7 +132,9 @@
     <Compile Include="Vehicle.Def.cs">
       <DependentUpon>Vehicle.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ClassDefs.xml" />
+    <EmbeddedResource Include="ClassDefs.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
