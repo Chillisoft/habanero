@@ -65,12 +65,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleDecimal_MaxValue_ActualValueLT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name, String.Format(
                                                 @"<rule name=""TestDecimal""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22d, ((PropRuleDecimal)rule).MinValue);
             Assert.AreEqual(15.51d, ((PropRuleDecimal)rule).MaxValue);
@@ -88,12 +89,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleDecimal_MaxValue_ActualValueEquals()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,String.Format(
                                                 @"<rule name=""TestDecimal""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22d, ((PropRuleDecimal)rule).MinValue);
             Assert.AreEqual(15.51d, ((PropRuleDecimal)rule).MaxValue);
@@ -111,12 +113,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleDecimal_MaxValue_ActualValueGT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,String.Format(
                                                 @"<rule name=""TestDecimal""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22D, ((PropRuleDecimal)rule).MinValue);
             Assert.AreEqual(15.51D, ((PropRuleDecimal)rule).MaxValue);
@@ -133,11 +136,12 @@ namespace Habanero.Test.BO
         public void TestPropRuleDecimal_UsingComparableInterface_MaxValue_ActualValueGT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Decimal).Name, String.Format(
                         @"<rule name=""TestDecimal""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
-                        </rule>");
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
+                        </rule>", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22D, ((IPropRuleComparable<decimal>)rule).MinValue);
             Assert.AreEqual(15.51D, ((IPropRuleComparable<decimal>)rule).MaxValue);

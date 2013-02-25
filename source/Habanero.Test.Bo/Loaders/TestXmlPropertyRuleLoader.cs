@@ -263,12 +263,13 @@ namespace Habanero.Test.BO.Loaders
         [Test]
         public void TestPropRuleDecimal()
         {
-            IPropRule rule = _loader.LoadRule(typeof (Decimal).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = _loader.LoadRule(typeof (Decimal).Name, String.Format(
                 @"<rule name=""TestDec"" >
-                            <add key=""min"" value=""1.5"" />
-                            <add key=""max"" value=""8.2"" />
+                            <add key=""min"" value=""1{0}5"" />
+                            <add key=""max"" value=""8{0}2"" />
                         </rule>                          
-");
+", decimalSep));
             Assert.AreEqual("TestDec", rule.Name, "Rule name is not being read from xml correctly.");
             Assert.AreEqual(1.5, Convert.ToDecimal(rule.Parameters["min"]));
             Assert.AreEqual(8.2, Convert.ToDecimal(rule.Parameters["max"]));

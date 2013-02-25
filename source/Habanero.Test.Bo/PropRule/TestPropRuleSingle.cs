@@ -82,12 +82,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleSingle_MaxValue_ActualValueLT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Single).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Single).Name, String.Format(
                 @"<rule name=""TestSingle""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22f, ((PropRuleSingle)rule).MinValue);
             Assert.AreEqual(15.51f, ((PropRuleSingle)rule).MaxValue);
@@ -105,12 +106,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleSingle_MaxValue_ActualValueEquals()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Single).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Single).Name, String.Format(
                 @"<rule name=""TestSingle""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22f, ((PropRuleSingle)rule).MinValue);
             Assert.AreEqual(15.51f, ((PropRuleSingle)rule).MaxValue);
@@ -127,12 +129,13 @@ namespace Habanero.Test.BO
         public void TestPropRuleSingle_MaxValue_ActualValueGT()
         {
             XmlRuleLoader loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
-            IPropRule rule = loader.LoadRule(typeof(Single).Name,
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            IPropRule rule = loader.LoadRule(typeof(Single).Name, String.Format(
                 @"<rule name=""TestSingle""  >
-                            <add key=""min"" value=""12.22"" />
-                            <add key=""max"" value=""15.51"" />
+                            <add key=""min"" value=""12{0}22"" />
+                            <add key=""max"" value=""15{0}51"" />
                         </rule>                          
-");
+", decimalSep));
             //-----------------Assert Preconditions ---------------------------
             Assert.AreEqual(12.22f, ((PropRuleSingle)rule).MinValue);
             Assert.AreEqual(15.51f, ((PropRuleSingle)rule).MaxValue);

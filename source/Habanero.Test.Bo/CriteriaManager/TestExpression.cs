@@ -276,7 +276,8 @@ namespace Habanero.Test.BO
             param = new Parameter("prop", "table", "field", "=", "2007/2/1", ParameterType.Date);
             Assert.AreEqual(new DateTime(2007, 2, 1), param.GetParameterValueAsObject());
 
-            param = new Parameter("prop", "table", "field", "=", "2.1", ParameterType.Number);
+            var decimalSep = System.Threading.Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            param = new Parameter("prop", "table", "field", "=", String.Format("2{0}1", decimalSep), ParameterType.Number);
             Assert.AreEqual(2.1, param.GetParameterValueAsObject());
         }
 
