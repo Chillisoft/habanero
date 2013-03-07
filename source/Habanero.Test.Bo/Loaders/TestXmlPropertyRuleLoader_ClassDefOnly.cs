@@ -32,23 +32,18 @@ namespace Habanero.Test.BO.Loaders
     [TestFixture]
     public class TestXmlPropertyRuleLoader_ClassDefOnly
     {
-        //private XmlRuleLoader _loader;
+        private XmlRuleLoader _loader;
 
         [SetUp]
         public virtual void SetupTest()
         {
-            //Initialise();
+            Initialise();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
         }
 
-//        protected void Initialise()
-//        {
-//            _loader = CreateXmlRuleLoader();
-//        }
-
-        protected virtual XmlRuleLoader CreateXmlRuleLoader()
+        protected void Initialise()
         {
-            return new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
+            _loader = new XmlRuleLoader(new DtdLoader(), GetDefClassFactory());
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()
@@ -60,8 +55,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropRuleInteger_NullValues()
         {
             //---------------Execute Test ----------------------
-            var loader = CreateXmlRuleLoader();
-            IPropRule rule = loader.LoadRule(typeof(int).Name,
+            IPropRule rule = _loader.LoadRule(typeof(int).Name,
                                               @"<rule name=""Test Rule"" message=""Test Message"">
                         <add key=""min"" value=""""/>
                         <add key=""max"" value="""" /></rule>
@@ -75,8 +69,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropRuleStringBlankAttributesTranslateToValidValues()
         {
             //---------------Execute Test ----------------------
-            var loader = CreateXmlRuleLoader();
-            IPropRule rule = loader.LoadRule(typeof (string).Name,
+            IPropRule rule = _loader.LoadRule(typeof (string).Name,
                                               @"<rule name=""TestString"" message=""String Test Message"" >
                             <add key=""minLength"" value="""" />          
                             <add key=""maxLength"" value="""" />
@@ -91,8 +84,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropRuleDate_BlankValues()
         {
             //---------------Execute Test ----------------------
-            var loader = CreateXmlRuleLoader();
-            PropRuleDate rule = (PropRuleDate) loader.LoadRule(typeof(DateTime).Name,
+            PropRuleDate rule = (PropRuleDate) _loader.LoadRule(typeof(DateTime).Name,
                                                                 @"<rule name=""TestDate""  >
                             <add key=""min"" value="""" />
                             <add key=""max"" value="""" />
@@ -107,8 +99,7 @@ namespace Habanero.Test.BO.Loaders
         public void TestPropRuleDecimal_Null()
         {
             //---------------Set up test pack-------------------
-            var loader = CreateXmlRuleLoader();
-            IPropRule rule = loader.LoadRule(typeof(Decimal).Name,
+            IPropRule rule = _loader.LoadRule(typeof(Decimal).Name,
                                               @"<rule name=""TestDec"" >
                             <add key=""min"" value="""" />
                             <add key=""max"" value="""" />
