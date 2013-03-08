@@ -226,6 +226,7 @@ namespace Habanero.Util
         public static bool TryParseValue(object valueToParse, out object returnValue)
         {
             returnValue = null;
+            bool isValidDate = false;
             if (valueToParse != null && valueToParse is string && ((string)valueToParse).Length == 0) return true;
             if(valueToParse == null || valueToParse == DBNull.Value) return true;
 
@@ -264,32 +265,39 @@ namespace Habanero.Util
                     }
 
 
+                    var valueToParseAsString = valueToParse.ToString();
+                    isValidDate = TryParseDateParse(valueToParseAsString, out returnValue);
+                    if (!isValidDate) isValidDate = TryParseDateParseExact(valueToParseAsString, StandardDateTimeFormat, out returnValue);
+                    if (!isValidDate) isValidDate = TryParseDateParseExact(valueToParseAsString, "dd/MM/yyyy HH:mm:ss:fff", out returnValue);
+                    if (!isValidDate) isValidDate = TryParseDateParseExact(valueToParseAsString, "MM/dd/yyyy HH:mm:ss:fff", out returnValue);
 
                 }
-                
-                try
-                {
-                    DateTime dateTimeOut = DateTime.Parse(valueToParse.ToString());
-                    returnValue = dateTimeOut;
-                    return true;
-                }
-                catch (Exception)
-                {
 
-                    try
-                    {
 
-                        returnValue = DateTime.ParseExact(valueToParse.ToString(),
-                                                          StandardDateTimeFormat,
-                                                          _dateTimeFormatProvider,
-                                                          DateTimeStyles.AllowWhiteSpaces);
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-                }
+
+//                try
+//                {
+//                    DateTime dateTimeOut = DateTime.Parse(valueToParseAsString);
+//                    returnValue = dateTimeOut;
+//                    return true;
+//                }
+//                catch (Exception)
+//                {
+//
+//                    try
+//                    {
+//
+//                        returnValue = DateTime.ParseExact(valueToParseAsString,
+//                                                          StandardDateTimeFormat,
+//                                                          _dateTimeFormatProvider,
+//                                                          DateTimeStyles.AllowWhiteSpaces);
+//                        return true;
+//                    }
+//                    catch (Exception)
+//                    {
+//                        return false;
+//                    }
+//                }
                 //DateTime dateTimeOut;
                 //if (DateTime.TryParse(valueToParse.ToString(), out dateTimeOut))
                 //{
@@ -299,7 +307,42 @@ namespace Habanero.Util
                 //return false;
             }
             returnValue = valueToParse;
-            return true;
+            return isValidDate;
+        }
+
+        private static bool TryParseDateParseExact(string valueToParse, string fullDateTimePattern, out object returnValue)
+        {
+            try
+            {
+
+                returnValue = DateTime.ParseExact(valueToParse,
+                                                  fullDateTimePattern,
+                                                  _dateTimeFormatProvider,
+                                                  DateTimeStyles.AllowWhiteSpaces);
+                return true;
+            }
+            catch (Exception)
+            {
+                returnValue = valueToParse;
+                return false;
+            }
+        }
+
+        private static bool TryParseDateParse(string valueToParse, out object returnValue)
+        {
+            DateTime dateTimeOut = default(DateTime);
+            try
+            {
+                
+                dateTimeOut = DateTime.Parse(valueToParse.ToString());
+                returnValue = dateTimeOut;
+                return true;
+            }
+            catch (Exception)
+            {
+                returnValue = valueToParse;
+                return false;
+            }
         }
 
         /// <summary>
