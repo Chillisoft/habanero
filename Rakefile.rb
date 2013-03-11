@@ -106,7 +106,7 @@ end
 
 desc "Install nuget packages"
 getnugetpackages :installNugetPackages do |ip|
-    ip.package_names = ["nunit.framework"]
+    ip.package_names = ["nunit.trunk"]
 end
 
 desc "Publish the Habanero.Base nuget package"
