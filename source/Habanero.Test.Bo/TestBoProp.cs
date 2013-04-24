@@ -107,6 +107,27 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_ValidateProp_WhenInvalidPropReloaded_ShouldRevalidate()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            const object invalidValue = null;
+            boProp.Value = invalidValue;
+            boProp.Validate();
+            boProp.InitialiseProp(invalidValue);
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory, "Prop should be compulsory");
+            Assert.IsTrue(boProp.IsValid, "Prop should be valid until revalidated");
+            Assert.IsTrue(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should not have an invalid message until revalidated");
+            //---------------Execute Test ----------------------
+            boProp.Validate();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(boProp.IsValid, "Prop should not be valid");
+            Assert.IsFalse(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should have an invalid reason");
+        }
+
+        [Test]
         public void TestRestorePropValue()
         {
             _prop.InitialiseProp("OriginalValue");
@@ -172,6 +193,29 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsFalse(lBOProp.IsValid);
             Assert.IsTrue(lBOProp.InvalidReason.Length > 0);
+        }
+
+        [Test]
+        public void Test_RestorePropValue_WhenInvalidPropRestored_ShouldRevalidate()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            const object invalidValue = null;
+            //boProp.Value = invalidValue;
+            //boProp.Validate();
+            boProp.InitialiseProp(invalidValue);
+            boProp.Validate();
+            boProp.Value = "Valid Value";
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory, "Prop should be compulsory");
+            Assert.IsTrue(boProp.IsValid, "Prop should be valid");
+            Assert.IsTrue(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should not have an invalid message");
+            //---------------Execute Test ----------------------
+            boProp.RestorePropValue();
+            //---------------Test Result -----------------------
+            Assert.IsFalse(boProp.IsValid, "Prop should not be valid");
+            Assert.IsFalse(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should have an invalid reason");
         }
 
         [Test]
@@ -1341,6 +1385,49 @@ namespace Habanero.Test.BO
             bool propValueChanged = boProp.InitialiseProp("NewValue");
             //---------------Test Result -----------------------
             Assert.IsTrue(propValueChanged);
+        }
+
+        [Test]
+        public void Test_InitialiseProp_Again_WhenAlreadyInvalid_AndNewInvalidValue_ShouldResetInvalidState()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            const object invalidValue = null;
+            boProp.Value = invalidValue;
+            boProp.Validate();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory, "Prop should be compulsory");
+            Assert.IsFalse(boProp.IsValid, "Prop should not be valid");
+            Assert.IsFalse(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should have an invalid reason");
+            //---------------Execute Test ----------------------
+            bool propValueChanged = boProp.InitialiseProp(invalidValue);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(propValueChanged);
+            Assert.IsTrue(boProp.IsValid, "Prop should be valid until revalidated");
+            Assert.IsTrue(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should not have an invalid message until revalidated");
+        }
+
+        [Test]
+        public void Test_InitialiseProp_Again_WhenAlreadyInvalid_AndNewValidValue_ShouldResetInvalidState()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropPropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            const object invalidValue = null;
+            boProp.Value = invalidValue;
+            boProp.Validate();
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(propDef.Compulsory, "Prop should be compulsory");
+            Assert.IsFalse(boProp.IsValid, "Prop should not be valid");
+            Assert.IsFalse(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should have an invalid reason");
+            //---------------Execute Test ----------------------
+            const string validValue = "valid Value";
+            bool propValueChanged = boProp.InitialiseProp(validValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(propValueChanged);
+            Assert.IsTrue(boProp.IsValid, "Prop should be valid until revalidated");
+            Assert.IsTrue(String.IsNullOrEmpty(boProp.InvalidReason), "Prop should not have an invalid message until revalidated");
         }
 
         [Test]

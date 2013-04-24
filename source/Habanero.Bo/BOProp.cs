@@ -158,7 +158,7 @@ namespace Habanero.BO
         /// </summary>
         public void Validate()
         {
-            //---Added for performance based on profiling LGMIS.
+            // Delayed load validation added for performance based on profiling LGMIS (Brett 12 Jan 2009)
             if (!_loadedPropHasBeenValidated && !this.IsDirty)
             {
                 _isValid = _propDef.IsValueValid(this.Value, ref _invalidReason);
@@ -182,9 +182,8 @@ namespace Habanero.BO
             bool propValueChanged = false;
             ParsePropValue(propValue, out newValue);
             _invalidReason = "";
-            //Brett 12 Jan 2009: Removed due to performance improvement during loading.
-            // No bo loaded from the database will ever be placed in an invalid state
-            //_isValid = _propDef.IsValueValid(newValue, ref _invalidReason);
+            _isValid = true;
+            _loadedPropHasBeenValidated = false;
 
             if ((_currentValue == null && newValue != null) || (_currentValue != null && newValue == null) ||
                 (_currentValue != null && !_currentValue.Equals(newValue)))
@@ -232,6 +231,8 @@ namespace Habanero.BO
 
             _currentValue = _persistedValue;
             _valueBeforeLastEdit = _persistedValue;
+            // Mark (24 April 2013) - A possible perfrmance optimisation here could be to restore the values of 
+            // the following properties here instead of revalidating: _isValid, _invalidReason and _loadedPropHasBeenValidated
             Validate();
             _isDirty = false;
             
