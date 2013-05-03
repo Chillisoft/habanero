@@ -291,7 +291,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="message"></param>
 		/// <returns></returns>
 		IPropRule CreatePropRuleSingle(string name, string message);
-
+        
 		/// <summary>
 		/// Creates a <see cref="PropRuleDouble"/>
 		/// </summary>
@@ -299,5 +299,13 @@ namespace Habanero.BO.ClassDefinition
 		/// <param name="message"></param>
 		/// <returns></returns>
 		IPropRule CreatePropRuleDouble(string name, string message);
+
+        ///<summary>
+        /// Creates an IPropRule of Type <see cref="PropRuleShort"/>
+        ///</summary>
+        ///<param name="name"></param>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        IPropRule CreatePropRuleShort(string name, string message);
 	}
 }

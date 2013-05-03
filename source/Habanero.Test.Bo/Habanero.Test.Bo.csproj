@@ -162,6 +162,7 @@
     <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
     <Compile Include="ClassDefinition\TestFilterDef.cs" />
     <Compile Include="ClassDefinition\TestSingleRelationshipDef.cs" />
+    <Compile Include="PropRule\TestPropRuleShort.cs" />
     <Compile Include="TestDataAccessorThreadSplitter.cs" />
     <Compile Include="TestEnumerableExtensions.cs" />
     <Compile Include="CriteriaManager\TestCriteriaValues.cs" />

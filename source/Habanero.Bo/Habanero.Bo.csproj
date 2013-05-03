@@ -246,6 +246,7 @@
     <Compile Include="PropertyLink.cs" />
     <Compile Include="PropRuleDouble.cs" />
     <Compile Include="PropRuleLong.cs" />
+    <Compile Include="PropRuleShort.cs" />
     <Compile Include="PropRuleSingle.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ReadOnlyDataSetProvider.cs">

@@ -1,5 +1,4 @@
 #region Licensing Header
-
 // ---------------------------------------------------------------------------------
 //  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
@@ -18,59 +17,48 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
-
 #endregion
-
 using Habanero.BO;
 using NUnit.Framework;
-
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
-
 namespace Habanero.Test.BO
 {
     [TestFixture]
-    public class TestPropRuleInt
+    public class TestPropRuleShort
     {
         [Test]
         public void Test_WithNegativeNumber_ShouldReturnErrorMessage()
         {
-            //---------------Set up test pack-------------------
-            var errorMessage = "";
-            var rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            string errorMessage = "";
+            var rule = new PropRuleShort("num", "TestMessage", 5, 10);
 
             Assert.IsFalse(rule.IsPropValueValid("Propname", -5, ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
         }
-
         [Test]
         public void Test_ValueLTMin_ShouldReturnErrorMessage()
         {
-            //---------------Set up test pack-------------------
-            var rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            var rule = new PropRuleShort("num", "TestMessage", 5, 10);
             var errorMessage = "";
 
             //Test less than min
             Assert.IsFalse(rule.IsPropValueValid("Propname", 1, ref errorMessage));
             Assert.IsTrue(errorMessage.Length > 0);
         }
-
         [Test]
         public void Test_WithValidValue_ShouldReturnEmptyErrorMessage()
         {
-            //---------------Set up test pack-------------------
-            var rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            var rule = new PropRuleShort("num", "TestMessage", 5, 10);
             var errorMessage = "";
 
             Assert.IsTrue(rule.IsPropValueValid("Propname", 6, ref errorMessage));
             Assert.IsFalse(errorMessage.Length > 0);
         }
-
         [Test]
         public void Test_WithValueGTMax_ShouldReturnErrorMessage()
         {
-            //---------------Set up test pack-------------------
-            var rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            var rule = new PropRuleShort("num", "TestMessage", 5, 10);
             var errorMessage = "";
 
             Assert.IsFalse(rule.IsPropValueValid("Propname", 12, ref errorMessage));
@@ -80,8 +68,7 @@ namespace Habanero.Test.BO
         [Test]
         public void Test_WithNullValue_ShouldReturnEmptyErrorMessage()
         {
-            //---------------Set up test pack-------------------
-            var rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            var rule = new PropRuleShort("num", "TestMessage", 5, 10);
             var errorMessage = "";
 
             Assert.IsTrue(rule.IsPropValueValid("Propname", null, ref errorMessage));
@@ -92,24 +79,28 @@ namespace Habanero.Test.BO
         public void Test_MaxAndMinValueAreSetOnIComparableInterface()
         {
             //---------------Set up test pack-------------------
+
             //---------------Assert Precondition----------------
+
             //---------------Execute Test ----------------------
-            IPropRuleComparable<int> rule = new PropRuleInteger("num", "TestMessage", 5, 10);
+            IPropRuleComparable<short> rule = new PropRuleShort("num", "TestMessage", 5, 10);
             //---------------Test Result -----------------------
             Assert.AreEqual(5, rule.MinValue);
             Assert.AreEqual(10, rule.MaxValue);
         }
 
         [Test]
-        public void ConstructWithoutMinOrMax_ShouldUseIntMinAndMax()
+        public void ConstructWithoutMinOrMax_ShouldUseShortMinAndMax()
         {
             //---------------Set up test pack-------------------
+
             //---------------Assert Precondition----------------
+
             //---------------Execute Test ----------------------
-            IPropRuleComparable<int> rule = new PropRuleInteger("num", "TestMessage");
+            IPropRuleComparable<short> rule = new PropRuleShort("num", "TestMessage");
             //---------------Test Result -----------------------
-            Assert.AreEqual(int.MinValue, rule.MinValue);
-            Assert.AreEqual(int.MaxValue, rule.MaxValue);
+            Assert.AreEqual(short.MinValue, rule.MinValue);
+            Assert.AreEqual(short.MaxValue, rule.MaxValue);
         }
     }
 }

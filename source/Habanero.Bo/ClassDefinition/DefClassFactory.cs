@@ -139,15 +139,26 @@ namespace Habanero.BO.ClassDefinition
 			return new PropRuleDecimal(name, message);
 		}
 
-		///<summary>
-		///</summary>
-		///<param name="name"></param>
-		///<param name="message"></param>
-		///<returns></returns>
-		public IPropRule CreatePropRuleInteger(string name, string message)
-		{
-			return new PropRuleInteger(name, message);
-		}
+        ///<summary>
+        /// Creates an IPropRule of Type Int
+        ///</summary>
+        ///<param name="name"></param>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        public IPropRule CreatePropRuleInteger(string name, string message)
+        {
+            return new PropRuleInteger(name, message);
+        }
+        ///<summary>
+        /// Creates an IPropRule of Type Short
+        ///</summary>
+        ///<param name="name"></param>
+        ///<param name="message"></param>
+        ///<returns></returns>
+        public IPropRule CreatePropRuleShort(string name, string message)
+        {
+            return new PropRuleShort(name, message);
+        }
         ///<summary>
         /// Constructs a <see cref="PropRuleLong"/>
         ///</summary>

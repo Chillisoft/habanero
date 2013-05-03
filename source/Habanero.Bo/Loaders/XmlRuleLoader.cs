@@ -96,7 +96,7 @@ namespace Habanero.BO.Loaders
 			{
 				string keyAtt = _reader.GetAttribute("key");
 				string valueAtt = _reader.GetAttribute("value");
-				if (keyAtt == null || keyAtt.Length == 0)
+				if (string.IsNullOrEmpty(keyAtt))
 				{
 					throw new InvalidXmlDefinitionException("An 'add' " +
 						"attribute in the class definitions was missing the " +
@@ -237,7 +237,12 @@ namespace Habanero.BO.Loaders
 			if (propTypeName == type.Name || propTypeName == type.FullName)
 			{
 				return _defClassFactory.CreatePropRuleInteger(name, message);
-			}
+            } 
+            type = typeof(short);
+            if (propTypeName == type.Name || propTypeName == type.FullName)
+            {
+                return _defClassFactory.CreatePropRuleShort(name, message);
+            }
 			type = typeof(string);
 			if (propTypeName == type.Name || propTypeName == type.FullName)
 			{

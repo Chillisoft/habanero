@@ -355,6 +355,22 @@ namespace Habanero.Test.BO.Loaders
             Assert.IsInstanceOf<PropRuleInteger>(createdPropRule);
             Assert.AreEqual(expectedRuleName, createdPropRule.Name);
         }
+
+        [Test]
+        public void Test_CreatePropRule_WhenTypeIsInt16_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            var xmlRuleLoaderSpy = new XmlRuleLoaderSpy();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = xmlRuleLoaderSpy.CallCreatePropRule("System.Int16", expectedRuleName);
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleShort>(createdPropRule);
+            Assert.AreEqual(expectedRuleName, createdPropRule.Name);
+        }
         [Test]
         public void Test_CreatePropRule_WhenTypeIsString_ShouldConstruct()
         {

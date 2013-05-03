@@ -1,4 +1,5 @@
 #region Licensing Header
+
 // ---------------------------------------------------------------------------------
 //  Copyright (C) 2007-2011 Chillisoft Solutions
 //  
@@ -17,7 +18,9 @@
 //      You should have received a copy of the GNU Lesser General Public License
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
+
 #endregion
+
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
@@ -35,7 +38,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_Construct_ConstructedCorrectly()
         {
             //---------------Set up test pack-------------------
-            
+
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -44,7 +47,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(defClassFactory);
         }
 
-        [Test] 
+        [Test]
         public void Test_CreatePropRuleDecimal()
         {
             //---------------Set up test pack-------------------
@@ -52,23 +55,23 @@ namespace Habanero.Test.BO.ClassDefinition
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleDecimal rule = (PropRuleDecimal) defClassFactory.CreatePropRuleDecimal("SomeName", "SomeMessage");
+            var rule = (PropRuleDecimal) defClassFactory.CreatePropRuleDecimal("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);
             Assert.AreEqual(Decimal.MinValue, rule.MinValue);
             Assert.AreEqual(Decimal.MaxValue, rule.MaxValue);
-
         }
 
-        [Test] public void Test_CreatePropRuleSingle()
+        [Test]
+        public void Test_CreatePropRuleSingle()
         {
             //---------------Set up test pack-------------------
             IDefClassFactory defClassFactory = new DefClassFactory();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleSingle rule = (PropRuleSingle) defClassFactory.CreatePropRuleSingle("SomeName", "SomeMessage");
+            var rule = (PropRuleSingle) defClassFactory.CreatePropRuleSingle("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);
@@ -76,14 +79,15 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.AreEqual(Single.MaxValue, rule.MaxValue);
         }
 
-        [Test] public void Test_CreatePropRuleDouble()
+        [Test]
+        public void Test_CreatePropRuleDouble()
         {
             //---------------Set up test pack-------------------
             IDefClassFactory defClassFactory = new DefClassFactory();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
-            PropRuleDouble rule = (PropRuleDouble) defClassFactory.CreatePropRuleDouble("SomeName", "SomeMessage");
+            var rule = (PropRuleDouble) defClassFactory.CreatePropRuleDouble("SomeName", "SomeMessage");
             //---------------Test Result -----------------------
             Assert.AreEqual("SomeName", rule.Name);
             Assert.AreEqual("SomeMessage", rule.Message);
@@ -111,8 +115,9 @@ namespace Habanero.Test.BO.ClassDefinition
 
             //---------------Execute Test ----------------------
             var uiFormField = defClassFactory.CreateUIFormProperty(label, propertyName
-                                                                      , controlTypeName, controlAssembly, mapperTypeName,
-                                                                      mapperAssembly, editable, showAsCompulsory, toolTipText, null, layoutStyle);
+                                                                   , controlTypeName, controlAssembly, mapperTypeName,
+                                                                   mapperAssembly, editable, showAsCompulsory,
+                                                                   toolTipText, null, layoutStyle);
             //---------------Test Result -----------------------
             Assert.AreEqual(label, uiFormField.Label);
             Assert.AreEqual(propertyName, uiFormField.PropertyName);
@@ -141,6 +146,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsInstanceOf<PropRuleInteger>(createdPropRule);
             Assert.AreEqual(expectedRuleName, createdPropRule.Name);
         }
+
         [Test]
         public void Test_CreatePropRule_WhenTypeIsString_ShouldConstruct()
         {
@@ -156,6 +162,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsInstanceOf<PropRuleString>(createdPropRule);
             Assert.AreEqual(expectedRuleName, createdPropRule.Name);
         }
+
         [Test]
         public void Test_CreatePropRule_WhenTypeIsDateTime_ShouldConstruct()
         {
@@ -169,6 +176,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(createdPropRule);
             Assert.IsInstanceOf<PropRuleDate>(createdPropRule);
         }
+
         [Test]
         public void Test_CreatePropRule_WhenTypeIsDecimalShouldConstruct()
         {
@@ -182,6 +190,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(createdPropRule);
             Assert.IsInstanceOf<PropRuleDecimal>(createdPropRule);
         }
+
         [Test]
         public void Test_CreatePropRule_WhenTypeIsDouble_ShouldConstruct()
         {
@@ -195,6 +204,7 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsNotNull(createdPropRule);
             Assert.IsInstanceOf<PropRuleDouble>(createdPropRule);
         }
+
         [Test]
         public void Test_CreatePropRule_WhenTypeIsSingle_ShouldConstruct()
         {
@@ -223,5 +233,20 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsInstanceOf<PropRuleLong>(createdPropRule);
         }
 
+        [Test]
+        public void CreatePropRuleInt16_ShouldConstruct()
+        {
+            //---------------Set up test pack-------------------
+            IDefClassFactory defFactory = new DefClassFactory();
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            const string expectedRuleName = "MyRule";
+            var createdPropRule = defFactory.CreatePropRuleShort(expectedRuleName, "fdafasdf");
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(createdPropRule);
+            Assert.IsInstanceOf<PropRuleShort>(createdPropRule);
+            Assert.AreEqual(expectedRuleName, createdPropRule.Name);
+        }
     }
 }
