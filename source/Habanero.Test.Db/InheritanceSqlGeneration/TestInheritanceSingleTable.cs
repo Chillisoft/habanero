@@ -272,7 +272,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             bo.SetPropertyValue("ShapeID", circle.ShapeID);
             bo.Save();
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             bo = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<MyBO>(bo.ID);

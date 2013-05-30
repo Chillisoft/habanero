@@ -61,7 +61,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             contactPerson.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             Car loadedCar = Broker.GetBusinessObject<Car>(car.ID);
 
             //---------------Test Result -----------------------
@@ -76,7 +76,7 @@ namespace Habanero.Test.DB
             var contactPersonTestBO = CreateSavedContactPersonTestBoAndOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             //---------------Assert Precondition----------------
@@ -96,7 +96,7 @@ namespace Habanero.Test.DB
             var contactPersonTestBO = CreateSavedContactPersonTestBoAndOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             var loadedCollection = organisationTestBO.ContactPeople;

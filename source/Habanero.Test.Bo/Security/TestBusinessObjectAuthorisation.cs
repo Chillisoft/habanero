@@ -491,7 +491,7 @@ namespace Habanero.Test.BO.Security
 			authorisationStub = GetAuthorisationStub_CanRead_True();
 			myBoStub.SetAuthorisation(authorisationStub);
 			IPrimaryKey id = myBoStub.ID;
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			
 			//---------------Assert Precondition----------------
 			Assert.IsTrue(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));
@@ -517,7 +517,7 @@ namespace Habanero.Test.BO.Security
 			authorisationStub = GetAuthorisationStub_CanRead_False();
 			myBoStub.SetAuthorisation(authorisationStub);
 			IPrimaryKey id = myBoStub.ID;
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 
 			//---------------Assert Precondition----------------
 			Assert.IsFalse(authorisationStub.IsAuthorised(myBoStub, BusinessObjectActions.CanRead));

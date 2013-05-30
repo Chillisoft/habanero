@@ -60,8 +60,8 @@ namespace Habanero.Test.BO
         {
             this.SetupDBConnection();
             OrderItem.CreateTable();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         [TestFixtureTearDown]

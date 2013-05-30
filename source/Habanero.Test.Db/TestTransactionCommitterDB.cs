@@ -48,7 +48,7 @@ namespace Habanero.Test.DB
             CleanStubDatabaseTransactionTable();
             ContactPersonTestBO.DeleteAllContactPeople();
             BORegistry.DataAccessor = new DataAccessorDB();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             
         }
 
@@ -211,7 +211,7 @@ namespace Habanero.Test.DB
         private static void DoTestCheckForDuplicateObjects()
         {
             ContactPersonTestBO contactPersonCompositeKey = GetSavedContactPersonCompositeKey();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO duplicateContactPerson = new ContactPersonTestBO
                                                              {
                                                                  ContactPersonID = Guid.NewGuid(),

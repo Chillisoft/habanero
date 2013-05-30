@@ -32,6 +32,7 @@ namespace Habanero.Test.DB
         public override void SetupTest()
         {
             base.SetupTest();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             TestUsingDatabase.SetupDBDataAccessor();
             OrganisationTestBO.DeleteAllOrganisations();
             ContactPersonTestBO.DeleteAllContactPeople();
@@ -57,7 +58,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             organisation.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO loadedContactPerson = Broker.GetBusinessObject<ContactPersonTestBO>(contactPerson.ID);
 
             //---------------Test Result -----------------------
@@ -89,7 +90,7 @@ namespace Habanero.Test.DB
 
             //---------------Execute Test ----------------------
             organisation.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO loadedContactPerson = Broker.GetBusinessObject<ContactPersonTestBO>(contactPerson.ID);
 
             //---------------Test Result -----------------------

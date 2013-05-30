@@ -68,7 +68,7 @@ namespace Habanero.Test.DB
             CreateSaveContactPersonTestPack();
   
             //Ensure that a fresh object is loaded from DB
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         private void CreateSaveContactPersonTestPack()
@@ -421,7 +421,7 @@ namespace Habanero.Test.DB
             myContactPerson.Save();
 
             //waitForDB();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //Reload the person and make sure that the changes have been made.
             ContactPerson myNewContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPerson>(_updateContactPersonId);
@@ -543,7 +543,7 @@ namespace Habanero.Test.DB
 
         internal static void ClearTransactionLogCol()
         {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         internal static void DeleteAllTransactionLogs()

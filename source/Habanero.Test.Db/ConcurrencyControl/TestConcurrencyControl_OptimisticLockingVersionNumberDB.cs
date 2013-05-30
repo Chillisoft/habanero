@@ -38,6 +38,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             ClassDef.ClassDefs.Clear();
             //Runs every time that any testmethod is executed
             //base.SetupTest();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
         [TestFixtureSetUp]
@@ -82,7 +83,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             AddObjectToDelete(contactPerson);
             contactPerson.Save();
             //Clear object manager
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
@@ -115,7 +116,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             ContactPersonOptimisticLockingVersionNumberDB contactPerson = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
 
             //Clear object manager
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //Load second object from DB
             ContactPersonOptimisticLockingVersionNumberDB duplicateContactPerson =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonOptimisticLockingVersionNumberDB>(contactPerson.ID);
@@ -149,7 +150,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
             ContactPersonOptimisticLockingVersionNumberDB contactPersonDeleteConcurrency 
                 = CreateSavedCntactPersonOptimisticLockingVersionNumberDB();
             //Clear object manager
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //Load second object from DB            
 
             ContactPersonOptimisticLockingVersionNumberDB contactPerson2 

@@ -173,7 +173,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestDatabaseReadWrite()
         {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             // Test inserting & selecting
             Shape shape = new Shape();
             shape.ShapeName = "MyShape";

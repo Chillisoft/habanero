@@ -46,8 +46,8 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
            // new Address();
-            BORegistry.BusinessObjectManager = null;//Ensures a new BOMan used is always the singleton
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             
         }
@@ -931,7 +931,7 @@ namespace Habanero.Test.BO
             var originalContactPerson = new ContactPersonTestBO {Surname = "FirstSurname"};
             originalContactPerson.Save();
             var origCPID = originalContactPerson.ID;
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, boMan.Count);
@@ -1595,7 +1595,7 @@ namespace Habanero.Test.BO
         public void Test3LayerLoadRelated()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO.DeleteAllContactPeople();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorDB();
@@ -1637,7 +1637,7 @@ namespace Habanero.Test.BO
         public void Test_NewObjectInObjectManager()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
@@ -1655,7 +1655,7 @@ namespace Habanero.Test.BO
         public void Test_SavedObjectInObjectManager()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var contactPersonTestBO = new ContactPersonTestBO {Surname = TestUtil.GetRandomString()};
             //---------------Assert Precondition----------------
@@ -1676,7 +1676,7 @@ namespace Habanero.Test.BO
         public void Test_ObjectRemovedFromObjectManager()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var contactPersonTestBO = new ContactPersonTestBO();
             //--------------- Test Preconditions ----------------
@@ -1700,7 +1700,7 @@ namespace Habanero.Test.BO
         public void Test_NewObject_ObjectManagerUpdated_WhenIdChangedTwice_Guid()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var contactPersonTestBO = new ContactPersonTestBO();
             var firstCpID = Guid.NewGuid();
@@ -1729,7 +1729,7 @@ namespace Habanero.Test.BO
         public void Test_NewObjectInObjectManager_Int()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, BusinessObjectManager.Instance.Count);
@@ -1747,7 +1747,7 @@ namespace Habanero.Test.BO
         public void Test_ChangeKey()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID();
             var boWithIntID = new BOWithIntID();
             //--------------- Test Preconditions ----------------
@@ -1762,7 +1762,7 @@ namespace Habanero.Test.BO
         public void Test_SavedObjectInObjectManager_Int()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID();
             var boWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt()};
             //---------------Assert Precondition----------------
@@ -1783,7 +1783,7 @@ namespace Habanero.Test.BO
         public void Test_ObjectRemovedFromObjectManager_Int()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID();
             var boWithIntID = new BOWithIntID();
             //--------------- Test Preconditions ----------------
@@ -1803,7 +1803,7 @@ namespace Habanero.Test.BO
         public void Test_NewObject_ObjectManagerUpdated_WhenIdChangedOnce()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID();
             var boWithIntID = new BOWithIntID();
             var firstIntID = TestUtil.GetRandomInt();
@@ -1995,7 +1995,7 @@ namespace Habanero.Test.BO
         public void Test_Find_NotFound()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
 
@@ -2010,7 +2010,7 @@ namespace Habanero.Test.BO
         public void Test_Find_OneMatch()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var cp = new ContactPersonTestBO();
             var surname = cp.Surname = TestUtil.GetRandomString();
@@ -2028,7 +2028,7 @@ namespace Habanero.Test.BO
         public void Test_Find_Null_ReturnsAllOfType()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
 #pragma warning disable 168
@@ -2076,7 +2076,7 @@ namespace Habanero.Test.BO
         public void Test_Find_NonGeneric_NotFound()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
 
@@ -2092,7 +2092,7 @@ namespace Habanero.Test.BO
         public void Test_Find_NonGeneric_OneMatch()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var cp = new ContactPersonTestBO();
             var surname = cp.Surname = TestUtil.GetRandomString();
@@ -2177,7 +2177,7 @@ namespace Habanero.Test.BO
         public void Test_Find_NonGeneric_Null_ReturnsAllOfType()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
 #pragma warning disable 168
@@ -2224,7 +2224,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_NotFound()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
 
@@ -2240,7 +2240,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_OneMatch()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var cp = new ContactPersonTestBO();
             var surname = cp.Surname = TestUtil.GetRandomString();
@@ -2258,7 +2258,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_Null_ReturnsAllOfType()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
 #pragma warning disable 168
@@ -2307,7 +2307,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_NonGeneric_NotFound()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var criteria = new Criteria("Surname", Criteria.ComparisonOp.Equals, TestUtil.GetRandomString());
 
@@ -2324,7 +2324,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_NonGeneric_OneMatch()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             var cp = new ContactPersonTestBO();
             var surname = cp.Surname = TestUtil.GetRandomString();
@@ -2343,7 +2343,7 @@ namespace Habanero.Test.BO
         public void Test_FindFirst_NonGeneric_Null_ReturnsAllOfType()
         {
             //--------------- Set up test pack ------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
 #pragma warning disable 168
@@ -2363,7 +2363,7 @@ namespace Habanero.Test.BO
         public void Test_GetObjectIfInManager_WhenObjectIsInManager_ShouldReturnObject()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
             var bo1 = new ContactPersonTestBO();
@@ -2379,11 +2379,11 @@ namespace Habanero.Test.BO
         public void Test_GetObjectIfInManager_WhenObjectIsNotInManager_ShouldReturnNull()
         {
             //---------------Set up test pack-------------------
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SetupDefaultContactPersonBO();
             var bo1 = new ContactPersonTestBO();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             //----------------Assert preconditions ---------------
             Assert.AreEqual(0, BusinessObjectManager.Instance.Count);

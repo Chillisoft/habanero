@@ -231,7 +231,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 			//---------------Execute Test ----------------------
 
 			cp.Surname = Guid.NewGuid().ToString();
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			ContactPersonPessimisticLockingDB cp2 =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
 
@@ -288,7 +288,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		{
 			//---------------Set up test pack-------------------
 			var cp = CreateSavedContactPersonPessimisticLocking();
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			var cp2 =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonPessimisticLockingDB>(cp.ID);
 			//---------------Execute Test ----------------------
@@ -350,7 +350,7 @@ namespace Habanero.Test.DB.ConcurrencyControl
 		public void Test_WhenCleansUpObjectClearsItsLock()
 		{
 			//---------------Set up test pack-------------------
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			var cp = CreateSavedContactPersonPessimisticLocking();
 			object value = cp.ID.GetAsValue();
 			//---------------Execute Test ----------------------
@@ -359,10 +359,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
 
 			cp = new ContactPersonPessimisticLockingDB(); //so that garbage collector can work
 
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			TestUtil.WaitForGC();
 			//---------------Test Result -----------------------
-			BusinessObjectManager.Instance.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			TestUtil.WaitForGC();
 			var cp2 =
 				BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObjectByValue<ContactPersonPessimisticLockingDB>(value);

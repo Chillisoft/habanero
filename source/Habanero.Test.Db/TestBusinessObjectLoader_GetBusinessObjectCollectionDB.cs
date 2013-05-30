@@ -193,7 +193,7 @@ namespace Habanero.Test.DB
             CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             Shape shape = Shape.CreateSavedShape();
             Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<CircleNoPrimaryKey> loadedCircles =
@@ -211,7 +211,7 @@ namespace Habanero.Test.DB
             IClassDef classDef = CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             Shape shape = Shape.CreateSavedShape();
             Criteria criteria = Criteria.FromPrimaryKey(shape.ID);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             IBusinessObjectCollection loadedCircles =
@@ -231,7 +231,7 @@ namespace Habanero.Test.DB
             CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
             Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<Shape> loadedShapes =
@@ -250,7 +250,7 @@ namespace Habanero.Test.DB
             CircleNoPrimaryKey.GetClassDefWithSingleInheritance();
             CircleNoPrimaryKey circle = CircleNoPrimaryKey.CreateSavedCircle();
             Criteria criteria = Criteria.FromPrimaryKey(circle.ID);
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
@@ -314,7 +314,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
@@ -332,7 +332,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchy();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
@@ -351,7 +351,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Execute Test ----------------------
             Shape loadedShape = BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<Shape>
@@ -369,7 +369,7 @@ namespace Habanero.Test.DB
 
             FilledCircleNoPrimaryKey.GetClassDefWithSingleInheritanceHierarchyDifferentDiscriminators();
             FilledCircleNoPrimaryKey filledCircle = FilledCircleNoPrimaryKey.CreateSavedFilledCircle();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             IClassDef classDef = ClassDef.Get<Shape>();
             //---------------Execute Test ----------------------
