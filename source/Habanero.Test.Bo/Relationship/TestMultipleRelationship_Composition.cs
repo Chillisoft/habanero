@@ -27,16 +27,19 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.Relationship
 {
     [TestFixture]
-    public class TestMultipleRelationship_Composition
+    public class TestMultipleRelationship_Composition : TestMultipleRelationship_AllTypes_Base
     {
         [SetUp]
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = new BusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
         }
+
+
 
 
         [Test]
@@ -302,7 +305,7 @@ namespace Habanero.Test.BO.Relationship
             Assert.IsFalse(organisationTestBO.Status.IsDirty);
         }
 
-        private MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
+        protected MultipleRelationship<ContactPersonTestBO> GetCompositionRelationship(OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
             RelationshipType relationshipType = RelationshipType.Composition;
             MultipleRelationship<ContactPersonTestBO> relationship =

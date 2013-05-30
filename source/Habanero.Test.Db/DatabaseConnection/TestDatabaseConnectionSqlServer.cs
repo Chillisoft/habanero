@@ -96,6 +96,7 @@ namespace Habanero.Test.DB
 						</primaryKey>
 					</class>
 				");
+            ClassDef.ClassDefs.Clear();
 			ClassDef.ClassDefs.Add(classDef);
 			var bo = classDef.CreateNewBusinessObject();
 			bo.SetPropertyValue("ByteArrayProp", null);

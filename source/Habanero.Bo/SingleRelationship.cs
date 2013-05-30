@@ -221,9 +221,10 @@ namespace Habanero.BO
 
         private TBusinessObject GetRelatedObject(bool isInternalAdd)
         {
-            Criteria newKeyCriteria = RelKey.Criteria;
+            var newKeyCriteria = RelKey.Criteria;
             if (!HasRelatedObject())
             {
+                _storedKeyCriteria = null;
                 if (_relatedBo == null) return null;
                 if (!newKeyCriteria.IsMatch(_relatedBo, false))
                 {
@@ -231,7 +232,8 @@ namespace Habanero.BO
                 }
                 return _relatedBo;
             }
-            if ((RelatedBoForeignKeyHasChanged() || _relatedBo == null))
+
+            if ((RelatedBoDoesNotMatchForeignKey() || _relatedBo == null))
             {
                 var relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
                 SetRelatedBoReferenceInternal(relatedBo);
@@ -243,15 +245,18 @@ namespace Habanero.BO
                 return _relatedBo;
             }
             //Load Related Object from database 
-            if (_storedKeyCriteria == null
-                || (_storedKeyCriteria != null && !_storedKeyCriteria.Equals(newKeyCriteria)))
+            var criteriaHasChangedSinceLastLoad = _storedKeyCriteria == null ||
+                                                  (_storedKeyCriteria != null &&
+                                                   !_storedKeyCriteria.Equals(newKeyCriteria));
+            if (criteriaHasChangedSinceLastLoad)
             {
                 if (HasRelatedObject())
                 {
+                    // use non-generic one because of type parameters
                     var relatedBo =
                         (TBusinessObject)
                         BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship) this);
-                        // use non-generic one because of type parameters
+
                     SetRelatedBoReferenceInternal(relatedBo);
                     _storedKeyCriteria = newKeyCriteria;
                 }
@@ -261,6 +266,7 @@ namespace Habanero.BO
                     _storedKeyCriteria = null;
                 }
             }
+
             //If the object loaded from the databases current value does not match the relationship critieria then 
             // return null.
             if (_relatedBo != null && newKeyCriteria.IsMatch(_relatedBo, false))
@@ -358,7 +364,7 @@ namespace Habanero.BO
             }
         }
 
-        private bool RelatedBoForeignKeyHasChanged()
+        private bool RelatedBoDoesNotMatchForeignKey()
         {
             if (_relatedBo != null)
             {

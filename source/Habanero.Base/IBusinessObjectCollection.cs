@@ -310,7 +310,7 @@ namespace Habanero.Base
 
         /// <summary>
         /// Returns a list of the business objects that are currently added for the
-        ///   collection but have not cessarily been persisted to the database.
+        ///   collection but have not necessarily been persisted to the database.
         /// </summary>
         /// Hack: This method was created returning a type IList to overcome problems with 
         ///   BusinessObjectCollecion being a generic collection.

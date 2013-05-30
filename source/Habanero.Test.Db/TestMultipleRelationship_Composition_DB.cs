@@ -18,6 +18,11 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System.Collections.Generic;
+using Habanero.BO;
+using Habanero.Base;
+using Habanero.Test.BO;
 using Habanero.Test.BO.Relationship;
 using NUnit.Framework;
 

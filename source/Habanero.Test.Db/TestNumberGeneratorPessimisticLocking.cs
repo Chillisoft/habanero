@@ -33,6 +33,7 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestNumberGeneratorPessimisticLocking
     {
+        private IBusinessObjectManager _businessObjectManagerBeforeFixture;
 // ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
@@ -49,6 +50,13 @@ namespace Habanero.Test.DB
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
+            _businessObjectManagerBeforeFixture = BORegistry.BusinessObjectManager;
+        }
+
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            BORegistry.BusinessObjectManager = _businessObjectManagerBeforeFixture;
         }
 
         [TearDown]

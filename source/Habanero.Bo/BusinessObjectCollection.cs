@@ -639,11 +639,11 @@ namespace Habanero.BO
             lock (KeyObjectHashTable)
             {
                 var bo = businessObject as TBusinessObject;
-                var typeName = this.GetType().ToString();
-                var parts = typeName.Split(new char[] { '[' });
-                var templateName = parts[1].Split(new char[] { ']' })[0];
                 if (bo == null)
                 {
+                    var typeName = this.GetType().ToString();
+                    var parts = typeName.Split(new char[] { '[' });
+                    var templateName = parts[1].Split(new char[] { ']' })[0];
                     throw new Exception(String.Join(String.Empty,
                         new string[] { "Unable to cast BO of type [", businessObject.GetType().ToString(), "] to [", templateName, "]" }));
                 }

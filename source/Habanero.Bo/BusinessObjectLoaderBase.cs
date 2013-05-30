@@ -506,6 +506,7 @@ namespace Habanero.BO
             if (collection.AddedBusinessObjects.Contains(loadedBo))
             {
                 collection.AddWithoutEvents(loadedBo);
+                collection.AddedBusinessObjects.Remove(loadedBo);
                 collection.PersistedBusinessObjects.Add(loadedBo);
                 return;
             }
@@ -763,11 +764,13 @@ namespace Habanero.BO
             if (collection.TimeLastLoaded == null)
             {
                 collection.PersistedBusinessObjects.Clear();
+                var hasAddedBos = collection.AddedBusinessObjects.Count > 0;
                 foreach (LoadedBoInfo loadedBoInfo in loadedBoInfos)
                 {
                     IBusinessObject loadedBo = loadedBoInfo.LoadedBo;
                     collection.AddWithoutEvents(loadedBo);
                     collection.PersistedBusinessObjects.Add(loadedBo);
+                    if (hasAddedBos) collection.AddedBusinessObjects.Remove(loadedBo);
                 }
                 FinaliseLoad(loadedBoInfos);
 
