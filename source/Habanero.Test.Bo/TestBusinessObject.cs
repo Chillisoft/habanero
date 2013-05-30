@@ -45,8 +45,8 @@ namespace Habanero.Test.BO
         [SetUp]
         public override void SetupTest()
         {
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             ClassDef.ClassDefs.Clear();
             //new Address();

@@ -58,10 +58,10 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
             DeleteAllContactPeople();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO.CreateSampleData();
             ContactPersonTestBO.LoadDefaultClassDef();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             SuperClass.LoadClassDef();
             SubClass.LoadClassDef();
@@ -713,7 +713,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.Save();
@@ -741,7 +741,7 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.Save();
@@ -767,7 +767,7 @@ namespace Habanero.Test.BO
             //--------------- Set up test pack ------------------
             MyBO.LoadDefaultClassDef();
             MyBO.DeleteAllMyBos();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             MyBO myBO1 = new MyBO();
             myBO1.SetToString(null);

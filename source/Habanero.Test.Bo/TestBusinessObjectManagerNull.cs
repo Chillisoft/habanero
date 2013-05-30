@@ -42,8 +42,8 @@ namespace Habanero.Test.BO
             //base.SetupTest();
             ClassDef.ClassDefs.Clear();
             //new Address();
-            BORegistry.BusinessObjectManager = null;//ensure that the BOManagager.Instance is used
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
         // ReSharper restore PossibleNullReferenceException
 

@@ -213,7 +213,7 @@ namespace Habanero.Test.BO
         public void TestAddRowAddsBo()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupTestData();
             int originalCount = _collection.Count;
             //---------------Assert Precondition----------------
@@ -239,7 +239,7 @@ namespace Habanero.Test.BO
         public void TestRejectChangesRemovesNewRow()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupTestData();
             int originalCount = _collection.Count;
             itsTable.Rows.Add(new object[] { null, "bo1prop1", "s1" });
@@ -260,7 +260,7 @@ namespace Habanero.Test.BO
 //        public void TestRejectChangesUnDoesDeletedRow()
 //        {
 //            //---------------Set up test pack-------------------
-//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+//            FixtureEnvironment.ClearBusinessObjectManager();
 //            SetupTestData();
 //            _collection.SaveAll();
 //            int originalCount = _collection.Count;

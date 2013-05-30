@@ -37,7 +37,7 @@ namespace Habanero.Test.Base.DataMappers
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         [TestFixtureSetUp]

@@ -425,7 +425,7 @@ namespace Habanero.Test.DB
             originalContactPerson.Save();
             IPrimaryKey origConactPersonID = originalContactPerson.ID;
             originalContactPerson = null;
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
 
             //load second object from DB to ensure that it is now in the object manager
@@ -466,7 +466,7 @@ namespace Habanero.Test.DB
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
 
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //load second object from DB to ensure that it is now in the object manager
             ContactPersonTestBO myContact2 =
@@ -511,7 +511,7 @@ namespace Habanero.Test.DB
             SetupDefaultContactPersonBO();
             ContactPersonTestBO contactPerson1 = ContactPersonTestBO.CreateSavedContactPerson
                 (Guid.NewGuid().ToString("N"), Guid.NewGuid().ToString("N"));
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, BORegistry.BusinessObjectManager.Count);
@@ -581,7 +581,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
@@ -613,7 +613,7 @@ namespace Habanero.Test.DB
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString();
             cp.Save();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cp.ID);
@@ -641,7 +641,7 @@ namespace Habanero.Test.DB
             //-------------Setup Test Pack------------------
             SetupDefaultContactPersonBO();
             ContactPersonTestBO cpTemp = ContactPersonTestBO.CreateSavedContactPerson();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             ContactPersonTestBO cpLoaded =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(cpTemp.ID);

@@ -142,7 +142,7 @@ namespace Habanero.Test
 
         internal static void ClearEngineCol()
         {
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         public static void DeleteAllEngines()

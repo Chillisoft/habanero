@@ -40,7 +40,7 @@ namespace Habanero.Test.BO.ClassDefinition
         [SetUp]
         public void Setup()
         {
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             _propDef = new PropDef("PropName", typeof (string), PropReadWriteRule.ReadOnly, null);
         }
 
@@ -240,7 +240,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             BOWithIntID.LoadClassDefWithIntID();
@@ -266,7 +266,7 @@ namespace Habanero.Test.BO.ClassDefinition
             BOWithIntID expectedBO = new BOWithIntID { IntID = 3, TestField = "ValidValue" };
             expectedBO.Save();
             propDef.LookupList = new BusinessObjectLookupList(typeof(BOWithIntID));
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, BORegistry.BusinessObjectManager.Count);
             //---------------Execute Test ----------------------
@@ -299,7 +299,7 @@ namespace Habanero.Test.BO.ClassDefinition
         public void Test_GetBusinessObjectFromObjectManager_WriteNewProp()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ClassDef.ClassDefs.Clear();
             BORegistry.DataAccessor = new DataAccessorInMemory();
             ContactPersonTestBO.LoadClassDefWithSurnameAsPrimaryKey_WriteNew();

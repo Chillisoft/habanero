@@ -172,7 +172,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -195,7 +195,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -238,7 +238,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
 
             //---------------Assert preconditions---------------
@@ -261,7 +261,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateUnsavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO contactPerson = new ContactPersonTestBO();
             //---------------Assert preconditions---------------
             Assert.IsTrue(organisationTestBO.Status.IsNew);
@@ -363,7 +363,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -385,7 +385,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -416,7 +416,7 @@ namespace Habanero.Test.BO.Relationship
             //---------------Set up test pack-------------------
             OrganisationTestBO organisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             OrganisationTestBO organisationTestBO2 = OrganisationTestBO.CreateSavedOrganisation();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SingleRelationship<ContactPersonTestBO> relationship = GetAssociationRelationship(organisationTestBO);
             relationship.OwningBOHasForeignKey = false;
             ContactPersonTestBO contactPerson = new ContactPersonTestBO
@@ -1033,8 +1033,8 @@ namespace Habanero.Test.BO.Relationship
         public override void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_WithAutoIncrementingPK_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithAutoIncrementingPK_WithSingleRelationship();
         }
@@ -1159,8 +1159,8 @@ namespace Habanero.Test.BO.Relationship
         public override void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
@@ -1173,8 +1173,8 @@ namespace Habanero.Test.BO.Relationship
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ClearBusinessObjectManager();
             BOWithIntID.LoadClassDefWithIntID_RelationshipToSelf();
             BOWithIntID_DifferentType.LoadClassDefWithIntID();
         }
@@ -1254,7 +1254,7 @@ namespace Habanero.Test.BO.Relationship
 //        {
 //            ClassDef.ClassDefs.Clear();
 //            BORegistry.DataAccessor = new DataAccessorInMemory();
-//            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+//            FixtureEnvironment.ClearBusinessObjectManager();
 //            ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleCompositeReverse();
 //            OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
 //        }

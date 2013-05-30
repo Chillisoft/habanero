@@ -3124,7 +3124,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO loadedCp =
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(singleCritieria);
             BusinessObjectCollection<ContactPersonTestBO> col =
@@ -3149,7 +3149,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             IOrderCriteria orderCriteria = QueryBuilder.CreateOrderCriteria(cp1.ClassDef, "Surname");
 
             //---------------Execute Test ----------------------
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO loadedCp =
                 (ContactPersonTestBO)
                 BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(cp1.ClassDef, singleCritieria);
@@ -3547,7 +3547,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             //---------------Set up test pack-------------------
             SetupDataAccessor();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             SetupDefaultContactPersonBO();
             ContactPersonTestBO cp = ContactPersonTestBO.CreateSavedContactPerson();
 

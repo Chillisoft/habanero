@@ -39,7 +39,7 @@ namespace Habanero.Test.DB
         public void Setup()
         {
             //Ensure that a fresh object is loaded from DB
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
         }
 
         #endregion
@@ -219,7 +219,7 @@ namespace Habanero.Test.DB
             myContact.SetPropertyValue("PK1Prop2", Guid.NewGuid());
             IPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             myContact.Save(); //save the object to the DB
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             //			BOPrimaryKey id = myContact.ID; //Save the objectsID so that it can be loaded from the Database
             Assert.AreEqual(id, myContact.ID);
 
@@ -300,7 +300,7 @@ namespace Habanero.Test.DB
             contactPTestSave.Save(); //save the object to the DB
 
 
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             WaitForGC();
 
             //---------------------------Assert Precondition --------------------------

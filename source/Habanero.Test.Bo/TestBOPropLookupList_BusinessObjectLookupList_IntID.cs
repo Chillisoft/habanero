@@ -662,7 +662,7 @@ namespace Habanero.Test.BO
             BOPropLookupList boProp = new BOPropLookupList(_propDef_int);
             BOWithIntID unSavedBoWithIntID = new BOWithIntID {IntID = TestUtil.GetRandomInt(), TestField = TestUtil.GetRandomString()};
             unSavedBoWithIntID.Save();
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             boProp.Value = unSavedBoWithIntID;
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------

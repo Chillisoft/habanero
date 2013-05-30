@@ -53,7 +53,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             originalContactPerson.Surname = "FirstSurname";
             originalContactPerson.Save();
 
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             //load second object from DB to ensure that it is now in the object manager
             ContactPerson myContact2 =

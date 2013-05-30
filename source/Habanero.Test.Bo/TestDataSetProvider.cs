@@ -463,7 +463,7 @@ namespace Habanero.Test.BO
         public void TestOrderItemChangeItemAndFind()
         {
             SetupTestData();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             OrderItem.ClearTable();
             BusinessObjectCollection<OrderItem> col = new BusinessObjectCollection<OrderItem>();
             col.LoadAll();

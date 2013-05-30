@@ -37,7 +37,7 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             //Runs every time that any testmethod is executed
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             GlobalRegistry.SecurityController = null;
             //new Address();
         }

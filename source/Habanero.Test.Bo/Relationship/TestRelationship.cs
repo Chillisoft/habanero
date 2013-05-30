@@ -558,7 +558,7 @@ namespace Habanero.Test.BO.Relationship
                             "The object returned should be the one with the ID = MockBOID");
 
             Assert.AreSame(ltempBO, rel.GetRelatedObject());
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             Assert.AreSame(ltempBO, rel.GetRelatedObject());
             _mMockBO.MarkForDelete();
             _mMockBO.Save();
@@ -592,7 +592,7 @@ namespace Habanero.Test.BO.Relationship
                             "The object returned should be the one with the ID = MockBOID");
 
             Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject()));
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             Assert.IsTrue(ReferenceEquals(ltempBO, rel.GetRelatedObject()));
             _mMockBO.MarkForDelete();
             _mMockBO.Save();

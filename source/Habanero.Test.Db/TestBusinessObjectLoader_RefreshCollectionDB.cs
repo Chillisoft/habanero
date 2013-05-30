@@ -88,7 +88,7 @@ namespace Habanero.Test.DB
             var col = new BusinessObjectCollection<ContactPersonTestBO>();
 
             var cp1 = ContactPersonTestBO.CreateSavedContactPerson();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             ContactPersonTestBO.CreateSavedContactPerson();
             ContactPersonTestBO.CreateSavedContactPerson();
             col.LoadAll();
@@ -125,7 +125,7 @@ namespace Habanero.Test.DB
             var col = new BusinessObjectCollection<ContactPersonTestBO>();
 
             var cp1 = CreateContactPersonTestBO();
-            BORegistry.BusinessObjectManager.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
 
             CreateContactPersonTestBO();
             CreateContactPersonTestBO();

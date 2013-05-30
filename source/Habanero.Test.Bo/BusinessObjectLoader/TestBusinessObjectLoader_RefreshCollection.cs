@@ -234,7 +234,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		    cp2.Save();
 			ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
 			
-			BORegistry.BusinessObjectManager.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			var col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
 			//---------------Execute Test ----------------------
 			BORegistry.DataAccessor.BusinessObjectLoader.Refresh(col);
@@ -286,7 +286,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		    cp2.Save();
 			ContactPersonTestBO.CreateSavedContactPerson(now.AddDays(1));
 
-			BORegistry.BusinessObjectManager.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 			IBusinessObjectCollection col = new BusinessObjectCollection<ContactPersonTestBO>(parametrizedClassDef);
 
 			//---------------Execute Test ----------------------
@@ -883,7 +883,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		{
 			//---------------Set up test pack-------------------
 			ContactPersonTestBO.DeleteAllContactPeople();
-			BORegistry.BusinessObjectManager.ClearLoadedObjects();
+			FixtureEnvironment.ClearBusinessObjectManager();
 
 			SetupDefaultContactPersonBO();
 			var col = new BusinessObjectCollection<ContactPersonTestBO>();
