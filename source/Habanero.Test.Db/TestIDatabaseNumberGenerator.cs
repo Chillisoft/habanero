@@ -40,7 +40,7 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//ensure that a new BOManagager.Instance is used
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 
@@ -63,7 +63,6 @@ namespace Habanero.Test.DB
         public void GetNextNumber_WhenWasOne_ShouldReturnTwo()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             var numberType = RandomValueGen.GetRandomString();
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
             IDBNumberGenerator numGen = new DatabaseNumberGenerator(numberType, "numbergenerator", 0, "NumberType", "SequenceNumber");
@@ -79,7 +78,6 @@ namespace Habanero.Test.DB
         {
             //See GetNextNumber_WhenWasOne_ShouldReturnTwo Test for what would happen if the UpdateAsRolledBack Did not happen 
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             var numberType = RandomValueGen.GetRandomString();
 
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -99,7 +97,6 @@ namespace Habanero.Test.DB
             //See GetNextNumber_WhenWasOne_ShouldReturnTwo Test for what would happen if the UpdateAsRolledBack Did not happen 
             //See TestAcceptance_UpdateAsRolledBack_ThenGetNextNumber_ShouldResetNumberToOriginalNumber to see what would happen if RollBackWasCalled
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             var numberType = RandomValueGen.GetRandomString();
 
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -119,7 +116,6 @@ namespace Habanero.Test.DB
         public void TestIntegration_GetPersistSql_WhenNumberEQ2_ShouldReturnCorrectSQL()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             var numberType = RandomValueGen.GetRandomString();
 
             //Create an instance of the number for a specific type of number (e.g. Invoice number)
@@ -144,7 +140,6 @@ namespace Habanero.Test.DB
         public void TestIntegration_UpdateDB_WhenCurrentNumberIs2_ShouldUpdateDB()
         {
             //---------------Set up test pack-------------------
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();
             var numberType = RandomValueGen.GetRandomString();
 
             //Create an instance of the number for a specific type of number (e.g. Invoice number)

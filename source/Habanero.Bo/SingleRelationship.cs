@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 
 namespace Habanero.BO
@@ -237,7 +238,7 @@ namespace Habanero.BO
             {
                 var relatedBo = GetRelatedBusinessObjectFromBusinessObjectManager();
                 SetRelatedBoReferenceInternal(relatedBo);
-                AddToReverseRelationship(_relatedBo, isInternalAdd);
+                if (RelKeyIsDirty()) AddToReverseRelationship(_relatedBo, isInternalAdd);
                 if (_relatedBo != null) return _relatedBo;
             }
             if (_relatedBo != null && newKeyCriteria.IsMatch(_relatedBo, false))
@@ -274,6 +275,12 @@ namespace Habanero.BO
                 return _relatedBo;
             }
             return null;
+        }
+
+        private bool RelKeyIsDirty()
+        {
+            var isRelKeyDirty = RelKey.Any(prop => prop.BOProp.IsDirty);
+            return isRelKeyDirty;
         }
 
         private void SetRelatedBoReferenceInternal(TBusinessObject relatedBo)

@@ -39,7 +39,7 @@ namespace Habanero.Test.DB
         {
             //Runs every time that any testmethod is executed
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//ensure that a new BOManagager.Instance is used
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             BORegistry.DataAccessor = new DataAccessorDB();
         }
 

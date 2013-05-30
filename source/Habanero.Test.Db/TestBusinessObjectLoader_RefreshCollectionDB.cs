@@ -40,7 +40,6 @@ namespace Habanero.Test.DB
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
             //Create a new ContactPersonTable with a randomlygenerated guid at end of name.
             
         }
@@ -56,6 +55,7 @@ namespace Habanero.Test.DB
         public override void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             ContactPersonTestBO.DeleteAllContactPeople();
         }
 

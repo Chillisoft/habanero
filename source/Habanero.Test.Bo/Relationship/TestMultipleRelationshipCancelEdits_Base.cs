@@ -38,9 +38,15 @@ namespace Habanero.Test.BO.Relationship
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            BORegistry.BusinessObjectManager = null;
+            SetupDataAccess();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();
+        }
+
+        protected virtual void SetupDataAccess()
+        {
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         #region Utility Methods
@@ -50,12 +56,18 @@ namespace Habanero.Test.BO.Relationship
         protected MultipleRelationship<ContactPersonTestBO> GetRelationship(
             OrganisationTestBO organisationTestBO, out BusinessObjectCollection<ContactPersonTestBO> cpCol)
         {
+            var relationship = GetRelationship(organisationTestBO);
+            cpCol = relationship.BusinessObjectCollection;
+            return relationship;
+        }
+
+        protected MultipleRelationship<ContactPersonTestBO> GetRelationship(OrganisationTestBO organisationTestBO)
+        {
             RelationshipType relationshipType = GetRelationshipType();
             MultipleRelationship<ContactPersonTestBO> relationship =
                 organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             RelationshipDef relationshipDef = (RelationshipDef) relationship.RelationshipDef;
             relationshipDef.RelationshipType = relationshipType;
-            cpCol = relationship.BusinessObjectCollection;
             return relationship;
         }
 

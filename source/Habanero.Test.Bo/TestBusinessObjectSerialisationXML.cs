@@ -47,8 +47,8 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
         }
 
         [Test]

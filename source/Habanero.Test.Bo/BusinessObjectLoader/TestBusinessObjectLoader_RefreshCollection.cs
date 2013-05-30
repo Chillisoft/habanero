@@ -35,8 +35,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 		[TestFixtureSetUp]
         public virtual void TestFixtureSetup()
 		{
-			BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
-            
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
 		}
 
 		[TearDown]

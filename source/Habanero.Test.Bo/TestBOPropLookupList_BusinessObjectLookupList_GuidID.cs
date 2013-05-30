@@ -42,9 +42,9 @@ namespace Habanero.Test.BO
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             MyBO.LoadClassDefsNoUIDef();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
             _propDefGuid = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             _validBusinessObject = new MyBO { TestProp = "ValidValue" };
             _collection = new BusinessObjectCollection<MyBO> { _validBusinessObject };

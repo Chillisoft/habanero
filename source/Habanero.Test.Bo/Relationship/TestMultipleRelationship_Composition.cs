@@ -29,11 +29,13 @@ namespace Habanero.Test.BO.Relationship
     [TestFixture]
     public class TestMultipleRelationship_Composition : TestMultipleRelationship_AllTypes_Base
     {
+
         [SetUp]
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             BORegistry.BusinessObjectManager = new BusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef_PreventAddChild();

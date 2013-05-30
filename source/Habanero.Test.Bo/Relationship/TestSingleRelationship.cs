@@ -37,9 +37,8 @@ namespace Habanero.Test.BO.Relationship
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }
@@ -814,8 +813,8 @@ namespace Habanero.Test.BO.Relationship
         public virtual void SetupTest()
         {
             ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy(); //Ensures a new BOMan is created and used for each test
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_SingleReverse();
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
         }

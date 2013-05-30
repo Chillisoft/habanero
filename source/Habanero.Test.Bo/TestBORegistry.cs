@@ -43,7 +43,7 @@ namespace Habanero.Test.BO
         [TearDown]
         public void TearDownTest()
         {
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerSpy();//Ensures a new BOMan is created and used for each test      
+            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
         }
 
  

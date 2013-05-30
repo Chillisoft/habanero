@@ -152,6 +152,7 @@
     <Compile Include="ContactPersonCompositeKey.cs" />
     <Compile Include="EmailAddressAsCustomProperty.cs" />
     <Compile Include="EmailAddressConverter.cs" />
+    <Compile Include="FixtureEnvironment.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
     <Compile Include="OrderItem.cs" />

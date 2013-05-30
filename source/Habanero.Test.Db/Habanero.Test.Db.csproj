@@ -248,6 +248,9 @@
     <Compile Include="TestCompositeKeyBO.cs" />
     <Compile Include="TestIDatabaseNumberGenerator.cs" />
     <Compile Include="TestInsertStatementGenerator.cs" />
+    <Compile Include="TestMultipleRelationshipCancelEdits_Aggregation_DB.cs" />
+    <Compile Include="TestMultipleRelationshipCancelEdits_Association_DB.cs" />
+    <Compile Include="TestMultipleRelationshipCancelEdits_Composition_DB.cs" />
     <Compile Include="TestMultipleRelationship_Aggregation_DB.cs" />
     <Compile Include="TestMultipleRelationship_Association_DB.cs" />
     <Compile Include="TestMultipleRelationship_Composition_DB.cs" />

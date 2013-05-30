@@ -38,8 +38,8 @@ namespace Habanero.Test.BO
         {
             ClassDef.ClassDefs.Clear();
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
-            BORegistry.DataAccessor = new DataAccessorInMemory();
-            BORegistry.BusinessObjectManager = new BusinessObjectManagerNull();
+            FixtureEnvironment.SetupInMemoryDataAccessor();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             AddressTestBO.LoadDefaultClassDef();
             ContactPersonTestBO.LoadClassDefOrganisationTestBORelationship_MultipleReverse();
             OrganisationTestBO.LoadDefaultClassDef();

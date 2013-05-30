@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using System.Linq;
@@ -314,7 +315,7 @@ namespace Habanero.BO
                 createdChild.CancelEdits();
 				currentCol.RemoveInternal(createdChild);
             }
-            var addedBusinessObjects = currentCol.AddedBusinessObjects;//.Except(currentCol.PersistedBusinessObjects);
+            var addedBusinessObjects = currentCol.AddedBusinessObjects.Except(currentCol.PersistedBusinessObjects);
             foreach (TBusinessObject addedChild in addedBusinessObjects.ToArray())
             {
 				currentCol.Remove(addedChild);
