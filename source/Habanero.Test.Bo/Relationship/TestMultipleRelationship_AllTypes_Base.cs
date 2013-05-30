@@ -14,7 +14,7 @@ namespace Habanero.Test.BO.Relationship
             var contactPersonTestBO = CreateSavedContactPersonTestBoAndOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             //---------------Assert Precondition----------------
@@ -34,7 +34,7 @@ namespace Habanero.Test.BO.Relationship
             var contactPersonTestBO = CreateSavedContactPersonTestBoAndOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             var loadedCollection = organisationTestBO.ContactPeople;
@@ -49,7 +49,6 @@ namespace Habanero.Test.BO.Relationship
         }
 
         [Test]
-        [Ignore("Known issue with GetRelatedObject")] //TODO Mark 29 May 2013: Ignored Test - Known issue with GetRelatedObject
         public void ReverseRelationship_GetRelatedObject_BUGFIX_WhenChildAndParentAlreadyLoaded_AndParentSwitchedToUnloadedParent_ShouldAddChildToParentRelationship()
         {
             //---------------Set up test pack-------------------
@@ -57,8 +56,8 @@ namespace Habanero.Test.BO.Relationship
             var newOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
-            organisationTestBO = ReloadBoFromDB(organisationTestBO);
+            FixtureEnvironment.ClearBusinessObjectManager();
+            //organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             contactPersonTestBO.OrganisationID = newOrganisationTestBO.OrganisationID;
             //---------------Assert Precondition----------------
@@ -79,7 +78,7 @@ namespace Habanero.Test.BO.Relationship
             var newOrganisationTestBO = OrganisationTestBO.CreateSavedOrganisation();
             var organisationTestBO = contactPersonTestBO.Organisation;
 
-            BusinessObjectManager.Instance.ClearLoadedObjects();
+            FixtureEnvironment.ClearBusinessObjectManager();
             organisationTestBO = ReloadBoFromDB(organisationTestBO);
             contactPersonTestBO = ReloadBoFromDB(contactPersonTestBO);
             newOrganisationTestBO = ReloadBoFromDB(newOrganisationTestBO);

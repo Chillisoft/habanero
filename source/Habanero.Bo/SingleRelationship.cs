@@ -259,6 +259,7 @@ namespace Habanero.BO
                         BORegistry.DataAccessor.BusinessObjectLoader.GetRelatedBusinessObject((ISingleRelationship) this);
 
                     SetRelatedBoReferenceInternal(relatedBo);
+                    if (RelKeyIsDirty()) AddToReverseRelationship(_relatedBo, isInternalAdd);
                     _storedKeyCriteria = newKeyCriteria;
                 }
                 else
