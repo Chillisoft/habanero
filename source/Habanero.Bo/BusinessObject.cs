@@ -824,7 +824,8 @@ namespace Habanero.BO
 			if (_logger.IsLogging(LogCategory.Debug))
 			{
 				//_logger.Log("SetPropertyValue BO (" + this + ") prop (" + propName + ") previousValue (" + prop.Value + ") new value (" + newPropValue + ")", LogCategory.Debug);
-				_logger.Log(propName + " is being set to '" + newPropValue + "'", LogCategory.Debug);
+				_logger.Log(string.Format("ObjectID:{0} Type:{1}, {2} is being set to '{3}'", this._primaryKey, this.GetType().Name, propName, newPropValue), LogCategory.Debug);
+                
 				//_logger.Log(GetStackTrace(), LogCategory.Debug);
 			}
 #endif
