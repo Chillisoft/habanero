@@ -2370,7 +2370,10 @@ namespace Habanero.BO
         /// <exception cref="System.ArgumentNullException">collection is null.</exception>
         public void AddRange(IEnumerable<TBusinessObject> collection)
         {
-            _boCol.AddRange(collection);
+            if (collection == null) throw new ArgumentNullException("collection");
+            
+            foreach (TBusinessObject current in collection)
+                Add(current);
         }
 
         /// <summary>

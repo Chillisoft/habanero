@@ -1652,6 +1652,27 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         [Test]
+        public void Test_AddRange_ShouldFireEventsForEachItemAdded()
+        {
+            //---------------Set up test pack-------------------
+            ContactPersonTestBO cp1;
+            ContactPersonTestBO cp2;
+            ContactPersonTestBO cp3;
+            BusinessObjectCollection<ContactPersonTestBO> colOrig = CreateCollectionWithTestPack(out cp1, out cp2, out cp3);
+            List<ContactPersonTestBO> list = new List<ContactPersonTestBO>(colOrig);
+            BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
+            //---------------Assert Precondition----------------
+            Assert.AreNotEqual(0, list.Count);
+            //---------------Execute Test ----------------------
+
+            int totalObjectAddedEventsFired = 0;
+            col.BusinessObjectAdded += (sender, args) => totalObjectAddedEventsFired++;
+            col.AddRange(list);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(list.Count, totalObjectAddedEventsFired);
+        }
+
+        [Test]
         public void IBusinessObjectCollection_AsEnumerable_T()
         {
             //---------------Set up test pack-------------------
