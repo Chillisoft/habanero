@@ -204,6 +204,7 @@
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />
     <Compile Include="TestDataStoreInMemoryXmlReader.cs" />
     <Compile Include="TestDataStoreInMemoryXmlWriter.cs" />
+    <Compile Include="TestNullBOPropertyMapper.cs" />
     <Compile Include="TestNullTransactionLogger.cs" />
     <Compile Include="TestNumberGenerator.cs" />
     <Compile Include="TestObjectTreeXmlReader.cs" />

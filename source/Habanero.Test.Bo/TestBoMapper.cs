@@ -38,7 +38,12 @@ namespace Habanero.Test.BO
 	public class TestBOMapper : TestUsingDatabase
 	{
 		private IClassDef _itsClassDef;
-		private IClassDef _itsRelatedClassDef;
+        private IClassDef _itsRelatedClassDef;
+
+        private static BOMapper CreateBOMapper(IBusinessObject bo)
+        {
+            return new BOMapper(bo);
+        }
 
 		[TestFixtureSetUp]
 		public void SetupTestFixture()
@@ -68,6 +73,7 @@ namespace Habanero.Test.BO
 			//---------------Test Result -----------------------
 			Assert.AreEqual(expectedPropValue, myBO.GetPropertyValue(propName));
 		}
+
 		[Test]
 		public void Test_SetDisplayPropertyValue_WithRelatedPropName_ShouldSetPropValue()
 		{
@@ -92,7 +98,67 @@ namespace Habanero.Test.BO
 			boMapper.SetDisplayPropertyValue(propName, expectedPropValue);
 			//---------------Test Result -----------------------
 			Assert.AreEqual(expectedPropValue, myRelatedBo.GetPropertyValue(underlyingPropName));
-		}
+        }
+
+        [Test]
+        public void Test_SetDisplayPropertyValue_WithRelatedPropName_WhenNullRelationship_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+            bo.MyRelationship = null;
+            var myNewValue = "MyNewValue";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
+            Assert.DoesNotThrow(() =>
+            {
+                mapper.SetDisplayPropertyValue("MyRelationship.TestProp", myNewValue);
+            });
+            //---------------Test Result -----------------------
+
+        }
+
+        [Test]
+        public void Test_SetDisplayPropertyValue_WithRelatedVirtualPropName_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+            bo.MyRelationship = new MyBO();
+            var myNewValue = "MyNewValue";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
+            mapper.SetDisplayPropertyValue("MyRelationship.-MySettableVirtualProp-", myNewValue);
+            //---------------Test Result -----------------------
+            Assert.AreEqual(myNewValue, bo.MyRelationship.MySettableVirtualProp);
+        }
+
+        [Test]
+        public void Test_SetDisplayPropertyValue_WithRelatedVirtualPropName_WhenNullRelationship_ShouldSetPropValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+            bo.MyRelationship = null;
+            var myNewValue = "MyNewValue";
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
+            Assert.DoesNotThrow(() =>
+            {
+                mapper.SetDisplayPropertyValue("MyRelationship.-MySettableVirtualProp-", myNewValue);
+            });
+            //---------------Test Result -----------------------
+
+        }
 
 		[Test]
 		public void Test_SetDisplayPropertyValue_WhenLookupList_ShouldSetUnderlyingValue()
@@ -194,7 +260,7 @@ namespace Habanero.Test.BO
         }
 
 		[Test]
-		public void TestGetPropertyValueToDisplay_BusinessObjectLookupList_NotInList()
+		public void Test_GetPropertyValueToDisplay_BusinessObjectLookupList_NotInList()
 		{
 			ContactPersonTestBO.DeleteAllContactPeople();
 			ContactPersonTestBO.CreateSampleData();
@@ -212,7 +278,7 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestGetPropertyValueToDisplay_SimpleLookup()
+		public void Test_GetPropertyValueToDisplay_SimpleLookup()
 		{
 			ClassDef.ClassDefs.Clear();
 			_itsClassDef = MyBO.LoadClassDefWithSimpleIntegerLookup();
@@ -250,7 +316,7 @@ namespace Habanero.Test.BO
 		//}
 
 		[Test]
-		public void TestGetPropertyValueWithDot()
+		public void Test_GetPropertyValue_WithDot()
 		{
 			ClassDef.ClassDefs.Clear();
 			_itsClassDef = MyBO.LoadClassDefWithRelationship();
@@ -267,7 +333,7 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestGetPropertyValueWithDot_IncorrectRelationshipName()
+		public void Test_GetPropertyValue_WithDot_IncorrectRelationshipName()
 		{
 			//---------------Set up test pack-------------------
 			ClassDef.ClassDefs.Clear();
@@ -314,26 +380,26 @@ namespace Habanero.Test.BO
 //                                             new object[] {});
 //            Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
 //        }
+        
+        [Test]
+        public void Test_GetPropertyValueToDisplay_WhenRelatedPropertyValue_WithNullRelationship_ShouldReturnNullValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+            bo.MyRelationship = null;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
+            var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.TestProp");
+            //---------------Test Result -----------------------
+            Assert.IsNull(propertyValueToDisplay);
+        }
 
 		[Test]
-		public void TestGetPropertyValueWithDotNoValue_WhenPropDoesNotExist()
-		{
-			ClassDef.ClassDefs.Clear();
-			_itsClassDef = MyBO.LoadClassDefWithRelationship();
-			_itsRelatedClassDef = MyRelatedBo.LoadClassDef();
-			//MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
-			MyBO bo1 = (MyBO)_itsClassDef.CreateNewBusinessObject();
-			MyRelatedBo relatedBo = (MyRelatedBo)_itsRelatedClassDef.CreateNewBusinessObject();
-			//			Guid myRelatedBoGuid = new Guid(relatedBo.ID.GetObjectId().Substring(3, 38));
-			//			bo1.SetPropertyValue("RelatedID", myRelatedBoGuid);
-			relatedBo.SetPropertyValue("MyRelatedTestProp", "MyValue");
-			BOMapper mapper = new BOMapper(bo1);
-
-			Assert.AreEqual(null, mapper.GetPropertyValueToDisplay("MyRelationship.MyRelatedTestProp"));
-		}
-
-		[Test]
-		public void TestVirtualPropertyValue()
+        public void Test_GetPropertyValueToDisplay_WhenVirtualPropertyValue()
 		{
 			ClassDef.ClassDefs.Clear();
 			_itsClassDef = MyBO.LoadDefaultClassDef();
@@ -354,57 +420,74 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestVirtualPropertyValueWithDot()
-		{
-			ClassDef.ClassDefs.Clear();
-			_itsClassDef = MyRelatedBo.LoadClassDef_WithUIDefVirtualProp();
-			_itsRelatedClassDef = MyBO.LoadClassDefWithRelationship();
-			//MyBO bo1 = (MyBO)itsClassDef.CreateNewBusinessObject(connection);
-			MyRelatedBo bo1 = (MyRelatedBo)_itsClassDef.CreateNewBusinessObject();
-			MyBO relatedBo = (MyBO)_itsRelatedClassDef.CreateNewBusinessObject();
-			Guid myRelatedBoGuid = relatedBo.ID.GetAsGuid();
-			bo1.SetPropertyValue("MyBoID", myRelatedBoGuid);
-			BOMapper mapper = new BOMapper(bo1);
-			Assert.AreEqual("MyNameIsMyBo", mapper.GetPropertyValueToDisplay("MyRelationship.-MyName-"));
+        public void Test_GetPropertyValueToDisplay_WhenRelatedVirtualPropertyValue_ShouldReturnRelatedValue()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+		    bo.MyRelationship = new MyBO();
+		    //---------------Assert Precondition----------------
+		    //---------------Execute Test ----------------------
+		    var mapper = CreateBOMapper(bo);
+		    var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.-MyName-");
+            //---------------Test Result -----------------------
+		    Assert.AreEqual("MyNameIsMyBo", propertyValueToDisplay);
 		}
 
 	    [Test]
-        public void TestVirtualPropertyValueWithDot_TwoLevels()
+        public void Test_GetPropertyValueToDisplay_WhenRelatedVirtualPropertyValue_WithNullRelationship_ShouldReturnNullValue()
+	    {
+	        //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            MyBO.LoadClassDefWithRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo = new MyRelatedBo();
+            bo.MyRelationship = null;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
+            var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.-MyName-");
+            //---------------Test Result -----------------------
+            Assert.IsNull(propertyValueToDisplay);
+	    }
+
+	    [Test]
+        public void Test_GetPropertyValueToDisplay_WhenRelatedVirtualPropertyValue_WithTwoLevels_ShouldReturnRelatedValue()
 	    {
 	        //---------------Set up test pack-------------------
 			ClassDef.ClassDefs.Clear();
-		    var myBoClassDef = MyBO.LoadClassDefWithRelationship();
-		    var myRelatedBoClassDef = MyRelatedBo.LoadClassDef();
+		    MyBO.LoadClassDefWithRelationship();
+		    MyRelatedBo.LoadClassDef();
 	        var bo = new MyBO();
-	        var myRelatedBo = new MyRelatedBo();
-            bo.MyRelationship = myRelatedBo;
+	        bo.MyRelationship = new MyRelatedBo();
             bo.MyRelationship.MyRelationship = new MyBO();
 	        //---------------Assert Precondition----------------
 
 	        //---------------Execute Test ----------------------
-			BOMapper mapper = new BOMapper(bo);
+	        var mapper = CreateBOMapper(bo);
 	        var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.MyRelationship.-MyName-");
 	        //---------------Test Result -----------------------
 	        Assert.AreEqual("MyNameIsMyBo", propertyValueToDisplay);
 	    }
 
 	    [Test]
-        public void TestVirtualPropertyValueWithDot_ManyLevels()
+        public void Test_GetPropertyValueToDisplay_WhenRelatedVirtualPropertyValue_WithManyLevels_ShouldReturnRelatedValue()
 	    {
 	        //---------------Set up test pack-------------------
 			ClassDef.ClassDefs.Clear();
-		    var myBoClassDef = MyBO.LoadClassDefWithRelationship();
-		    var myRelatedBoClassDef = MyRelatedBo.LoadClassDef();
+		    MyBO.LoadClassDefWithRelationship();
+		    MyRelatedBo.LoadClassDef();
 	        var bo = new MyBO();
-	        var myRelatedBo = new MyRelatedBo();
-            bo.MyRelationship = myRelatedBo;
+	        bo.MyRelationship = new MyRelatedBo();
             bo.MyRelationship.MyRelationship = new MyBO();
             bo.MyRelationship.MyRelationship.MyRelationship = new MyRelatedBo();
             bo.MyRelationship.MyRelationship.MyRelationship.MyRelationship = new MyBO();
 	        //---------------Assert Precondition----------------
 
-	        //---------------Execute Test ----------------------
-			BOMapper mapper = new BOMapper(bo);
+            //---------------Execute Test ----------------------
+            var mapper = CreateBOMapper(bo);
             var propertyValueToDisplay = mapper.GetPropertyValueToDisplay("MyRelationship.MyRelationship.MyRelationship.MyRelationship.-MyName-");
 	        //---------------Test Result -----------------------
 	        Assert.AreEqual("MyNameIsMyBo", propertyValueToDisplay);

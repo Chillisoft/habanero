@@ -35,6 +35,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         {
             ClassDef.ClassDefs.Clear();
             SetupDataAccessor();
+            FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
         }

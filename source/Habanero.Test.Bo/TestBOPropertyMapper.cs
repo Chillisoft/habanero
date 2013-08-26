@@ -29,10 +29,9 @@ using Rhino.Mocks;
 
 namespace Habanero.Test.BO
 {
-// ReSharper disable InconsistentNaming
     [TestFixture]
     public class TestBOPropertyMapper
-    {
+    {// ReSharper disable InconsistentNaming
         private const string _relationshipPathSeperator = ".";
 
         [SetUp]

@@ -71,7 +71,7 @@ namespace Habanero.Test.BO
         public void Test_Create_WhenRelatedProp_ShouldCreateBOPropMapper()
         {
             //---------------Set up test pack-------------------
-            const string propName = "Organisation.OrganisationID";
+            const string propName = "Organisation.Name";
             var bo = new ContactPersonTestBO();
             //---------------Assert Precondition----------------
             Assert.IsTrue(bo.Relationships.Contains("Organisation"));
@@ -81,6 +81,24 @@ namespace Habanero.Test.BO
             Assert.IsInstanceOf<BOPropertyMapper>(propMapper);
             Assert.AreEqual(propName, propMapper.PropertyName);
             Assert.AreSame(bo, propMapper.BusinessObject);
+        }
+
+        [Test]
+        public void Test_Create_WhenRelatedReflectiveProp_WithNullRelationship_ShouldCreateBOPropMapper()
+        {
+            //---------------Set up test pack-------------------
+            const string propName = "Organisation.-Name-";
+            var bo = new ContactPersonTestBO();
+            bo.Organisation = null;
+            //---------------Assert Precondition----------------
+            Assert.IsTrue(bo.Relationships.Contains("Organisation"));
+            //---------------Execute Test ----------------------
+            IBOPropertyMapper propMapper = BOPropMapperFactory.CreateMapper(bo, propName);
+            //---------------Test Result -----------------------
+            Assert.IsInstanceOf<NullBOPropertyMapper>(propMapper);
+            Assert.AreEqual(propName, propMapper.PropertyName);
+            Assert.AreSame(bo, propMapper.BusinessObject);
+            Assert.AreEqual("The 'Organisation' relationship of the 'ContactPersonTestBO' returned null, therefore the '-Name-' property could not be accessed.", propMapper.InvalidReason);
         }
 
         [Test]
@@ -142,7 +160,7 @@ namespace Habanero.Test.BO
             Assert.AreSame(bo, propMapper.BusinessObject);
         }
         [Test]
-        public void Test_Create_WhenReflectiveProp_WhenWhenReflectivePropNotExists_ShouldCreateReflectivePropMapper()
+        public void Test_Create_WhenReflectiveProp_WhenReflectivePropNotExists_ShouldCreateReflectivePropMapper()
         {
             //---------------Set up test pack-------------------
             const string propName = "NonExistentReflectiveProp";

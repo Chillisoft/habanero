@@ -76,10 +76,12 @@ namespace Habanero.Test
 		{
 			get { return 11.00d; }
 		}
-		public string MyName
-		{
-			get { return "MyNameIsMyBo"; }
-		}
+        public string MyName
+        {
+            get { return "MyNameIsMyBo"; }
+        }
+
+        public string MySettableVirtualProp { get; set; }
 // ReSharper restore UnusedMember.Global
 		public string TestProp
 		{

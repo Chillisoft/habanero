@@ -39,6 +39,7 @@ namespace Habanero.BO
         /// <returns></returns>
         public static IBOPropertyMapper CreateMapper(IBusinessObject businessObject, string propertyName)
         {
+            var originalPropertyName = propertyName;
             if (IsReflectiveProp(propertyName))
             {
                 IBusinessObject relatedBo = businessObject;
@@ -47,12 +48,13 @@ namespace Habanero.BO
                     //Get the first property name
                     string relationshipName = propertyName.Substring(0, propertyName.IndexOf("."));
                     propertyName = propertyName.Remove(0, propertyName.IndexOf(".") + 1);
-                    relatedBo = relatedBo.Relationships.GetRelatedObject(relationshipName);
-                    if (relatedBo == null)
+                    var newRelatedBo = relatedBo.Relationships.GetRelatedObject(relationshipName);
+                    if (newRelatedBo == null)
                     {
-                        return null;
-                        //throw new HabaneroApplicationException("Unable to retrieve property " + propertyName + " from a business object of type " + this._businessObject.GetType().Name);
+                        var invalidReason = string.Format("The '{0}' relationship of the '{1}' returned null, therefore the '{2}' property could not be accessed.", relationshipName, relatedBo.GetType().Name, propertyName);
+                        return new NullBOPropertyMapper(originalPropertyName, invalidReason) { BusinessObject = businessObject };
                     }
+                    relatedBo = newRelatedBo;
                 }
                 return new ReflectionPropertyMapper(propertyName) { BusinessObject = relatedBo };
             }

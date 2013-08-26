@@ -198,6 +198,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Xsds.resx</DependentUpon>
     </Compile>
+    <Compile Include="NullBOPropertyMapper.cs" />
     <Compile Include="NumberGenerator\NumberGenerator.cs" />
     <Compile Include="ObjectManager\BusinessObjectManager.cs" />
     <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
