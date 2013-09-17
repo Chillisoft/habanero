@@ -256,7 +256,7 @@ namespace Habanero.DB
         /// error opening a connection.
         /// </summary>
         /// <returns>Returns a new IDbConnection object</returns>
-        internal IDbConnection GetOpenConnectionForReading()
+        protected internal virtual IDbConnection GetOpenConnectionForReading()
         {
             try
             {
@@ -375,7 +375,7 @@ namespace Habanero.DB
         /// <exception cref="DatabaseReadException">Thrown when an error
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>        
-        public IDataReader LoadDataReader(string selectSql)
+        public virtual IDataReader LoadDataReader(string selectSql)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
             IDbConnection con = null;
@@ -385,7 +385,7 @@ namespace Habanero.DB
                 IDbCommand cmd = CreateCommand(con);
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
-                cmd.Transaction = BeginTransaction(con);
+                SetupReadTransaction(cmd);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -402,6 +402,23 @@ namespace Habanero.DB
             {
                 //if (con != null) log.Debug(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
             }
+        }
+
+        /// <summary>
+        /// Setup the transaction on the connection to be used for read operations.
+        /// This may be overridden for a specific provider (eg. sqlLite)
+        /// </summary>
+        /// <param name="dbCommand">The connection to be set up with a transaction</param>
+        protected virtual void SetupReadTransaction(IDbCommand dbCommand)
+        {
+            var dbConnection = dbCommand.Connection;
+            if (dbConnection == null)
+            {
+                const string message = "The connection on the command must be set before setting up the command for a read transaction.";
+                throw new ArgumentException(message,"dbCommand");
+            }
+            var beginTransaction = BeginTransaction(dbConnection);
+            dbCommand.Transaction = beginTransaction;
         }
 
         /// <summary>
@@ -450,7 +467,7 @@ namespace Habanero.DB
         /// <exception cref="DatabaseReadException">Thrown when an error
         /// occurred while setting up the data reader.  Also sends error
         /// output to the log.</exception>
-        public IDataReader LoadDataReader(ISqlStatement selectSql)
+        public virtual IDataReader LoadDataReader(ISqlStatement selectSql)
         {
             if (selectSql == null)
             {
@@ -463,7 +480,7 @@ namespace Habanero.DB
                 con = GetOpenConnectionForReading();
                 IDbCommand cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
-                cmd.Transaction = BeginTransaction(con);
+                SetupReadTransaction(cmd);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
             }
             catch (Exception ex)
@@ -604,7 +621,7 @@ namespace Habanero.DB
             }
         }
 
-        private IDbCommand CreateCommand(IDbConnection dbConnection)
+        protected virtual IDbCommand CreateCommand(IDbConnection dbConnection)
         {
             IDbCommand dbCommand = dbConnection.CreateCommand();
             try
