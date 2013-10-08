@@ -42,7 +42,7 @@ namespace Habanero.DB
         protected readonly IDatabaseConnection _databaseConnection;
         protected IDbConnection _dbConnection;
         protected IDbTransaction _dbTransaction;
-        private Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
+        protected Dictionary<string, ITransactional> _transactionsExecutingToDataSource;
 
         ///<summary>
         /// Constructs the TransactionCommitter for a specific database connection
