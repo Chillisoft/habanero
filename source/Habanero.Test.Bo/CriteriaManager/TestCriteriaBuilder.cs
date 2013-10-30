@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Habanero.Base;
+using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.CriteriaManager
@@ -32,9 +33,16 @@ namespace Habanero.Test.BO.CriteriaManager
     {
         private CriteriaBuilder Builder { get; set; }
 
+        [SetUp]
+        public void Setup()
+        {
+            ClassDef.ClassDefs.Clear();
+        }
+
         [TestFixtureSetUp] 
         public void SetupFixture()
         {
+            ClassDefCol.GetColClassDef().Clear();
         }
 
         [Test]
@@ -67,6 +75,20 @@ namespace Habanero.Test.BO.CriteriaManager
             Assert.AreEqual(expectedCriteria, criteria);
         }
         // ReSharper restore ConvertToConstant.Local
+
+        [Test]
+        public void BinaryExpression_NullableProperty()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithNullableDateTime();
+            var op = Criteria.ComparisonOp.GreaterThan;
+            var dateTime = DateTime.Now;
+            var expectedCriteria = Criteria.Create<MyBO, DateTime?>(bo => bo.TestDateTimeNullable, op, dateTime);
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestDateTimeNullable > dateTime).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
 
         [Test]
         public void BinaryExpression_GreaterThan()

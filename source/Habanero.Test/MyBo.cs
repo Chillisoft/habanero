@@ -150,7 +150,15 @@ namespace Habanero.Test
             get { return (int?)this.GetPropertyValue("TestInt"); }
             set { this.SetPropertyValue("TestInt", value); }
 		}
-		public string TestProp2
+
+	    public DateTime? TestDateTimeNullable
+	    {
+            get { return (DateTime?)this.GetPropertyValue("TestDateTimeNullable"); }
+            set { this.SetPropertyValue("TestDateTimeNullable", value); }
+	    }
+
+
+	    public string TestProp2
 		{
 			get
 			{
@@ -794,6 +802,25 @@ namespace Habanero.Test
 			ClassDef.ClassDefs.Add(itsClassDef);
 			return itsClassDef;
 		}
+
+        public static IClassDef LoadClassDefWithNullableDateTime()
+        {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            IClassDef itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyBO"" assembly=""Habanero.Test"">
+					<property  name=""MyBoID""  type=""Guid""/>
+					<property  name=""TestDateTimeNullable"" type=""DateTime"" />
+					<primaryKey>
+						<prop name=""MyBoID"" />
+					</primaryKey>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+        }
+
 		public static IClassDef LoadClassDefWithDateTime()
 		{
 			XmlClassLoader itsLoader = CreateXmlClassLoader();

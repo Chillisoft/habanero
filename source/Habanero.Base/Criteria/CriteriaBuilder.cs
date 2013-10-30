@@ -25,6 +25,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using Habanero.Util;
 
 namespace Habanero.Base
 {
@@ -225,28 +226,43 @@ namespace Habanero.Base
 
             var comparisonOp = Ops[binaryExpression.NodeType];
 
-            ConstantExpression valueExpression;
             object finalValue = null;
 
             if (binaryExpression.Right is ConstantExpression)
             {
-                valueExpression = (ConstantExpression)binaryExpression.Right;
+                var valueExpression = (ConstantExpression)binaryExpression.Right;
                 finalValue = valueExpression.Value;
             }
             else if (binaryExpression.Right is MemberExpression)
             {
                 var fieldExpression = (MemberExpression)binaryExpression.Right;
-                if (fieldExpression.Expression is ConstantExpression)
+                finalValue = GetValueFromMemberExpression(fieldExpression);
+            }
+            else if (binaryExpression.Right is UnaryExpression)
+            {
+                var unaryExpression = (UnaryExpression) binaryExpression.Right;
+                var operand = unaryExpression.Operand as MemberExpression;
+                if (operand != null)
                 {
-                    valueExpression = (ConstantExpression)fieldExpression.Expression;
-                    var fieldInfo = (FieldInfo)fieldExpression.Member;
-                    finalValue = fieldInfo.GetValue(valueExpression.Value);
+                    var fieldExpression = operand;
+                    finalValue = GetValueFromMemberExpression(fieldExpression);
                 }
             }
 
             if (finalValue == null && comparisonOp == Criteria.ComparisonOp.Equals) comparisonOp = Criteria.ComparisonOp.Is;
             if (finalValue == null && comparisonOp == Criteria.ComparisonOp.NotEquals) comparisonOp = Criteria.ComparisonOp.IsNot;
             return new Criteria(memberExpression.Member.Name, comparisonOp, finalValue);
+        }
+
+        private object GetValueFromMemberExpression(MemberExpression fieldExpression)
+        {
+            var constantExpression = fieldExpression.Expression as ConstantExpression;
+            if (constantExpression != null)
+            {
+                var fieldInfo = (FieldInfo) fieldExpression.Member;
+                return fieldInfo.GetValue(constantExpression.Value);
+            }
+            return null;
         }
 
         public class CriteriaBuilderAnd : CriteriaBuilder
