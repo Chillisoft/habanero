@@ -8,8 +8,7 @@ require 'albacore'
 # This should be the same for most projects, but if your project is a level
 # deeper in the repo you will need to add another ..
 bs = File.dirname(__FILE__)
-bs = File.join(bs, "..") if bs.index("branches") != nil
-bs = File.join(bs, "../../HabaneroCommunity/BuildScripts")
+bs = File.join(bs, "../HabaneroCommunity/BuildScripts")
 $buildscriptpath = File.expand_path(bs)
 $:.unshift($buildscriptpath) unless
     $:.include?(bs) || $:.include?($buildscriptpath)
