@@ -173,6 +173,7 @@
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="Encryption\IHasher.cs" />
+    <Compile Include="IResultSetLoader.cs" />
     <Compile Include="ISupportsRSADecryption.cs" />
     <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\IHabaneroLogger.cs" />
@@ -355,7 +356,13 @@
     <Compile Include="PropReadWriteRule.cs" />
     <Compile Include="QueryField.cs" />
     <Compile Include="Result.cs" />
-    <Compile Include="ResultSet.cs" />
+    <Compile Include="Data\IQueryResult.cs" />
+    <Compile Include="Data\IQueryResultField.cs" />
+    <Compile Include="Data\IQueryResultRow.cs" />
+    <Compile Include="Data\QueryResult.cs" />
+    <Compile Include="Data\QueryResultField.cs" />
+    <Compile Include="Data\QueryResultRow.cs" />
+    <Compile Include="Data\QueryResultSorter.cs" />
     <Compile Include="RethrowingExceptionNotifier.cs" />
     <Compile Include="Encryption\RSAPasswordCrypter.cs" />
     <Compile Include="Source.cs" />

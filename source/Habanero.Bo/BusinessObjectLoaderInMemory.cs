@@ -24,7 +24,6 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
-using System.Linq;
 
 namespace Habanero.BO
 {
@@ -314,31 +313,7 @@ namespace Habanero.BO
 
         #endregion
 
-        #region GetResultSet
-
-        public ResultSet GetResultSet(ISelectQuery selectQuery)
-        {
-            QueryBuilder.PrepareCriteria(selectQuery.ClassDef, selectQuery.Criteria);
-            var collection = _dataStore.FindAll(selectQuery.ClassDef, selectQuery.Criteria);
-            var resultSet = new ResultSet();
-            var propNames = selectQuery.Fields.Keys;
-            propNames.ForEach(resultSet.AddField);
-
-            foreach (IBusinessObject bo in collection)
-            {
-                var bo1 = bo;
-                resultSet.AddResult(
-                    propNames.Select(s => new BOMapper(bo1).GetPropertyValueToDisplay(s))
-                        .ToArray()
-                    );
-            }
-            resultSet.Sort(selectQuery.OrderCriteria);
-            return resultSet;
-        }
-
-        #endregion
+       
 
     }
-
-   
 }

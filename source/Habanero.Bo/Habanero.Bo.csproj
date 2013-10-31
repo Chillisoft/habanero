@@ -370,6 +370,7 @@
     <Compile Include="RelProp.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ResultSetLoaderInMemory.cs" />
     <Compile Include="Rules\InterPropRule.cs" />
     <Compile Include="SelectQuery.cs" />
     <Compile Include="SimpleLookupList.cs" />

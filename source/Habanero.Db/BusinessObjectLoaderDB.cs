@@ -755,41 +755,5 @@ namespace Habanero.DB
             //SetStatusAfterLoad(bo);
             return objectUpdatedInLoading;
         }
-
-        public ResultSet GetResultSet(ISelectQuery selectQuery)
-        {
-            var classDef = selectQuery.ClassDef;
-            var criteria = selectQuery.Criteria;
-            QueryBuilder.PrepareCriteria(classDef, criteria);
-            //Ensure that all the criteria field sources are merged correctly
-            selectQuery.Criteria = criteria;
-            selectQuery.Fields.ForEach(pair =>
-            {
-                var field = pair.Value;
-                var fieldSource = field.Source;
-                QueryBuilder.PrepareField(fieldSource, classDef, field);
-                selectQuery.Source.MergeWith(field.Source);
-                field.Source = field.Source.ChildSourceLeaf;
-            });
-            var queryDb = new SelectQueryDB(selectQuery, _databaseConnection);
-            var statement = queryDb.CreateSqlStatement();
-            var resultSet = new ResultSet();
-            var propNames = selectQuery.Fields.Keys;
-            propNames.ForEach(resultSet.AddField);
-
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
-            {
-                while (dr.Read())
-                {
-                    var rawValues = new object[dr.FieldCount];
-                    dr.GetValues(rawValues);
-                    resultSet.AddResult(rawValues);
-                }
-            }
-            return resultSet;
-        }
-
     }
-
-    
 }

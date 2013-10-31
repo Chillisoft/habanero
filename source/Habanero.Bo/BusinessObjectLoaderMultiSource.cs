@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base;
+using Habanero.Base.Data;
 
 namespace Habanero.BO
 {
@@ -293,7 +294,7 @@ namespace Habanero.BO
             return _defaultBusinessObjectLoader.GetCount(classDef, criteria);
         }
 
-        public ResultSet GetResultSet(ISelectQuery selectQuery)
+        public QueryResult GetResultSet(ISelectQuery selectQuery)
         {
             throw new NotImplementedException();
         }

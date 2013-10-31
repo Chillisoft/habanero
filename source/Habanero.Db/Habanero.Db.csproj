@@ -222,6 +222,7 @@
     <Compile Include="ParameterNameGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ResultSetLoaderDB.cs" />
     <Compile Include="SelectQueryDB.cs" />
     <Compile Include="SourceDB.cs" />
     <Compile Include="SqlFormatterForAccess.cs" />
