@@ -214,7 +214,7 @@
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
     <Compile Include="TestBusinessObjectLoaderDB.cs" />
     <Compile Include="TestBusinessObjectLoaderDBWithInheritance.cs" />
-    <Compile Include="TestResultSetLoaderDb.cs" />
+    <Compile Include="TestQueryResultLoaderDb.cs" />
     <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollectionDB.cs" />
     <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
     <Compile Include="TestBusinessObjectLookupListDB.cs" />

@@ -2,7 +2,7 @@ using Habanero.Base.Data;
 
 namespace Habanero.Base
 {
-    public interface IResultSetLoader
+    public interface IQueryResultLoader
     {
         /// <summary>
         /// Populates a <see cref="QueryResult"/> using the given <see cref="ISelectQuery"/>.
@@ -13,6 +13,6 @@ namespace Habanero.Base
         /// </summary>
         /// <param name="selectQuery">The select query to execute</param>
         /// <returns>A <see cref="QueryResult"/> that contains the results of the query</returns>
-        Data.QueryResult GetResultSet(ISelectQuery selectQuery);
+        IQueryResult GetResultSet(ISelectQuery selectQuery);
     }
 }

@@ -4,16 +4,16 @@ using Habanero.Base.Data;
 
 namespace Habanero.BO
 {
-    public class ResultSetLoaderInMemory : IResultSetLoader
+    public class QueryResultLoaderInMemory : IQueryResultLoader
     {
         private readonly DataStoreInMemory _dataStore;
 
-        public ResultSetLoaderInMemory(DataStoreInMemory dataStore)
+        public QueryResultLoaderInMemory(DataStoreInMemory dataStore)
         {
             _dataStore = dataStore;
         }
 
-        public QueryResult GetResultSet(ISelectQuery selectQuery)
+        public IQueryResult GetResultSet(ISelectQuery selectQuery)
         {
             QueryBuilder.PrepareCriteria(selectQuery.ClassDef, selectQuery.Criteria);
             var collection = _dataStore.FindAll(selectQuery.ClassDef, selectQuery.Criteria);

@@ -173,7 +173,7 @@
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="Encryption\IHasher.cs" />
-    <Compile Include="IResultSetLoader.cs" />
+    <Compile Include="IQueryResultLoader.cs" />
     <Compile Include="ISupportsRSADecryption.cs" />
     <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\IHabaneroLogger.cs" />

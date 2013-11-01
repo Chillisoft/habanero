@@ -5,16 +5,16 @@ using Habanero.BO;
 
 namespace Habanero.DB
 {
-    public class ResultSetLoaderDB : IResultSetLoader
+    public class QueryResultLoaderDb : IQueryResultLoader
     {
         private readonly IDatabaseConnection _databaseConnection;
 
-        public ResultSetLoaderDB(IDatabaseConnection databaseConnection)
+        public QueryResultLoaderDb(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
         }
 
-        public QueryResult GetResultSet(ISelectQuery selectQuery)
+        public IQueryResult GetResultSet(ISelectQuery selectQuery)
         {
             var classDef = selectQuery.ClassDef;
             var criteria = selectQuery.Criteria;
