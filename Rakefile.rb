@@ -171,3 +171,14 @@ pushnugetpackages :publishTestDBNugetPackage do |package|
   package.Version = $nuget_publish_version_id
   package.Description = "Habanero.Test.DB"
 end
+
+
+#------------------------------------------Build Stats------------------------------------------------------------
+
+desc "Runs sonar"
+exec :sonar do |cmd|
+  puts cyan("Running Sonar")
+  cmd.command = "cmd.exe"
+  cmd.parameters = "/c #{$sonar_runner_path}"
+end
+
