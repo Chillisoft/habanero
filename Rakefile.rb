@@ -58,6 +58,9 @@ task :build_only => [:clean, :msbuild]
 desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
 task :build_with_coverage => [:installNugetPackages, :build_only, :test_with_coverage, :nuget]
 
+deck "Build with sonar (stats build)"
+task :build_with_sonar => [:build_only, :sonar]
+
 desc "Pushes Habanero into the local nuget folder"
 task :nuget => [:publishBaseNugetPackage, 
 				:publishConsoleNugetPackage, 
