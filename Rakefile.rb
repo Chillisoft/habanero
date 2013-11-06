@@ -24,6 +24,10 @@ else
 	$nuget_publish_version = 'v3.0'
 	$nuget_publish_version_id = '3.0'
 end		
+
+$binaries_baselocation = "bin"
+$nuget_baselocation = "nugetArtifacts"
+
 #------------------------build settings--------------------------
 require 'rake-settings.rb'
 
@@ -53,7 +57,7 @@ desc "Builds Habanero, including tests"
 task :build_test => [:clean, :installNugetPackages, :msbuild, :test]
 
 desc "Builds Habanero"
-task :build_only => [:clean, :msbuild]
+task :build_only => [:clean, :msbuild, :copy_to_nuget]
 
 desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
 task :build_with_coverage => [:installNugetPackages, :build_only, :test_with_coverage, :nuget]
@@ -72,12 +76,14 @@ task :nuget => [:publishBaseNugetPackage,
 				:publishTestDBNugetPackage]
 #------------------------build habanero --------------------
 
-desc "Cleans the bin folder"
+desc "Cleans build folders"
 task :clean do
-	puts cyan("Cleaning bin folder")
-	FileUtils.rm_rf 'bin'
-  FileSystem.ensure_dir_exists 'bin/Debug'
-  FileSystem.ensure_dir_exists 'bin/Release'
+	puts cyan("Cleaning build folders")
+	FileUtils.rm_rf $binaries_baselocation
+	FileUtils.rm_rf $nuget_baselocation	
+	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Debug"
+	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Release"
+	FileSystem.ensure_dir_exists $nuget_baselocation
 end
 
 desc "Builds the solution with msbuild"
@@ -104,6 +110,46 @@ dotcover :test_with_coverage do |dc|
 	puts cyan("Running tests with dotcover")
 	dc.assemblies testassemblies
     dc.filters '+:module=*;class=*;function=*'
+end
+
+def nugetassemblieswithpdb
+	['bin\Habanero.Base.dll',
+	'bin\Habanero.BO.dll',
+	'bin\Habanero.Console.dll',
+	'bin\Habanero.Test.dll',
+	'bin\Habanero.Test.BO.dll',
+	'bin\Habanero.Test.Structure.dll',
+	'bin\Habanero.Test.DB.dll',
+	'bin\Habanero.Base.pdb',
+	'bin\Habanero.BO.pdb',
+	'bin\Habanero.Console.pdb',
+	'bin\Habanero.Test.pdb',
+	'bin\Habanero.Test.BO.pdb',
+	'bin\Habanero.Test.Structure.pdb',
+	'bin\Habanero.Test.DB.pdb',]
+end
+
+def copy_nuget_files_to location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Base.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.BO.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Console.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.BO.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.Structure.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.DB.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Base.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.BO.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Console.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.BO.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.Structure.pdb", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.DB.pdb", location
+end
+
+task :copy_to_nuget do
+	puts cyan("Copying files to the nuget folder")
+	
+	copy_nuget_files_to $nuget_baselocation
 end
 
 desc "Install nuget packages"
