@@ -23,6 +23,7 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.Structure;

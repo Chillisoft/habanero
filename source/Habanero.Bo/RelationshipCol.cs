@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Exceptions;
 
 namespace Habanero.BO
 {

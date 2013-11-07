@@ -21,13 +21,14 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
     /// <summary>
     /// Checks integer values against property rules that test for validity
     /// </summary>
-    public class PropRuleLong : PropRuleBase, IPropRuleComparable<long>
+    public class PropRuleLong : PropRuleIntegerBase<long>, IPropRuleComparable<long>
     {
         //private int _minValue = int.MinValue;
         //private int _maxValue = int.MaxValue;
@@ -68,7 +69,7 @@ namespace Habanero.BO
         {
             try
             {
-                string[] keys = new string[_parameters.Keys.Count];
+                var keys = new string[_parameters.Keys.Count];
                 _parameters.Keys.CopyTo(keys, 0);
                 foreach (string key in keys)
                 {
@@ -112,7 +113,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the minimum value that the integer can be assigned
         /// </summary>
-        public long MinValue
+        public override long MinValue
         {
             get { return Convert.ToInt64(Parameters["min"]); }
             set { Parameters["min"] = value; }
@@ -121,16 +122,30 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the maximum value that the integer can be assigned
         /// </summary>
-        public long MaxValue
+        public override long MaxValue
         {
-            get
-            {
-                return Convert.ToInt64(Parameters["max"]);
-            }
-            set
-            {
-                Parameters["max"] = value;
-            }
+            get { return Convert.ToInt64(Parameters["max"]); }
+            set { Parameters["max"] = value; }
+        }
+
+        /// <summary>
+        /// Returns whether the supplied value is less than the MinValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
+        protected override bool IsLessThanMinValue(long value)
+        {
+            return value < MinValue;
+        }
+
+        /// <summary>
+        /// Returns whether the supplied value is greater than the MaxValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
+        protected override bool IsGreaterThanMaxValue(long value)
+        {
+            return value > MaxValue;
         }
 
         /// <summary>
@@ -143,53 +158,16 @@ namespace Habanero.BO
         /// <returns>Returns true if valid</returns>
         public override bool IsPropValueValid(string displayName, object propValue, ref string errorMessage)
         {
-            bool valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
-            if (propValue is int)
+            var valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
+            if (propValue == null) return true;
+            if (propValue.GetType().IsInteger())
             {
-                int intPropRule = (int) propValue;
-                if (intPropRule < MinValue)
-                {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be less than " + MinValue + ".";
-                    }
-                    valueValid = false;
-                }
-                if (intPropRule > MaxValue)
-                {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be more than " + MaxValue + ".";
-                    }
-                    valueValid = false;
-                }
+                var longValue = Convert.ToInt64(propValue);
+                valueValid = CheckValueAgainstAcceptedRange(displayName, longValue, ref errorMessage);
             }
             return valueValid;
         }
 
-        /// <summary>
-        /// Returns the list of available parameter names for the rule.
-        /// </summary>
-        /// <returns>A list of the parameters that this rule uses</returns>
-        public override List<string> AvailableParameters
-        {
-            get
-            {
-                List<string> parameters = new List<string>();
-                parameters.Add("min");
-                parameters.Add("max");
-                return parameters;
-            }
-        }
+      
     }
 }

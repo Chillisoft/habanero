@@ -18,11 +18,12 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
 using Habanero.BO;
 using NUnit.Framework;
+
 // ReSharper disable InconsistentNaming
-// ReSharper disable CheckNamespace
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.PropRule
 {
     [TestFixture]
     public class TestPropRuleShort
@@ -101,6 +102,20 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(short.MinValue, rule.MinValue);
             Assert.AreEqual(short.MaxValue, rule.MaxValue);
+        }
+
+        [Test]
+        public void IsPropValueValid_GivenValueOutsideShortRange_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            var rule = new PropRuleShort("num", "");
+             var errorMessage = "";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var valid = rule.IsPropValueValid("num", int.MaxValue, ref errorMessage);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
         }
     }
 }

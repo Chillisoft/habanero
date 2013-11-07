@@ -18,14 +18,13 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
 using System;
-using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
-using Habanero.BO.Loaders;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.PropRule
 {
     [TestFixture]
     public class TestPropRuleLong
@@ -103,6 +102,23 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.IsFalse(valid);
             Assert.IsTrue(errorMessage.Length > 0);
+        }
+
+        [Test]
+        public void IsPropValueValid_ShouldPassForNumberGreaterThanMaxInt()
+        {
+            //---------------Set up test pack-------------------
+            var rule = new PropRuleLong("num", "TestMessage", 0, long.MaxValue);
+            var errorMessage = "";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            long value = int.MaxValue;
+            value += 1;
+            var valid = rule.IsPropValueValid("Propname", value, ref errorMessage);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(valid);
+            Assert.IsTrue(errorMessage.Length == 0);
         }
 
         protected virtual IDefClassFactory GetDefClassFactory()

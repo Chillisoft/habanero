@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 using NUnit.Framework;
 using Rhino.Mocks;
 

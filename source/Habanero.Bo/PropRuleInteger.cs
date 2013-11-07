@@ -21,19 +21,15 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
-
-
     /// <summary>
     /// Checks integer values against property rules that test for validity
     /// </summary>
-    public class PropRuleInteger : PropRuleBase, IPropRuleComparable<int>
+    public class PropRuleInteger : PropRuleIntegerBase<int>, IPropRuleComparable<int>
     {
-        //private int _minValue = int.MinValue;
-        //private int _maxValue = int.MaxValue;
-
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -70,7 +66,7 @@ namespace Habanero.BO
         {
             try
             {
-                string[] keys = new string[_parameters.Keys.Count];
+                var keys = new string[_parameters.Keys.Count];
                 _parameters.Keys.CopyTo(keys, 0);
                 foreach (string key in keys)
                 {
@@ -114,7 +110,7 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the minimum value that the integer can be assigned
         /// </summary>
-        public int MinValue
+        public override int MinValue
         {
             get { return Convert.ToInt32(Parameters["min"]); }
             set { Parameters["min"] = value; }
@@ -123,16 +119,20 @@ namespace Habanero.BO
         /// <summary>
         /// Gets and sets the maximum value that the integer can be assigned
         /// </summary>
-        public int MaxValue
+        public override int MaxValue
         {
-            get
-            {
-                return Convert.ToInt32(Parameters["max"]);
-            }
-            set
-            {
-                Parameters["max"] = value;
-            }
+            get { return Convert.ToInt32(Parameters["max"]); }
+            set { Parameters["max"] = value; }
+        }
+
+        protected override bool IsLessThanMinValue(int value)
+        {
+            return value < MinValue;
+        }
+
+        protected override bool IsGreaterThanMaxValue(int value)
+        {
+            return value > MaxValue;
         }
 
         /// <summary>
@@ -145,53 +145,22 @@ namespace Habanero.BO
         /// <returns>Returns true if valid</returns>
         public override bool IsPropValueValid(string displayName, object propValue, ref string errorMessage)
         {
-            bool valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
-            if (propValue is int)
+            var valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
+            if (propValue == null) return true;
+            if (propValue.GetType().IsInteger())
             {
-                int intPropRule = (int) propValue;
-                if (intPropRule < MinValue)
+                try
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be less than " + MinValue + ".";
-                    }
-                    valueValid = false;
+                    var intValue = Convert.ToInt32(propValue);
+                    valueValid = CheckValueAgainstAcceptedRange(displayName, intValue, ref errorMessage);
                 }
-                if (intPropRule > MaxValue)
+                catch (OverflowException)
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be more than " + MaxValue + ".";
-                    }
-                    valueValid = false;
+                    errorMessage += string.Format("{0} value of {1} too large or small for an int", displayName, propValue);
+                    return false;
                 }
             }
             return valueValid;
-        }
-
-        /// <summary>
-        /// Returns the list of available parameter names for the rule.
-        /// </summary>
-        /// <returns>A list of the parameters that this rule uses</returns>
-        public override List<string> AvailableParameters
-        {
-            get
-            {
-                List<string> parameters = new List<string>();
-                parameters.Add("min");
-                parameters.Add("max");
-                return parameters;
-            }
         }
     }
 }

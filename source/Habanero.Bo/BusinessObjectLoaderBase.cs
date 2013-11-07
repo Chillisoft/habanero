@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Exceptions;
 using Habanero.Util;
 
 namespace Habanero.BO

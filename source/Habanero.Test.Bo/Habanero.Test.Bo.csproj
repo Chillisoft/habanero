@@ -296,7 +296,6 @@
     <Compile Include="TransactionCommitters\TestTransactionalBusinessObject.cs" />
     <Compile Include="TransactionCommitters\TestTransactionCommitter.cs" />
     <Compile Include="Relationship\TestMultipleRelationship.cs" />
-    <Compile Include="Loaders\TestXmlTriggerLoader.cs" />
     <Compile Include="TestBOKeyCol.cs" />
     <Compile Include="CriteriaManager\TestCriteriaExpression.cs" />
     <Compile Include="CriteriaManager\TestExpression.cs" />

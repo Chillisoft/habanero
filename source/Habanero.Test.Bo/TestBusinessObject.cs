@@ -24,6 +24,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 using Habanero.DB;
 using Habanero.Test.BO.ClassDefinition;
 using Habanero.Test.Structure;

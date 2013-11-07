@@ -18,16 +18,15 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
 using System;
-using System.Collections.Generic;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.Util;
 using NUnit.Framework;
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.PropRule
 {
     [TestFixture]
     public class TestPropRuleDate

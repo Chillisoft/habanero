@@ -22,6 +22,7 @@ using System;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -155,7 +156,7 @@ namespace Habanero.Test
         /// </remarks>
         /// <param name="id">The object Value</param>
         /// <returns>The loaded business object</returns>
-        /// <exception cref="Habanero.BO.BusObjDeleteConcurrencyControlException">
+        /// <exception cref="BusObjDeleteConcurrencyControlException">
         ///  if the object has been deleted already</exception>
         public static ContactPersonCompositeKey GetContactPersonCompositeKey(IPrimaryKey id)
         {

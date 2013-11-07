@@ -25,9 +25,8 @@ using Habanero.BO;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
-// ReSharper disable CheckNamespace
 
-namespace Habanero.Test.BO
+namespace Habanero.Test.BO.PropRule
 {
     [TestFixture]
     public class TestPropRuleInt
@@ -110,6 +109,20 @@ namespace Habanero.Test.BO
             //---------------Test Result -----------------------
             Assert.AreEqual(int.MinValue, rule.MinValue);
             Assert.AreEqual(int.MaxValue, rule.MaxValue);
+        }
+
+        [Test]
+        public void IsPropValueValid_GivenValueOutsideIntRange_ShouldReturnFalse()
+        {
+            //---------------Set up test pack-------------------
+            var rule = new PropRuleInteger("num", "");
+            var errorMessage = "";
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var valid = rule.IsPropValueValid("num", long.MaxValue, ref errorMessage);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(valid);
         }
     }
 }

@@ -32,6 +32,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 
 namespace Habanero.BO
 {

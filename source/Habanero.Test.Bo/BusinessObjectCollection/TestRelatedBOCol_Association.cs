@@ -21,6 +21,7 @@
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
+using Habanero.BO.Exceptions;
 using Habanero.Test.BO.RelatedBusinessObjectCollection;
 using Habanero.Util;
 using NUnit.Framework;

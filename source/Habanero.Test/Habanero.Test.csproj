@@ -135,7 +135,7 @@
     <Compile Include="Base\TestDateTimeTodayConverter.cs" />
     <Compile Include="Base\TestDelegatedExceptionNotifier.cs" />
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
-    <Compile Include="Base\TestExceptions.cs" />
+    <Compile Include="Base\Exceptions\TestExceptions.cs" />
     <Compile Include="Base\TestGlobalRegistry.cs" />
     <Compile Include="Base\TestHabaneroApp.cs" />
     <Compile Include="Base\Encryption\TestNullCrypter.cs" />
@@ -261,9 +261,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Base\Exceptions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

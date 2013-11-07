@@ -138,7 +138,6 @@
     <Compile Include="ConcurrencyControl\OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
     <Compile Include="ConnectionStringAccess2007Factory.cs" />
-    <Compile Include="ConnectionStringDB4OFactory.cs" />
     <Compile Include="ConnectionStringFirebirdEmbeddedFactory.cs" />
     <Compile Include="ConnectionStringFirebirdFactory.cs" />
     <Compile Include="ConnectionStringPostgreSqlFactory.cs" />

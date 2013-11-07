@@ -26,6 +26,7 @@ using System.Text;
 using System.Xml;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO.Exceptions;
 
 namespace Habanero.BO
 {

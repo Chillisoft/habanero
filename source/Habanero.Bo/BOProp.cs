@@ -24,6 +24,7 @@ using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
+using Habanero.BO.Exceptions;
 
 namespace Habanero.BO
 {

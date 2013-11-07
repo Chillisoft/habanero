@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Habanero.Base.Exceptions;
+using Habanero.Util;
 
 namespace Habanero.BO
 {
     /// <summary>
     /// Checks integer values against property rules that test for validity
     /// </summary>
-    public class PropRuleShort : PropRuleBase, IPropRuleComparable<short>
+    public class PropRuleShort : PropRuleIntegerBase<short>, IPropRuleComparable<short>
     {
-        //private int _minValue = int.MinValue;
-        //private int _maxValue = int.MaxValue;
-
         /// <summary>
         /// Constructor to initialise a new rule
         /// </summary>
@@ -89,28 +87,26 @@ namespace Habanero.BO
             }
         }
 
-        /// <summary>
-        /// Gets and sets the minimum value that the integer can be assigned
-        /// </summary>
-        public short MinValue
+        public override short MinValue
         {
             get { return Convert.ToInt16(Parameters["min"]); }
             set { Parameters["min"] = value; }
         }
 
-        /// <summary>
-        /// Gets and sets the maximum value that the integer can be assigned
-        /// </summary>
-        public short MaxValue
+        public override short MaxValue
         {
-            get
-            {
-                return Convert.ToInt16(Parameters["max"]);
-            }
-            set
-            {
-                Parameters["max"] = value;
-            }
+            get { return Convert.ToInt16(Parameters["max"]); }
+            set { Parameters["max"] = value; }
+        }
+
+        protected override bool IsLessThanMinValue(short value)
+        {
+            return value < MinValue;
+        }
+
+        protected override bool IsGreaterThanMaxValue(short value)
+        {
+            return value > MaxValue;
         }
 
         /// <summary>
@@ -123,53 +119,22 @@ namespace Habanero.BO
         /// <returns>Returns true if valid</returns>
         public override bool IsPropValueValid(string displayName, object propValue, ref string errorMessage)
         {
-            bool valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
-            if (propValue is int)
+            var valueValid = base.IsPropValueValid(displayName, propValue, ref errorMessage);
+            if (propValue == null) return true;
+            if (propValue.GetType().IsInteger())
             {
-                int intPropRule = (int) propValue;
-                if (intPropRule < MinValue)
+                try
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be less than " + MinValue + ".";
-                    }
-                    valueValid = false;
+                    var value = Convert.ToInt16(propValue);
+                    valueValid = CheckValueAgainstAcceptedRange(displayName, value, ref errorMessage);
                 }
-                if (intPropRule > MaxValue)
+                catch (OverflowException)
                 {
-                    errorMessage = GetBaseErrorMessage(propValue, displayName);
-                    if (!String.IsNullOrEmpty(Message))
-                    {
-                        errorMessage += Message;
-                    }
-                    else
-                    {
-                        errorMessage += "The value cannot be more than " + MaxValue + ".";
-                    }
-                    valueValid = false;
+                    errorMessage += string.Format("{0} value of {1} too large or small for a short", displayName, propValue);
+                    return false;
                 }
             }
             return valueValid;
-        }
-
-        /// <summary>
-        /// Returns the list of available parameter names for the rule.
-        /// </summary>
-        /// <returns>A list of the parameters that this rule uses</returns>
-        public override List<string> AvailableParameters
-        {
-            get
-            {
-                List<string> parameters = new List<string>();
-                parameters.Add("min");
-                parameters.Add("max");
-                return parameters;
-            }
         }
     }
 }

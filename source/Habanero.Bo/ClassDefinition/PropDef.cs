@@ -25,6 +25,7 @@ using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using Habanero.BO.Comparer;
+using Habanero.BO.Exceptions;
 using Habanero.Util;
 
 namespace Habanero.BO.ClassDefinition
