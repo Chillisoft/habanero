@@ -1433,7 +1433,7 @@ namespace Habanero.BO
         {
             foreach (TBusinessObject child in this)
             {
-                if (!child.IsValid())
+                if (!child.Status.IsValid())
                 {
                     return false;
                 }
@@ -1453,7 +1453,7 @@ namespace Habanero.BO
             errorMessage = string.Empty;
             foreach (TBusinessObject child in this)
             {
-                if (!child.IsValid(out errorMessage))
+                if (!child.Status.IsValid(out errorMessage))
                 {
                     return false;
                 }

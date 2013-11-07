@@ -27,7 +27,7 @@ namespace Habanero.Base
     /// Provides an interface for business objects. This interface contains all the publically accessable
     /// methods for Business Objects.
     /// </summary>
-    public interface IBusinessObject : IXmlSerializable
+    public interface IBusinessObject
     {
 
         /// <summary>
@@ -105,13 +105,6 @@ namespace Habanero.Base
         /// Cancel all edits made to the object since it was loaded from the 
         /// database or last saved to the database
         /// </summary>
-        [Obsolete("This is replaced by CancelEdits().")]
-        void Restore();
-
-        /// <summary>
-        /// Cancel all edits made to the object since it was loaded from the 
-        /// database or last saved to the database
-        /// </summary>
         void CancelEdits();
 
         /// <summary>
@@ -119,13 +112,6 @@ namespace Habanero.Base
         /// then carry out the deletion from the database.
         /// </summary>
         void MarkForDelete();
-
-        /// <summary>
-        /// Marks the business object for deleting.  Calling Save() will
-        /// then carry out the deletion from the database.
-        /// </summary>
-        [Obsolete("This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object.")]
-        void Delete();
 
         /// <summary>
         /// Fired every time an object is persisted.
@@ -149,19 +135,6 @@ namespace Habanero.Base
         /// The event is fired when the business object is updated
         /// </summary>
         event EventHandler<BOEventArgs> IDUpdated;
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
-        /// <param name="invalidReason">A string to modify with a reason
-        /// for any invalid values</param>
-        /// <returns>Returns true if all are valid</returns>
-        bool IsValid(out string invalidReason);
-
-        /// <summary>
-        /// Indicates whether all of the property values are valid
-        /// </summary>
-        /// <returns>Returns true if all are valid</returns>
-        bool IsValid();
 
         ///<summary>
         /// This method can be overridden by a class that inherits from Business object.

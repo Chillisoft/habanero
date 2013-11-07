@@ -36,7 +36,6 @@ namespace Habanero.BO.Loaders
         protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(XmlUIGridColumnLoader));
         private string _heading;
         private string _propertyName;
-//        private Type _gridControlType;
         private bool _editable;
         private int _width;
         private PropAlignment _alignment;
@@ -84,9 +83,6 @@ namespace Habanero.BO.Loaders
         {
 			return _defClassFactory.CreateUIGridProperty(_heading, _propertyName,
                 _className ,_assemblyName, _editable, _width, _alignment, _propertyAttributes);
-			//return
-			//    new UIGridProperty(_heading, _propertyName, _gridControlType, _editable, _width,
-			//                       _alignment);
         }
 
         /// <summary>
@@ -130,35 +126,6 @@ namespace Habanero.BO.Loaders
         {
               _assemblyName = _reader.GetAttribute("assembly");
               _className = _reader.GetAttribute("type");
-
-
-
-            //if (_assemblyName == null || _assemblyName.Length == 0)
-            //{
-            //    if (_className == "DataGridViewTextBoxColumn" || _className == "DataGridViewCheckBoxColumn" ||
-            //        _className == "DataGridViewComboBoxColumn")
-            //    {
-            //        _assemblyName = "System.Windows.Forms";
-            //    }
-            //    else
-            //    {
-            //        _assemblyName = "Habanero.UI";
-            //        _className = "Habanero.UI.Grid." + _className;
-            //    }
-            //}
-            ////log.Debug("assembly: " + _assemblyName + ", class: " + _className) ;
-            //try
-            //{
-            //    _gridControlType = TypeLoader.LoadType(_assemblyName, _className);
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new InvalidXmlDefinitionException(String.Format(
-            //        "In a 'column' element, the grid column type could not be loaded, " +
-            //        "with the 'type' given as '{0}' and the assembly as '{1}'. " +
-            //        "See the documentation for available types.",
-            //        _className, _assemblyName), ex);
-            //}
         }
 
         /// <summary>
@@ -232,9 +199,7 @@ namespace Habanero.BO.Loaders
         private void LoadParameters()
         {
             _propertyAttributes = new Hashtable();
-            //System.Console.WriteLine(_reader.Name);
             _reader.Read();
-            //System.Console.WriteLine(_reader.Name);
 
             while (_reader.Name == "parameter")
             {

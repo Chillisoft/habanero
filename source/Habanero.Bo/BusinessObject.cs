@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
@@ -56,7 +55,7 @@ namespace Habanero.BO
 	/// </summary>
 	public class BusinessObject : IBusinessObject, ISerializable
 	{
-		protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObject));
+		protected static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObject));
 
 		#region IBusinessObject Members
 
@@ -210,7 +209,7 @@ namespace Habanero.BO
 				}
 				catch (Exception ex)
 				{
-					string message = "The Business Object " + ClassDef.ClassName
+					var message = "The Business Object " + ClassDef.ClassName
 									 + " could not be deserialised because the property " + prop.PropertyName
 									 + " raised an exception";
 					throw new HabaneroDeveloperException(message, message, ex);
@@ -231,7 +230,7 @@ namespace Habanero.BO
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
 		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			foreach (IBOProp prop in _boPropCol)
+			foreach (var prop in _boPropCol)
 			{
 				info.AddValue(prop.PropertyName, prop.Value);
 				info.AddValue(prop.PropertyName + "_IsDirty", prop.IsDirty);
@@ -253,7 +252,7 @@ namespace Habanero.BO
 
 		private void SetupBOPropsWithThisBo()
 		{
-			foreach (IBOProp prop in _boPropCol)
+			foreach (var prop in _boPropCol)
 			{
 				((BOProp)prop).BusinessObject = this;
 			}
@@ -352,14 +351,12 @@ namespace Habanero.BO
 				if (ClassDef == null) return;
 				if (ID != null)
 				{
-					//BusinessObjectManager.Instance.Remove(this);
 					FinaliseBusinessObjectTearDown();
 				}
 			}
 			catch (Exception ex)
 			{
-				_logger.Log("Error disposing BusinessObject.", ex);
-				//_log.Error("Error disposing BusinessObject.", ex);
+				Logger.Log("Error disposing BusinessObject.", ex);
 			}
 			finally
 			{
@@ -369,7 +366,7 @@ namespace Habanero.BO
 				}
 				catch (Exception e)
 				{
-					_logger.Log("it is potentially dangerous to access ADO connections in an object's destructor. But the release locks is really a but if when maybe type situation so we can live with this.", e, LogCategory.Debug);
+					Logger.Log("it is potentially dangerous to access ADO connections in an object's destructor. But the release locks is really a but if when maybe type situation so we can live with this.", e, LogCategory.Debug);
 				}            
 			}
 		}
@@ -444,8 +441,6 @@ namespace Habanero.BO
 					throw new HabaneroDeveloperException(ex.Message + " Your discriminator field is not included in the properties of the class and you are using Single Table Inheritance. Please include the discriminator field as a property.");
 				}
 			}
-			// NOTE: This has been moved to the Relationships getter so that it does lazy loading.
-			//_relationshipCol = classDef.CreateRelationshipCol(_boPropCol, this);
 		}
 
 		private void SetPrimaryKeyForInheritedClass()
@@ -538,13 +533,6 @@ namespace Habanero.BO
 			get { return (ClassDef) _classDef; }
 			set { _classDef = value; }
 		}
-//
-		/// <summary>
-		/// A property to store the business object's full classdef name.  this is used when persisting to an object database
-		/// so that the object can be queried based on its classdef (without the necessity of persisting the entire classdef
-		/// for each object).
-		/// </summary>
-//        public string ClassDefName { get; set; }
 
 		/// <summary>
 		/// Gets and sets the collection of relationships
@@ -580,11 +568,6 @@ namespace Habanero.BO
 		{
 			get
 			{
-				//                if (_primaryKey == null)
-				//                {
-				//                    CheckClassDefNotNull();
-				//                    SetupPrimaryKey();
-				//                }
 				return _primaryKey;
 			}
 		}
@@ -821,52 +804,21 @@ namespace Habanero.BO
 		{
 			var prop = GetProperty(propName);
 #if DEBUG
-			if (_logger.IsLogging(LogCategory.Debug))
+			if (Logger.IsLogging(LogCategory.Debug))
 			{
-				//_logger.Log("SetPropertyValue BO (" + this + ") prop (" + propName + ") previousValue (" + prop.Value + ") new value (" + newPropValue + ")", LogCategory.Debug);
-				_logger.Log(string.Format("ObjectID:{0} Type:{1}, {2} is being set to '{3}'", this._primaryKey, this.GetType().Name, propName, newPropValue), LogCategory.Debug);
-                
-				//_logger.Log(GetStackTrace(), LogCategory.Debug);
+				Logger.Log(string.Format("ObjectID:{0} Type:{1}, {2} is being set to '{3}'", this._primaryKey, this.GetType().Name, propName, newPropValue), LogCategory.Debug);
 			}
 #endif
 			prop.Value = newPropValue;
 		}
 
-		private static string GetStackTrace()
-		{
-			var stack = new StackTrace();
-			return stack.ToString();
-			// var frame = stack.GetFrame(1);
-		}
-		/// <summary>
+	    /// <summary>
 		/// The BOProps in this business object
 		/// </summary>
 		[TypeDescriptorIgnore]
 		public IBOPropCol Props
 		{
 			get { return _boPropCol; }
-		}
-
-		/// <summary>
-		/// Indicates whether all of the property values are valid
-		/// </summary>
-		/// <param name="invalidReason">A string to modify with a reason
-		/// for any invalid values</param>
-		/// <returns>Returns true if all are valid</returns>
-		[Obsolete("Please use IsValid on the Status property of the BusinessObject: eg. myBO.Status.IsValid()")]
-		public bool IsValid(out string invalidReason)
-		{
-			return _boStatus.IsValid(out invalidReason);
-		}
-
-		/// <summary>
-		/// Indicates whether all of the property values are valid
-		/// </summary>
-		/// <returns>Returns true if all are valid</returns>
-		[Obsolete("Please use IsValid on the Status property of the BusinessObject: eg. myBO.Status.IsValid()")]
-		public bool IsValid()
-		{
-			return Status.IsValid();
 		}
 
 		/// <summary>
@@ -1070,27 +1022,6 @@ namespace Habanero.BO
 			return _boRules;
 		}
 
-		///// <summary>
-		///// Commits to the database any changes made to the object
-		///// </summary>
-		//public virtual IBusinessObject Save()
-		//{
-		//    ITransactionCommitter committer = BORegistry.DataAccessor.CreateTransactionCommitter();
-		//    committer.AddBusinessObject(this);
-		//    committer.CommitTransaction();
-		//    return this;
-		//}
-
-		/// <summary>
-		/// Cancel all edits made to the object since it was loaded from the 
-		/// database or last saved to the database
-		/// </summary>
-		[Obsolete("This is replaced by CancelEdits().")]
-		public void Restore()
-		{
-			CancelEdits();
-		}
-
 		/// <summary>
 		/// Cancel all edits made to the object since it was loaded from the 
 		/// database or last saved to the database
@@ -1132,19 +1063,6 @@ namespace Habanero.BO
 					relationship.MarkForDelete();
 				}
 			}
-		}
-
-
-		/// <summary>
-		/// Marks the business object for deleting.  Calling Save() will
-		/// then carry out the deletion from the database.
-		/// </summary>
-		[Obsolete(
-			"V2.1 This method has been replaced with MarkForDelete() since it is far more explicit that this does not instantly delete the business object."
-			)]
-		public void Delete()
-		{
-			MarkForDelete();
 		}
 
 		/// <summary>
@@ -1220,7 +1138,6 @@ namespace Habanero.BO
 		{
 			_boStatus.IsNew = false;
 			_boStatus.IsDeleted = false;
-			//_boStatus.IsDirty = false;
 			_boStatus.IsEditing = false;
 		}
 
@@ -1228,7 +1145,6 @@ namespace Habanero.BO
 		{
 			_boStatus.IsNew = true;
 			_boStatus.IsDeleted = true;
-			//_boStatus.IsDirty = false;
 			_boStatus.IsEditing = false;
 		}
 
@@ -1241,11 +1157,6 @@ namespace Habanero.BO
 		///<param name="transactionCommitter">the transaction committer that is executing the transaction</param>
 		protected internal virtual void UpdateObjectBeforePersisting(ITransactionCommitter transactionCommitter)
 		{
-			//TODO: solidify method for using the transactionlog (either in constructor or in updateobjectbeforepersisting)
-			//if (_transactionLog != null)
-			//{
-			//    transactionCommitter.AddTransaction(_transactionLog);
-			//}
 			Relationships.AddDirtyChildrenToTransactionCommitter((TransactionCommitter) transactionCommitter);
 
 			if (BusinessObjectUpdateLog != null && (Status.IsNew || (Status.IsDirty && !Status.IsDeleted)))
@@ -1442,149 +1353,6 @@ namespace Habanero.BO
 
 		#endregion //Persistance
 
-		#region XMLSerialization
-
-		/// <summary>
-		/// Method implemented for legacy purposes only. Returns null.
-		/// </summary>
-		/// <returns></returns>
-		[Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
-		public XmlSchema GetSchema()
-		{
-			return null;
-		}
-
-		/// <summary>
-		/// Defines how to read Business Objects from serialized xml
-		/// </summary>
-		/// <param name="reader">The XmlReader</param>
-		[Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
-		public void ReadXml(XmlReader reader)
-		{
-			while (reader.MoveToNextAttribute())
-			{
-				string propertyName = reader.Name;
-				string propertyValue = reader.Value;
-				SetPropertyValue(propertyName, propertyValue);
-			}
-
-			reader.MoveToContent();
-			reader.Read();
-			if (!string.IsNullOrEmpty(reader.Name))
-			{
-				string relationshipName = reader.Name;
-				if (Relationships.Contains(relationshipName))
-				{
-					IRelationship relationship = Relationships[relationshipName];
-					RelationshipDef relationshipDef = (RelationshipDef)relationship.RelationshipDef;
-					Type relatedObjectType = relationshipDef.RelatedObjectClassType;
-					reader.MoveToContent();
-					reader.Read();
-
-					if (relationship is ISingleRelationship)
-					{
-						IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
-						relatedObject.ReadXml(reader);
-						((ISingleRelationship)relationship).SetRelatedObject(relatedObject);
-					}
-					else if (relationship is IMultipleRelationship)
-					{
-						ReadRelatedObject(reader, relationship, relatedObjectType);
-					}
-				}
-				else
-				{
-					string className = ClassDef.ClassName;
-					if (relationshipName != className && relationshipName != "ArrayOf" + className
-						&& reader.NodeType != XmlNodeType.EndElement)
-					{
-						throw new InvalidRelationshipNameException
-							(string.Format
-								 ("The relationship '{0}' does not exist on the class '{1}'.", relationshipName,
-								  className));
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Defines how to write Business Objects to serialized xml 
-		/// </summary>
-		/// <param name="writer">The XmlWriter</param>
-		[Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
-		public void WriteXml(XmlWriter writer)
-		{
-			foreach (IBOProp prop in _boPropCol)
-			{
-				writer.WriteAttributeString(prop.PropertyName, Convert.ToString(prop.Value));
-			}
-			foreach (IRelationship relationship in Relationships)
-			{
-				//what type of relationship? composition,aggregation...
-				//if (relationship.RelationshipDef.RelationshipType != RelationshipType.Association)
-
-				RelationshipType relationshipType = relationship.RelationshipDef.RelationshipType;
-				if (relationshipType == RelationshipType.Composition || relationshipType == RelationshipType.Aggregation)
-				{
-					WriteXmlNestedRelationship(writer, relationship);
-				}
-			}
-		}
-
-		[Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
-		private static void ReadRelatedObject(XmlReader reader, IRelationship relationship, Type relatedObjectType)
-		{
-			IBusinessObject relatedObject = (IBusinessObject)Activator.CreateInstance(relatedObjectType);
-			relatedObject.ReadXml(reader);
-			((IMultipleRelationship)relationship).BusinessObjectCollection.Add(relatedObject);
-
-			string elementName = reader.Name;
-			if (elementName == relatedObjectType.Name)
-			{
-				ReadRelatedObject(reader, relationship, relatedObjectType);
-			}
-		}
-
-		/// <summary>
-		/// Writes related objects that are in composite and aggregate relationships
-		/// as nested xml.
-		/// </summary>
-		[Obsolete("v2.6.0: Rather use classes like DataStoreInMemoryXmlReader/DataStoreInMemoryXmlWriter")]
-		private static void WriteXmlNestedRelationship(XmlWriter writer, IRelationship relationship)
-		{
-			if (relationship is ISingleRelationship)
-			{
-				ISingleRelationship singleRelationship = (ISingleRelationship)relationship;
-				IBusinessObject relatedObject = singleRelationship.GetRelatedObject();
-				if (relatedObject != null)
-				{
-					writer.WriteStartElement(relationship.RelationshipName);
-					writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
-					relatedObject.WriteXml(writer);
-					writer.WriteEndElement();
-					writer.WriteEndElement();
-				}
-			}
-			else if (relationship is IMultipleRelationship)
-			{
-				IMultipleRelationship multipleRelationship = (IMultipleRelationship)relationship;
-				IBusinessObjectCollection relatedObjects = multipleRelationship.BusinessObjectCollection;
-				if (relatedObjects.Count != 0)
-				{
-					writer.WriteStartElement(relationship.RelationshipName);
-					foreach (IBusinessObject relatedObject in relatedObjects)
-					{
-						writer.WriteStartElement(relationship.RelationshipDef.RelatedObjectClassName);
-						relatedObject.WriteXml(writer);
-						writer.WriteEndElement();
-					}
-					writer.WriteEndElement();
-				}
-			}
-		}
-
-		#endregion
-
 		#region Concurrency
 
 		/// <summary>
@@ -1632,17 +1400,6 @@ namespace Habanero.BO
 			}
 		}
 
-		//        /// <summary>
-		//        /// Releases read locks from the database
-		//        /// </summary>
-		//        protected virtual void ReleaseReadLocks()
-		//        {
-		//            if (!(_concurrencyControl == null))
-		//            {
-		//                _concurrencyControl.ReleaseReadLocks();
-		//            }
-		//        }
-
 		#endregion //Concurrency
 
 		///<summary>
@@ -1659,7 +1416,7 @@ namespace Habanero.BO
 		/// Called by the business object when the transaction has been successfully committed
 		/// to the database. Called in cases of insert, delete and update.
 		/// </summary>
-		protected internal virtual void AfterSave()
+		protected virtual void AfterSave()
 		{
 			FireUpdatedEvent();
 		}
@@ -1703,35 +1460,7 @@ namespace Habanero.BO
 
 			return !Status.IsDirty || IsEditable(out errMsg);
 		}
-/*
-		internal void UpdateDirtyStatusFromProperties()
-		{
-			bool hasDirtyProps = false;
-			foreach (BOProp prop in _boPropCol)
-			{
-				if (prop.IsDirty) hasDirtyProps = true;
-			}
 
-		  //  _boStatus.SetBOFlagValue(BOStatus.Statuses.isDirty, hasDirtyProps);
-		}*/
-/*
-		
-		internal void SetDirty(bool dirty)
-		{
-			_boStatus.IsDirty = dirty;
-		}
-*/
-
-		/// <summary>
-		/// Is the <see cref="IBusinessObject"/> archived or not. This can be overriden by a
-		/// specific business object to implement required behaviour.
-		/// </summary>
-		/// <returns></returns>
-		[Obsolete("V 2.5.0 This is no longer used")]
-		protected internal virtual bool IsArchived()
-		{
-			return false;
-		}
 		/// <summary>
 		/// Commits to the database any changes made to the object
 		/// </summary>
@@ -1764,23 +1493,6 @@ namespace Habanero.BO
 		{
 		}
 
-		///// <summary>
-		///// Sets a property value to a new value
-		///// </summary>
-		///// <param name="propNameExpression">The property name expression (eg. p => p.Name)</param>
-		///// <param name="newPropValue">The new value to set to</param>
-		///// <remarks>This runs about 5 times slower than the normal <see cref="BusinessObject.SetPropertyValue"/> method but has the advantage
-		///// of being type safe.  Unless you are experiencing performance problems using this method, it is the recommended way of setting a property value.
-		///// </remarks>
-		//public void SetPropertyValue(Expression<Func<T, object>> propNameExpression, object newPropValue)
-		//{
-		//    var memberExpression = propNameExpression.Body as MemberExpression;
-		//    if (memberExpression == null)
-		//    {
-		//        throw new ArgumentException(propNameExpression + " is not a valid property on " + this.GetType().Name);
-		//    }
-		//    SetPropertyValue(memberExpression.Member.Name, newPropValue);
-		//}
 		/// <summary>
 		/// Sets a property value to a new value
 		/// </summary>
@@ -1836,22 +1548,4 @@ namespace Habanero.BO
 			return this;
 		}
 	}
-/*    /// <summary>
-	/// Adds convenience extension methods to the <see cref="IBusinessObject"/>
-	/// e.g. the <see cref="Save{T}"/> method
-	/// </summary>
-	public static class BusinessObjectExtensions
-	{
-		/// <summary>
-		/// Commits to the database any changes made to the object
-		/// </summary>
-		public static T Save<T>(this T businessObject) where T: IBusinessObject
-		{
-			if(businessObject.IsNull()) throw new HabaneroApplicationException("There is an application error a business object that is null was saved via the Save{T} extension Method"); 
-			var committer = BORegistry.DataAccessor.CreateTransactionCommitter();
-			committer.AddBusinessObject(businessObject);
-			committer.CommitTransaction();
-			return businessObject;
-		}
-	}*/
 }

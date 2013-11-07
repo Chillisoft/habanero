@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
@@ -33,7 +34,6 @@ namespace Habanero.BO
     /// </summary>
     public class RelKey : IRelKey
     {
-        private readonly RelKeyDef _relKeyDef;
         private readonly Dictionary<string, IRelProp> _relProps;
 
         /// <summary>
@@ -49,13 +49,12 @@ namespace Habanero.BO
         /// <param name="lRelKeyDef">The relationship key definition</param>
         /// <param name="lBoPropCol">The properties of the business object that this relationship key
         /// is being created form</param>
-        public RelKey(RelKeyDef lRelKeyDef, IBOPropCol lBoPropCol)
+        public RelKey(IEnumerable<IRelPropDef> lRelKeyDef, IBOPropCol lBoPropCol)
         {
-            _relKeyDef = lRelKeyDef;
             _relProps = new Dictionary<string, IRelProp>();
-            foreach (RelPropDef relPropDef in _relKeyDef)
+            foreach (RelPropDef relPropDef in lRelKeyDef)
             {
-                IRelProp relProp = relPropDef.CreateRelProp(lBoPropCol);
+                var relProp = relPropDef.CreateRelProp(lBoPropCol);
                 relProp.PropValueUpdated += (sender, e) => FireRelatedPropValueChangedEvent();
                 this.Add(relProp);
             }
@@ -97,10 +96,11 @@ namespace Habanero.BO
         {
             get
             {
-                int i = 0;
-                foreach (KeyValuePair<string, IRelProp> prop in _relProps)
+                var i = 0;
+                foreach (var prop in _relProps)
                 {
-                    if (i++ == index) return prop.Value;
+                    if (i == index) return prop.Value;
+                    i += 1;
                 }
                 throw new IndexOutOfRangeException("This RelKey does not contain a RelProp at index " + index);
             }
@@ -147,57 +147,8 @@ namespace Habanero.BO
                     criteria = criteria == null ? relProp.Criteria : new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
                 }
                 return criteria;
- 
-                //if (_relProps.Count >= 1)
-                //{
-                //    IExpression exp = null;
-                //    foreach (RelProp relProp in this)
-                //    {
-                //        exp = exp == null
-                //            ? relProp.RelatedPropExpression()
-                //            : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
-                //    }
-                //    return exp;
-                //}
-                //return null;
             }
         }
-//        /// <summary>
-//        /// Returns a copy of the key's Criteria (ie the search string matching this key). 
-//        /// </summary>
-//        /// <returns>Returns a Criteria object</returns>
-//        public Criteria RelatedCriteria
-//        {
-//            get
-//            {
-//                if (_relProps.Count == 0) return null;
-//                Criteria criteria = null;
-//                foreach (RelProp relProp in this)
-//                {
-//                    if (criteria == null)
-//                        criteria = relProp.Criteria;
-//                    else
-//                    {
-//                        criteria = new Criteria(criteria, Criteria.LogicalOp.And, relProp.Criteria);
-//                    }
-//                }
-//                return criteria;
-// 
-//                //if (_relProps.Count >= 1)
-//                //{
-//                //    IExpression exp = null;
-//                //    foreach (RelProp relProp in this)
-//                //    {
-//                //        exp = exp == null
-//                //            ? relProp.RelatedPropExpression()
-//                //            : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
-//                //    }
-//                //    return exp;
-//                //}
-//                //return null;
-//            }
-//        }
-
 
         /// <summary>
         /// Indicates if there is a related object.
@@ -207,35 +158,8 @@ namespace Habanero.BO
         /// <returns>Returns true if there is a valid relationship</returns>
         public bool HasRelatedObject()
         {
-            foreach (RelProp relProp in this)
-            {
-                if (! (relProp.IsNull))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return this.Cast<RelProp>().Any(relProp => ! (relProp.IsNull));
         }
-
-        ///// <summary>
-        ///// Returns the relationship expression. This is a copy of the expression as stored in the <see cref="RelKey"/>
-        ///// </summary>
-        ///// <returns>Returns an IExpression object</returns>
-        //public IExpression RelationshipExpression()
-        //{
-        //    if (_relProps.Count >= 1)
-        //    {
-        //        IExpression exp = null;
-        //        foreach (RelProp relProp in this)
-        //        {
-        //            exp = exp == null 
-        //                ? relProp.RelatedPropExpression() 
-        //                : new Expression(exp, new SqlOperator("AND"), relProp.RelatedPropExpression());
-        //        }
-        //        return exp;
-        //    }
-        //    return null;
-        //}
 
         /// <summary>
         /// Returns an enumrated for theis RelKey to iterate through its RelProps

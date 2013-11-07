@@ -92,7 +92,7 @@ namespace Habanero.DB
         /// If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(IPrimaryKey primaryKey) where T : class, IBusinessObject, new()
         {
-            T businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
+            var businessObject = GetBusinessObject<T>(Criteria.FromPrimaryKey(primaryKey));
             if (businessObject != null) return businessObject;
 
             throw new BusObjDeleteConcurrencyControlException
@@ -159,17 +159,17 @@ namespace Habanero.DB
         /// <exception cref="UserException">Thrown if more than one object matches the criteria</exception>
         public T GetBusinessObject<T>(ISelectQuery selectQuery) where T : class, IBusinessObject, new()
         {
-            IClassDef classDef = ClassDef.Get<T>();
-            Source source = selectQuery.Source;
+            var classDef = ClassDef.Get<T>();
+            var source = selectQuery.Source;
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
-            ISqlStatement statement = selectQueryDB.CreateSqlStatement();
+            var selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
+            var statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             T loadedBo = null;
-            bool objectUpdatedInLoading = false;
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            var objectUpdatedInLoading = false;
+            using (var dr = _databaseConnection.LoadDataReader(statement))
             {
                 if (dr.Read())
                 {
@@ -188,7 +188,7 @@ namespace Habanero.DB
                 loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
             }
             if (loadedBo == null) return null;
-            bool isFreshlyLoaded = loadedBo.Status.IsNew;
+            var isFreshlyLoaded = loadedBo.Status.IsNew;
             SetStatusAfterLoad(loadedBo);
             if (objectUpdatedInLoading)
             {
@@ -206,9 +206,9 @@ namespace Habanero.DB
             // is stored in a dictionary and reused as the object populated to perform a search on the business object
             // manager.
 
-            T bo = GetTempBO<T>();
+            var bo = GetTempBO<T>();
 
-            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
+            var loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
             if (loadedBusinessObject == bo)
             {
                 var tempObject = new T();
@@ -239,7 +239,7 @@ namespace Habanero.DB
         public IBusinessObject GetBusinessObject(IClassDef classDef, Criteria criteria)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef);
+            var selectQuery = QueryBuilder.CreateSelectQuery(classDef);
             QueryBuilder.PrepareCriteria(classDef, criteria);
             selectQuery.Criteria = criteria;
             return GetBusinessObject(classDef, selectQuery);
@@ -256,16 +256,16 @@ namespace Habanero.DB
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, ISelectQuery selectQuery)
         {
-            Source source = selectQuery.Source;
+            var source = selectQuery.Source;
             QueryBuilder.PrepareSource(classDef, ref source);
             selectQuery.Source = source;
             QueryBuilder.PrepareCriteria(classDef, selectQuery.Criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
-            ISqlStatement statement = selectQueryDB.CreateSqlStatement();
+            var selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
+            var statement = selectQueryDB.CreateSqlStatement();
             IClassDef correctSubClassDef = null;
             IBusinessObject loadedBo = null;
-            bool objectUpdatedInLoading = false;
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            var objectUpdatedInLoading = false;
+            using (var dr = _databaseConnection.LoadDataReader(statement))
             {
                 if (dr.Read())
                 {
@@ -281,11 +281,11 @@ namespace Habanero.DB
             if (correctSubClassDef != null)
             {
                 BORegistry.BusinessObjectManager.Remove(loadedBo);
-                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
+                var subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = subClassBusinessObject;
             }
             if (loadedBo == null) return null;
-            bool isFreshlyLoaded = loadedBo.Status.IsNew;
+            var isFreshlyLoaded = loadedBo.Status.IsNew;
             SetStatusAfterLoad(loadedBo);
             if (objectUpdatedInLoading)
             {
@@ -306,7 +306,7 @@ namespace Habanero.DB
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an <see cref="HabaneroDeveloperException"/> error is throw</returns>
         public T GetBusinessObject<T>(string criteriaString) where T : class, IBusinessObject, new()
         {
-            Criteria criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
+            var criteria = GetCriteriaObject(ClassDef.ClassDefs[typeof (T)], criteriaString);
             return GetBusinessObject<T>(criteria);
         }
 
@@ -318,13 +318,13 @@ namespace Habanero.DB
         /// <returns>The business object that was found. If none was found, null is returned. If more than one is found an error is raised</returns>
         public IBusinessObject GetBusinessObject(IClassDef classDef, string criteriaString)
         {
-            Criteria criteria = GetCriteriaObject(classDef, criteriaString);
+            var criteria = GetCriteriaObject(classDef, criteriaString);
             return GetBusinessObject(classDef, criteria);
         }
 
         private static Criteria GetCriteriaObject(IClassDef classDef, string criteriaString)
         {
-            Criteria criteria = CriteriaParser.CreateCriteria(criteriaString);
+            var criteria = CriteriaParser.CreateCriteria(criteriaString);
             QueryBuilder.PrepareCriteria(classDef, criteria);
             return criteria;
         }
@@ -336,14 +336,14 @@ namespace Habanero.DB
         protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery) 
         {
             int totalCountAvailableForPaging;
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
+            var selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
 
-            int totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQueryDB);
+            var totalNoOfRecords = GetTotalNoOfRecordsIfNeeded(classDef, selectQueryDB);
             List<LoadedBoInfo> loadedBoInfos;
             string loadMechanismDescription;
             if (IsLoadNecessary(selectQueryDB, totalNoOfRecords))
             {
-                ISqlStatement statement = CreateStatementAdjustedForLimits(selectQueryDB, totalNoOfRecords);
+                var statement = CreateStatementAdjustedForLimits(selectQueryDB, totalNoOfRecords);
 
                 loadedBoInfos = GetLoadedBusinessObjectsFromDB<T>(classDef, statement, selectQueryDB);
 
@@ -374,8 +374,8 @@ namespace Habanero.DB
 
         protected virtual List<LoadedBoInfo> GetLoadedBusinessObjectsFromDB<T>(IClassDef classDef, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
         {
-            List<LoadedBoInfo> loadedBoInfos = new List<LoadedBoInfo>();
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            var loadedBoInfos = new List<LoadedBoInfo>();
+            using (var dr = _databaseConnection.LoadDataReader(statement))
             {
                 while (dr.Read())
                 {
@@ -386,30 +386,13 @@ namespace Habanero.DB
             return loadedBoInfos;
         }
 
-        private static void AddBusinessObjectToCollection(IBusinessObjectCollection collection, IBusinessObject loadedBo, Dictionary<string, IBusinessObject> originalPersistedCollection, bool isFirstLoad)
-        {
-            //If the origional collection had the new business object then
-            // use add internal this adds without any events being raised etc.
-            //else adds via the Add method (normal add) this raises events such that the 
-            // user interface can be updated.
-            if (isFirstLoad)
-            {
-                collection.AddWithoutEvents(loadedBo);
-                collection.PersistedBusinessObjects.Add(loadedBo);
-            }
-            else
-            {
-                AddBusinessObjectToCollection(collection, loadedBo, originalPersistedCollection);
-            }
-        }
-
         private LoadedBoInfo LoadCorrectlyTypedBOFromReader<T>(IDataReader dr, IClassDef classDef, SelectQueryDB selectQuery) where T : IBusinessObject
         {
             bool objectUpdatedInLoading;
-            T loadedBo = (T) LoadBOFromReader(classDef, dr, selectQuery, out objectUpdatedInLoading);
+            var loadedBo = (T) LoadBOFromReader(classDef, dr, selectQuery, out objectUpdatedInLoading);
             //Checks to see if the loaded object is the base of a single table inheritance structure
             // and has a sub type
-            IClassDef correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
+            var correctSubClassDef = GetCorrectSubClassDef(loadedBo, dr);
             // loads an object of the correct sub type (for single table inheritance)
             loadedBo = GetLoadedBoOfSpecifiedType(loadedBo, correctSubClassDef);
 
@@ -475,12 +458,12 @@ namespace Habanero.DB
         /// </summary>
         public int GetCount(IClassDef classDef, Criteria criteria)
         {
-            ISelectQuery selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
-            SelectQueryDB selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
-            SqlFormatter sqlFormatter = new SqlFormatter("", "", "", "");
-            ISqlStatement statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
-            int totalNoOfRecords = 0;
-            using (IDataReader dr = _databaseConnection.LoadDataReader(statement))
+            var selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
+            var selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
+            var sqlFormatter = new SqlFormatter("", "", "", "");
+            var statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
+            var totalNoOfRecords = 0;
+            using (var dr = _databaseConnection.LoadDataReader(statement))
             {
                 while (dr.Read())
                 {
@@ -503,7 +486,7 @@ namespace Habanero.DB
             if (correctSubClassDef != null)
             {
                 BORegistry.BusinessObjectManager.Remove(loadedBo);
-                IBusinessObject subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
+                var subClassBusinessObject = GetBusinessObject(correctSubClassDef, loadedBo.ID);
                 loadedBo = (T) subClassBusinessObject;
             }
             return loadedBo;
@@ -532,65 +515,6 @@ namespace Habanero.DB
             businessObject = GetBusinessObject(businessObject.ClassDef, businessObject.ID);
             return businessObject;
         }
-
-        #endregion
-
-        #region GetRelatedBusinessObjectCollection
-
-        ///// <summary>
-        ///// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        ///// fields defined in the relationship.
-        ///// </summary>
-        ///// <typeparam name="T">The type of collection to load. This must be a class that implements IBusinessObject and has a parameterless constructor</typeparam>
-        ///// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        ///// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        ///// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        ///// PersonID</param>
-        ///// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        //public RelatedBusinessObjectCollection<T> GetRelatedBusinessObjectCollection<T>(IRelationship relationship)
-        //    where T : class, IBusinessObject, new()
-        //{
-        //    RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
-        //    Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-        //    OrderCriteria preparedOrderCriteria =
-        //        QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
-
-        //    BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
-        //    foreach (T businessObject in col)
-        //    {
-        //        AddBusinessObjectToCollection(relatedCol, businessObject);
-        //    }
-        //    relatedCol.SelectQuery = col.SelectQuery;
-        //    return relatedCol;
-        //}
-
-        ///// <summary>
-        ///// Loads a RelatedBusinessObjectCollection using the Relationship given.  This method is used by relationships to load based on the
-        ///// fields defined in the relationship.
-        ///// </summary>
-        ///// <param name="type">The type of collection to load. This must be a class that implements IBusinessObject</param>
-        ///// <param name="relationship">The relationship that defines the criteria that must be loaded.  For example, a Person might have
-        ///// a Relationship called Addresses, which defines the PersonID property as the relationship property. In this case, calling this method
-        ///// with the Addresses relationship will load a collection of Address where PersonID = '?', where the ? is the value of the owning Person's
-        ///// PersonID</param>
-        ///// <returns>The loaded RelatedBusinessObjectCollection</returns>
-        //public IBusinessObjectCollection GetRelatedBusinessObjectCollection(Type type, IRelationship relationship)
-        //{
-        //    IBusinessObjectCollection relatedCol = CreateRelatedBusinessObjectCollection(type, relationship);
-        //    Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
-
-        //    OrderCriteria preparedOrderCriteria =
-        //        QueryBuilder.CreateOrderCriteria(relationship.RelatedObjectClassDef, relationship.OrderCriteria.ToString());
-
-        //    IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
-        //                                                                relationshipCriteria, preparedOrderCriteria);
-        //    foreach (IBusinessObject businessObject in col)
-        //    {
-        //        AddBusinessObjectToCollection(relatedCol, businessObject);
-        //    }
-        //    relatedCol.SelectQuery = col.SelectQuery;
-        //    return relatedCol;
-        //}
 
         #endregion
 
@@ -691,7 +615,6 @@ namespace Habanero.DB
             // then the incorrect type is loaded from the BusinessObjectManager.
             if (!bo.GetType().IsInstanceOfType(boFromObjectManager) && bo.ClassDef.IsUsingClassTableInheritance())
             {
-//                 ((ClassDef)bo.ClassDef).SuperClassDef
                 boManager.Remove(boFromObjectManager);
                 boManager.Add(bo);
                 return bo;
@@ -717,29 +640,29 @@ namespace Habanero.DB
         /// <returns></returns>
         protected static IClassDef GetCorrectSubClassDef(IBusinessObject bo, IDataRecord dataReader)
         {
-            ClassDef classDef = (ClassDef) bo.ClassDef;
-            ClassDefCol subClasses = classDef.AllChildren;
+            var classDef = (ClassDef) bo.ClassDef;
+            var subClasses = classDef.AllChildren;
             foreach (ClassDef immediateChild in subClasses)
             {
                 if (!immediateChild.IsUsingSingleTableInheritance()) continue;
 
-                string discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
-                string discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
+                var discriminatorFieldName = immediateChild.SuperClassDef.Discriminator;
+                var discriminatorValue = Convert.ToString(dataReader[discriminatorFieldName]);
 
                 if (String.IsNullOrEmpty(discriminatorValue)) continue;
 
-                IClassDef subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
+                var subClassDef = ClassDef.ClassDefs.FindByClassName(discriminatorValue);
 
-                if (subClassDef != null && !object.ReferenceEquals(subClassDef, classDef)) return subClassDef;
+                if (subClassDef != null && !ReferenceEquals(subClassDef, classDef)) return subClassDef;
             }
             return null;
         }
 
         private static bool PopulateBOFromReader(IBusinessObject bo, IDataRecord dr, ISelectQuery selectQuery)
         {
-            int i = 0;
-            bool objectUpdatedInLoading = false;
-            foreach (QueryField field in selectQuery.Fields.Values)
+            var i = 0;
+            var objectUpdatedInLoading = false;
+            foreach (var field in selectQuery.Fields.Values)
             {
                 try
                 {
@@ -747,12 +670,10 @@ namespace Habanero.DB
                     objectUpdatedInLoading = objectUpdatedInLoading | boProp.InitialiseProp(dr[i]);   // set objectUpdatedInLoading to true if any initialiseprop returns true
                 } catch (InvalidPropertyNameException)
                 {
-                    // do nothing - this was to increase performance as catching this exception is quicker than always doing a
-                    // bo.Props.Contains(field.PropertyName) call.
+                    // do nothing - this was to increase performance as catching this exception is quicker than always doing a bo.Props.Contains(field.PropertyName) call.
                 }
-                i++;
+                i += 1;
             }
-            //SetStatusAfterLoad(bo);
             return objectUpdatedInLoading;
         }
     }

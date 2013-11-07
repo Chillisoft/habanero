@@ -27,8 +27,6 @@ namespace Habanero.BO
     /// </summary>
     public class ReadOnlyDataSetProvider : DataSetProvider
     {
-//        private bool _addPropertyUpdatedHandler = true;
-
         /// <summary>
         /// Constructor to initialise a new provider with the business object
         /// collection provided
@@ -39,45 +37,6 @@ namespace Habanero.BO
         {
         }
         
-//        /// <summary>
-//        /// Adds handlers to be called when business object updates occur
-//        /// </summary>
-//        public override void AddHandlersForDataTableUpdates()
-//        {
-//            if (base.RegisterForBusinessObjectPropertyUpdatedEvents)
-//            {
-//                _collection.BusinessObjectPropertyUpdated += PropertyUpdatedHandler;
-//            }
-//            else
-//            {
-////                _collection.BusinessObjectUpdated += UpdatedHandler;
-//            }
-////            _collection.BusinessObjectIDUpdated += IDUpdatedHandler;
-//            _collection.BusinessObjectAdded += BOAddedHandler;
-//            _collection.BusinessObjectRemoved += RemovedHandler;
-//        }
-
-
-
-
-
-//        /// <summary>
-//        /// Handles the event of a <see cref="IBusinessObject"/> being updated
-//        /// </summary>
-//        /// <param name="sender">The object that notified of the event</param>
-//        /// <param name="e">Attached arguments regarding the event</param>
-//        private void UpdatedHandler(object sender, BOEventArgs e)
-//        {
-//            BusinessObject businessObject = (BusinessObject) e.BusinessObject;
-//            UpdateBusinessObjectRowValues(businessObject);
-//        }
-
-//        private void PropertyUpdatedHandler(object sender, BOEventArgs boEventArgs, BOPropEventArgs propEventArgs)
-//        {
-//            UpdatedHandler(sender, boEventArgs);
-//        }
-
-
         /// <summary>
         /// Initialises the local data
         /// </summary>

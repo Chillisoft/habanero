@@ -134,7 +134,7 @@ namespace Habanero.Test
         ////{
         ////    CombinedParts = FirstPart + SecondPart;
         ////}
-        protected internal override void AfterSave()
+        protected override void AfterSave()
         {
             if (this.Status.IsDeleted)
             {

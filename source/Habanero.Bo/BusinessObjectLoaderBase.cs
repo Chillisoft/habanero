@@ -121,11 +121,9 @@ namespace Habanero.BO
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
             boColInternal.Loading = true;
-//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);PrepareForRefresh
         	PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
- //           ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         /// <summary>
@@ -137,12 +135,10 @@ namespace Habanero.BO
         public void Refresh(IBusinessObjectCollection collection)
         {
             var boColInternal = ((IBusinessObjectCollectionInternal)collection);
-//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", true);
 			boColInternal.Loading = true; 
 			PrepareForRefresh(collection);
             DoRefresh(collection);
             boColInternal.Loading = false;
-//            ReflectionUtilities.SetPrivatePropertyValue(collection, "Loading", false);
         }
 
         /// <summary>
@@ -469,25 +465,6 @@ namespace Habanero.BO
             return (IBusinessObjectCollection) Activator.CreateInstance(boColType, classDef);
         }
 
-//        protected static void AddBusinessObjectToCollection<T>
-//            (BusinessObjectCollection<T> collection, T loadedBo, BusinessObjectCollection<T> clonedCol)
-//            where T : class, IBusinessObject, new()
-//        {
-//            //If the origional collection had the new business object then
-//            // use add internal this adds without any events being raised etc.
-//            //else adds via the Add method (normal add) this raises events such that the 
-//            // user interface can be updated.
-//            if (clonedCol.Contains(loadedBo))
-//            {
-//                ((IBusinessObjectCollection) collection).AddWithoutEvents(loadedBo);
-//            }
-//            else
-//            {
-//                collection.Add(loadedBo);
-//            }
-//            collection.PersistedBOCol.Add(loadedBo);
-//        }
-
         /// <summary>
         /// Adds the business object <paramref name="loadedBo"/> to the collection identified by <paramref name="collection"/>
         /// </summary>
@@ -697,7 +674,6 @@ namespace Habanero.BO
             RelatedBusinessObjectCollection<T> relatedCol = new RelatedBusinessObjectCollection<T>(relationship);
             var boColInternal = ((IBusinessObjectCollectionInternal)relatedCol);
 
-            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
             boColInternal.Loading = true;
             Criteria relationshipCriteria = Criteria.FromRelationship(relationship);
             IOrderCriteria preparedOrderCriteria =
@@ -705,11 +681,9 @@ namespace Habanero.BO
 
             BusinessObjectCollection<T> col = GetBusinessObjectCollection<T>(relationshipCriteria, preparedOrderCriteria);
             LoadBOCollection(relatedCol, (ICollection) col);
-            //QueryBuilder.PrepareCriteria(relationship.RelatedObjectClassDef, relationshipCriteria);
             relatedCol.SelectQuery.Criteria = relationshipCriteria;
             relatedCol.SelectQuery.OrderCriteria = preparedOrderCriteria;
             boColInternal.Loading = false;
-            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
@@ -773,8 +747,6 @@ namespace Habanero.BO
                     if (hasAddedBos) collection.AddedBusinessObjects.Remove(loadedBo);
                 }
                 FinaliseLoad(loadedBoInfos);
-
-                //RestoreEditedLists(collection, originalPersistedCollection); TEST THIS
             }  else 
             {
                 BOColLoaderHelper.ClearCurrentCollection(collection);
@@ -858,7 +830,6 @@ namespace Habanero.BO
         {
             IBusinessObjectCollection relatedCol = RelationshipUtils.CreateRelatedBusinessObjectCollection(type, relationship);
             BOColLoaderHelper.SetLoading(relatedCol, true);
-            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", true);
 
             IBusinessObjectCollection col = GetBusinessObjectCollection(relationship.RelatedObjectClassDef,
                                                                         relatedCol.SelectQuery.Criteria, relatedCol.SelectQuery.OrderCriteria);
@@ -866,7 +837,6 @@ namespace Habanero.BO
             LoadBOCollection(relatedCol, col);
             relatedCol.SelectQuery = col.SelectQuery;
             BOColLoaderHelper.SetLoading(relatedCol, false);
-            //ReflectionUtilities.SetPrivatePropertyValue(relatedCol, "Loading", false);
             return relatedCol;
         }
 
@@ -951,14 +921,6 @@ namespace Habanero.BO
                 }
             }
             return businessObject;
-/*            if (key.IsGuidObjectID)
-            {
-                return BORegistry.BusinessObjectManager.GetObjectIfInManager(key.ObjectID);
-            }
-            BOPrimaryKey boPrimaryKey = ((BOPrimaryKey) key);
-//            IBusinessObjectCollection find = businessObjectManager.Find(boPrimaryKey.GetKeyCriteria(), boType);
-//            return find.Count > 0 ? find[0] : null;
-            return businessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria(), boType);*/
         }
 
         /// <summary>

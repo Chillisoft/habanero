@@ -29,10 +29,9 @@ namespace Habanero.BO.ClassDefinition
 	/// </summary>
 	public class UIFormTab : IEquatable<IUIFormTab>, IUIFormTab
 	{
-		private IList _list;
+		private readonly IList _list;
 		private string _name;
 		private IUIFormGrid _uiFormGrid;
-		//private UIDefName _name;
 
 		/// <summary>
 		/// Constructor to initialise a new tab definition
@@ -175,40 +174,6 @@ namespace Habanero.BO.ClassDefinition
 		/// </summary>
 		public IUIForm UIForm { get; set; }
 
-		/////<summary>
-		/////Determines whether the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>.
-		/////</summary>
-		/////
-		/////<returns>
-		/////true if the specified <see cref="T:System.Object"></see> is equal to the current <see cref="T:System.Object"></see>; otherwise, false.
-		/////</returns>
-		/////
-		/////<param name="obj">The <see cref="T:System.Object"></see> to compare with the current <see cref="T:System.Object"></see>. </param><filterpriority>2</filterpriority>
-		//public override bool Equals(object obj)
-		//{
-		//    UIFormTab otherUiTab = obj as UIFormTab;
-		//    if (otherUiTab == null) return false;
-
-		//    if (this.Name != otherUiTab.Name) return false;
-		//    if (this.Count != otherUiTab.Count) return false;
-		//    foreach (UIFormColumn col in this)
-		//    {
-		//        bool found = false;
-		//        foreach (UIFormColumn otherFormCol in otherUiTab)
-		//        {
-		//            if (otherFormCol.Equals(col))
-		//            {
-		//                found = true;
-		//            }
-		//        }
-		//        if (!found)
-		//        {
-		//            return false;
-		//        }
-		//    }
-		//    return true;
-		//}
-
 		///<summary>
 		///</summary>
 		///<param name="a"></param>
@@ -217,7 +182,7 @@ namespace Habanero.BO.ClassDefinition
 		public static bool operator ==(UIFormTab a, UIFormTab b)
 		{
 			// If both are null, or both are same instance, return true.
-			if (System.Object.ReferenceEquals(a, b))
+			if (ReferenceEquals(a, b))
 			{
 				return true;
 			}
@@ -247,13 +212,13 @@ namespace Habanero.BO.ClassDefinition
 		///<returns>a new collection that is a shallow copy of this collection</returns>
 		public IUIFormTab Clone()
 		{
-			UIFormTab newUIFormTab = new UIFormTab();
-			newUIFormTab.Name = this.Name;
+			var newUiFormTab = new UIFormTab();
+			newUiFormTab.Name = this.Name;
 			foreach (UIFormColumn column in this)
 			{
-				newUIFormTab.Add(column.Clone());
+				newUiFormTab.Add(column.Clone());
 			}
-			return newUIFormTab;
+			return newUiFormTab;
 		}
 
 		///<summary>
@@ -268,13 +233,12 @@ namespace Habanero.BO.ClassDefinition
 		public bool Equals(IUIFormTab uiFormTab)
 		{
 			if (uiFormTab == null) return false;
-//            if (!Equals(_list, uiFormTab._list)) return false;
 			if (!Equals(_name, ((UIFormTab)uiFormTab)._name)) return false;
 			if (!Equals(_uiFormGrid, ((UIFormTab)uiFormTab)._uiFormGrid)) return false;
 			if (this.Count != uiFormTab.Count) return false;
 			foreach (UIFormColumn col in this)
 			{
-				bool found = false;
+				var found = false;
 				foreach (UIFormColumn otherFormCol in uiFormTab)
 				{
 					if (otherFormCol.Equals(col))
@@ -315,7 +279,7 @@ namespace Habanero.BO.ClassDefinition
 		///<filterpriority>2</filterpriority>
 		public override int GetHashCode()
 		{
-			int result = _list.GetHashCode();
+			var result = _list.GetHashCode();
 			result = 29*result + _name.GetHashCode();
 			result = 29*result + (_uiFormGrid != null ? _uiFormGrid.GetHashCode() : 0);
 			return result;
@@ -327,7 +291,7 @@ namespace Habanero.BO.ClassDefinition
 		///<returns></returns>
 		public int GetMaxFieldCount()
 		{
-			int maxFieldCount = 0;
+			var maxFieldCount = 0;
 			foreach (UIFormColumn column in this)
 			{
 				if (column.Count > maxFieldCount)
@@ -342,14 +306,14 @@ namespace Habanero.BO.ClassDefinition
 		///<returns></returns>
 		public int GetMaxRowsInColumns()
 		{
-			int maxRowsInColumns = 0;
-			for (int colNum = 0; colNum < this.Count; colNum++)
+			var maxRowsInColumns = 0;
+			for (var colNum = 0; colNum < this.Count; colNum++)
 			{
-				UIFormColumn column = (UIFormColumn) this[colNum];
+				var column = (UIFormColumn) this[colNum];
 
-				int rowsInColumn = column.GetRowsRequired();
+				var rowsInColumn = column.GetRowsRequired();
 
-				for (int previousColNum = 0; previousColNum < colNum; previousColNum++)
+				for (var previousColNum = 0; previousColNum < colNum; previousColNum++)
 				{
 					rowsInColumn += ((UIFormColumn )this[previousColNum]).GetRowSpanForColumnToTheRight(colNum-previousColNum);
 				}

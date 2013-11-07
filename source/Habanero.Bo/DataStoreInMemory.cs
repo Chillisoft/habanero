@@ -274,66 +274,7 @@ namespace Habanero.BO
         {
             AllObjects.Clear();
         }
-
-        /// <summary>
-        /// Saves all the objects from the data store to the file defined in fullFileName
-        /// </summary>
-        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.dat </param>
-        [Obsolete("v2.6.0: Please use DataStoreInMemoryXmlWriter")]
-        public void SaveToXml(string fullFileName)
-        {
-
-            string directoryName = Path.GetDirectoryName(fullFileName);
-            FileUtilities.CreateDirectory(directoryName);
-           // XmlSerializer serializer = new XmlSerializer(typeof(BusinessObject));
-            // Serialize the all BO's in _objectsCollection
-
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.ConformanceLevel = ConformanceLevel.Auto;
-            using (FileStream fs = new FileStream(fullFileName, FileMode.Create))
-            {
-                XmlWriter writer = XmlWriter.Create(fs, settings);
-                writer.WriteStartDocument();
-                writer.WriteStartElement("BusinessObjects");
-                foreach (var o in AllObjects)
-                {
-
-                    ((BusinessObject) o.Value).WriteXml(writer);
-                    //serializer.Serialize(fs, o.Value);                    
-                }
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-                writer.Close();
-
-            }
-        }
-        
-        /// <summary>
-        /// Loads all the objects to the data store from the file specified by fullFileName.
-        /// The file specified to be loaded must be a serialised xml file.
-        /// </summary>
-        /// <param name="fullFileName">The full file name to store including the file path e.g. C:\Systems\SomeFile.xml </param>
-        /// <param name="typeToLoad">The type to load that is the top of the heirarchy in the xml file</param>
-        [Obsolete("v2.6.0: Please use DataStoreInMemoryXmlReader")]
-        public void LoadFromXml(string fullFileName, Type typeToLoad)
-        {
-            if (!File.Exists(fullFileName)) return;
-            XmlSerializer xs = new XmlSerializer(typeToLoad);
-            using (Stream stream = new FileStream(fullFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                try
-                {
-                    IBusinessObject bo = (IBusinessObject) xs.Deserialize(stream);
-                    this.AllObjects.TryAdd(bo.ID.GetAsGuid(), bo);
-                }
-                catch (Exception ex)
-                {
-                    string message = "The File " + fullFileName + " could not be deserialised because of the following error";
-                    throw new Exception(message + ex.Message, ex);
-                }
-            }
-        }
-
+      
         ///<summary>
         /// The <see cref="INumberGenerator"/>s used to produce the AutoIncremented values for Classes in this DataStore.
         ///</summary>
