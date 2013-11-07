@@ -196,7 +196,6 @@
     <Compile Include="TestBusinessObjectInheritance.cs" />
     <Compile Include="TestBusinessObjectManagerNull.cs" />
     <Compile Include="TestBusinessObjectRules.cs" />
-    <Compile Include="TestBusinessObjectSerialisationXML.cs" />
     <Compile Include="TestBOStatus.cs" />
     <Compile Include="TestBusinessObjectXmlReader.cs" />
     <Compile Include="TestBusinessObjectXmlWriter.cs" />
@@ -247,8 +246,6 @@
     <Compile Include="TestBoPropString.cs" />
     <Compile Include="TestBusinessObjectSerialisation.cs" />
     <Compile Include="TestPack\AddressTestBO.cs" />
-    <Compile Include="ClassDefinition\TestTriggerCol.cs" />
-    <Compile Include="ClassDefinition\TestTrigger.cs" />
     <Compile Include="ClassDefinition\TestUIFormGrid.cs" />
     <Compile Include="ClassDefinition\TestUIGridColumn.cs" />
     <Compile Include="ClassDefinition\TestUIGrid.cs" />

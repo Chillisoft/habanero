@@ -154,7 +154,6 @@
     <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
     <Compile Include="ClassDefinition\PropDefCol.cs" />
     <Compile Include="ClassDefinition\TriggerCol.cs" />
-    <Compile Include="ClassDefinition\Trigger.cs" />
     <Compile Include="ClassDefinition\UIDef.cs" />
     <Compile Include="ClassDefinition\UIForm.cs" />
     <Compile Include="ClassDefinition\UIFormColumn.cs" />
