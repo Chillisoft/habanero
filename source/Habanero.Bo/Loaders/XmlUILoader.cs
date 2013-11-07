@@ -33,9 +33,6 @@ namespace Habanero.BO.Loaders
         private IUIGrid _uiGrid;
         private string _name;
 
-        //private string _xmlUICollections;
-
-
         /// <summary>
         /// Constructor to initialise a new loader with a dtd path
         /// </summary>
@@ -45,16 +42,6 @@ namespace Habanero.BO.Loaders
 			: base(dtdLoader, defClassFactory)
         {
         }
-
-
-        //		public XmlUILoader(string xmlUICollections) {
-        //			_xmlUICollections = xmlUICollections;
-        //		}
-
-        //		public IEnumerable LoadUIPropertyCollections() 
-        //		{
-        //			return LoadUIDef(_xmlUICollections );
-        //		}
 
         /// <summary>
         /// Loads a UI definition from the xml string provided
@@ -96,12 +83,12 @@ namespace Habanero.BO.Loaders
             _reader.Read();
             if (_reader.Name == "grid")
             {
-                XmlUIGridLoader loader = new XmlUIGridLoader(DtdLoader, _defClassFactory);
+                var loader = new XmlUIGridLoader(DtdLoader, _defClassFactory);
                 _uiGrid = loader.LoadUIGridDef(_reader.ReadOuterXml());
             }
             if (_reader.Name == "form")
             {
-                XmlUIFormLoader loader = new XmlUIFormLoader(DtdLoader, _defClassFactory);
+                var loader = new XmlUIFormLoader(DtdLoader, _defClassFactory);
                 _uiForm = loader.LoadUIFormDef(_reader.ReadOuterXml());
             }
         }

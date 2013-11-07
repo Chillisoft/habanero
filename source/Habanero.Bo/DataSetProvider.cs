@@ -156,7 +156,6 @@ namespace Habanero.BO
                           + "the name '{0}' has been detected. Only one column " + "per property can be specified.",
                           uiProperty.PropertyName));
             }
-            //ILookupList lookupList = classDef.GetLookupList(uiProperty.PropertyName);
             Type columnPropertyType = GetPropertyType(classDef, uiProperty.PropertyName);
 
             column.DataType = columnPropertyType;
@@ -216,12 +215,6 @@ namespace Habanero.BO
                     }
                     row.RowError = businessObject.Status.IsValidMessage;
                     row.ItemArray = values;
-
-//                if (string.IsNullOrEmpty(row.RowError ))
-//                {
-//                    row.ClearErrors();
-//                } 
-//                row.EndEdit();
                 }
                 finally
                 {
@@ -269,14 +262,6 @@ namespace Habanero.BO
             return values;
         }
 
-/*        /// <summary>
-        /// Adds handlers to be called when updates occur
-        /// </summary>
-        public virtual void DeregisterForEvents()
-        {
-            DeregisterForBOEvents();
-            DeregisterForTableEvents();
-        }*/
         /// <summary>
         /// Derigisters the Data Set Provider from all events raised by the BO collection.
         /// </summary>

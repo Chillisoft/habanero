@@ -80,11 +80,6 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class ClassDef : IClassDef
     {
-//        /// <summary>
-//        /// The collection of classDefs used for the the Singleton.
-//        /// </summary>
-//        protected static ClassDefCol _classDefCol;
-
         private string _assemblyName;
         private string _cachedTableName;
         private string _className;
@@ -534,15 +529,6 @@ namespace Habanero.BO.ClassDefinition
                 if (_relationshipDefCol != null) _relationshipDefCol.ClassDef = this;
             }
         }
-
-        ///// <summary>
-        ///// Indicates whether synchronising is supported
-        ///// </summary>
-        //public bool SupportsSynchronising
-        //{
-        //    get { return _supportsSynchronisation; }
-        //    set { _supportsSynchronisation = value; }
-        //}
 
         #endregion Properties
 
@@ -1272,8 +1258,8 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public ClassDef Clone(bool clonePropDefs)
         {
-            IPropDefCol propDefClone = PropDefcol != null ? PropDefcol.Clone(clonePropDefs) : null;
-            UIDefCol uiDefClone = UIDefCol != null ? UIDefCol.Clone() : null;
+            var propDefClone = PropDefcol != null ? PropDefcol.Clone(clonePropDefs) : null;
+            var uiDefClone = UIDefCol != null ? UIDefCol.Clone() : null;
             var newClassDef = new ClassDef(AssemblyName, ClassName, PrimaryKeyDef,
                                            propDefClone, KeysCol,
                                            RelationshipDefCol, uiDefClone);
@@ -1290,7 +1276,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public ClassDef GetBaseClassOfSingleTableHierarchy()
         {
-            ClassDef currentClassDef = this;
+            var currentClassDef = this;
             while (currentClassDef.IsUsingSingleTableInheritance())
             {
                 currentClassDef = (ClassDef) currentClassDef.SuperClassClassDef;

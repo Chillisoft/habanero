@@ -262,8 +262,6 @@ namespace Habanero.DB
             {
                 lock (LockObject)
                 {
-                    //log.Debug(string.Format("GetOpenConnectionForReading: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
-
                     // looks for closed connections for reading because open 
                     // connections could have readers still associated with them.
                     foreach (IDbConnection dbConnection in _connections)
@@ -272,7 +270,7 @@ namespace Habanero.DB
                         dbConnection.Open();
                         return dbConnection;
                     }
-                    IDbConnection newDbConnection = this.NewConnection;
+                    var newDbConnection = this.NewConnection;
                     newDbConnection.Open();
                     _connections.Add(newDbConnection);
                     return newDbConnection;
@@ -297,7 +295,6 @@ namespace Habanero.DB
         {
             try
             {
-                //log.Debug(string.Format("GetConnection: Open connection count: {0}/{1}", _connections.FindAll(connection => connection.State == ConnectionState.Open).Count, _connections.Count));
                 lock (LockObject)
                 {
                     foreach (var dbConnection in _connections)
@@ -382,7 +379,7 @@ namespace Habanero.DB
             try
             {
                 con = GetOpenConnectionForReading();
-                IDbCommand cmd = CreateCommand(con);
+                var cmd = CreateCommand(con);
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
                 SetupReadTransaction(cmd);
@@ -397,10 +394,6 @@ namespace Habanero.DB
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
-            }
-            finally
-            {
-                //if (con != null) log.Debug(string.Format("LoadDataReader(string): Final Connection state: {0}", con.State));
             }
         }
 
@@ -437,7 +430,7 @@ namespace Habanero.DB
             try
             {
                 con = transaction.Connection;
-                IDbCommand cmd = CreateCommand(con);
+                var cmd = CreateCommand(con);
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
@@ -452,10 +445,6 @@ namespace Habanero.DB
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql, ErrorSafeConnectString());
-            }
-            finally
-            {
-                //if (con != null) log.Debug(string.Format("LoadDataReader(string, IDbTransaction): Final Connection state: {0}", con.State));
             }
         }
 
@@ -478,7 +467,7 @@ namespace Habanero.DB
             try
             {
                 con = GetOpenConnectionForReading();
-                IDbCommand cmd = CreateCommand(con);
+                var cmd = CreateCommand(con);
                 selectSql.SetupCommand(cmd);
                 SetupReadTransaction(cmd);
                 return cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -498,10 +487,6 @@ namespace Habanero.DB
                     ("There was an error reading the database. Please contact your system administrator." + Environment.NewLine +
                      selectSql.ToString() + Environment.NewLine,
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
-            }
-            finally
-            {
-                //if (con != null) log.Debug(string.Format("LoadDataReader(ISqlStatement): Final Connection state: {0}", con.State));
             }
         }
 
@@ -623,7 +608,7 @@ namespace Habanero.DB
 
         protected virtual IDbCommand CreateCommand(IDbConnection dbConnection)
         {
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            var dbCommand = dbConnection.CreateCommand();
             try
             {
                 if (_timeoutPeriod > 0) dbCommand.CommandTimeout = _timeoutPeriod;
@@ -660,7 +645,7 @@ namespace Habanero.DB
         /// </future>
         public virtual int ExecuteSql(IEnumerable<ISqlStatement> statements, IDbTransaction transaction)
         {
-            bool inTransaction = false;
+            var inTransaction = false;
             ArgumentValidationHelper.CheckArgumentNotNull(statements, "statements");
             IDbConnection con = null;
             try
@@ -685,11 +670,10 @@ namespace Habanero.DB
                     transaction = con.BeginTransaction();
                     cmd.Transaction = transaction;
                 }
-                int totalRowsAffected = 0;
+                var totalRowsAffected = 0;
                 foreach (SqlStatement statement in statements)
                 {
                     statement.SetupCommand(cmd);
-                    //cmd.CommandText = sql;
                     try
                     {
                     totalRowsAffected += cmd.ExecuteNonQuery();
@@ -719,7 +703,7 @@ namespace Habanero.DB
                 }
                 throw new DatabaseWriteException
                     ("There was an error writing to the database. Please contact your system administrator."
-                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + statements.ToString(),
+                     + Environment.NewLine + "The command executeNonQuery could not be completed. :" + statements,
                      "The command executeNonQuery could not be completed.", ex, statements.ToString(), ErrorSafeConnectString());
             }
             finally
@@ -812,9 +796,9 @@ namespace Habanero.DB
                      + ExceptionUtilities.GetExceptionString(ex, 10, true), LogCategory.Exception);
                 Log.Log("Sql: " + sql, LogCategory.Exception);
                 Console.WriteLine
-                    ("Error reading database : " + Environment.NewLine
+                    (@"Error reading database : " + Environment.NewLine
                      + ExceptionUtilities.GetExceptionString(ex, 10, true));
-                Console.WriteLine("Connect string: " + this.ErrorSafeConnectString());
+                Console.WriteLine(@"Connect string: " + this.ErrorSafeConnectString());
                 throw new DatabaseReadException
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The command ExecuteScalar could not be completed.", ex, sql, ErrorSafeConnectString());
@@ -861,31 +845,6 @@ namespace Habanero.DB
         public virtual IsolationLevel IsolationLevel
         {
             get { return IsolationLevel.RepeatableRead; }
-        }
-
-
-        /// <summary>
-        /// Returns a limit clause with the limit specified, with the format
-        /// as " TOP [limit] " (eg. " TOP 4 ")
-        /// </summary>
-        /// <param name="limit">The limit</param>
-        /// <returns>Returns a string</returns>
-        [Obsolete("please use the SqlFormatter directly")]
-        public virtual string GetLimitClauseForBeginning(int limit)
-        {
-            return _sqlFormatter.GetLimitClauseCriteriaForBegin(limit);
-        }
-
-        /// <summary>
-        /// Returns an empty string in this implementation
-        /// </summary>
-        /// <param name="limit">The limit - has no relevance in this 
-        /// implementation</param>
-        /// <returns>Returns an empty string in this implementation</returns>
-        [Obsolete("please use the SqlFormatter directly")]
-        public virtual string GetLimitClauseForEnd(int limit)
-        {
-            return _sqlFormatter.GetLimitClauseCriteriaForEnd(limit);
         }
 
         /// <summary>
@@ -960,11 +919,8 @@ namespace Habanero.DB
                     ("There was an error reading the database. Please contact your system administrator.",
                      "The DataReader could not be filled with", ex, selectSql.ToString(), ErrorSafeConnectString());
             }
-            finally
-            {
-                //if (con != null) log.Debug(string.Format("LoadDataTable(ISqlStatement, string, string): Final Connection state: {0}", con.State));
-            }
         }
+
         /// <summary>
         /// Returns the DataTable for the DataReader.
         /// </summary>
@@ -972,20 +928,20 @@ namespace Habanero.DB
         /// <returns></returns>
         public DataTable GetDataTable(IDataReader reader)
         {
-            DataTable dt = new DataTable {TableName = "TableName"};
+            var dt = new DataTable {TableName = "TableName"};
             if (reader.Read())
             {
-                for (int i = 0; i < reader.FieldCount; i++)
+                for (var i = 0; i < reader.FieldCount; i++)
                 {
-                    DataColumn add = dt.Columns.Add();
-                    string columnName = reader.GetName(i);
+                    var add = dt.Columns.Add();
+                    var columnName = reader.GetName(i);
                     if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
                     add.DataType = reader.GetFieldType(i);
                 }
                 do
                 {
-                    DataRow row = dt.NewRow();
-                    for (int i = 0; i < reader.FieldCount; i++)
+                    var row = dt.NewRow();
+                    for (var i = 0; i < reader.FieldCount; i++)
                     {
                         row[i] = reader.GetValue(i);
                     }
@@ -1003,7 +959,7 @@ namespace Habanero.DB
         /// <returns></returns>
         public static DataTable GetDataTable(IDataReader reader, string dataTableName)
         {
-            DataTable dt = new DataTable {TableName = dataTableName};
+            var dt = new DataTable {TableName = dataTableName};
             if (reader.Read())
             {
                 CreateDataColumns(reader, dt);
@@ -1023,10 +979,10 @@ namespace Habanero.DB
 
         private static void CreateDataColumns(IDataRecord reader, DataTable dt)
         {
-            for (int i = 0; i < reader.FieldCount; i++)
+            for (var i = 0; i < reader.FieldCount; i++)
             {
-                DataColumn add = dt.Columns.Add();
-                string columnName = reader.GetName(i);
+                var add = dt.Columns.Add();
+                var columnName = reader.GetName(i);
                 if (!String.IsNullOrEmpty(columnName)) add.ColumnName = columnName;
                 add.DataType = reader.GetFieldType(i);
             }

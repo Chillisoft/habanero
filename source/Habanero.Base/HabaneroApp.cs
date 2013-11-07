@@ -33,8 +33,6 @@ namespace Habanero.Base
     {
         protected IApplicationVersionUpgrader _applicationVersionUpgrader;
 
-        //private ISynchronisationController _synchronisationController;
-
         /// <summary>
         /// Constructor to initialise a new application with basic application
         /// information.  Use the Startup() method to launch the application.
@@ -157,19 +155,6 @@ namespace Habanero.Base
         /// Loads the class definitions
         /// </summary>
         protected abstract void SetupClassDefs();
-
-        ///// <summary>
-        ///// Sets the synchronisation controller, which implements a
-        ///// synchronisation strategy for the application.
-        ///// </summary>
-        //public ISynchronisationController SynchronisationController {
-        //    set { _synchronisationController = value; }
-        //}
-
-        //private static void SetupSynchronisationController() {
-        //    if (_synchronisationController == null) _synchronisationController = new NullSynchronisationController();
-        //    GlobalRegistry.SynchronisationController = _synchronisationController;
-        //}
 
         /// <summary>
         /// Upgrades an application's database where an application

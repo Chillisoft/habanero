@@ -78,16 +78,9 @@ namespace Habanero.DB
             LimitToList = limitToList;
             _statement = statement;
             _timeout = timeout;
-//            if (lookupObjectType != null)
-//            {
-//                MyLookupObjectType = lookupObjectType;
-//            }
-//            else
-//            {
             _assemblyName = assemblyName;
             _className = className;
             _lookupObjectType = null;
-//            }
             _lastCallTime = DateTime.MinValue;
         }
 

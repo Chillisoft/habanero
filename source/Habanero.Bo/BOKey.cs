@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -186,17 +187,6 @@ namespace Habanero.BO
             }
         }
 
-   
-
-        //      /// <summary>
-        //      /// is valid if more the BOKey contains 1 or more properties.
-        //      /// </summary>
-        //      /// <returns></returns>
-        //		internal bool IsValid
-        //		{
-        //			get{return (Count > 0);}
-        //		}
-        
         /// <summary>
         /// Gets the ignore-if-null setting.  If this is true, then the uniqueness
         /// check on a key is ignored if one of the properties that make up the
@@ -232,15 +222,7 @@ namespace Habanero.BO
             // check each property to determine whether
             // any of them are null if any are null then do not check sincd
             // Ignore if null is true.
-            foreach (BOProp lBOProp in _props.Values)
-            {
-               
-                if (lBOProp.Value == null)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return _props.Values.Cast<BOProp>().All(lBOProp => lBOProp.Value != null);
         }
 
         /// <summary>
@@ -250,14 +232,7 @@ namespace Habanero.BO
         {
             get
             {
-                foreach (BOProp lBOProp in _props.Values)
-                {
-                    if (lBOProp.IsDirty)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return _props.Values.Cast<BOProp>().Any(lBOProp => lBOProp.IsDirty);
             }
         }
 
@@ -268,14 +243,7 @@ namespace Habanero.BO
         {
             get
             {
-                foreach (BOProp lBOProp in _props.Values)
-                {
-                    if (lBOProp.IsObjectNew)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return _props.Values.Cast<BOProp>().Any(lBOProp => lBOProp.IsObjectNew);
             }
         }
 
@@ -294,11 +262,8 @@ namespace Habanero.BO
         {
             get
             {
-                List<IBOProp> props = new List<IBOProp>();
-                foreach (KeyValuePair<string, IBOProp> prop in _props) {
-                    props.Add(prop.Value);
-                }
-                props.Sort((x, y) => String.Compare(x.PropertyName, y.PropertyName));
+                var props = _props.Select(prop => prop.Value).ToList();
+                props.Sort((x, y) => String.CompareOrdinal(x.PropertyName, y.PropertyName));
                 return props;
             }
         }
@@ -310,11 +275,7 @@ namespace Habanero.BO
         {
             get
             {
-                foreach (IPropDef propDef in _keyDef)
-                {
-                    if (propDef.AutoIncrementing) return true;
-                }
-                return false;
+                return _keyDef.Cast<IPropDef>().Any(propDef => propDef.AutoIncrementing);
             }
         }
 
@@ -333,12 +294,12 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         public virtual string AsString_CurrentValue()
         {
-            string[] propsAsStrings = new string[_props.Count];
-            int i = 0;
+            var propsAsStrings = new string[_props.Count];
+            var i = 0;
 
             foreach (BOProp prop in this.GetBOPropCol().SortedValues)
             {
-                string classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
+                var classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
                 propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.Value;
             }
             return String.Join(";", propsAsStrings);
@@ -351,7 +312,7 @@ namespace Habanero.BO
         /// <returns>Returns a string</returns>
         public virtual string AsString_LastPersistedValue()
         {
-            StringBuilder propString = new StringBuilder(_props.Count * 30);
+            var propString = new StringBuilder(_props.Count * 30);
             foreach (BOProp prop in _props.Values)
             {
                 if (propString.Length > 0)
@@ -372,11 +333,11 @@ namespace Habanero.BO
         /// </summary>
         public virtual string AsString_PreviousValue()
         {
-            string[] propsAsStrings = new string[_props.Count];
-            int i = 0;
+            var propsAsStrings = new string[_props.Count];
+            var i = 0;
             foreach (BOProp prop in _props.Values)
             {
-                string classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
+                var classNameFull = prop.PropDef.ClassDef == null ? "" : prop.PropDef.ClassDef.ClassNameFull;
                 propsAsStrings[i++] = classNameFull + "." + prop.PropertyName + "=" + prop.ValueBeforeLastEdit;
             }
             return String.Join(";", propsAsStrings);
@@ -388,32 +349,13 @@ namespace Habanero.BO
         /// <returns>Returns a new BOProp collection</returns>
         public IBOPropCol GetBOPropCol()
         {
-            BOPropCol col = new BOPropCol();
+            var col = new BOPropCol();
             foreach (BOProp boProp in _props.Values)
             {
                 col.Add(boProp);
             }
             return col;
         }
-
-//        /// <summary>
-//        /// Creates a "where" clause from the properties held
-//        /// </summary>
-//        /// <param name="sql">The sql statement</param>
-//        /// <returns>Returns a string</returns>
-//        protected internal virtual string DatabaseWhereClause(SqlStatement sql)
-//        {
-//            StringBuilder whereClause = new StringBuilder(_props.Count*30);
-//            foreach (BOProp prop in _props.Values)
-//            {
-//                if (whereClause.Length > 0)
-//                {
-//                    whereClause.Append(" AND ");
-//                }
-//                whereClause.Append(prop.DatabaseNameFieldNameValuePair(sql));
-//            }
-//            return whereClause.ToString();
-//        }
 
         /// <summary>
         /// Indicates whether the two keys provided are equal in content
@@ -423,8 +365,8 @@ namespace Habanero.BO
         /// <returns>Returns true if equal</returns>
         public static bool operator ==(BOKey lhs, BOKey rhs)
         {
-            bool lhsIsNull = Utilities.IsNull(lhs);
-            bool rhsIsNull = Utilities.IsNull(rhs);
+            var lhsIsNull = lhs.IsNull();
+            var rhsIsNull = rhs.IsNull();
             if (rhsIsNull && lhsIsNull)
             {
                 return true;
@@ -434,16 +376,16 @@ namespace Habanero.BO
                 return false;
             }
             // Niether of the operands are null
-            int lhsPropsCount = lhs._props.Count;
-            int rhsPropsCount = rhs._props.Count;
+            var lhsPropsCount = lhs._props.Count;
+            var rhsPropsCount = rhs._props.Count;
             if (lhsPropsCount != rhsPropsCount)
             {
                 return false;
             }
-            foreach (BOProp prop in lhs._props.Values)
+            foreach (var prop in lhs._props.Values)
             {
                 if (!rhs.Contains(prop.PropertyName)) return false;
-                IBOProp rhsProp = rhs[prop.PropertyName];
+                var rhsProp = rhs[prop.PropertyName];
 
                 if (prop.Value == rhsProp.Value) continue;
 
@@ -472,9 +414,10 @@ namespace Habanero.BO
         /// <returns>Returns true if equal</returns>
         public override bool Equals(Object obj)
         {
-            if (obj is BOKey)
+            var key = obj as BOKey;
+            if (key != null)
             {
-                return (this == (BOKey) obj);
+                return (this == key);
             }
 
             return false;
@@ -510,9 +453,9 @@ namespace Habanero.BO
                 return new Criteria(this[0].PropertyName, Criteria.ComparisonOp.Equals, this[0].Value);
             }
             Criteria lastCriteria = null;
-            foreach (IBOProp prop in this)
+            foreach (var prop in this)
             {
-                Criteria propCriteria = new Criteria(prop.PropertyName, Criteria.ComparisonOp.Equals, prop.Value);
+                var propCriteria = new Criteria(prop.PropertyName, Criteria.ComparisonOp.Equals, prop.Value);
                 lastCriteria = lastCriteria == null
                                    ? propCriteria
                                    : new Criteria(lastCriteria, Criteria.LogicalOp.And, propCriteria);

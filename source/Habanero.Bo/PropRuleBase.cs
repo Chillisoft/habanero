@@ -91,23 +91,6 @@ namespace Habanero.BO
 		/// </summary>
 		protected internal abstract void SetupParameters();
 
-		///// <summary>
-		///// Returns the list of available parameter names for the rule
-		///// </summary>
-		///// <returns>Returns a string</returns>
-		//protected internal virtual string AvailableParametersString()
-		//{
-		//    string list = "";
-		//    string delimiter = "";
-		//    foreach (string availableParameter in AvailableParameters())
-		//    {
-		//        list += delimiter + "'" + availableParameter + "'";
-		//        delimiter = ", ";
-		//    }
-		//    list = "{" + list + "}";
-		//    return list;
-		//}
-
 		/// <summary>
 		/// Returns the rule name
 		/// </summary>
@@ -118,7 +101,7 @@ namespace Habanero.BO
 		/// </summary>
 		public string Message { get; set; }
 
-		private void FillParameters(List<string> availableParams, Dictionary<string, object> currentCollection)
+		private void FillParameters(IEnumerable<string> availableParams, Dictionary<string, object> currentCollection)
 		{
 			if (currentCollection == null)
 			{

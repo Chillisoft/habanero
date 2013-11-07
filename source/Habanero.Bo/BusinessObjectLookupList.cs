@@ -72,16 +72,8 @@ namespace Habanero.BO
         /// Constructor to initialise a new lookup-list
         /// </summary>
         /// <param name="boType">The business object type</param>
-        public BusinessObjectLookupList(Type boType) : this(boType, 10000)
-        {
-        }
-
-        /// <summary>
-        /// Constructor to initialise a new lookup-list
-        /// </summary>
-        /// <param name="boType">The business object type</param>
         /// <param name="timeout">The period after which the cache expires</param>
-        public BusinessObjectLookupList(Type boType, int timeout)
+        public BusinessObjectLookupList(Type boType, int timeout = 10000)
         {
             BoType = boType;
             _timeout = timeout;
@@ -93,17 +85,8 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="assemblyName">The assembly containing the class</param>
         /// <param name="className">The class from which to load the values</param>
-        public BusinessObjectLookupList(string assemblyName, string className) : this(assemblyName, className, 10000)
-        {
-        }
-
-        /// <summary>
-        /// Constructor to initialise a new lookup-list
-        /// </summary>
-        /// <param name="assemblyName">The assembly containing the class</param>
-        /// <param name="className">The class from which to load the values</param>
         /// <param name="timeout">The time period in milliseconds after which the cache expires</param>
-        public BusinessObjectLookupList(string assemblyName, string className, int timeout)
+        public BusinessObjectLookupList(string assemblyName, string className, int timeout = 10000)
         {
             _assemblyName = assemblyName;
             _className = className;
@@ -127,7 +110,6 @@ namespace Habanero.BO
         {
             _criteriaString = criteria;
             _sortString = sort;
-            CheckSortCriteriaIsValid();
         }
 
         /// <summary>
@@ -181,25 +163,6 @@ namespace Habanero.BO
             _criteriaString = criteria;
             _sortString = sort;
             _limitToList = limitToList;
-            CheckSortCriteriaIsValid();
-        }
-
-// ReSharper disable MemberCanBeMadeStatic
-        private void CheckSortCriteriaIsValid()
-// ReSharper restore MemberCanBeMadeStatic
-        {
-            //Note_ : Code commented out because not all ClassDefs are loaded when lookup Lists are being loaded.
-            //try
-            //{
-            //    OrderCriteria orderCriteria = this.OrderCriteria;
-            //}
-            //catch (InvalidPropertyNameException e)
-            //{
-            //    string errMessage =
-            //        "The sort criteria properties do not match the Properties of the Lookup Business Object of type " +
-            //        AssemblyName + "." + ClassName;
-            //    throw new HabaneroDeveloperException(errMessage, errMessage);
-            //}
         }
 
         #endregion Constructors

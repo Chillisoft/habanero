@@ -33,8 +33,7 @@ namespace Habanero.BO.Loaders
     {
         private IUIFormTab _tab;
 
-        private string MixedContentMessage =
-            "A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture.";
+        private const string MixedContentMessage = "A 'tab' can have either a set of 'columnLayout' or 'field' nodes or a single 'formGrid' node, but not a mixture.";
 
 
         /// <summary>
@@ -82,74 +81,45 @@ namespace Habanero.BO.Loaders
         protected override void LoadFromReader()
         {
 			_tab = _defClassFactory.CreateUIFormTab();
-			//_tab = new UIFormTab();
-
-            //_reader.Read();
-            //string className = _reader.GetAttribute("class");
-            //string assemblyName = _reader.GetAttribute("assembly");
-            //_collection.Class = TypeLoader.LoadType(assemblyName, className);
-            //_collection.Name = new UIPropertyCollectionName(_collection.Class, _reader.GetAttribute("name"));
-
             _reader.Read();
             _tab.Name = _reader.GetAttribute("name");
             _reader.Read();
-            //if (_reader.Name == "uiFormGrid")
-            //{
-            //    XmlUIFormGridLoader gridLoader = new XmlUIFormGridLoader(DtdLoader, _defClassFactory);
-            //    _tab.UIFormGrid = gridLoader.LoadUIFormGrid(_reader.ReadOuterXml());
-            //}
-            //else
-            //{
-
-
-                List<IUIFormField> fields = new List<IUIFormField>();
-                string contentType = "";
-                while (_reader.Name != "tab")
+            var fields = new List<IUIFormField>();
+            var contentType = "";
+            while (_reader.Name != "tab")
+            {
+                if (_reader.Name == "columnLayout")
                 {
-                    if (_reader.Name == "columnLayout")
-                    {
-                        if (contentType.Length > 0 && contentType != "columnLayout")
-                        {
-                            throw new InvalidXmlDefinitionException(MixedContentMessage);
-                        }
-                        contentType = "columnLayout";
-                        XmlUIFormColumnLoader columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
-                        _tab.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
-                    }
-                    else if (_reader.Name == "field")
-                    {
-                        if (contentType.Length > 0 && contentType != "field")
-                        {
-                            throw new InvalidXmlDefinitionException(MixedContentMessage);
-                        }
-                        contentType = "field";
-                        XmlUIFormFieldLoader fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
-                        fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
-
-                    }
-                    else
+                    if (contentType.Length > 0 && contentType != "columnLayout")
                     {
                         throw new InvalidXmlDefinitionException(MixedContentMessage);
                     }
+                    contentType = "columnLayout";
+                    var columnLoader = new XmlUIFormColumnLoader(DtdLoader, _defClassFactory);
+                    _tab.Add(columnLoader.LoadUIFormColumn(_reader.ReadOuterXml()));
                 }
-                if (contentType == "field")
+                else if (_reader.Name == "field")
                 {
-                    IUIFormColumn col = _defClassFactory.CreateUIFormColumn();
-                    fields.ForEach(delegate(IUIFormField obj) { col.Add(obj); });
-                    _tab.Add(col);
-                }
+                    if (contentType.Length > 0 && contentType != "field")
+                    {
+                        throw new InvalidXmlDefinitionException(MixedContentMessage);
+                    }
+                    contentType = "field";
+                    var fieldLoader = new XmlUIFormFieldLoader(DtdLoader, _defClassFactory);
+                    fields.Add(fieldLoader.LoadUIProperty(_reader.ReadOuterXml()));
 
-                //Eric: Not sure this is needed
-//                if (_tab.Count == 0)
-//                {
-//                    throw new InvalidXmlDefinitionException("In a 'tab' " +
-//                        "element, there were no 'columnLayout' " +
-//                        "elements specified.  Ensure that the element " +
-//                        "contains one or more " +
-//                        "'columnLayout' elements, which specify the columns of " +
-//                        "controls to appear in the editing form.");
-//                }
-           //}
+                }
+                else
+                {
+                    throw new InvalidXmlDefinitionException(MixedContentMessage);
+                }
+            }
+            if (contentType == "field")
+            {
+                var col = _defClassFactory.CreateUIFormColumn();
+                fields.ForEach(col.Add);
+                _tab.Add(col);
+            }
         }
     }
 }

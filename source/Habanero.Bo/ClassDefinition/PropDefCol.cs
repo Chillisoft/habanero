@@ -68,11 +68,6 @@ namespace Habanero.BO.ClassDefinition
                              ("The property name '{0}' does not exist in the " + "collection of property definitions.",
                               propertyName));
                 }
-
-                //else
-
-                //return new PropDef("","",propertyName,;
-                //	Throw (New Exception( obj.PropertyName + " is already in this BOProperty Collection",   "obj", e));
             }
         }
 
@@ -141,11 +136,6 @@ namespace Habanero.BO.ClassDefinition
             }
             return lBOPropertyCol;
         }
-
-        //public IEnumerator GetEnumerator()
-        //{
-        //    return _propDefs.Values.GetEnumerator();
-        //}
 
         /// <summary>
         /// Gets the number of definitions in this collection

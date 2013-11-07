@@ -119,9 +119,9 @@ namespace Habanero.BO
         internal override void DereferenceChildren(TransactionCommitter committer)
         {
             IBusinessObjectCollection col = BusinessObjectCollection;
-            for (int i = col.Count - 1; i >= 0; i--)
+            for (var i = col.Count - 1; i >= 0; i--)
             {
-                IBusinessObject bo = col[i];
+                var bo = col[i];
                 DereferenceChild(committer, bo);
             }
         }
@@ -131,7 +131,7 @@ namespace Habanero.BO
             IList col = this.CurrentBusinessObjectCollection.RemovedBusinessObjects;
             for (int i = col.Count - 1; i >= 0; i--)
             {
-                IBusinessObject bo = (IBusinessObject) col[i];
+                var bo = (IBusinessObject) col[i];
                 DereferenceChild(committer, bo);
             }
         }
@@ -141,7 +141,7 @@ namespace Habanero.BO
             IList col = CurrentBusinessObjectCollection.MarkedForDeleteBusinessObjects;
             for (int i = col.Count - 1; i >= 0; i--)
             {
-                IBusinessObject bo = (IBusinessObject) col[i];
+                var bo = (IBusinessObject) col[i];
                 DeleteChild(committer, bo);
             }
         }
@@ -149,9 +149,9 @@ namespace Habanero.BO
         internal override void DeleteChildren(TransactionCommitter committer)
         {
             IBusinessObjectCollection col = BusinessObjectCollection;
-            for (int i = col.Count - 1; i >= 0; i--)
+            for (var i = col.Count - 1; i >= 0; i--)
             {
-                IBusinessObject businessObject = col[i];
+                var businessObject = col[i];
                 if (!businessObject.Status.IsNew)
                 {
                     DeleteChild(committer, businessObject);
@@ -169,7 +169,7 @@ namespace Habanero.BO
             if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.DeleteRelated) return;
             IBusinessObjectCollection collection = this.BusinessObjectCollection;
             collection.Refresh();
-            for (int i = collection.Count - 1; i >= 0; i--)
+            for (var i = collection.Count - 1; i >= 0; i--)
             {
                 collection[i].MarkForDelete();
             }
@@ -189,16 +189,10 @@ namespace Habanero.BO
                 if (this.RelationshipDef.RelationshipType == RelationshipType.Aggregation
                     || RelationshipDef.RelationshipType == RelationshipType.Composition)
                 {
-					var currentCol = _boCol.Value;
-                	foreach (IBusinessObject bo in currentCol.PersistedBusinessObjects)
-                    {
-                        if (bo.Status.IsDirty)
-                        {
-                            return true;
-                        }
-                    }
+                    var currentCol = _boCol.Value;
+                    return currentCol.PersistedBusinessObjects.Any(bo => bo.Status.IsDirty);
                 }
-            	return false; // || 
+                return false; // || 
             }
         }
 
@@ -348,18 +342,6 @@ namespace Habanero.BO
             }
         }
 
-//        private ISingleRelationship CreateReverseRelationship(TBusinessObject businessObject)
-//        {
-//            RelKeyDef def = new RelKeyDef();
-//            foreach (IRelProp prop in this.RelKey)
-//            {
-//                def.Add(new RelPropDef(businessObject.ClassDef.PropDefcol[prop.OwnerPropertyName],prop.OwnerPropertyName));
-//            }
-//            IRelationshipDef relationshipDef = new SingleRelationshipDef("TempSingleReverseRelationship", businessObject.ClassDef.ClassType, def, false,
-//                 DeleteParentAction.DoNothing);
-//            return (ISingleRelationship) relationshipDef.CreateRelationship(businessObject, businessObject.Props);
-//        }
-
         internal IList<TBusinessObject> GetDirtyChildren()
         {
         	IList<TBusinessObject> dirtyChildren = new List<TBusinessObject>();
@@ -413,7 +395,7 @@ namespace Habanero.BO
             if (this.RelationshipDef.DeleteParentAction != DeleteParentAction.Prevent) return true;
 
             IBusinessObjectCollection collection = this.BusinessObjectCollection;
-            int noRelatedObjects = collection.Count;
+            var noRelatedObjects = collection.Count;
             if (noRelatedObjects <= 0) return true;
             if (!String.IsNullOrEmpty(this._relDef.PreventDeleteMessage))
                 message = String.Format(this._relDef.PreventDeleteMessage, this._owningBo.ToString());

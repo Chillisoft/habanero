@@ -39,10 +39,8 @@ namespace Habanero.BO.Loaders
 		private string _mapperTypeAssembly;
 		private string _controlTypeName;
 		private string _controlAssembly;
-		//private Type _controlType;
         private bool _editable;
         private Hashtable _parameters;
-        private TriggerCol _triggers = new TriggerCol();
         private string _toolTipText;
         private LayoutStyle _layout;
         private bool _showAsCompulsory;
@@ -112,7 +110,6 @@ namespace Habanero.BO.Loaders
             LoadToolTipText();
             LoadLayout();
             LoadParameters();
-            LoadTriggers();
         }
 
         private void LoadLayout()
@@ -157,22 +154,6 @@ namespace Habanero.BO.Loaders
         {
 			_controlTypeName = _reader.GetAttribute("type");
 			_controlAssembly = _reader.GetAttribute("assembly");
-
-			//string controlTypeName = _reader.GetAttribute("type");
-			//string controlAssemblyName = _reader.GetAttribute("assembly");
-			//try
-			//{
-			//    _controlType = TypeLoader.LoadType(controlAssemblyName, controlTypeName);
-			//}
-			//catch (Exception ex)
-			//{
-			//    throw new InvalidXmlDefinitionException(String.Format(
-			//        "While attempting to load a 'field' element, an " +
-			//        "error occurred while loading the control type. " +
-			//        "The type supplied was '{0}' and the assembly was '{1}'. " +
-			//        "Please ensure that the type exists in the assembly provided.",
-			//        controlTypeName, controlAssemblyName), ex);
-			//}
         }
 
         /// <summary>
@@ -244,9 +225,7 @@ namespace Habanero.BO.Loaders
         private void LoadParameters()
         {
             _parameters = new Hashtable();
-            //System.Console.WriteLine(_reader.Name);
             _reader.Read();
-            //System.Console.WriteLine(_reader.Name);
 
             while (_reader.Name == "parameter")
             {
@@ -271,22 +250,6 @@ namespace Habanero.BO.Loaders
                                                             "be duplicates with the same 'name' attribute.", ex);
                 }
                 ReadAndIgnoreEndTag();
-            }
-        }
-
-        /// <summary>
-        /// Loads the triggers for the property
-        /// </summary>
-        private void LoadTriggers()
-        {
-            _triggers = new TriggerCol();
-            while (_reader.Name == "trigger")
-            {
-                while (_reader.Name == "trigger")
-                {
-                    XmlTriggerLoader propLoader = new XmlTriggerLoader(DtdLoader, _defClassFactory);
-                    _triggers.Add(propLoader.LoadTrigger(_reader.ReadOuterXml()));
-                }
             }
         }
     }

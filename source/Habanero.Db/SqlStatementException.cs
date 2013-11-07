@@ -65,27 +65,5 @@ namespace Habanero.DB
             : base(info, context)
         {
         }
-
-        ///// <summary>
-        ///// Returns a summary of this exception as a string
-        ///// </summary>
-        ///// <returns>Returns a string</returns>
-        //public override string ToString()
-        //{
-        //    return base.ToString();
-        //}
-
-        ///// <summary>
-        ///// Required for ISerializable.
-        ///// </summary>
-        ///// <param name="info"></param>
-        ///// <param name="context"></param>
-        //public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        //{
-        //    base.GetObjectData(info, context);
-        //    info.AddValue("sqlStatement", _sqlStatement);
-        //    info.AddValue("developerMessage", _developerMessage);
-        //    info.AddValue("connectString", _connectString);
-        //}
     }
 }

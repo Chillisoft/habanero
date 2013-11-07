@@ -135,29 +135,6 @@ namespace Habanero.BO.Loaders
 			_propRule.Parameters = _ruleParameters;
 		}
 
-		///// <summary>
-		///// Loads the property rule data from the reader - to be implemented
-		///// in a subclass of XmlPropertyRuleLoader
-		///// </summary>
-		//protected void LoadPropertyRuleFromReader() {
-		//    try
-		//    {
-		//        Dictionary<string, string> ruleParameters = new Dictionary<string, string>();
-		//        _reader.Read();
-		//        while (_reader.Name == "add") {
-		//            ruleParameters.Add(_reader.GetAttribute("name"), _reader.GetAttribute("value"));
-		//            _reader.Read();
-		//        }
-				
-		//    }
-		//    catch (Exception ex)
-		//    {
-		//        throw new InvalidXmlDefinitionException("In a " +
-		//            "'PropertyRuleInteger' element, either the 'minValue' or " +
-		//            "'maxValue' attribute was set to an invalid integer value.", ex);
-		//    }
-		//}
-
 		/// <summary>
 		/// Loads the property rule from the given xml string and applies
 		/// this to the specified property definition
@@ -203,28 +180,6 @@ namespace Habanero.BO.Loaders
 				}
 				throw new TypeLoadException("The prop rule '" + _name + "' must inherit from PropRuleBase.");
 			}
-			/*if (_propTypeName == typeof(int).Name) {
-				return _defClassFactory.CreatePropRuleInteger(_name, _message);
-			}
-			if (_propTypeName == typeof(string).Name ) {
-				return _defClassFactory.CreatePropRuleString(_name, _message);
-			}
-			if (_propTypeName == typeof(DateTime).Name ) {
-				return _defClassFactory.CreatePropRuleDate(_name, _message);
-			}
-			if (_propTypeName == typeof(Decimal).Name) {
-				return _defClassFactory.CreatePropRuleDecimal(_name, _message);
-			}
-			if (_propTypeName == typeof(Single).Name) {
-				return _defClassFactory.CreatePropRuleSingle(_name, _message);
-			}
-			if (_propTypeName == typeof(Double).Name) {
-				return _defClassFactory.CreatePropRuleDouble(_name, _message);
-			}
-			if (_propTypeName == typeof(Int64).Name)
-			{
-				return _defClassFactory.CreatePropRuleInteger(_name, _message);
-			}*/
 			var propRule = CreatePropRule(_propTypeName, _name, _message);
 			if (propRule != null) return propRule;
 			throw new InvalidXmlDefinitionException("Could not load the Property Rule " +

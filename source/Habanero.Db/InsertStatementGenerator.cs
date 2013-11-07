@@ -110,7 +110,6 @@ namespace Habanero.DB
 
             foreach (BOProp prop in _bo.Props.SortedValues)
             {
-                // BOProp prop = (BOProp) item.Value;
                 if (propsToInclude.Contains(prop.PropertyName))
                 {
                     if (!prop.PropDef.AutoIncrementing) 
@@ -145,15 +144,6 @@ namespace Habanero.DB
         private void AddDiscriminatorProperties(ClassDef classDef, IBOPropCol propsToInclude, IBOPropCol discriminatorProps)
         {
             ClassDef classDefWithSTI = null;
-            //foreach (ClassDef def in classDef.ImmediateChildren)
-            //{
-            //    if (def.IsUsingSingleTableInheritance())
-            //    {
-            //        classDefWithSTI = def;
-            //        break;
-            //    }
-            //}
-
             if (classDef.IsUsingSingleTableInheritance() || classDefWithSTI != null)
             {
                 string discriminator = null;
@@ -172,13 +162,13 @@ namespace Habanero.DB
                 }
                 if (propsToInclude.Contains(discriminator) && _bo.Props.Contains(discriminator))
                 {
-                    IBOProp boProp = _bo.Props[discriminator];
+                    var boProp = _bo.Props[discriminator];
                     boProp.Value = _bo.ClassDef.ClassName;
                 }
                 else if (!discriminatorProps.Contains(discriminator))
                 {
-                    PropDef propDef = new PropDef(discriminator, typeof (string), PropReadWriteRule.ReadWrite, null);
-                    BOProp discriminatorProp = new BOProp(propDef, _bo.ClassDef.ClassName);
+                    var propDef = new PropDef(discriminator, typeof (string), PropReadWriteRule.ReadWrite, null);
+                    var discriminatorProp = new BOProp(propDef, _bo.ClassDef.ClassName);
                     discriminatorProps.Add(discriminatorProp);
                 }
             }
@@ -197,7 +187,7 @@ namespace Habanero.DB
         {
             _dbFieldList = new StringBuilder(_bo.Props.Count * 20);
             _dbValueList = new StringBuilder(_bo.Props.Count * 20);
-            InsertSqlStatement statement = new InsertSqlStatement(_connection);
+            var statement = new InsertSqlStatement(_connection);
             statement.TableName = tableName;
             statement.SupportsAutoIncrementingField = supportsAutoIncrementingField;
 
@@ -244,9 +234,9 @@ namespace Habanero.DB
             }
             if (currentClassDef.SuperClassClassDef ==  null ||currentClassDef.SuperClassClassDef.PrimaryKeyDef == null) return;
 
-            SuperClassDef superClassDef = (SuperClassDef) currentClassDef.SuperClassDef;
-            string parentIDCopyFieldName = superClassDef.ID;
-            PrimaryKeyDef superClassPrimaryKeyDef = (PrimaryKeyDef) currentClassDef.SuperClassClassDef.PrimaryKeyDef;
+            var superClassDef = (SuperClassDef) currentClassDef.SuperClassDef;
+            var parentIDCopyFieldName = superClassDef.ID;
+            var superClassPrimaryKeyDef = (PrimaryKeyDef) currentClassDef.SuperClassClassDef.PrimaryKeyDef;
             if (string.IsNullOrEmpty(parentIDCopyFieldName) ||
                 superClassPrimaryKeyDef.KeyName == parentIDCopyFieldName)
             {
@@ -263,9 +253,9 @@ namespace Habanero.DB
                                                             "allow composite primary keys where the child's copies have the same " +
                                                             "field name as the parent.");
                 }
-                IBOProp parentProp = superClassPrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol()[superClassPrimaryKeyDef.KeyName];
-                PropDef profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
-                BOProp newProp = new BOProp(profDef) {Value = parentProp.Value};
+                var parentProp = superClassPrimaryKeyDef.CreateBOKey(_bo.Props).GetBOPropCol()[superClassPrimaryKeyDef.KeyName];
+                var profDef = new PropDef(parentIDCopyFieldName, parentProp.PropertyType, PropReadWriteRule.ReadWrite, null);
+                var newProp = new BOProp(profDef) {Value = parentProp.Value};
                 propsToInclude.Add(newProp);
             }
         }

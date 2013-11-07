@@ -50,10 +50,15 @@ namespace Habanero.Test.DB
 
         public class DatabaseConnectionStub : DatabaseConnection
         {
-            public DatabaseConnectionStub()
+            public DatabaseConnectionStub(SqlFormatter sqlFormatter)
                 : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
             {
-                _sqlFormatter = new SqlFormatter("","","", "");
+                _sqlFormatter = sqlFormatter;
+            }
+
+            public DatabaseConnectionStub()
+                : this(new SqlFormatter("","","", ""))
+            {
             }
 
             public override IParameterNameGenerator CreateParameterNameGenerator() {
@@ -514,7 +519,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithLimit_AtEnd()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub(new SqlFormatter("", "", "", "LIMIT"));
             SelectQuery selectQuery = new SelectQuery {Limit = 10};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
@@ -533,7 +538,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithOrder_WithLimit_AtEnd()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub(new SqlFormatter("", "", "", "LIMIT"));
             SelectQuery selectQuery = new SelectQuery {Limit = 10};
             const string fieldName = "Field1";
             selectQuery.Fields.Add(fieldName, new QueryField(fieldName, fieldName, null));
@@ -553,7 +558,7 @@ namespace Habanero.Test.DB
         public void TestCreateSqlStatement_WithNoLimit_AtEnd()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub_LimitClauseAtEnd();
+            DatabaseConnection.CurrentConnection = new DatabaseConnectionStub(new SqlFormatter("", "", "", "LIMIT"));
             SelectQuery selectQuery = new SelectQuery();
             selectQuery.Limit = -1;
             const string fieldName = "Field1";
@@ -1091,18 +1096,5 @@ namespace Habanero.Test.DB
                 "SELECT a1.[testfield] FROM [mysource] a1 ORDER BY a1.[testfield] ASC", statement.Statement.ToString());
         }
 
-
-
-
-        public class DatabaseConnectionStub_LimitClauseAtEnd : DatabaseConnectionStub
-        {
-#pragma warning disable 672 //Tests on backward compatibility are being maintained.
-            public override string GetLimitClauseForEnd(int limit)
-
-            {
-                return "LIMIT " + limit;
-            }
-#pragma warning restore 672
-        }
     }
 }

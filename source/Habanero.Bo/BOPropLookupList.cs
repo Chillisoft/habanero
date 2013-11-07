@@ -176,8 +176,7 @@ namespace Habanero.BO
         {
             get
             {
-//                string displayValue;
-                object propValue = this.Value;
+                var propValue = this.Value;
                 if (propValue == null) return null;
                 //-----This has been added to improve the performance based on Profiling LGMIS.
                 if (propValue.Equals(_propValueWhenLookupListDisplayValueLastCalled))
@@ -186,15 +185,15 @@ namespace Habanero.BO
                 }
                 _propValueWhenLookupListDisplayValueLastCalled = propValue;
 
-                ILookupList lookupList = _propDef.LookupList;
-                Dictionary<string, string> keyLookupList = lookupList.GetIDValueLookupList();
+                var lookupList = _propDef.LookupList;
+                var keyLookupList = lookupList.GetIDValueLookupList();
                 if (keyLookupList.TryGetValue(this.PropDef.ConvertValueToString(propValue), out _displayValueWhenLookupListDisplayValueLastCalled))
                     return _displayValueWhenLookupListDisplayValueLastCalled;
                 if (lookupList is BusinessObjectLookupList)
                 {
-                    BusinessObjectLookupList businessObjectLookupList = lookupList as BusinessObjectLookupList;
-                    IClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-                    IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
+                    var businessObjectLookupList = lookupList as BusinessObjectLookupList;
+                    var classDef = businessObjectLookupList.LookupBoClassDef;
+                    var businessObject = GetBusinessObjectForProp(classDef);
                     _displayValueWhenLookupListDisplayValueLastCalled = businessObject == null ? null : businessObject.ToString();
                     return _displayValueWhenLookupListDisplayValueLastCalled;
                 }
@@ -212,7 +211,7 @@ namespace Habanero.BO
 
         internal IBusinessObject GetBusinessObjectForProp(IClassDef classDef)
         {
-            IBusinessObject businessObject = ((PropDef) this.PropDef).GetlookupBusinessObjectFromObjectManager(this.Value);
+            var businessObject = ((PropDef) this.PropDef).GetlookupBusinessObjectFromObjectManager(this.Value);
             if (businessObject != null) return businessObject;
             try
             {
@@ -227,33 +226,19 @@ namespace Habanero.BO
             return businessObject;
         }
 
-//        internal BOPrimaryKey GetRelatedBOPrimaryKeyForProp(ClassDef classDef)
-//        {
-//            PrimaryKeyDef primaryKeyDef = classDef.GetPrimaryKeyDef();
-//            if (primaryKeyDef.IsCompositeKey) return null;
-//
-//            BOPropCol boPropCol = classDef.CreateBOPropertyCol(true);
-//            BOPrimaryKey boPrimaryKey = primaryKeyDef.CreateBOKey(boPropCol) as BOPrimaryKey;
-//            if (boPrimaryKey != null)
-//            {
-//                boPrimaryKey[0].Value = Value;
-//            }
-//            return boPrimaryKey;
-//        }
         ///<summary>
         /// Returns the Business Object that is related to this property in the case 
         ///   where this property is related to a BusinessObjectLookupList
         ///</summary>
         ///<returns></returns>
-        ///<exception cref="NotImplementedException"></exception>
         public IBusinessObject GetBusinessObjectForProp()
         {
             var propDef = this.PropDef;
             if (propDef.LookupList is BusinessObjectLookupList)
             {
-                BusinessObjectLookupList businessObjectLookupList = propDef.LookupList as BusinessObjectLookupList;
-                IClassDef classDef = businessObjectLookupList.LookupBoClassDef;
-                IBusinessObject businessObject = GetBusinessObjectForProp(classDef);
+                var businessObjectLookupList = propDef.LookupList as BusinessObjectLookupList;
+                var classDef = businessObjectLookupList.LookupBoClassDef;
+                var businessObject = GetBusinessObjectForProp(classDef);
                 return businessObject;
             }
 

@@ -47,10 +47,10 @@ namespace Habanero.BO
 		    if (bo == null) throw new ArgumentNullException("bo");
 		    reason = "";
 
-		    ClassDef classDef = (ClassDef) bo.ClassDef;
-		    IRelationshipDefCol relationshipDefCol = classDef.RelationshipDefCol;
-			MatchList listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
-			Dictionary<string, int> results = new Dictionary<string, int>();
+		    var classDef = (ClassDef) bo.ClassDef;
+		    var relationshipDefCol = classDef.RelationshipDefCol;
+			var listOfPaths = FindPreventDeleteRelationships(relationshipDefCol);
+			var results = new Dictionary<string, int>();
 			CheckCanDeleteSafe(bo, new List<IBusinessObject>(), listOfPaths, "", ref results);
 			foreach (KeyValuePair<string, int> pair in results)
 			{
@@ -61,7 +61,7 @@ namespace Habanero.BO
 			if (reason.Length > 0)
 			{
 				reason = String.Format("Cannot delete this '{0}' identified as '{1}' for the following reasons:",
-                    classDef.ClassName, bo.ToString()) + reason;
+                    classDef.ClassName, bo) + reason;
 			}
 			/*
 			 * Message format:-
@@ -81,17 +81,17 @@ namespace Habanero.BO
 			{
 				currentRelationshipPath += ".";
 			}
-			MatchList listOfPaths = matchList;
-			foreach (KeyValuePair<string, MatchList> pair in listOfPaths)
+			var listOfPaths = matchList;
+			foreach (var pair in listOfPaths)
 			{
-				string relationshipName = pair.Key;
+				var relationshipName = pair.Key;
 				if (!bo.Relationships.Contains(relationshipName)) return;
-				string thisRelationshipPath = currentRelationshipPath + relationshipName;
-				IMultipleRelationship relationship = bo.Relationships[relationshipName] as IMultipleRelationship;
+				var thisRelationshipPath = currentRelationshipPath + relationshipName;
+				var relationship = bo.Relationships[relationshipName] as IMultipleRelationship;
 				if (relationship == null) continue;
 				if (pair.Value == null)
 				{
-				    IBusinessObjectCollection businessObjects = relationship.BusinessObjectCollection;
+				    var businessObjects = relationship.BusinessObjectCollection;
 				    if (businessObjects.Count > 0)
 					{
 						if (!results.ContainsKey(thisRelationshipPath))
@@ -105,37 +105,13 @@ namespace Habanero.BO
 				}
 				else if (pair.Value.Count > 0)
 				{
-				    IBusinessObjectCollection boCol = relationship.BusinessObjectCollection;
+				    var boCol = relationship.BusinessObjectCollection;
 				    foreach (BusinessObject businessObject in boCol)
 					{
 						CheckCanDeleteSafe(businessObject, alreadyChecked, pair.Value, thisRelationshipPath, ref results);
 					}
 				}
 			}
-
-			//foreach (Relationship relationship in bo.Relationships)
-			//{
-			//    MultipleRelationship multipleRelationship = relationship as MultipleRelationship;
-			//    if (multipleRelationship != null)
-			//    {
-			//        MultipleRelationshipDef multipleRelationshipDef =
-			//            multipleRelationship.RelationshipDef as MultipleRelationshipDef;
-			//        if (multipleRelationshipDef != null)
-			//        {
-			//            if (multipleRelationshipDef.DeleteParentAction == DeleteParentAction.Prevent)
-			//            {
-			//                BusinessObjectCollection<BusinessObject> col;
-			//                col = multipleRelationship.GetRelatedBusinessObjectCol();
-			//                int count = col.Count;
-			//                if (count > 0)
-			//                {
-			//                    reason += "";
-			//                }
-			//            }
-			//        }
-			//    }
-			//}
-
 		}
 
 		/// <summary>
@@ -148,7 +124,7 @@ namespace Habanero.BO
 			return FindRelationships<MultipleRelationshipDef>(relationshipDefCol, PreventDeleteRelationshipCondition);
 		}
 
-		public delegate bool MatchesConditionDelegate<TRelationshipDef>(TRelationshipDef relationshipDef)
+		public delegate bool MatchesConditionDelegate<in TRelationshipDef>(TRelationshipDef relationshipDef)
 			where TRelationshipDef : RelationshipDef;
 
         /// <summary>
@@ -170,27 +146,26 @@ namespace Habanero.BO
 			MatchesConditionDelegate<TRelationshipDef> matchesConditionDelegate, List<IRelationshipDefCol> alreadyChecked)
 			where TRelationshipDef : RelationshipDef
 		{
-			MatchList listOfPaths = new MatchList();
+			var listOfPaths = new MatchList();
 			if (matchesConditionDelegate == null) return listOfPaths;
             if (relationshipDefCol == null) return listOfPaths;
 			if (alreadyChecked.Contains(relationshipDefCol)) return listOfPaths;
 			alreadyChecked.Add(relationshipDefCol);
-			foreach (IRelationshipDef relationshipDef in relationshipDefCol)
+			foreach (var relationshipDef in relationshipDefCol)
 			{
-				string relationshipName = relationshipDef.RelationshipName;
-				TRelationshipDef castedRelationshipDef =
-					relationshipDef as TRelationshipDef;
+				var relationshipName = relationshipDef.RelationshipName;
+				var castedRelationshipDef = relationshipDef as TRelationshipDef;
 			    if (castedRelationshipDef == null) continue;
-			    bool matchesCondition = matchesConditionDelegate(castedRelationshipDef);
+			    var matchesCondition = matchesConditionDelegate(castedRelationshipDef);
 			    if (matchesCondition)
 			    {
 			        listOfPaths.Add(relationshipName, null);
 			    } else
 			    {
-			        ClassDef classDef = (ClassDef) relationshipDef.RelatedObjectClassDef;
+			        var classDef = (ClassDef) relationshipDef.RelatedObjectClassDef;
 			        if (classDef != null)
 			        {
-			            MatchList results = FindRelationshipsSafe(classDef.RelationshipDefCol, matchesConditionDelegate, alreadyChecked);
+			            var results = FindRelationshipsSafe(classDef.RelationshipDefCol, matchesConditionDelegate, alreadyChecked);
 			            if (results.Count > 0)
 			            {
 			                listOfPaths.Add(relationshipName, results);
@@ -226,8 +201,8 @@ namespace Habanero.BO
 
 		public string ToString(string delimiter)
 		{
-			string keysString = "";
-			foreach (KeyValuePair<string, MatchList> pair in this)
+			var keysString = "";
+			foreach (var pair in this)
 			{
 				if (keysString.Length > 0)
 				{

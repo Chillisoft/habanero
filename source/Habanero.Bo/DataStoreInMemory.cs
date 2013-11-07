@@ -37,8 +37,7 @@ namespace Habanero.BO
     public class DataStoreInMemory
     {
         private ConcurrentDictionary<Guid, IBusinessObject> _objects = new ConcurrentDictionary<Guid, IBusinessObject>();
-        //private Dictionary<Guid, IBusinessObject> _objects = new Dictionary<Guid, IBusinessObject>();
-        private ConcurrentDictionary<IClassDef, INumberGenerator> _autoIncrementNumberGenerators = new ConcurrentDictionary<IClassDef, INumberGenerator>();
+        private readonly ConcurrentDictionary<IClassDef, INumberGenerator> _autoIncrementNumberGenerators = new ConcurrentDictionary<IClassDef, INumberGenerator>();
         private readonly object _lock = new object();
 
         ///<summary>
@@ -191,9 +190,8 @@ namespace Habanero.BO
         ///<returns></returns>
         internal virtual List<T> FindAllInternal<T>(Criteria criteria) where T : class, IBusinessObject, new()
         {
-            //return AllObjects.Values.OfType<T>().Where(boAsT => criteria == null || criteria.IsMatch(boAsT)).ToList();
-            List<T> list = new List<T>();
-            Type boType = typeof (T);
+            var list = new List<T>();
+            var boType = typeof (T);
             foreach (IBusinessObject bo in AllObjects.Values)
             {
                 if (!boType.IsInstanceOfType(bo)) continue;
@@ -211,13 +209,6 @@ namespace Habanero.BO
         public virtual IBusinessObjectCollection FindAll(Type boType, Criteria criteria)
         {
             IBusinessObjectCollection col = CreateGenericCollection(boType);
-
-/*            IEnumerable<IBusinessObject> allMatchineBOs = AllObjects.Values.Where(boType.IsInstanceOfType).Where(bo => criteria == null || criteria.IsMatch(bo));
-            foreach (IBusinessObject bo in allMatchineBOs)
-            {
-                col.Add(bo);
-            }*/
-
             foreach (IBusinessObject bo in AllObjects.Values)
             {
                 if (!boType.IsInstanceOfType(bo)) continue;
@@ -245,9 +236,6 @@ namespace Habanero.BO
             Type boType = classDef.ClassType;
             IBusinessObjectCollection col = CreateGenericCollection(boType);
             col.ClassDef = classDef;
-            //var objectsMatchingType = FindObjectsMatchingType(classDef);
-            //var objectsMatchingCriteria = criteria == null ? objectsMatchingType : objectsMatchingType.Where(criteria.IsMatch);
-            //objectsMatchingCriteria.ToArray().ForEach(col.Add);
             foreach (IBusinessObject bo in GetAllObjectsSnapshot()) //AllObjects.Values.ToArray())
             {
                 if (bo.ClassDef != classDef && !boType.IsInstanceOfType(bo)) continue;

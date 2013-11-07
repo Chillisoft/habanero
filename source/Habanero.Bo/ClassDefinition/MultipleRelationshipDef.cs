@@ -30,9 +30,6 @@ namespace Habanero.BO.ClassDefinition
     /// </summary>
     public class MultipleRelationshipDef : RelationshipDef
     {
-        // protected int _minNoOfRelatedObjects;
-       // protected int _maxNoOfRelatedObjects;
-
 		#region Constructors
 
         /// <summary>
@@ -60,9 +57,6 @@ namespace Habanero.BO.ClassDefinition
             OrderCriteriaString = orderBy;
 
             this.OrderCriteria = Base.OrderCriteria.FromString( orderBy);
-            //_minNoOfRelatedObjects = minNoOfRelatedObjects;
-            // _maxNoOfRelatedObjects = maxNoOfRelatedObjects;
-
         }
 
     	/// <summary>
@@ -90,9 +84,6 @@ namespace Habanero.BO.ClassDefinition
             ArgumentValidationHelper.CheckArgumentNotNull(orderBy, "orderBy");
             OrderCriteriaString = orderBy; 
             OrderCriteria = Base.OrderCriteria.FromString(orderBy);
-			//_minNoOfRelatedObjects = minNoOfRelatedObjects;
-			//_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
-
 		}
 
         /// <summary>
@@ -121,45 +112,8 @@ namespace Habanero.BO.ClassDefinition
             OrderCriteriaString = orderBy; 
             OrderCriteria = new OrderCriteria();
             OrderCriteria = Base.OrderCriteria.FromString(orderBy);
-            //_minNoOfRelatedObjects = minNoOfRelatedObjects;
-            //_maxNoOfRelatedObjects = maxNoOfRelatedObjects;
-
         }
 		#endregion Constructors
-
-		#region Properties
-
-        ///// <summary>
-        ///// Returns the sql order-by clause
-        ///// </summary>
-        //public string OrderBy
-        //{
-        //    get { return _orderCriteria; }
-        //    protected set { _orderCriteria = value; }
-        //}
-
-        ///// <summary>
-        ///// Indicates the minimum number of related objects that the owner
-        ///// object must have to be valid (e.g. A car must have at least 4 wheels.)
-        ///// </summary>
-        //public int MinNoOfRelatedObjects
-        //{
-        //    get { return _minNoOfRelatedObjects; }
-        //    protected set { _minNoOfRelatedObjects = value; }
-        //}
-
-        ///// <summary>
-        ///// Indicates the maximum number of related objects that the owner 
-        ///// object can have and still be valid (e.g. A person cannot have 
-        ///// more than two biological parents.)
-        ///// </summary>
-        //public int MaxNoOfRelatedObjects
-        //{
-        //    get { return _maxNoOfRelatedObjects; }
-        //    protected set { _maxNoOfRelatedObjects = value; }
-        //}
-
-        #endregion Properties
 
         ///<summary>
         /// Returns true where the owning business object has the foreign key for this relationship false otherwise.
@@ -180,7 +134,7 @@ namespace Habanero.BO.ClassDefinition
 		/// <returns>Returns the new relationship that has been created</returns>
 		public override IRelationship CreateRelationship(IBusinessObject owningBo, IBOPropCol lBOPropCol)
 		{
-            Type relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
+            var relationshipBOType = typeof(MultipleRelationship<>).MakeGenericType(this.RelatedObjectClassType);
             return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
 		}
 

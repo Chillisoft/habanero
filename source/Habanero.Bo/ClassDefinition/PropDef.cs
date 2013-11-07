@@ -202,39 +202,6 @@ namespace Habanero.BO.ClassDefinition
         {
         }
 
-//        /// <summary>
-//        /// This constructor is used to create a propdef using property type assembly and class name and other information. 
-//        /// The default value and the property type are loaded when they are needed.
-//        /// </summary>
-//        /// <param name="propertyName">The name of the property (e.g. "surname")</param>
-//        /// <param name="assemblyName">The assembly name of the property type</param>
-//        /// <param name="typeName">The type name of the property type (e.g. "string")</param>
-//        /// <param name="propRWStatus">Rules for how a property can be accessed.
-//        /// See PropReadWriteRule enumeration for more detail.</param>
-//        /// <param name="databaseFieldName">The database field name - this
-//        /// allows you to have a database field name that is different to the
-//        /// property name, which is useful for migrating systems where
-//        /// the database has already been set up.</param>
-//        /// <param name="defaultValueString">The default value that a property 
-//        /// of a new object will be set to</param>
-//        /// <param name="compulsory">Whether this property is a required field or not.</param>
-//        /// <param name="autoIncrementing">Whether this is an auto-incrementing field in the database</param>
-//        /// <param name="length">The maximum length for a string</param>
-//        /// <param name="displayName">The display name for the property</param>
-//        /// <param name="description">The description of the property</param>
-//        public PropDef
-//            (string propertyName, string assemblyName, string typeName, PropReadWriteRule propRWStatus,
-//             string databaseFieldName, string defaultValueString, bool compulsory, bool autoIncrementing, int length,
-//             string displayName, string description)
-//            : this(
-//                propertyName, null, assemblyName, typeName, propRWStatus, databaseFieldName, null, defaultValueString,
-//                compulsory, autoIncrementing, length, displayName, description)
-//        {
-//        }
-
-
-
-
         /// <summary>
         /// This constructor is used to create a propdef using property type assembly and class name and other information. 
         /// The default value and the property type are loaded when they are needed.
@@ -495,7 +462,7 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public string DisplayName
         {
-            get { return _displayName; } //            set { _displayName = value; }
+            get { return _displayName; }
         }
 
         ///<summary>
@@ -735,22 +702,21 @@ namespace Habanero.BO.ClassDefinition
 
             if (this.LookupList is BusinessObjectLookupList)
             {
-                BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
-               // if (list.Criteria == null) return true;//If there are no criteria then the business object will
+                var list = ((BusinessObjectLookupList)this.LookupList);
+                //If there are no criteria then the business object will
                 // definitely be in the list since the business object is the right type.
 
-                //if (BusinessObjectManager.Instance.Contains(propValue.ToString()) )
-                IBusinessObject businessObject = GetlookupBusinessObjectFromObjectManager(propValue);
+                var businessObject = GetlookupBusinessObjectFromObjectManager(propValue);
                 if (businessObject != null)
                 {
                     return CheckBusinessObjectMeetsLookupListCriteria(propValue, businessObject, list, ref errorMessage);
                 }
             }
 
-            Dictionary<string, string> idValueLookupList = this.LookupList.GetIDValueLookupList();
+            var idValueLookupList = this.LookupList.GetIDValueLookupList();
             if (!idValueLookupList.ContainsKey(ConvertValueToString((propValue))))
             {
-                string classNameFull =  this.ClassDef == null? "": this.ClassDef.ClassNameFull;
+                var classNameFull =  this.ClassDef == null? "": this.ClassDef.ClassNameFull;
                 errorMessage += String.Format("'{0} - {1}' invalid since '{2}' is not in the lookup list of available values.", classNameFull,  DisplayName, propValue);
                 return false;
             }
@@ -775,7 +741,7 @@ namespace Habanero.BO.ClassDefinition
                 if (list.Criteria == null) return true;
                 if (list.Criteria.IsMatch(businessObject)) return true;
 
-                string classNameFull = ClassDef == null ? "" : ClassDef.ClassNameFull;
+                var classNameFull = ClassDef == null ? "" : ClassDef.ClassNameFull;
                 errorMessage += String.Format("'{0} - {1}' invalid since '{2}' is not in the lookup list of available values.",
                                               classNameFull, DisplayName, propValue);
                 return false;
@@ -790,18 +756,18 @@ namespace Habanero.BO.ClassDefinition
             if (!this.HasLookupList()) return null;
             if (!(this.LookupList is BusinessObjectLookupList)) return null;
             IBusinessObject businessObject = null;
-            BusinessObjectLookupList list = ((BusinessObjectLookupList)this.LookupList);
+            var list = ((BusinessObjectLookupList)this.LookupList);
             var primaryKeyDef =  ClassDefHelper.GetPrimaryKeyDef(list.LookupBoClassDef, ClassDefinition.ClassDef.ClassDefs);
             if (propValue is Guid && primaryKeyDef.IsGuidObjectID)
             {
-                IBusinessObject objectInManager = BORegistry.BusinessObjectManager.GetObjectIfInManager((Guid)propValue);
+                var objectInManager = BORegistry.BusinessObjectManager.GetObjectIfInManager((Guid)propValue);
                 if (objectInManager != null) return objectInManager;
             }
-            BOPrimaryKey boPrimaryKey = BOPrimaryKey.CreateWithValue((ClassDef) list.LookupBoClassDef, propValue);
+            var boPrimaryKey = BOPrimaryKey.CreateWithValue((ClassDef) list.LookupBoClassDef, propValue);
 
             if (boPrimaryKey != null)
             {
-                IBusinessObject found = BORegistry.BusinessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria()
+                var found = BORegistry.BusinessObjectManager.FindFirst(boPrimaryKey.GetKeyCriteria()
                         , list.LookupBoClassDef.ClassType);
                 businessObject = found;
             }
@@ -829,9 +795,9 @@ namespace Habanero.BO.ClassDefinition
 
         private string GetErrorMessage(object propValue)
         {
-            string displayName = this.DisplayName;
+            var displayName = this.DisplayName;
             if (string.IsNullOrEmpty(displayName)) displayName = GetDisplayName(this.PropertyName);
-            string errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
+            var errorMessage = String.Format("'{0}' for property '{1}' is not valid. ", propValue, displayName);
             errorMessage += "It is not a type of " + this.PropertyTypeName + ".";
             return errorMessage;
         }
@@ -1017,7 +983,7 @@ namespace Habanero.BO.ClassDefinition
         ///<returns></returns>
         public IPropDef Clone()
         {
-            PropDef propDef = new PropDef
+            var propDef = new PropDef
                 (PropertyName, PropertyTypeAssemblyName, PropertyTypeName, ReadWriteRule,
                  DatabaseFieldName, DefaultValueString, Compulsory, AutoIncrementing, Length,
                  DisplayName, Description, KeepValuePrivate)

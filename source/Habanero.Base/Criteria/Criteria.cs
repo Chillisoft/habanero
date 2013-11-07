@@ -464,24 +464,6 @@ namespace Habanero.Base
                                                          , "The operator " + ComparisonOperator + " is not supported by the application");
             }
         }
-/*
-        private static IComparable ConvertDateTimeToday(IComparable y)
-        {
-            if (y is DateTimeToday)
-            {
-                y = DateTimeToday.Value;
-            }
-            return y;
-        }
-
-        private static IComparable ConvertDateTimeNow(IComparable y)
-        {
-            if (y is DateTimeNow)
-            {
-                y = DateTimeNow.Value;
-            }
-            return y;
-        }*/
 
         ///<summary>
         ///Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
@@ -620,7 +602,7 @@ namespace Habanero.Base
             Criteria lastCriteria = null;
             foreach (IBOProp prop in primaryKey)
             {
-                Criteria propCriteria = new Criteria(prop.PropertyName, ComparisonOp.Equals, prop.Value);
+                var propCriteria = new Criteria(prop.PropertyName, ComparisonOp.Equals, prop.Value);
                 lastCriteria = lastCriteria == null
                                    ? propCriteria
                                    : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
@@ -640,13 +622,13 @@ namespace Habanero.Base
         	var relKey = relationship.RelKey;
         	if (relKey.Count == 1)
             {
-                IRelProp relProp = relKey[0];
+                var relProp = relKey[0];
                 return new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
             }
             Criteria lastCriteria = null;
             foreach (IRelProp relProp in relKey)
             {
-                Criteria propCriteria = new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
+                var propCriteria = new Criteria(relProp.RelatedClassPropName, ComparisonOp.Equals, relProp.BOProp.Value);
                 lastCriteria = lastCriteria == null 
                         ? propCriteria 
                         : new Criteria(lastCriteria, LogicalOp.And, propCriteria);
@@ -661,7 +643,6 @@ namespace Habanero.Base
         public bool CannotBeParametrised()
         {
             return !CanBeParametrised();
-//            return (strOp == "IS" || strOp == "IS NOT" || strOp == "NOT IS" || strOp == "IN" || strOp == "NOT IN");
         }
 
         /// <summary>
@@ -729,7 +710,7 @@ namespace Habanero.Base
             if (s == null)
                 throw new ArgumentNullException("s");
 
-            Match match = GuidFormat.Match(s);
+            var match = GuidFormat.Match(s);
 
             if (match.Success)
             {
@@ -792,7 +773,7 @@ namespace Habanero.Base
 
             public override string ToString()
             {
-                List<string> stringValues = new List<string>();
+                var stringValues = new List<string>();
                 foreach (var value in _values)
                 {
                     if (value is string) stringValues.Add("'" + (string)value + "'");

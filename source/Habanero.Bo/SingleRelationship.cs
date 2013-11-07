@@ -321,13 +321,6 @@ namespace Habanero.BO
 
         private TBusinessObject GetRelatedBusinessObjectFromBusinessObjectManager()
         {
-//            BusinessObjectCollection<TBusinessObject> relatedBOCol =
-//                BusinessObjectManager.Instance.Find<TBusinessObject>(_relKey.Criteria);
-//            TBusinessObject relatedBo = null;
-//            if (relatedBOCol.Count == 1)
-//            {
-//                relatedBo = relatedBOCol[0] == relatedBo ? null : relatedBOCol[0];
-//            }
 			return (TBusinessObject)BORegistry.BusinessObjectManager.FindFirst<TBusinessObject>(RelKey.Criteria);
         }
 
@@ -439,7 +432,7 @@ namespace Habanero.BO
         {
             if (relatedObject == null) return;
 
-            IRelationship reverseRelationship = GetReverseRelationship(relatedObject);
+            var reverseRelationship = GetReverseRelationship(relatedObject);
             if (reverseRelationship == null) return;
             //If related Object belongs to this relationship then you do not need to CheckCanAddChild.
             if (!reverseRelationship.RelKey.Criteria.IsMatch(this.OwningBO, false))
@@ -455,7 +448,7 @@ namespace Habanero.BO
 
         private void AddToSingleReverseRelationship(IRelationship reverseRelationship)
         {
-            ISingleRelationship singleRelationship = reverseRelationship as ISingleRelationship;
+            var singleRelationship = reverseRelationship as ISingleRelationship;
 
             if (singleRelationship == null) return;
             RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid
@@ -465,10 +458,10 @@ namespace Habanero.BO
 
         private void AddToMultipleReverseRelationship(IRelationship reverseRelationship, bool isInternalAdd)
         {
-            MultipleRelationshipBase multipleRelationship = reverseRelationship as MultipleRelationshipBase;
+            var multipleRelationship = reverseRelationship as MultipleRelationshipBase;
             if (multipleRelationship != null)
             {
-                IBusinessObjectCollectionInternal colInternal = multipleRelationship.GetLoadedBOColInternal();
+                var colInternal = multipleRelationship.GetLoadedBOColInternal();
                 if (isInternalAdd) colInternal.AddInternal(this.OwningBO);
                 else colInternal.Add(this.OwningBO);
             }
@@ -482,7 +475,7 @@ namespace Habanero.BO
                 RemovedBO = null;
                 return;
             }
-            IRelationship reverseRelationship = GetReverseRelationship(previousRelatedBO);
+            var reverseRelationship = GetReverseRelationship(previousRelatedBO);
             if (reverseRelationship != null)
             {
                 reverseRelationship.RelationshipDef.CheckCanRemoveChild(this.OwningBO);
@@ -507,7 +500,7 @@ namespace Habanero.BO
 
         private void RemoveFromSingleReverseRelationship(IRelationship reverseRelationship)
         {
-            SingleRelationshipBase singleReverseRelationship = reverseRelationship as SingleRelationshipBase;
+            var singleReverseRelationship = reverseRelationship as SingleRelationshipBase;
             if (singleReverseRelationship == null) return;
 
             RelationshipUtils.CheckCorrespondingSingleRelationshipsAreValid(this, singleReverseRelationship);
@@ -516,7 +509,7 @@ namespace Habanero.BO
 
         private void RemoveFromMultipleReverseRelationship(IRelationship reverseRelationship)
         {
-            MultipleRelationshipBase multipleReverseRelationship = reverseRelationship as MultipleRelationshipBase;
+            var multipleReverseRelationship = reverseRelationship as MultipleRelationshipBase;
             if (multipleReverseRelationship == null) return;
             IBusinessObjectCollection colInternal = multipleReverseRelationship.GetLoadedBOColInternal();
             if (colInternal.Contains(this.OwningBO)) colInternal.Remove(this.OwningBO);
@@ -529,7 +522,7 @@ namespace Habanero.BO
             {
 				foreach (RelProp relProp in relKey)
                 {
-                    object relatedObjectValue = _relatedBo == null
+                    var relatedObjectValue = _relatedBo == null
                                                     ? null
                                                     : _relatedBo.GetPropertyValue(relProp.RelatedClassPropName);
                     _owningBo.SetPropertyValue(relProp.OwnerPropertyName, relatedObjectValue);
@@ -539,7 +532,7 @@ namespace Habanero.BO
             {
 				foreach (RelProp relProp in relKey)
                 {
-                    object owningBOValue = _owningBo == null
+                    var owningBOValue = _owningBo == null
                                                ? null
                                                : _owningBo.GetPropertyValue(relProp.OwnerPropertyName);
                     if (_relatedBo != null) _relatedBo.SetPropertyValue(relProp.RelatedClassPropName, owningBOValue);

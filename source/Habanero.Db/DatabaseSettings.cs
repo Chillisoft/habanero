@@ -173,16 +173,7 @@ namespace Habanero.DB
         private void SetValue(string settingName, string settingValue)
         {
             settingName = settingName.ToUpper();
-            bool hasCurrentValue = HasSetting(settingName);
-            //try
-            //{
-            //    Convert.ToString(GetValue(settingName, DateTime.Now));
-            //    hasCurrentValue = true;
-            //}
-            //catch (UserException)
-            //{
-            //    hasCurrentValue = false;
-            //}
+            var hasCurrentValue = HasSetting(settingName);
             SqlStatement statement;
             if (hasCurrentValue)
             {
@@ -237,7 +228,7 @@ namespace Habanero.DB
         private bool RetrieveSettingValue(string settingName, DateTime date, out object value)
         {
             settingName = settingName.ToUpper();
-            Setting setting = (Setting) _cachedSettings[settingName];
+            var setting = (Setting) _cachedSettings[settingName];
             if (setting != null)
             {
                 if (!setting.IsExpired())
@@ -247,7 +238,7 @@ namespace Habanero.DB
                 }
                 _cachedSettings.Remove(settingName);
             }
-            SqlStatement statement = CreateSelectStatement(settingName, date);
+            var statement = CreateSelectStatement(settingName, date);
             IDataReader reader = null;
             try
             {
@@ -283,7 +274,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateSelectStatement(string settingName, DateTime date)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            var statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("select SettingValue from " + _tableName + " where SettingName = ");
             statement.AddParameterToStatement(settingName);
             statement.Statement.Append(" and (StartDate <= ");
@@ -304,7 +295,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateUpdateStatementNoDate(string settingName, string settingValue)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            var statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("update " + _tableName + " set SettingValue = ");
             statement.AddParameterToStatement(settingValue);
             statement.Statement.Append(" where SettingName = ");
@@ -320,7 +311,7 @@ namespace Habanero.DB
         /// <returns>Returns a sql statement object</returns>
         private SqlStatement CreateInsertStatement(string settingName, string settingValue)
         {
-            SqlStatement statement = new SqlStatement(DatabaseConnection.CurrentConnection);
+            var statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append("insert into " + _tableName + " (SettingName, SettingValue, StartDate, EndDate) ");
             statement.Statement.Append("values (");
             statement.AddParameterToStatement(settingName);
@@ -352,14 +343,6 @@ namespace Habanero.DB
                 _time = time;
                 _value = value;
             }
-//
-//            /// <summary>
-//            /// Returns the time value held
-//            /// </summary>
-//            public DateTime Time
-//            {
-//                get { return _time; }
-//            }
 
             /// <summary>
             /// Returns the setting value held

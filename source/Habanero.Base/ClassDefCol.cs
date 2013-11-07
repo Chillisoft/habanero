@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-//using System.Linq;
 using Habanero.Base.Exceptions;
 using Habanero.Util;
 
@@ -272,7 +271,6 @@ namespace Habanero.Base
                     return classDef; }
             }
             return null;
-           // return _classDefs.Values.FirstOrDefault(classDef => classDef.ClassName == className);
         }
 
         #region Singleton ClassDefCol
