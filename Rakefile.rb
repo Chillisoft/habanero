@@ -27,7 +27,7 @@ end
 
 $binaries_baselocation = "bin"
 $nuget_baselocation = "nugetArtifacts"
-$app_version ='9.9.9.999'
+
 #------------------------build settings--------------------------
 require 'rake-settings.rb'
 
@@ -43,42 +43,27 @@ msbuild_settings = {
 
 #------------------------project settings------------------------
 $solution = 'source/Habanero.sln'
-$major_version = ''
-$minor_version = ''
-$patch_version = ''
+
 #______________________________________________________________________________
 #---------------------------------TASKS----------------------------------------
 
 desc "Runs the build task"
-task :default, [:major, :minor, :patch] => [:setupversion, :build]
+task :default => [:build]
 
 desc "Builds Habanero, including tests and pushes to local nuget folder"
 task :build => [:installNugetPackages, :build_only, :test, :nuget]
 
 desc "Builds Habanero, including tests"
-task :build_test => [:clean, :installNugetPackages, :set_assembly_version, :msbuild, :copy_to_nuget, :test]
+task :build_test => [:clean, :installNugetPackages, :msbuild, :test]
 
 desc "Builds Habanero"
-task :build_only => [:clean, :set_assembly_version, :msbuild, :copy_to_nuget]
+task :build_only => [:clean, :msbuild, :copy_to_nuget]
 
 desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
 task :build_with_coverage => [:installNugetPackages, :build_only, :test_with_coverage, :nuget]
 
 desc "Build with sonar (stats build)"
 task :build_with_sonar => [:build_only, :sonar]
-
-desc "Setup Versions"
-task :setupversion,:major ,:minor,:patch do |t, args|
-	puts cyan("Setup Versions")
-	args.with_defaults(:major => "0")
-	args.with_defaults(:minor => "0")
-	args.with_defaults(:patch => "0000")
-	$major_version = "#{args[:major]}"
-	$minor_version = "#{args[:minor]}"
-	$patch_version = "#{args[:patch]}"
-	$app_version = "#{$major_version}.#{$minor_version}.#{$patch_version}.0"
-	puts cyan("Assembly Version #{$app_version}")
-end
 
 desc "Pushes Habanero into the local nuget folder"
 task :nuget => [:publishBaseNugetPackage, 
@@ -99,16 +84,6 @@ task :clean do
 	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Debug"
 	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Release"
 	FileSystem.ensure_dir_exists $nuget_baselocation
-end
-
-
-task :set_assembly_version do
-	puts green("Setting Shared AssemblyVersion to: #{$app_version}")
-	file_path = "source/Common/AssemblyInfoShared.cs"
-	outdata = File.open(file_path).read.gsub(/"9.9.9.999"/, "\"#{$app_version}\"")
-	File.open(file_path, 'w') do |out|
-		out << outdata
-	end	
 end
 
 desc "Builds the solution with msbuild"
@@ -138,20 +113,20 @@ dotcover :test_with_coverage do |dc|
 end
 
 def nugetassemblieswithpdb
-	["#{$binaries_baselocation}/#{$build_configuration}\Habanero.Base.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.BO.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Console.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.BO.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.Structure.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.DB.dll",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Base.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.BO.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Console.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.BO.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.Structure.pdb",
-	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.DB.pdb",]
+	['bin\Habanero.Base.dll',
+	'bin\Habanero.BO.dll',
+	'bin\Habanero.Console.dll',
+	'bin\Habanero.Test.dll',
+	'bin\Habanero.Test.BO.dll',
+	'bin\Habanero.Test.Structure.dll',
+	'bin\Habanero.Test.DB.dll',
+	'bin\Habanero.Base.pdb',
+	'bin\Habanero.BO.pdb',
+	'bin\Habanero.Console.pdb',
+	'bin\Habanero.Test.pdb',
+	'bin\Habanero.Test.BO.pdb',
+	'bin\Habanero.Test.Structure.pdb',
+	'bin\Habanero.Test.DB.pdb',]
 end
 
 def copy_nuget_files_to location
