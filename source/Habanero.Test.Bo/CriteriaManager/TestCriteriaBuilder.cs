@@ -77,6 +77,53 @@ namespace Habanero.Test.BO.CriteriaManager
         // ReSharper restore ConvertToConstant.Local
 
         [Test]
+        public void BinaryExpression_Equals_MethodCall_WithNoParameters()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.Equals;
+            const string val = "hello";
+            var expectedCriteria = Criteria.Create<MyBO, string>(bo => bo.TestProp, op, val);
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestProp == val.ToString()).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void BinaryExpression_Equals_MethodCall_WithConstantParameter()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.Equals;
+            var val = new DateTime(2013, 09, 30);
+            var expectedCriteria = Criteria.Create<MyBO, DateTime>(bo => bo.TestDateTime, op, val.AddDays(1));
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestDateTime == val.AddDays(1)).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void BinaryExpression_Equals_MethodCall_WithNestedMethodCallParameter()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var op = Criteria.ComparisonOp.Equals;
+            var val = new DateTime(2013, 09, 30);
+            var expectedCriteria = Criteria.Create<MyBO, DateTime>(bo => bo.TestDateTime, op, val.AddDays(1));
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestDateTime == val.AddDays(Return1())).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        private int Return1()
+        {
+            return 1;
+        }
+
+        [Test]
         public void BinaryExpression_NullableProperty()
         {
             //---------------Set up test pack-------------------
