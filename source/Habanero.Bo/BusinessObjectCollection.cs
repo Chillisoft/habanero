@@ -22,12 +22,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
+using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
+using Habanero.BO.CriteriaManager;
 using Habanero.Util;
 
 namespace Habanero.BO
@@ -1669,6 +1672,25 @@ namespace Habanero.BO
                 }
             }
             return clonedCol;
+        }
+
+        /// <summary>
+        /// Sorts the collection by the property specified. The second parameter
+        /// indicates whether this property is a business object property or
+        /// whether it is a property defined in the code.  For example, a full name
+        /// would be a code-calculated property that is not itself a business
+        /// object property, even though it uses the BO properties of first name
+        /// and surname, and the argument would thus be set as false.
+        /// </summary>
+        /// <param name="sortExpression">A Linq expression defining the property name to sort on</param>
+        /// <param name="isBoProperty">Whether the property is a business
+        /// object property</param>
+        /// <param name="isAscending">Whether to sort in ascending order, set
+        /// false for descending order</param>
+        public virtual void Sort<TResult>(Expression<Func<TBusinessObject, TResult>> sortExpression, bool isBoProperty, bool isAscending)
+        {
+            var propertyName = ReflectionUtilities.GetPropertyName(sortExpression);
+            Sort(propertyName, isBoProperty, isAscending);
         }
 
         /// <summary>
