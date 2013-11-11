@@ -238,6 +238,11 @@ namespace Habanero.Base
                 var fieldExpression = (MemberExpression)binaryExpression.Right;
                 finalValue = GetValueFromMemberExpression(fieldExpression);
             }
+            else if (binaryExpression.Right is MethodCallExpression)
+            {
+                var methodCallExpression = (MethodCallExpression)binaryExpression.Right;
+                finalValue = Expression.Lambda(methodCallExpression).Compile().DynamicInvoke();
+            }
             else if (binaryExpression.Right is UnaryExpression)
             {
                 var unaryExpression = (UnaryExpression) binaryExpression.Right;

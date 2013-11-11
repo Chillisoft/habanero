@@ -157,6 +157,11 @@ namespace Habanero.Test
             set { this.SetPropertyValue("TestDateTimeNullable", value); }
 	    }
 
+        public DateTime TestDateTime
+        {
+            get { return (DateTime)this.GetPropertyValue("TestDateTime"); }
+            set { this.SetPropertyValue("TestDateTime", value); }
+        }
 
 	    public string TestProp2
 		{
