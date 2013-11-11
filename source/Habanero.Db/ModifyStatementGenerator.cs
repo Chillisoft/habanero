@@ -36,7 +36,10 @@ namespace Habanero.DB
         {
             foreach (BOProp prop in propsToIncludeTemp)
             {
-                if (prop.PropDef.Persistable) propsToInclude.Add(prop);
+                if (prop.PropDef.Persistable && prop.PropDef.ReadWriteRule != PropReadWriteRule.ReadOnly)
+                {
+                    propsToInclude.Add(prop);
+                }
             }
         }
     }

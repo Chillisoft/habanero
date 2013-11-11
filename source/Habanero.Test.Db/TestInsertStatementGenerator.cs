@@ -127,6 +127,19 @@ namespace Habanero.Test.DB.SqlGeneration
         }       
         
         [Test]
+        public void TestInsertStatementExcludesReadOnlyProps()
+        {
+            ClassDef.ClassDefs.Clear();
+            const string newPropName = "NewProp";
+            MockBO bo = StatementGeneratorTestHelper.CreateMockBOWithExtraReadOnlyProp(newPropName);
+
+            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            var statementCol = gen.Generate();
+            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
+            Assert.IsFalse(statement.Statement.ToString().Contains(newPropName));
+        }       
+        
+        [Test]
         public void TestInsertStatementExcludesNonPersistable_InheritanceProps()
         {
             //---------------Set up test pack-------------------
