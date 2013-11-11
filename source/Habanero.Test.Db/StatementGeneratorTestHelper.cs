@@ -34,5 +34,13 @@ namespace Habanero.Test.BO.SqlGeneration
             newClassDef.PropDefcol.Add(def);
             return new MockBO(newClassDef);
         }
+
+        internal static MockBO CreateMockBOWithExtraReadOnlyProp(string newPropName)
+        {
+            ClassDef newClassDef = new MockBO().ClassDef.Clone();
+            PropDef def = new PropDef(newPropName, typeof (string), PropReadWriteRule.ReadOnly, "");
+            newClassDef.PropDefcol.Add(def);
+            return new MockBO(newClassDef);
+        }
     }
 }
