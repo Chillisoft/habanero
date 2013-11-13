@@ -31,7 +31,37 @@ namespace Habanero.Test.DB
             Assert.AreEqual(expectedPercentage, propVal);
         }
 
-        [Test]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
+        [TestCase]
         public void Constructor_SetsTotalStepsToSpecifiedValue()
         {
             //---------------Set up test pack-------------------
@@ -42,7 +72,7 @@ namespace Habanero.Test.DB
             
             //---------------Assert Precondition----------------
             Assert.AreNotEqual(0, step);
-            Assert.That(totalSteps, Is.GreaterThan(step));
+            Assert.That(totalSteps, Is.GreaterThanOrEqualTo(step));
             Assert.IsNotNull(migrator);
 
             //---------------Execute Test ----------------------
