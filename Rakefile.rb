@@ -95,9 +95,9 @@ desc "Cleans build folders"
 task :clean do
 	puts cyan("Cleaning build folders")
 	FileUtils.rm_rf $binaries_baselocation
-	FileUtils.rm_rf $nuget_baselocation	
 	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Debug"
 	FileSystem.ensure_dir_exists "#{$binaries_baselocation}/Release"
+	FileUtils.rm_rf $nuget_baselocation	
 	FileSystem.ensure_dir_exists $nuget_baselocation
 end
 
