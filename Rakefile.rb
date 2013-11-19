@@ -145,6 +145,7 @@ def nugetassemblieswithpdb
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.BO.dll",
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.Structure.dll",
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Test.DB.dll",
+	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.DB.dll",
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Base.pdb",
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.BO.pdb",
 	"#{$binaries_baselocation}/#{$build_configuration}\Habanero.Console.pdb",
@@ -162,6 +163,7 @@ def copy_nuget_files_to location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.BO.dll", location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.Structure.dll", location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Test.DB.dll", location
+	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.DB.dll", location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Base.pdb", location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.BO.pdb", location
 	FileUtils.cp "#{$binaries_baselocation}/#{$build_configuration}/Habanero.Console.pdb", location
