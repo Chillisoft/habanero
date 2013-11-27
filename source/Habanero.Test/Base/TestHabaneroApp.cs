@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.Console;
 using Habanero.DB;
 using Habanero.Util;
@@ -29,6 +30,12 @@ namespace Habanero.Test.Base
     [TestFixture]
     public class TestHabaneroApp
     {
+        [SetUp]
+        public void Setup()
+        {
+            BORegistry.DataAccessor = null;
+        }
+
         [Test]
         public void TestDefaultValues()
         {
