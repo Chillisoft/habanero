@@ -57,10 +57,10 @@ namespace Habanero.Test.BO
              var expectedDataAccessorForThread = new DataAccessorInMemory();
              var thread = new Thread(() => dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread));
              thread.Start();
-             thread.Join();
              //---------------Assert preconditions---------------
              Assert.AreSame(expectedDataAccessorForThread, dataAccessor.GetDataAccessorForThread(thread));
              //---------------Execute Test ----------------------
+             thread.Join();
              dataAccessor.ClearDeadThreads();
              //---------------Test Result -----------------------
              try
