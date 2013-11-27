@@ -1910,6 +1910,29 @@ namespace Habanero.Test
 			return itsClassDef;
 		}
 
+	    public static IClassDef LoadClassDefWithRelationshipWithTwoProperties()
+	    {
+            XmlClassLoader itsLoader = CreateXmlClassLoader();
+            itsClassDef =
+                itsLoader.LoadClass(
+                    @"
+				<class name=""MyRelatedBo"" assembly=""Habanero.Test"" table=""MyRelatedBo"">
+					<property  name=""MyRelatedBoID"" type=""Guid""/>
+					<property  name=""MyRelatedTestProp"" />
+					<property  name=""MyBoID"" type=""Guid""/>
+					<primaryKey>
+						<prop name=""MyRelatedBoID"" />
+					</primaryKey>
+					<relationship name=""MyRelationship"" type=""single"" relatedClass=""MyBO"" relatedAssembly=""Habanero.Test"">
+						<relatedProperty property=""MyBoID"" relatedProperty=""MyBoID"" />
+						<relatedProperty property=""MyRelatedTestProp"" relatedProperty=""TestProp"" />
+					</relationship>
+				</class>
+			");
+            ClassDef.ClassDefs.Add(itsClassDef);
+            return itsClassDef;
+	    }
+
 		protected static XmlClassLoader CreateXmlClassLoader()
 		{
 			return new XmlClassLoader(new DtdLoader(), new DefClassFactory());
@@ -2080,74 +2103,6 @@ namespace Habanero.Test
 			return itsClassDef;
 		}
 	}
-
-//    /// <summary>
-//    /// MyBoNotDeletable used for testing the when Deletable set to false. 
-//    /// The architecture should prevent deletion.
-//    /// </summary>
-//    public class MyBoNotDeletable : BusinessObject
-//    {
-
-
-//        private bool _deletable = false;
-//        public MyBoNotDeletable() {}
-
-//        public MyBoNotDeletable(IDatabaseConnection conn) : base(conn) { }
-
-//        protected override ClassDef ConstructClassDef()
-//        {
-//            return _classDef;
-//        }
-
-//        public string MyName
-//        {
-//            get { return "MyBoNotDeletable"; }
-//        }
-
-//        public Guid MyBoNotDeletableID
-//        {
-//            get
-//            {
-//                return (Guid)this.GetPropertyValue("MyBoNotDeletableID");
-//            }
-//        }
-
-//        public static ClassDef LoadDefaultClassDef()
-//        {
-//            XmlClassLoader itsLoader = CreateXmlClassLoader();
-//            ClassDef itsClassDef =
-//                itsLoader.LoadClass(
-//                    @"
-//				<class name=""MyBoNotDeletable"" assembly=""Habanero.Test"">
-//					<property  name=""MyBoNotDeletableID"" />
-//					<property  name=""TestProp"" />
-//					<primaryKey>
-//						<prop name=""MyBoNotDeletableID"" />
-//					</primaryKey>
-//					<ui>
-//					</ui>                   
-//				</class>
-//			");
-//            ClassDef.ClassDefs.Add(itsClassDef);
-//            return itsClassDef;
-//        }
-//        public bool Deletable
-//        {
-//            get { return _deletable; }
-//            set { _deletable = value; }
-//        }
-//        ///<summary>
-//        /// This method can be overridden by a class that inherits from Business object.
-//        /// The method allows the Business object developer to add customised rules that determine.
-//        /// The Deletable state of a business object. E.g. Invoices can never be delted once created. 
-//        /// Objects cannot be deteled once they have reached certain stages e.g. a customer order after it is accepted.
-//        ///</summary>
-//        public override bool IsDeletable(out string message)
-//        {
-//            message = "";
-//            return  _deletable; 
-//        }
-	//}
 
 	/// <summary>
 	/// MyBoNotEditableDeletable used for testing the when Editable set to false. 

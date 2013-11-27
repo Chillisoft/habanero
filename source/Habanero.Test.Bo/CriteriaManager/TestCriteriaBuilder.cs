@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 
@@ -35,6 +36,7 @@ namespace Habanero.Test.BO.CriteriaManager
         public void Setup()
         {
             ClassDef.ClassDefs.Clear();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [TestFixtureSetUp] 
@@ -270,7 +272,7 @@ namespace Habanero.Test.BO.CriteriaManager
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
-   
+        
         [Test]
         public void UnaryExpression_Like_Contains()
         {
@@ -676,5 +678,74 @@ namespace Habanero.Test.BO.CriteriaManager
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCriteria, criteria);
         }
+
+        [Test]
+        public void BinaryExpression_WithRelationship_ShouldCreateCriteriaOnRelationshipFields()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithAssociationRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo1 = new MyBO();
+            var expectedCriteria = new Criteria("MyRelationship.MyBoID", Criteria.ComparisonOp.Equals, bo1.ID.GetAsGuid());
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyRelatedBo>(bo => bo.MyRelationship == bo1).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void BinaryExpression_WithRelationshipWithTwoProps_ShouldCreateCriteriaOnAllRelationshipFields()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithAssociationRelationship();
+            MyRelatedBo.LoadClassDefWithRelationshipWithTwoProperties();
+            const string testValue = "test value";
+            var bo1 = new MyBO() { TestProp = testValue };
+            var expectedCriteria =
+                new Criteria(
+                    new Criteria("MyRelationship.MyBoID", Criteria.ComparisonOp.Equals, bo1.ID.GetAsGuid()),
+                    Criteria.LogicalOp.And,
+                    new Criteria("MyRelationship.MyRelatedTestProp", Criteria.ComparisonOp.Equals, testValue)
+                );
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyRelatedBo>(bo => bo.MyRelationship == bo1).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void BinaryExpression_WithRelationship_NotEquals_ShouldCreateCriteriaOnRelationshipFields()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithAssociationRelationship();
+            MyRelatedBo.LoadClassDef();
+            var bo1 = new MyBO();
+            var expectedCriteria = new Criteria("MyRelationship.MyBoID", Criteria.ComparisonOp.NotEquals, bo1.ID.GetAsGuid());
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyRelatedBo>(bo => bo.MyRelationship != bo1).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
+        [Test]
+        public void BinaryExpression_WithRelationshipWithTwoProps_NotEquals_ShouldCreateCriteriaOnRelationshipFields()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadClassDefWithAssociationRelationship();
+            MyRelatedBo.LoadClassDefWithRelationshipWithTwoProperties();
+            const string testValue = "test value";
+            var bo1 = new MyBO() { TestProp = testValue };
+            var expectedCriteria =
+                new Criteria(
+                    new Criteria("MyRelationship.MyBoID", Criteria.ComparisonOp.NotEquals, bo1.ID.GetAsGuid()),
+                    Criteria.LogicalOp.Or,
+                    new Criteria("MyRelationship.MyRelatedTestProp", Criteria.ComparisonOp.NotEquals, testValue)
+                );
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyRelatedBo>(bo => bo.MyRelationship != bo1).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
+        }
+
     }
 }

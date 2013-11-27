@@ -256,7 +256,44 @@ namespace Habanero.Base
 
             if (finalValue == null && comparisonOp == Criteria.ComparisonOp.Equals) comparisonOp = Criteria.ComparisonOp.Is;
             if (finalValue == null && comparisonOp == Criteria.ComparisonOp.NotEquals) comparisonOp = Criteria.ComparisonOp.IsNot;
+
+            var memberInfo = memberExpression.Member;
+            var propInfo = memberInfo as PropertyInfo;
+            var type = propInfo.PropertyType;
+            if (typeof(IBusinessObject).IsAssignableFrom(type))
+            {
+                return CreateCriteriaForRelationship(memberInfo, comparisonOp, finalValue);
+            }
+            
             return new Criteria(memberExpression.Member.Name, comparisonOp, finalValue);
+        }
+
+        private Criteria CreateCriteriaForRelationship(MemberInfo memberInfo, Criteria.ComparisonOp comparisonOp, object finalValue)
+        {
+            var relationshipName = memberInfo.Name;
+            var classDef = ClassDefCol.GetColClassDef()[memberInfo.DeclaringType];
+            var relationshipDef = classDef.GetRelationship(relationshipName);
+            var relatedObject = finalValue as IBusinessObject;
+            Criteria criteria = null;
+            var logicalOp = comparisonOp == Criteria.ComparisonOp.Equals
+                        ? Criteria.LogicalOp.And
+                        : Criteria.LogicalOp.Or;
+            foreach (var relPropDef in relationshipDef.RelKeyDef)
+            {
+                var propertyCriteria = new Criteria(
+                        relationshipName + "." + relPropDef.OwnerPropertyName,
+                        comparisonOp,
+                        relatedObject.GetPropertyValue(relPropDef.RelatedClassPropName)
+                    );
+
+                if (criteria == null)
+                    criteria = propertyCriteria;
+                else
+                {
+                    criteria = new Criteria(criteria, logicalOp, propertyCriteria);
+                }
+            }
+            return criteria;
         }
 
         private object GetValueFromMemberExpression(MemberExpression fieldExpression)
