@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 13.00
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.BO", "Habanero.Bo\Habanero.BO.csproj", "{9ED22DDE-ED14-43CA-807A-D0A42DFBF322}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.DB", "Habanero.Db\Habanero.DB.csproj", "{80FEC63C-DBD7-4DAE-882D-9CB93F738B48}"
