@@ -31,8 +31,6 @@ namespace Habanero.Test.BO.CriteriaManager
     [TestFixture]
     public class TestCriteriaBuilder
     {
-        private CriteriaBuilder Builder { get; set; }
-
         [SetUp]
         public void Setup()
         {
@@ -121,6 +119,21 @@ namespace Habanero.Test.BO.CriteriaManager
         private int Return1()
         {
             return 1;
+        }
+
+        [Test]
+        public void BinaryExpression_Equals_PropertyGet_ShouldEvaluateProperty()
+        {
+            //---------------Set up test pack-------------------
+            MyBO.LoadDefaultClassDef();
+            var bo2 = new MyBO();
+            bo2.TestProp = "testvalue";
+            var op = Criteria.ComparisonOp.Equals;
+            var expectedCriteria = Criteria.Create<MyBO, string>(bo => bo.TestProp, op, bo2.TestProp);
+            //---------------Execute Test ----------------------
+            var criteria = Criteria.Expr<MyBO>(bo => bo.TestProp == bo2.TestProp).Build();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expectedCriteria, criteria);
         }
 
         [Test]

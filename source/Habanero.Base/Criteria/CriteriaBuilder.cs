@@ -261,13 +261,7 @@ namespace Habanero.Base
 
         private object GetValueFromMemberExpression(MemberExpression fieldExpression)
         {
-            var constantExpression = fieldExpression.Expression as ConstantExpression;
-            if (constantExpression != null)
-            {
-                var fieldInfo = (FieldInfo) fieldExpression.Member;
-                return fieldInfo.GetValue(constantExpression.Value);
-            }
-            return null;
+            return Expression.Lambda(fieldExpression).Compile().DynamicInvoke();
         }
 
         public class CriteriaBuilderAnd : CriteriaBuilder
