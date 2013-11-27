@@ -23,6 +23,7 @@ using System.Collections;
 using System.Data;
 using System.Linq;
 using Habanero.Base;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
@@ -35,20 +36,22 @@ namespace Habanero.Test.Util
 	/// This Test Class tests the functionality of the ByteString custom property class.
 	/// </summary>
 	[TestFixture]
-	public class TestByteString : TestUsingDatabase
+	public class TestByteString 
 	{
-		private readonly IClassDef _classDef;
+		private IClassDef _classDef;
 
 		//These unicode bytes spell 'test':   t - 116, e - 101, s - 115, t - 116
 		private readonly byte[] itsByteArrSpelling_test = { 116, 0, 101, 0, 115, 0, 116, 0 };
 
-		public TestByteString()
-		{
-			ClassDef.ClassDefs.Clear();
-			var loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
-			_classDef =
-				loader.LoadClass(
-					@"
+	    [TestFixtureSetUp]
+	    public void SetupFixture()
+	    {
+	        TestUsingDatabase.SetupDBDataAccessor();
+            ClassDef.ClassDefs.Clear();
+            var loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
+            _classDef =
+                loader.LoadClass(
+                    @"
 				<class name=""MyBO"" assembly=""Habanero.Test"">
 					<property  name=""MyBoID"" type=""Guid"" />
 					<property  name=""TestProp"" type=""Habanero.Util.ByteString"" assembly=""Habanero.Base"" />
@@ -58,10 +61,9 @@ namespace Habanero.Test.Util
 					</primaryKey>
 				</class>
 			");
-			ClassDef.ClassDefs.Add(_classDef);
-			base.SetupDBConnection();
-		}
+            ClassDef.ClassDefs.Add(_classDef);
 
+	    }
 		[Test]
 		public void TestLoadingConstructor()
 		{

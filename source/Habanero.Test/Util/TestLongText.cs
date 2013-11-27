@@ -37,12 +37,14 @@ namespace Habanero.Test.Util
     /// This Test Class tests the functionality of the LongText custom property class.
     /// </summary>
     [TestFixture]
-    public class TestLongText : TestUsingDatabase
+    public class TestLongText
     {
-        private readonly IClassDef _itsClassDef;
+        private IClassDef _itsClassDef;
 
-        public TestLongText()
+        [TestFixtureSetUp]
+        public void SetupFixture()
         {
+            TestUsingDatabase.SetupDBDataAccessor();
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _itsClassDef = loader.LoadClass
@@ -56,7 +58,6 @@ namespace Habanero.Test.Util
 				</class>
 			");
             ClassDef.ClassDefs.Add(_itsClassDef);
-            base.SetupDBConnection();
         }
 
         //[Test]
