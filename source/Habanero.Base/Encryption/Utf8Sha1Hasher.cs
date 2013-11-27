@@ -29,6 +29,11 @@ namespace Habanero.Base
     ///</summary>
     public class Utf8Sha1Hasher : IHasher
     {
+        /// <summary>
+        /// Creates a Hash of a UTF8 string using Sha1
+        /// </summary>
+        /// <param name="value">The string to hash</param>
+        /// <returns>The hashed string as a Base64 string</returns>
         public string HashString(string value)
         {
             if (value == null) value = "";

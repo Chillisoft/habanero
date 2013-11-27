@@ -4,14 +4,29 @@ using System.Linq;
 
 namespace Habanero.Base.Data
 {
+    /// <summary>
+    /// Sorts a <see cref="IQueryResult"/> using an <see cref="IOrderCriteria"/>
+    /// </summary>
     public interface IQueryResultSorter
     {
+        /// <summary>
+        /// Sorts a <see cref="IQueryResult"/> using an <see cref="IOrderCriteria"/>
+        /// </summary>
+        /// <param name="queryResult"></param>
+        /// <param name="orderCriteria"></param>
         void Sort(IQueryResult queryResult, IOrderCriteria orderCriteria);
     }
 
+    /// <summary>
+    /// Used for sorting a <see cref="IQueryResult"/>
+    /// </summary>
     public class QueryResultSorter : IQueryResultSorter
     {
-
+        /// <summary>
+        /// Sorts a <see cref="IQueryResult"/> using an <see cref="IOrderCriteria"/>
+        /// </summary>
+        /// <param name="queryResult"></param>
+        /// <param name="orderCriteria"></param>
         public void Sort(IQueryResult queryResult, IOrderCriteria orderCriteria)
         {
             queryResult.Rows.Sort(new RowComparer(orderCriteria, queryResult));

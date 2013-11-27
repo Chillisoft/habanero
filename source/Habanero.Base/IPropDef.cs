@@ -101,7 +101,7 @@ namespace Habanero.Base
         bool Persistable { get; set; }
 
         /// <summary>
-        /// The <see cref="IDataMapper"/> used to parse, compare and convert values to the associated <see cref="PropertyType"/>.
+        /// The <see cref="IDataMapper"/> used to parse, compare and convert values to the associated <see cref="ISingleValueDef.PropertyType"/>.
         /// </summary>
         IDataMapper DataMapper { get; }
 

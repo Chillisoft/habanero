@@ -31,12 +31,12 @@ namespace Habanero.Base.DataMappers
     public class GeneralDataMapper : DataMapper
     {
         private readonly Type _targetType;
-        protected static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(GeneralDataMapper));
+        private static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(GeneralDataMapper));
 
         ///<summary>
-        /// Creates the Generalised Data Mapper with the appropriate propDef.
+        /// Creates the Generalised Data Mapper with the appropriate targetType.
         ///</summary>
-        ///<param name="propDef"></param>
+        ///<param name="targetType">The target type for mapping</param>
         public GeneralDataMapper(Type targetType)
         {
             if (targetType == null) throw new ArgumentNullException("targetType");

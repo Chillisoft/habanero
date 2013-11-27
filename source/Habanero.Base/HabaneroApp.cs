@@ -31,6 +31,10 @@ namespace Habanero.Base
     /// </summary>
     public abstract class HabaneroApp
     {
+        /// <summary>
+        /// The application version upgrader. Override this if you want to perform
+        /// upgrade maneuvres on startup.
+        /// </summary>
         protected IApplicationVersionUpgrader _applicationVersionUpgrader;
 
         /// <summary>
@@ -110,6 +114,10 @@ namespace Habanero.Base
             log.Log("---------------------------------------------------------------------", LogCategory.Debug);
         }
 
+        /// <summary>
+        /// Sets up logging using Log4net. If you want to use your own logging component override this.
+        /// </summary>
+        /// <exception cref="XmlException"></exception>
         protected virtual void SetupLogging()
         {
             try
@@ -126,6 +134,9 @@ namespace Habanero.Base
         }
 
 
+        /// <summary>
+        /// Sets the GlobalRegistry ApplicationName and ApplicationVersion from AppName and AppVersion.
+        /// </summary>
         protected void SetupApplicationNameAndVersion()
         {
             GlobalRegistry.ApplicationName = AppName;

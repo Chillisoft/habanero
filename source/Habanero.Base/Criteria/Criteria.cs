@@ -177,12 +177,12 @@ namespace Habanero.Base
             InitFieldCriteria(field, comparisonOp, value);
         }
 
-        protected void InitFieldCriteria(string propName, ComparisonOp comparisonOp, object value)
+        private void InitFieldCriteria(string propName, ComparisonOp comparisonOp, object value)
         {
             InitFieldCriteria(QueryField.FromString(propName), comparisonOp, value);
         }
 
-        protected void InitFieldCriteria(QueryField field, ComparisonOp comparisonOp, object value)
+        private void InitFieldCriteria(QueryField field, ComparisonOp comparisonOp, object value)
         {
             Field = field;
             ComparisonOperator = comparisonOp;
@@ -771,6 +771,13 @@ namespace Habanero.Base
 
             #endregion
 
+            /// <summary>
+            /// Returns a string that represents the current object.
+            /// </summary>
+            /// <returns>
+            /// A string that represents the current object.
+            /// </returns>
+            /// <filterpriority>2</filterpriority>
             public override string ToString()
             {
                 var stringValues = new List<string>();
@@ -783,6 +790,14 @@ namespace Habanero.Base
                 return "(" + String.Join(", ", stringValues.ToArray()) + ")";
             }
 
+            /// <summary>
+            /// Returns an enumerator that iterates through a collection.
+            /// Iterates through the values in the Criteria.
+            /// </summary>
+            /// <returns>
+            /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
+            /// </returns>
+            /// <filterpriority>2</filterpriority>
             public IEnumerator GetEnumerator()
             {
                 return _values.GetEnumerator();
@@ -790,6 +805,15 @@ namespace Habanero.Base
         }
 
         //Peter: busy working on this stuff... work in progress...
+        /// <summary>
+        /// Can be used to create a <see cref="Criteria"/> object for a property.
+        /// </summary>
+        /// <typeparam name="T">The declaring type of the property</typeparam>
+        /// <typeparam name="TProp">The property type</typeparam>
+        /// <param name="propNameExpression">The expression describing the property</param>
+        /// <param name="comparisonOp">The comparison operator</param>
+        /// <param name="value">The value</param>
+        /// <returns>A <see cref="Criteria"/> for the property name, comparison operator and value</returns>
         public static Criteria Create<T, TProp>(Expression<Func<T, TProp>> propNameExpression, ComparisonOp comparisonOp, TProp value)
         {
             MemberExpression memberExpression;
@@ -804,11 +828,23 @@ namespace Habanero.Base
             return new Criteria(memberExpression.Member.Name, comparisonOp, value);
         }
 
+        /// <summary>
+        /// Creates a <see cref="CriteriaBuilder"/> using the expression
+        /// </summary>
+        /// <param name="expression">The expression to convert into a <see cref="Criteria"/></param>
+        /// <typeparam name="T">The core type of the object the <see cref="Criteria"/> is for</typeparam>
+        /// <returns>A <see cref="CriteriaBuilder"/>. Use Build() on it to get the <see cref="Criteria"/></returns>
         public static CriteriaBuilder Expr<T>(Expression<Func<T, bool>> expression)
         {
             return new CriteriaBuilder(expression.Body);
         }
 
+        /// <summary>
+        /// Creates a <see cref="CriteriaBuilder"/> using the expression negated.
+        /// </summary>
+        /// <param name="expression">The expression to convert into a <see cref="Criteria"/></param>
+        /// <typeparam name="T">The core type of the object the <see cref="Criteria"/> is for</typeparam>
+        /// <returns>A <see cref="CriteriaBuilder"/>. Use Build() on it to get the <see cref="Criteria"/></returns>
         public static CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
         {
             return new CriteriaBuilder(Expression.Not(expression.Body));

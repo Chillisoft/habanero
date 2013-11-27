@@ -319,7 +319,7 @@ namespace Habanero.Util
                                              RegexOptions.IgnoreCase);
                     }
                     return null;
-                }/**/
+                }
 
         ///<summary>
         /// Pluralises a noun using standard rule e.g. Name => Names
@@ -350,6 +350,11 @@ namespace Habanero.Util
         }
 
 
+        /// <summary>
+        /// Camel cases the input, removing spaces.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string Camelize(string input)
         {
             var replace = Humanize(input);

@@ -142,8 +142,10 @@ namespace Habanero.Base
                                                        .PutBackQuotedSections().ToString().Trim(), _operators);
                     if (op.Trim() == "IN" || op.Trim() == "NOT IN")
                     {
-                        _right = CriteriaExpression.CreateInExpression(quotesRemovedExpression.Substring(pos + op.Length)
-                                                           .PutBackQuotedSections().ToString().Trim());
+                        var criteriaExpression = new CriteriaExpression("");
+                        criteriaExpression._expression = quotesRemovedExpression.Substring(pos + op.Length)
+                            .PutBackQuotedSections().ToString().Trim();
+                        _right = criteriaExpression;
                     }
                     else
                     {
@@ -256,11 +258,5 @@ namespace Habanero.Base
             return ((this.Left == null) && (this.Right == null));
         }
 
-        public static CriteriaExpression CreateInExpression(string expression)
-        {
-            CriteriaExpression criteriaExpression = new CriteriaExpression("");
-            criteriaExpression._expression = expression;
-            return criteriaExpression;
-        }
     }
 }

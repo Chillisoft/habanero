@@ -2,6 +2,9 @@ using Habanero.Base.Data;
 
 namespace Habanero.Base
 {
+    /// <summary>
+    /// Loads an <see cref="IQueryResult"/> given a <see cref="ISelectQuery"/>
+    /// </summary>
     public interface IQueryResultLoader
     {
         /// <summary>

@@ -180,8 +180,28 @@ namespace Habanero.Base
         /// <returns></returns>
         IDbTransaction BeginTransaction(IDbConnection openConnection);
 
+        /// <summary>
+        /// Executes a stored proc with the params given.
+        /// </summary>
+        /// <param name="procName">The stored proc name</param>
+        /// <param name="params">The parameters to pass in</param>
+        /// <returns>A scalar result</returns>
         int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params);
+
+        /// <summary>
+        /// Executes a stored proc with the params given using the timeout length given.
+        /// </summary>
+        /// <param name="procName">The stored proc name</param>
+        /// <param name="params">The parameters to pass in</param>
+        /// <param name="timeout">The timeout in seconds</param>
+        /// <returns>A scalar result</returns>
         int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params, int timeout);
+
+        /// <summary>
+        /// Executes a raw sql statement. BEWARE OF SQL INJECTION ATTACKS. Use for hardcoded sql only.
+        /// </summary>
+        /// <param name="sql">The sql statement to run as a scalar</param>
+        /// <returns>The scalar result</returns>
         object ExecuteRawSqlScalar(string sql);
     }
 }

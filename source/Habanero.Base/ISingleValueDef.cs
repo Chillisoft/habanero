@@ -84,7 +84,7 @@ namespace Habanero.Base
         string PropertyTypeAssemblyName { get; set; }
 
         /// <summary>
-        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef>"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
         /// </summary>
         List<IPropRule> PropRules { get; }
 

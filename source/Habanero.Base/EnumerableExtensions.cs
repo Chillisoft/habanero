@@ -44,6 +44,12 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Checks if one IEnumerable is equal to another by checking each pair in the two
+        /// </summary>
+        /// <param name="enumerable1"></param>
+        /// <param name="enumerable2"></param>
+        /// <returns>true if the two IEnumerables are equal, false if not.</returns>
         public static bool IsEqualTo(this IEnumerable enumerable1, IEnumerable enumerable2)
         {
             var enumerator1 = enumerable1.GetEnumerator();

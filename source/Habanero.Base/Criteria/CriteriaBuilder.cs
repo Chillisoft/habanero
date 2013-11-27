@@ -67,19 +67,28 @@ namespace Habanero.Base
                   { ExpressionType.NotEqual, Criteria.ComparisonOp.NotEquals},
                   {ExpressionType.Equal, Criteria.ComparisonOp.Equals} };
 
-        private CriteriaBuilderAnd _and;
-
+        /// <summary>
+        /// Creates a CriteriaBuilder. Use Build() to create a Criteria.
+        /// </summary>
+        /// <param name="expression">The expression to parse into a Criteria.</param>
         public CriteriaBuilder(Expression expression)
         {
             _expression = expression;
         }
 
        
+        /// <summary>
+        /// Creates the final Criteria object.
+        /// </summary>
+        /// <returns>A Criteria object created from the expression</returns>
         public Criteria Build()
         {
             return Create(_expression);
         }
 
+        /// <summary>
+        /// Returns a new CriteriaBuilder linked to the current one with an And clause.
+        /// </summary>
         public CriteriaBuilderAnd And
         {
             get
@@ -88,6 +97,9 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Returns a new CriteriaBuilder linked to the current one with an Or clause.
+        /// </summary>
         public CriteriaBuilderOr Or
         {
             get
@@ -96,6 +108,12 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Appends a Not expression on to the end of this builder.
+        /// </summary>
+        /// <param name="expression">The expression to append (with a Not)</param>
+        /// <typeparam name="T">The type the criteria is for.</typeparam>
+        /// <returns>A new CriteriaBuilder that incorporates the new expression negated</returns>
         public virtual CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
         {
             return new CriteriaBuilder(Expression.Not(expression.Body));
@@ -301,30 +319,69 @@ namespace Habanero.Base
             return Expression.Lambda(fieldExpression).Compile().DynamicInvoke();
         }
 
+        /// <summary>
+        /// Used to append another set of criteria (<see cref="CriteriaBuilder.And"/>
+        /// </summary>
         public class CriteriaBuilderAnd : CriteriaBuilder
         {
+            /// <summary>
+            /// <see cref="CriteriaBuilder"/>
+            /// </summary>
+            /// <param name="expression"></param>
             public CriteriaBuilderAnd(Expression expression) : base(expression)  { }
 
+
+            /// <summary>
+            /// <see cref="Criteria.Expr{T}"/>
+            /// </summary>
+            /// <param name="expression">The expression</param>
+            /// <typeparam name="T">The type the criteria is for</typeparam>
+            /// <returns>A new CriteriaBuilder that links this one to that one with an And</returns>
             public CriteriaBuilder Expr<T>(Expression<Func<T, bool>> expression)
             {
                 return new CriteriaBuilder(Expression.AndAlso(_expression, expression.Body));
             }
 
+            /// <summary>
+            /// <see cref="Criteria.Not{T}"/>
+            /// </summary>
+            /// <param name="expression">The expression</param>
+            /// <typeparam name="T">The type the criteria is for</typeparam>
+            /// <returns>A new CriteriaBuilder that links this one to that one with an "And Not"</returns>
             public override CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
             {
                 return new CriteriaBuilder(Expression.AndAlso(_expression, Expression.Not(expression.Body)));
             }
         }
 
+        /// <summary>
+        /// Used to append another set of criteria (<see cref="CriteriaBuilder.Or"/>
+        /// </summary>
         public class CriteriaBuilderOr : CriteriaBuilder
-        {
+        {  
+            /// <summary>
+            /// <see cref="CriteriaBuilder"/>
+            /// </summary>
+            /// <param name="expression"></param>
             public CriteriaBuilderOr(Expression expression) : base(expression)  { }
 
+            /// <summary>
+            /// <see cref="Criteria.Expr{T}"/>
+            /// </summary>
+            /// <param name="expression">The expression</param>
+            /// <typeparam name="T">The type the criteria is for</typeparam>
+            /// <returns>A new CriteriaBuilder that links this one to that one with an Or</returns>
             public CriteriaBuilder Expr<T>(Expression<Func<T, bool>> expression)
             {
                 return new CriteriaBuilder(Expression.OrElse(_expression, expression.Body));
             }
 
+            /// <summary>
+            /// <see cref="Criteria.Not{T}"/>
+            /// </summary>
+            /// <param name="expression">The expression</param>
+            /// <typeparam name="T">The type the criteria is for</typeparam>
+            /// <returns>A new CriteriaBuilder that links this one to that one with an "Or Not"</returns>
             public override CriteriaBuilder Not<T>(Expression<Func<T, bool>> expression)
             {
                 return new CriteriaBuilder(Expression.OrElse(_expression, Expression.Not(expression.Body)));

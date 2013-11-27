@@ -30,6 +30,9 @@ namespace Habanero.Base.Logging
 	public class Log4NetLogger : IHabaneroLogger
 	{
 		private readonly string _contextName;
+        /// <summary>
+        /// The underlying log4net logger.
+        /// </summary>
 		protected ILog _log;
 
 		///<summary>
@@ -103,7 +106,15 @@ namespace Habanero.Base.Logging
 			this.Log("", exception);
 		}
 
-		public void Log(string message, Exception exception)
+	    /// <summary>
+	    /// Creates a single log entry for with the appropriate exception message and message.
+	    /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
+	    /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
+	    /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
+	    /// </summary>
+	    /// <param name="message">The additional log message to be logged with the exception</param>
+	    /// <param name="exception"></param>
+	    public void Log(string message, Exception exception)
 		{
 			if (exception is UserException)
 			{
@@ -113,7 +124,13 @@ namespace Habanero.Base.Logging
 			if (_log.IsErrorEnabled) _log.Error(message, exception);           
 		}
 
-		public void Log(string message, Exception exception, LogCategory logCategory)
+	    /// <summary>
+	    /// Creates a single log entry for with appropriate exception message and message with the specified LogCategory.
+	    /// </summary>
+	    /// <param name="message">The additional log message to be logged with the exception</param>
+	    /// <param name="exception">The exception being logged</param>
+	    /// <param name="logCategory">The specified LogCategory</param>
+	    public void Log(string message, Exception exception, LogCategory logCategory)
 		{
 			if (!IsLogging(logCategory)) return;
 			switch (logCategory)
@@ -136,7 +153,12 @@ namespace Habanero.Base.Logging
 			}       
 		}
 
-		public bool IsLogging(LogCategory logCategory)
+	    ///<summary>
+	    /// Checks the logger to see if it has been enabled to log messages of the specified <see cref="LogCategory"/> type.
+	    ///</summary>
+	    ///<param name="logCategory">The <see cref="LogCategory"/> for which to check if logging is enabled or not.</param>
+	    ///<returns>true if the specified <see cref="LogCategory"/> messages will be logged, otherwise false.</returns>
+	    public bool IsLogging(LogCategory logCategory)
 		{
 			switch (logCategory)
 			{

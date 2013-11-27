@@ -222,22 +222,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual("((Name = 'Test' OR Field1 >= 1) AND (Field2 <= 2 OR Name = 'Test2'))", tree.CompleteExpression);
         }
 
-        [Test]
-        public void Test_CreateInExpression()
-        {
-            //---------------Set up test pack-------------------
-            string expression = "'Item1', 'Item2'";
-
-            //---------------Execute Test ----------------------
-            CriteriaExpression inExpression = CriteriaExpression.CreateInExpression(expression);
-
-            //---------------Test Result -----------------------
-            Assert.AreEqual(expression, inExpression.CompleteExpression);
-            Assert.IsNull(inExpression.Left);
-            Assert.IsNull(inExpression.Right);
-        }
-
-
     }
 
 }

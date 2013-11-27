@@ -30,15 +30,36 @@ namespace Habanero.Base
         /// <param name="ex">Exception hit in the background thread</param>
         public delegate void BackgroundWorkerExceptionHandlerDelegate(Exception ex);
 
+        /// <summary>
+        /// The dispatcher for the background thread
+        /// </summary>
         public IActionDispatcher ActionDispatcher { get; protected set; }
+        /// <summary>
+        /// The method that does the work
+        /// </summary>
         public BackgroundWorkerMethodDelegate BackgroundWorker { get; set; }
+        /// <summary>
+        /// A delegate to run on completion
+        /// </summary>
         public UIWorkerMethodDelegate OnSuccess { get; set; }
+        /// <summary>
+        /// A delgate to run on cancellation
+        /// </summary>
         public UIWorkerMethodDelegate OnCancelled { get; set; }
+        /// <summary>
+        /// A delegate to run when an exception is encountered in the background thread
+        /// </summary>
         public BackgroundWorkerExceptionHandlerDelegate OnException { get; set; }
+        /// <summary>
+        /// The data to pass into the background worker thread.
+        /// </summary>
         public ConcurrentDictionary<string, object> Data { get; set; }
 
         private Thread _thread;
 
+        /// <summary>
+        /// Starts the new thread.
+        /// </summary>
         public void Run()
         {
             this._thread = new Thread(this.RunBackgroundWorker);
@@ -46,6 +67,9 @@ namespace Habanero.Base
             this._thread.Start();
         }
 
+        /// <summary>
+        /// Waits for the thread to end.
+        /// </summary>
         public void WaitForBackgroundWorkerToComplete()
         {
             if (this._thread == null)
@@ -54,7 +78,7 @@ namespace Habanero.Base
                 this._thread.Join();
         }
 
-        protected void RunBackgroundWorker()
+        private void RunBackgroundWorker()
         {
             var success = true;
             if (this.BackgroundWorker != null)
@@ -89,7 +113,7 @@ namespace Habanero.Base
             this.RunUIWorkerDelegate(success);
         }
 
-        protected void RunExceptionDelegate(Exception ex)
+        private void RunExceptionDelegate(Exception ex)
         {
             if (this.OnException != null)
             {
@@ -97,7 +121,7 @@ namespace Habanero.Base
             }
         }
 
-        protected void RunUIWorkerDelegate(bool success)
+        private void RunUIWorkerDelegate(bool success)
         {
             if (success && (this.OnSuccess != null))
             {
@@ -109,6 +133,16 @@ namespace Habanero.Base
             }
         }
 
+        /// <summary>
+        /// Convenience method for creating an HabaneroBackgroundWorker.
+        /// </summary>
+        /// <param name="dispatcher"></param>
+        /// <param name="data"></param>
+        /// <param name="backgroundWorker"></param>
+        /// <param name="onSuccess"></param>
+        /// <param name="onCancel"></param>
+        /// <param name="onException"></param>
+        /// <returns></returns>
         public static HabaneroBackgroundWorker Run(IActionDispatcher dispatcher, ConcurrentDictionary<string, object> data, BackgroundWorkerMethodDelegate backgroundWorker, UIWorkerMethodDelegate onSuccess, UIWorkerMethodDelegate onCancel, BackgroundWorkerExceptionHandlerDelegate onException)
         {
             var runner = new HabaneroBackgroundWorker()

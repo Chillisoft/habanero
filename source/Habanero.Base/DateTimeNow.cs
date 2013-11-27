@@ -144,6 +144,10 @@ namespace Habanero.Base
             _dateTimeNow = dateTimeNow;
         }
 
+        ///<summary>
+        /// Resolved the instance class to a value of type DateTime.
+        ///</summary>
+        ///<returns>The value that the instance class is resolved to.</returns>
         public override DateTime ResolveToValue()
         {
             return _dateTimeNow;

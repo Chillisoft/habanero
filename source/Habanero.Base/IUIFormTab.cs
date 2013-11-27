@@ -68,12 +68,6 @@ namespace Habanero.BO.ClassDefinition
         /// Returns the <see cref="UIForm"/> that this <see cref="IUIForm"/> is defined for.
         /// </summary>
         IUIForm UIForm { get; set; }
-
-        /// <summary>
-        /// Returns the definition list's enumerator
-        /// </summary>
-        /// <returns>Returns an IEnumerator-type object</returns>
-        IEnumerator GetEnumerator();
     }
 
 }

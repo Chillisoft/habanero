@@ -28,20 +28,38 @@ namespace Habanero.Base.Data
     /// </summary>
     public class QueryResult : IQueryResult
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public QueryResult()
         {
             Fields = new List<IQueryResultField>();
             Rows = new List<IQueryResultRow>();
         }
 
+        /// <summary>
+        /// The rows in the result
+        /// </summary>
         public List<IQueryResultRow> Rows { get; private set; }
+
+        /// <summary>
+        /// The fields/columns in the result
+        /// </summary>
         public List<IQueryResultField> Fields { get; private set; }
 
+        /// <summary>
+        /// Adds a field to the list of fields.
+        /// </summary>
+        /// <param name="propertyName"></param>
         public void AddField(string propertyName)
         {
             Fields.Add(new QueryResultField(propertyName, Fields.Count));
         }
 
+        /// <summary>
+        /// Adds a result to the list of results.
+        /// </summary>
+        /// <param name="rawValues">the array of raw values</param>
         public void AddResult(object[] rawValues)
         {
             Rows.Add(new QueryResultRow(rawValues));   
