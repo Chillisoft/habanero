@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
@@ -78,13 +79,13 @@ namespace Habanero.BO
                             if (value is string && string.IsNullOrEmpty((string)value))
                                 MinValue = Decimal.MinValue;
                             else 
-                                MinValue = Convert.ToDecimal(value);
+                                MinValue = Convert.ToDecimal(value, CultureInfo.InvariantCulture);
                             break;
                         case "max":
                             if (value is string && string.IsNullOrEmpty((string)value))
                                 MaxValue = Decimal.MaxValue;
                             else 
-                                MaxValue = Convert.ToDecimal(value);
+                                MaxValue = Convert.ToDecimal(value, CultureInfo.InvariantCulture);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException

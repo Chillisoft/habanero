@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Globalization;
 using Habanero.Base;
 using Habanero.Util;
 
@@ -229,7 +230,7 @@ namespace Habanero.BO.CriteriaManager
                 case ParameterType.Date:
                      return DateTimeUtilities.ParseToDate(_parameterValue);
                 case ParameterType.Number:
-                    return Convert.ToDecimal(_parameterValue);
+                    return Convert.ToDecimal(_parameterValue, CultureInfo.InvariantCulture);
                 case ParameterType.String:
                     return _parameterValue;
             }

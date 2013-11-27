@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
@@ -80,10 +81,10 @@ namespace Habanero.BO
                     switch (key)
                     {
                         case "min":
-                            MinValue = Convert.ToDouble(value);
+                            MinValue = Convert.ToDouble(value, CultureInfo.InvariantCulture);
                             break;
                         case "max":
-                            MaxValue = Convert.ToDouble(value);
+                            MaxValue = Convert.ToDouble(value, CultureInfo.InvariantCulture);
                             break;
                         default:
                             throw new InvalidXmlDefinitionException
