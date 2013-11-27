@@ -5,12 +5,30 @@ using Habanero.Base;
 
 namespace Habanero.BO.Exceptions
 {
+    /// <summary>
+    /// Base class for concurrency errors caused by user edits..
+    /// </summary>
     public class BusObjUserConcurrencyControlExceptionBase : BusObjectConcurrencyControlException
     {
+        /// <summary>
+        /// The user that made the edit
+        /// </summary>
         protected string _userNameEdited;
+        /// <summary>
+        /// The machine the edit was made on
+        /// </summary>
         protected string _machineNameEdited;
+        /// <summary>
+        /// The datetime the change was made
+        /// </summary>
         protected DateTime _dateUpdated;
+        /// <summary>
+        /// The object id
+        /// </summary>
         protected string _objectID;
+        /// <summary>
+        /// The class
+        /// </summary>
         protected string _className;
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace Habanero.BO
     public abstract class DataSetProvider : IDataSetProvider
     {
         private const string _idColumnName = "HABANERO_OBJECTID";
-        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(DataSetProvider));
+        private static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(DataSetProvider));
 
         /// <summary>
         /// The <see cref="IBusinessObjectCollection"/> of <see cref="IBusinessObject"/>s that
@@ -430,7 +430,7 @@ namespace Habanero.BO
             }
             catch (IndexOutOfRangeException ex)
             {
-                _logger.Log(ex);
+                Logger.Log(ex);
                 throw;
 
             }

@@ -36,6 +36,9 @@ namespace Habanero.BO
     /// </summary>
     public class DataStoreInMemoryXmlReader
     {
+        /// <summary>
+        /// Information about whether the read worked.
+        /// </summary>
         public Result ReadResult { get; private set; }
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace Habanero.BO
                         objects.TryAdd(objectToAdd.ID.GetAsGuid(), objectToAdd);
                     });
  
-            ReadResult = boReader.PropertyReadExceptions.Count() == 0 ? 
+            ReadResult = !boReader.PropertyReadExceptions.Any() ? 
                 new Result(true) : 
                 new Result(false, BuildExceptionMessage(boReader.PropertyReadExceptions));
             return new DataStoreInMemory {AllObjects = objects};
@@ -147,6 +150,10 @@ namespace Habanero.BO
             return bo;
         }
 
+        /// <summary>
+        /// Returns the settings for the xml reader. Can be overridden to set your own settings.
+        /// </summary>
+        /// <returns>The settings to use.</returns>
         protected virtual XmlReaderSettings GetSettings()
         {
             var settings = new XmlReaderSettings();

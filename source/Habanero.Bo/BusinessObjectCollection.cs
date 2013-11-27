@@ -140,6 +140,9 @@ namespace Habanero.BO
         private const string ADDED_BUSINESS_OBJECT = "addedbo";
         private const string REMOVED_BUSINESS_OBJECT = "removedbo";
         private const string MARKEDFORDELETE_BUSINESS_OBJECT = "markedfordeletebo";
+        /// <summary>
+        /// The internal list of bos
+        /// </summary>
         protected readonly List<TBusinessObject> _boCol = new List<TBusinessObject>();
 
         #region StronglyTypedComparer

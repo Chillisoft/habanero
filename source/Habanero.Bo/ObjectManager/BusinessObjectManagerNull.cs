@@ -189,7 +189,7 @@ namespace Habanero.BO
         /// so this method is far faster than the other FindFirst methods for finding objects with composite keys.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="boType"></param>
+        /// <param name="classDef"></param>
         /// <returns></returns>
         public IBusinessObject FindFirst(BOPrimaryKey key, IClassDef classDef)
         {

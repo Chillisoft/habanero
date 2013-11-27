@@ -126,6 +126,12 @@ namespace Habanero.BO
             xmlReader.Close();
         }
 
+        /// <summary>
+        /// Sets up a property using InitialiseProp so no rules are checked or events are fired.
+        /// </summary>
+        /// <param name="bo">The bo to set the property value on</param>
+        /// <param name="propertyName">The name of the property to set</param>
+        /// <param name="propertyValue">The value to set</param>
         protected virtual void SetupProperty(IBusinessObject bo, string propertyName, string propertyValue)
         {
             bo.Props[propertyName].InitialiseProp(propertyValue);

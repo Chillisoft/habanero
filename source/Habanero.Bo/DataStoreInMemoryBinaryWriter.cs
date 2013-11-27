@@ -26,23 +26,38 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// A class that writes the contents of a <see cref="DataStoreInMemory"/> to a binary stream.
+    /// </summary>
     public class DataStoreInMemoryBinaryWriter
     {
         private readonly Stream _stream;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="stream">The stream to write to</param>
         public DataStoreInMemoryBinaryWriter(Stream stream)
         {
             _stream = stream;
         }
 
+        /// <summary>
+        /// Writes the given data store to the stream
+        /// </summary>
+        /// <param name="dataStore"></param>
         public void Write(DataStoreInMemory dataStore)
         {
             Write(dataStore.AllObjects);
         }
 
+        /// <summary>
+        /// Writes the dictionary of objects to the stream
+        /// </summary>
+        /// <param name="businessObjects"></param>
         public void Write(IDictionary<Guid, IBusinessObject> businessObjects)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
+            var formatter = new BinaryFormatter();
             formatter.Serialize(_stream, businessObjects);
         }
     }

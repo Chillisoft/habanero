@@ -228,6 +228,9 @@ namespace Habanero.BO
             get { return _sortString; }
         }
 
+        /// <summary>
+        /// The criteria (as a string) for this lookup list, used to filter.
+        /// </summary>
         public string CriteriaString { get { return _criteriaString; } }
 
         /// <summary>

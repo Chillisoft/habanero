@@ -63,7 +63,6 @@ namespace Habanero.BO
         /// <summary> The value prior to the last edit. </summary>
         protected object _valueBeforeLastEdit;
         private IBOPropAuthorisation _boPropAuthorisation;
-        protected bool _convertEmptyStringToNull = true;
         private bool _loadedPropHasBeenValidated;
         // ReSharper restore InconsistentNaming
         /// <summary>

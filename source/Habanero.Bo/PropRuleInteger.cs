@@ -125,11 +125,21 @@ namespace Habanero.BO
             set { Parameters["max"] = value; }
         }
 
+        /// <summary>
+        /// Returns whether the supplied value is less than the MinValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
         protected override bool IsLessThanMinValue(int value)
         {
             return value < MinValue;
         }
 
+        /// <summary>
+        /// Returns whether the supplied value is greater than the MaxValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
         protected override bool IsGreaterThanMaxValue(int value)
         {
             return value > MaxValue;

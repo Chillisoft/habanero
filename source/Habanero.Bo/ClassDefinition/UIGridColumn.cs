@@ -49,6 +49,9 @@ namespace Habanero.BO.ClassDefinition
     {
         private string _propertyName;
         private Type _gridControlType;
+        /// <summary>
+        /// The <see cref="IPropDef"/> this column is related to.
+        /// </summary>
         protected IPropDef _propDef;
         private bool _editable;
 

@@ -27,31 +27,56 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// Writes the contents of a <see cref="DataStoreInMemory"/> to an xml stream
+    /// </summary>
     public class DataStoreInMemoryXmlWriter
     {
-        private XmlWriterSettings _settings;
+        private readonly XmlWriterSettings _settings;
 
+        /// <summary>
+        /// Default constructor - ConformanceLevel = Auto.
+        /// </summary>
         public DataStoreInMemoryXmlWriter()
             : this(new XmlWriterSettings { ConformanceLevel = ConformanceLevel.Auto })
         {
         }
 
+        /// <summary>
+        /// Constructor - set your own <see cref="XmlWriterSettings"/>
+        /// </summary>
+        /// <param name="xmlWriterSettings"></param>
         public DataStoreInMemoryXmlWriter(XmlWriterSettings xmlWriterSettings)
         {
             _settings = xmlWriterSettings;
         }
 
+        /// <summary>
+        /// Writes the data store's objects to the stream.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="dataStore"></param>
         public void Write(Stream stream, DataStoreInMemory dataStore)
         {
             Write(stream, dataStore.AllObjects);
         }
 
+        /// <summary>
+        /// Writes the datastore's objects to a StringBuilder
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="dataStore"></param>
         public void Write(StringBuilder s, DataStoreInMemory dataStore)
         {
             var writer = XmlWriter.Create(s, _settings);
             Write(writer, dataStore.AllObjects);
         }
 
+        /// <summary>
+        /// Writes the dictionary of business objects (only the actual bos) to the stream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="businessObjects"></param>
         public void Write(Stream stream, IDictionary<Guid, IBusinessObject> businessObjects)
         {
             var writer = XmlWriter.Create(stream, _settings);
@@ -59,7 +84,7 @@ namespace Habanero.BO
         }
 
         /// <summary>
-        /// 
+        /// Writes the businessobjects to the writer.
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="businessObjects"></param>

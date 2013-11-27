@@ -27,15 +27,26 @@ using Habanero.Base;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// Reads business objects from a binary file that has been saved with a <see cref="DataStoreInMemoryBinaryWriter"/>
+    /// </summary>
     public class DataStoreInMemoryBinaryReader
     {
         private readonly Stream _stream;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="stream">The binary stream to read from</param>
         public DataStoreInMemoryBinaryReader(Stream stream)
         {
             _stream = stream;
         }
 
+        /// <summary>
+        /// Reads from the stream.
+        /// </summary>
+        /// <returns></returns>
         public ConcurrentDictionary<Guid, IBusinessObject> Read()
         {
             var formatter = new BinaryFormatter();

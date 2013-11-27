@@ -502,7 +502,7 @@ namespace Habanero.BO
                     {
                         return this[_compositeKeyIDs[asStringCurrentValue]];
                     }
-                    catch (HabaneroDeveloperException ex)
+                    catch (HabaneroDeveloperException)
                     {
                         _compositeKeyIDs.Remove(asStringCurrentValue);
                         return FindFirst(key.GetKeyCriteria(), boType);
@@ -530,7 +530,7 @@ namespace Habanero.BO
                     {
                         return this[_compositeKeyIDs[asStringCurrentValue]];
                     }
-                    catch (HabaneroDeveloperException ex)
+                    catch (HabaneroDeveloperException)
                     {
                         _compositeKeyIDs.Remove(asStringCurrentValue);
                         return FindFirst(key.GetKeyCriteria(), classDef);

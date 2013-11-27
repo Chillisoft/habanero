@@ -132,6 +132,9 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IClassDef OwningClassDef { get; set; }
 
+        /// <summary>
+        /// The name of the owning class of this relationship def.
+        /// </summary>
         public string OwningClassName
         {
             get { return this.OwningClassDef == null? "": this.OwningClassDef.ClassName; }
@@ -197,6 +200,10 @@ namespace Habanero.BO.ClassDefinition
     		}
     	}
 
+        /// <summary>
+        /// Returns true if the related class def has been loaded already.
+        /// </summary>
+        /// <returns></returns>
         protected bool RelatedClassDefLoaded()
         {
             return ClassDef.ClassDefs.Contains(RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter);

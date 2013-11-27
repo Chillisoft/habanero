@@ -121,6 +121,9 @@ namespace Habanero.BO.ClassDefinition
             }
         }
 
+        /// <summary>
+        /// The type parameter of this SuperClassDef
+        /// </summary>
         public string TypeParameter
         {
             get { return _typeParameter; }
@@ -190,6 +193,9 @@ namespace Habanero.BO.ClassDefinition
 
         #region SuperClassDef Methods
 
+        /// <summary>
+        /// The actual classdef associated with this superclassdef.
+        /// </summary>
         public IClassDef MySuperClassDef
         {
             get

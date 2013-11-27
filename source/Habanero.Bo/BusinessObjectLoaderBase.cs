@@ -201,6 +201,12 @@ namespace Habanero.BO
         protected abstract LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery) 
             where T : IBusinessObject;
 
+        /// <summary>
+        /// Returns a message describing the duplicate persisted objects
+        /// </summary>
+        /// <param name="selectQuery">The select query</param>
+        /// <param name="loadMechanismDescription">A description of the load mechanism</param>
+        /// <returns>A descriptive error message</returns>
         protected abstract string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription);
 
         /// <summary>
@@ -499,19 +505,20 @@ namespace Habanero.BO
             collection.Add(loadedBo);
         }
 
-        /// <summary>
-        /// The collection should show all loaded object less removed or deleted object not yet persisted
-        ///     plus all created or added objects not yet persisted.
-        ///Note_: This behaviour is fundamentally different than the business objects behaviour which 
-        ///  throws and error if any of the items are dirty when it is being refreshed.
-        ///Should a refresh be allowed on a dirty collection (what do we do with BO's
-        ///I think this could be done via reflection instead of having all these public methods.
-        ///   especially where done via the interface.
-        ///  the other option would be for the business object collection to have another method (other than clone)
-        ///   that returns another type of object that has these methods to eliminate all these 
-        ///   public accessors
-        /// </summary>
-        /// <param name="collection"></param>
+        ///  <summary>
+        ///  The collection should show all loaded object less removed or deleted object not yet persisted
+        ///      plus all created or added objects not yet persisted.
+        /// Note_: This behaviour is fundamentally different than the business objects behaviour which 
+        ///   throws and error if any of the items are dirty when it is being refreshed.
+        /// Should a refresh be allowed on a dirty collection (what do we do with BO's
+        /// I think this could be done via reflection instead of having all these public methods.
+        ///    especially where done via the interface.
+        ///   the other option would be for the business object collection to have another method (other than clone)
+        ///    that returns another type of object that has these methods to eliminate all these 
+        ///    public accessors
+        ///  </summary>
+        ///  <param name="collection"></param>
+        /// <param name="originalPersistedCollection"></param>
         protected static void RestoreEditedLists(IBusinessObjectCollection collection, Dictionary<string, IBusinessObject> originalPersistedCollection)
         {
             ArrayList addedBoArray = new ArrayList();
@@ -688,20 +695,50 @@ namespace Habanero.BO
             return relatedCol;
         }
 
+        /// <summary>
+        /// Information to do with loading a bo 
+        /// </summary>
         protected class LoadedBoInfo
         {
+            /// <summary>
+            /// The bo
+            /// </summary>
             public IBusinessObject LoadedBo { get; set; }
+            /// <summary>
+            /// Whether this is a freshly loaded bo
+            /// </summary>
             public bool IsFreshlyLoaded { get; set; }
+            /// <summary>
+            /// Whether the bo was updated in loading
+            /// </summary>
             public bool IsUpdatedInLoading { get; set; }
         }
 
+        /// <summary>
+        /// A load result
+        /// </summary>
         protected class LoaderResult
         {
+            /// <summary>
+            /// The list of loaded bo info
+            /// </summary>
             public List<LoadedBoInfo> LoadedBoInfos { get; set; }
+            /// <summary>
+            /// The total number of bos available for paging
+            /// </summary>
             public int TotalCountAvailableForPaging { get; set; }
+            /// <summary>
+            /// A description of the load mechanism for use in messages to the user.
+            /// </summary>
             public string LoadMechanismDescription { get; set; }
         }
 
+        /// <summary>
+        /// Loads a collection. Stores a list of previously loaded BO's before hand so that those are refreshed.
+        /// </summary>
+        /// <param name="collection">The collection to load</param>
+        /// <param name="loadedBos">The previously loaded bos</param>
+        /// <param name="duplicatePersistedObjectsErrorMessage">The error message to use should a duplicate be loaded</param>
         protected void LoadBOCollection(IBusinessObjectCollection collection, ICollection loadedBos, string duplicatePersistedObjectsErrorMessage = "")
         {
             var loadedBoInfos = new List<LoadedBoInfo>();
@@ -731,6 +768,7 @@ namespace Habanero.BO
         /// </summary>
         /// <param name="collection">the collection being added to</param>
         /// <param name="loadedBoInfos">the collection of loaded BOs to add</param>
+        /// <param name="duplicatePersistedObjectsErrorMessage">The message to use should a duplicate object be loaded</param>
         protected void LoadBOCollection(IBusinessObjectCollection collection, List<LoadedBoInfo> loadedBoInfos, string duplicatePersistedObjectsErrorMessage = "")
         {
             

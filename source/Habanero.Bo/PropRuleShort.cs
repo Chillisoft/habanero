@@ -87,23 +87,39 @@ namespace Habanero.BO
             }
         }
 
+        /// <summary>
+        /// Gets and sets the minimum value that the integer can be assigned
+        /// </summary>
         public override short MinValue
         {
             get { return Convert.ToInt16(Parameters["min"]); }
             set { Parameters["min"] = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the maximum value that the integer can be assigned
+        /// </summary>
         public override short MaxValue
         {
             get { return Convert.ToInt16(Parameters["max"]); }
             set { Parameters["max"] = value; }
         }
-
+        
+        /// <summary>
+        /// Returns whether the supplied value is less than the MinValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
         protected override bool IsLessThanMinValue(short value)
         {
             return value < MinValue;
         }
 
+        /// <summary>
+        /// Returns whether the supplied value is greater than the MaxValue
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns></returns>
         protected override bool IsGreaterThanMaxValue(short value)
         {
             return value > MaxValue;

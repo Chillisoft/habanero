@@ -39,6 +39,9 @@ namespace Habanero.BO
     /// </summary>
     public class ObjectTreeXmlReader
     {
+        /// <summary>
+        /// Contains info about the read result.
+        /// </summary>
         public Result ReadResult { get; private set; }
 
         /// <summary>
@@ -190,7 +193,7 @@ namespace Habanero.BO
                 try
                 {
                     return BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, bo.ID);
-                } catch (BusObjDeleteConcurrencyControlException ex)
+                } catch (BusObjDeleteConcurrencyControlException)
                 {
                     return null;
                 }
@@ -198,9 +201,13 @@ namespace Habanero.BO
             return null;
         }
 
+        /// <summary>
+        /// Returns the default XmlReaderSettings used. Override this to change them.
+        /// </summary>
+        /// <returns></returns>
         protected virtual XmlReaderSettings GetSettings()
         {
-            XmlReaderSettings settings = new XmlReaderSettings();
+            var settings = new XmlReaderSettings();
             settings.IgnoreComments = true;
             settings.IgnoreProcessingInstructions = true;
             settings.IgnoreWhitespace = true;

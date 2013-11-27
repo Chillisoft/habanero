@@ -216,6 +216,14 @@ namespace Habanero.BO
 
         #region GetBusinessObjectCollection Members
 
+        /// <summary>
+        /// Load the Business Objects from the specific DataStore type that applies to this loader.
+        /// In this case these objects are loaded from a <see cref="DataStoreInMemory"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classDef"></param>
+        /// <param name="selectQuery"></param>
+        /// <returns></returns>
         protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery)
         {
             Criteria criteria = selectQuery.Criteria;
@@ -241,6 +249,12 @@ namespace Habanero.BO
             };
         }
 
+        /// <summary>
+        /// Returns a message describing the duplicate persisted objects
+        /// </summary>
+        /// <param name="selectQuery">The select query</param>
+        /// <param name="loadMechanismDescription">A description of the load mechanism</param>
+        /// <returns>A descriptive error message</returns>
         protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
         {
             return String.Format("This can be caused by the data store returning duplicates or where the primary key of your object is incorrectly defined. "

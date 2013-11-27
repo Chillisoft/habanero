@@ -266,7 +266,7 @@ namespace Habanero.BO
 
         /// <summary>
         /// Loads the Business object collection with the appropriate items.
-        /// See <see cref="GetBusinessObjectCollection{T}(Criteria,OrderCriteria,int,int,out int)"/> for a full explanation.
+        /// See <see cref="GetBusinessObjectCollection{T}(Criteria,IOrderCriteria,int,int,out int)"/> for a full explanation.
         /// </summary>
         /// <param name="def"></param>
         /// <param name="criteria"></param>

@@ -87,9 +87,18 @@ namespace Habanero.BO
     public class BOPropertyMapper : IBOPropertyMapper
     {
         private IBusinessObject _businessObject;
+        /// <summary>
+        /// The property used to map.
+        /// </summary>
         protected IBOProp _property;
         private readonly BOPropertyMapper _childBoPropertyMapper;
 
+        /// <summary>
+        /// The BOPropertyMapper for the child of this mapper. 
+        /// For a string of property names (eg Person.Address.FirstLine), the Person would 
+        /// have a BOPropertyMapper and the Address would have a BOPropertyMapper
+        /// that would be the child of the Person one.
+        /// </summary>
         public BOPropertyMapper ChildBoPropertyMapper
         {
             get { return _childBoPropertyMapper; }

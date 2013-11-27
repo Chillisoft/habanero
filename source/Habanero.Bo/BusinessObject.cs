@@ -56,7 +56,7 @@ namespace Habanero.BO
 	/// </summary>
 	public class BusinessObject : IBusinessObject, ISerializable
 	{
-		protected static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObject));
+	    private static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(BusinessObject));
 
 		#region IBusinessObject Members
 
@@ -173,6 +173,10 @@ namespace Habanero.BO
 		// ReSharper restore UnusedParameter.Local
 		// ReSharper restore DoNotCallOverridableMethodsInConstructor
 
+		/// <summary>
+		/// Constructs the bo using the given classdef.
+		/// </summary>
+		/// <param name="def"></param>
 		protected virtual void ConstructEntireClassFromClassDefs(IClassDef def)
 		{
 			Initialise(def);
@@ -862,7 +866,7 @@ namespace Habanero.BO
 
 		///<summary>
 		/// Returns the value under the property name specified
-		/// as a specific type <paramref name="{T}"/>
+		/// as a specific type <typeparamref name="T"/>
 		///</summary>
 		///<param name="propName">The property name</param>
 		///<typeparam name="T">The type to cast the retrieved property value to.</typeparam>
@@ -1488,9 +1492,22 @@ namespace Habanero.BO
 	/// <typeparam name="T"></typeparam>
 	public class BusinessObject<T> : BusinessObject
 	{
+		/// <summary>
+		/// default constructor
+		/// </summary>
 		public BusinessObject() : base() { }
+        /// <summary>
+        /// A constructor that takes in a classdef. Inherit this in your bo type if you want to instantiate using a different classdef.
+        /// </summary>
+        /// <param name="def"></param>
 		protected internal BusinessObject(IClassDef def) : base(def) { }
-		protected BusinessObject(ConstructForFakes constructForFakes) : base(constructForFakes)
+		
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="constructForFakes"></param>
+        [Obsolete("Not for use, to be removed, see Habanero.Testability for creating")]
+        protected BusinessObject(ConstructForFakes constructForFakes) : base(constructForFakes)
 		{
 		}
 

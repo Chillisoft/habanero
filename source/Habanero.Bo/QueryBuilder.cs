@@ -97,6 +97,12 @@ namespace Habanero.BO
             return new QueryField(propDef.PropertyName, propDef.DatabaseFieldName, propSource);
         }
 
+        /// <summary>
+        /// Creates a <see cref="QueryField"/> given a classdef and a property name. 
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static QueryField CreateQueryField(IClassDef classDef, string propertyName)
         {
             var propDef = classDef.GetPropDef(propertyName);
@@ -246,6 +252,13 @@ namespace Habanero.BO
             PrepareSource(classDef, ref source, out relatedClassDef);
         }
 
+        /// <summary>
+        /// Prepares the Source based on the ClassDef.
+        /// </summary>
+        /// <param name="classDef"></param>
+        /// <param name="source"></param>
+        /// <param name="relatedClassDef"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public static void PrepareSource(IClassDef classDef, ref Source source, out IClassDef relatedClassDef)
         {
             if (classDef == null) throw new ArgumentNullException("classDef");

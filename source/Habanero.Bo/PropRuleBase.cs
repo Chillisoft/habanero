@@ -127,6 +127,9 @@ namespace Habanero.BO
 												propValue, displayName, Name);
 		}
 
+		/// <summary>
+		/// What parameters are available for this property rule.
+		/// </summary>
 		public abstract List<string> AvailableParameters { get; }
 
 		///<summary>

@@ -166,6 +166,9 @@ namespace Habanero.BO.ClassDefinition
         ///</summary>
         public IUIDef UIDef { get; set; }
 
+        /// <summary>
+        /// The <see cref="IClassDef"/> for this UIGrid.
+        /// </summary>
         public IClassDef ClassDef
         {
             get
