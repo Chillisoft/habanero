@@ -62,6 +62,11 @@ namespace Habanero.DB
             _statement = new StringBuilder(100);
         }
 
+        ///<summary>
+        /// Returns the <see cref="IDatabaseConnection"/> this statement is using. This
+        /// connection is required for generating commands, parameters etc for the correct
+        /// db type
+        ///</summary>
         public IDatabaseConnection DatabaseConnection { get; private set; }
 
         /// <summary>

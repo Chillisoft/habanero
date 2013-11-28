@@ -334,6 +334,13 @@ namespace Habanero.DB
 
         #region GetBusinessObjectCollection
 
+        /// <summary>
+        /// Load the Business Objects from the specific DataStore type that applies to this loader.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classDef"></param>
+        /// <param name="selectQuery"></param>
+        /// <returns></returns>
         protected override LoaderResult GetObjectsFromDataStore<T>(IClassDef classDef, ISelectQuery selectQuery) 
         {
             int totalCountAvailableForPaging;
@@ -367,12 +374,26 @@ namespace Habanero.DB
                 };
         }
 
+        /// <summary>
+        /// Returns a message describing the duplicate persisted objects
+        /// </summary>
+        /// <param name="selectQuery">The select query</param>
+        /// <param name="loadMechanismDescription">A description of the load mechanism</param>
+        /// <returns>A descriptive error message</returns>
         protected override string GetDuplicatePersistedObjectsErrorMessage(ISelectQuery selectQuery, string loadMechanismDescription)
         {
             return String.Format("This can be caused by a view returning duplicates or where the primary key of your object is incorrectly defined. " 
                 + "The database table used for loading this collections was '{0}' and the original load sql query was as follows: '{1}'", selectQuery.Source, loadMechanismDescription);
         }
 
+        /// <summary>
+        /// Actually loads the objects using the statement given.
+        /// </summary>
+        /// <typeparam name="T">The type of class you are loading</typeparam>
+        /// <param name="classDef">The classdef to use when loading</param>
+        /// <param name="statement">The sql statement to run</param>
+        /// <param name="selectQuery">The original select query</param>
+        /// <returns></returns>
         protected virtual List<LoadedBoInfo> GetLoadedBusinessObjectsFromDB<T>(IClassDef classDef, ISqlStatement statement, SelectQueryDB selectQuery) where T : IBusinessObject
         {
             var loadedBoInfos = new List<LoadedBoInfo>();

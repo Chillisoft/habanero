@@ -22,7 +22,12 @@ namespace Habanero.DB
 		{
 		}
 
-		public override string GetLimitClauseCriteriaForBegin(int limit)
+	    /// <summary>
+	    /// Returns the beginning limit clause with the limit specified
+	    /// </summary>
+	    /// <param name="limit">The limit</param>
+	    /// <returns>Returns a string</returns>
+	    public override string GetLimitClauseCriteriaForBegin(int limit)
 		{
 			return string.IsNullOrEmpty(LimitClauseAtBeginning) ? "" : string.Format("{0}({1})", LimitClauseAtBeginning, limit);
 		}

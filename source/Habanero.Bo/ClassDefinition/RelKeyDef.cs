@@ -157,6 +157,13 @@ namespace Habanero.BO.ClassDefinition
 
 		#region IEnumerable Members
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.  The enumerator iterates through the values of a Dictionary of <see cref="IRelPropDef"/>
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+        /// </returns>
+        /// <filterpriority>1</filterpriority>
         public IEnumerator<IRelPropDef> GetEnumerator()
         {
             return _relPropDefs.Values.GetEnumerator();

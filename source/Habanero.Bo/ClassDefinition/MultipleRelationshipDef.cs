@@ -138,21 +138,37 @@ namespace Habanero.BO.ClassDefinition
             return (IMultipleRelationship)Activator.CreateInstance(relationshipBOType, owningBo, this, lBOPropCol, this.TimeOut);
 		}
 
+        ///<summary>
+        /// Returns true if this is a Multiple Relationship and the Reverse is a single relationship
+        ///</summary>
         public override bool IsOneToMany
         {
             get { return true; }
         }
 
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Multiple relationship
+        ///</summary>
         public override bool IsManyToOne
         {
             get { return false; }
         }
 
+        ///<summary>
+        /// Returns true if this is a Single Relationship and the Reverse is a Single relationship
+        ///</summary>
         public override bool IsOneToOne
         {
             get { return false; }
         }
 
+        /// <summary>
+        /// Returns true if this RelationshipDef is compulsory.
+        /// This relationship def will be considered to be compulsory if this
+        /// <see cref="IRelationshipDef.OwningBOHasForeignKey"/> and all the <see cref="IPropDef"/>'s that make up the 
+        /// <see cref="IRelKeyDef"/> are compulsory. This is only relevant for ManyToOne and OneToOne Relationships.
+        /// I.e. to single Relationships
+        /// </summary>
         public override bool IsCompulsory
         {
             get { return false; }

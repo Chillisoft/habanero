@@ -186,6 +186,13 @@ namespace Habanero.BO.Loaders
 				"for this type('" + _propTypeName + "').");
 		}
 
+        /// <summary>
+        /// Creates a <see cref="IPropRule"/> based on the type name.
+        /// </summary>
+        /// <param name="propTypeName">The type name to create the rule for</param>
+        /// <param name="name">The rule name</param>
+        /// <param name="message">The rule message</param>
+        /// <returns></returns>
 		protected IPropRule CreatePropRule(string propTypeName, string name, string message)
 		{
 			var type = typeof(int);

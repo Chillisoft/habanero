@@ -177,10 +177,8 @@ namespace Habanero.BO
         /// returns true if there is already an object in the database with the same primary identifier (primary key)
         ///  or with the same alternate identifier (alternate key)
         ///</summary>
-        ///<param name="transactionalBusinessObject"></param>
         ///<param name="pendingTransactions"></param>
         ///<param name="errorMessages"></param>
-        ///<param name="bo"></param>
         ///<returns></returns>
         protected internal virtual void CheckDuplicateIdentifier(List<ITransactional> pendingTransactions, List<string> errorMessages)
         {

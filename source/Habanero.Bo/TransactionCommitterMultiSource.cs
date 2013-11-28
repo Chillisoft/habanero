@@ -25,6 +25,15 @@ using Habanero.Base.Exceptions;
 
 namespace Habanero.BO
 {
+    /// <summary>
+    /// An implementation of <see cref="ITransactionCommitter"/> used as an aggregate transaction committer. It stores a 
+    /// dictionary of <see cref="IDataAccessor"/> - one for each type, as well as a default. If the business object added
+    /// is linked to a particular DataAccessor it will be added to that one, otherwise it will be added to the default.
+    /// Note that only one underlying DataAccessor will be allowed to be used. If you add business objects whose types are
+    /// linked to different DataAccessors you will get an error.
+    /// 
+    /// This can be used when you have some objects that are persisted to one database and others to another. See <see cref="DataAccessorMultiSource"/>
+    /// </summary>
     public class TransactionCommitterMultiSource : ITransactionCommitter
     {
         private readonly IDataAccessor _defaultDataAccessor;
@@ -33,6 +42,11 @@ namespace Habanero.BO
         private ITransactionCommitter _transactionCommitter;
         private IDataAccessor _myDataAccessor;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="defaultDataAccessor">The default <see cref="IDataAccessor"/>, used for all objects that don't have an alternate DataAccessor specified</param>
+        /// <param name="dataAccessors">The alternate DataAccessors - each type can be linked to one data accessor (and more than one type to the same one.</param>
         public TransactionCommitterMultiSource(IDataAccessor defaultDataAccessor, Dictionary<Type, IDataAccessor> dataAccessors)
         {
             _defaultDataAccessor = defaultDataAccessor;
@@ -40,6 +54,12 @@ namespace Habanero.BO
         }
 
 
+        ///<summary>
+        /// Add an object of type business object to the transaction.
+        /// The DBTransactionCommiter wraps this Business Object in the
+        /// appropriate Transactional Business Object
+        ///</summary>
+        ///<param name="businessObject"></param>
         public void AddBusinessObject(IBusinessObject businessObject)
         {
             if (_myDataAccessor == null)
@@ -62,6 +82,10 @@ namespace Habanero.BO
             return _dataAccessors.ContainsKey(type) ? _dataAccessors[type] : _defaultDataAccessor;
         }
 
+        ///<summary>
+        /// This method adds an <see cref="ITransactional"/> to the list of transactions.
+        ///</summary>
+        ///<param name="transaction">The transaction to add to the <see cref="ITransactionCommitter"/>.</param>
         public void AddTransaction(ITransactional transaction)
         {
             if (_myDataAccessor == null)
@@ -72,6 +96,10 @@ namespace Habanero.BO
             _transactionCommitter.AddTransaction(transaction);
         }
 
+        ///<summary>
+        /// Commit the transactions to the datasource e.g. the database, file, memory DB
+        ///</summary>
+        ///<returns></returns>
         public List<Guid> CommitTransaction()
         {
             return _transactionCommitter != null ? _transactionCommitter.CommitTransaction() : new List<Guid>();

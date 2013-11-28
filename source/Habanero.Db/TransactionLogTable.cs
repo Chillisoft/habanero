@@ -255,16 +255,27 @@ namespace Habanero.DB
         }
     }
 
-
-
-
+    /// <summary>
+    /// database table-based implementation of <see cref="ITransactionLoggerFactory"/>
+    /// </summary>
     public class TransactionLoggerFactory : ITransactionLoggerFactory
     {
+        /// <summary>
+        /// Creates a <see cref="TransactionLogTable"/> with the provided table name/
+        /// </summary>
+        /// <param name="bo">The bo to log</param>
+        /// <param name="tableName">The table to log to</param>
+        /// <returns></returns>
         public ITransactionLog GetLogger(BusinessObject bo, string tableName)
         {
             return new TransactionLogTable(bo, tableName);
         }
 
+        /// <summary>
+        /// Creates a <see cref="TransactionLogTable"/> that will log the provided BO.
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <returns></returns>
         public ITransactionLog GetLogger(BusinessObject bo)
         {
             return new TransactionLogTable(bo);

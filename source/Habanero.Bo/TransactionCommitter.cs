@@ -130,7 +130,6 @@ namespace Habanero.BO
         ///  in the list of transactional objects that will be committed by this
         /// transaction committer. This is often required for referential integrity issues.
         /// </summary>
-        /// <param name="businessObject"></param>
         public void InsertBusinessObject(IBusinessObject businessObject)
         {
             if (!MustBOBeAdded(businessObject)) return;

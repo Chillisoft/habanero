@@ -26,7 +26,7 @@ namespace Habanero.Base
 {
     ///<summary>
     /// This class inherits from the <see cref="Criteria"/> class and implements a
-    /// <see cref="ToString(SqlFormatter, AddParameterDelegate)"/> behaviour.
+    /// <see cref="ToString(Habanero.Base.ISqlFormatter,Habanero.Base.CriteriaDB.AddParameterDelegate,System.Collections.Generic.IDictionary{string,string})"/> behaviour.
     /// This allows the formatting of a criteria object into a format specific for the database.
     ///</summary>
     public class CriteriaDB : Criteria
@@ -132,23 +132,32 @@ namespace Habanero.Base
             get { return _criteria.ComparisonOperator; }
         }
 
+        /// <summary>
+        /// Converts this Criteria to a string for use in a sql statement.
+        /// </summary>
+        /// <param name="formatter">The formatter to use</param>
+        /// <param name="addParameter">A delegate defining how to add a parameter to the string.</param>
+        /// <returns>A sql string snippet for this criteria</returns>
         public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter)
         {
             return ToString(formatter, addParameter, new Dictionary<string, string>());
         }
 
         /// <summary>
-        /// Converts this Criteria object to a string, using field names instead of property names and entity names instead of
+        /// Converts this Criteria object to a string, using field names instead of property names and entity names (aliased) instead of
         /// source names. The <see cref="AddParameterDelegate"/> allows a database query builder to create a parameter value
         /// when adding the value to the string for use with parametrized SQL.  Also see <see cref="ISqlStatement"/>.
         /// 
         /// The <see cref="ToString()"/> method uses this method with a simple delegate that converts DateTimes and Guids 
         /// to sensible string representations and to 
+        /// 
+        /// Provide a set of aliases to replace entity names with their aliases.
         /// </summary>
         /// See <see cref="PropNameConverterDelegate"/>
         /// <param name="formatter">A formatter for any specific database <see cref="SqlFormatter"/></param>
         /// <param name="addParameter">The delegate to use to convert the value in object form to a value in string form. 
         /// See <see cref="AddParameterDelegate"/></param>
+        /// <param name="aliases">The mapping of aliases to use</param>
         /// <returns>The Criteria in string form.</returns>
         public string ToString(ISqlFormatter formatter, AddParameterDelegate addParameter, IDictionary<string, string> aliases)
         {

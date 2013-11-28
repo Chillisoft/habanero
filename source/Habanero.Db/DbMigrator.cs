@@ -40,10 +40,27 @@ namespace Habanero.DB
     public class DBMigrator
     {
         // events to be raised by DBMigrator
+        /// <summary>
+        /// Defines a migration event
+        /// </summary>
+        /// <param name="sender">The <see cref="DBMigrator"/> that raised the event</param>
+        /// <param name="args">The information about the event</param>
         public delegate void DBMigrationEvent(DBMigrator sender, DBMigratorEventArgs args);
+        /// <summary>
+        /// Raised when a migration starts
+        /// </summary>
         public DBMigrationEvent OnDbMigrationStarted { get; set; }
+        /// <summary>
+        /// Raised on completion of each step
+        /// </summary>
         public DBMigrationEvent OnDbMigrationProgress { get; set; }
+        /// <summary>
+        /// Raised when migration completes
+        /// </summary>
         public DBMigrationEvent OnDbMigrationCompleted { get; set; }
+        /// <summary>
+        /// Raised when an exception occurs during migration
+        /// </summary>
         public DBMigrationEvent OnDbMigrationException { get; set; }
         /// <summary>
         /// The string for the version of the Database.

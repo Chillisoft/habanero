@@ -40,7 +40,14 @@ namespace Habanero.BO
     public class ReflectionPropertyMapper : IBOPropertyMapper
     {
         private IBusinessObject _businessObject;
+        /// <summary>
+        /// Reflection info about the property
+        /// </summary>
         protected PropertyInfo _propertyInfo;
+
+        /// <summary>
+        /// The message to display when the property value is invalid.
+        /// </summary>
         protected string _invalidMessage = "";
 
         ///<summary>
