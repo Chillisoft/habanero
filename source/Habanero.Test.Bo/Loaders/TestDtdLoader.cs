@@ -25,7 +25,7 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO.Loaders;
 using Habanero.Util;
-using NMock;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO.Loaders
@@ -93,29 +93,25 @@ TestDtd3";
         [Test]
         public void TestSimpleDtd()
         {
-            Mock mockControl = new DynamicMock(typeof (ITextFileLoader));
-            ITextFileLoader textFileLoader = (ITextFileLoader) mockControl.MockInstance;
+            var textFileLoader = Substitute.For<ITextFileLoader>();
 
-            DtdLoader loader = new DtdLoader(textFileLoader, "");
+            textFileLoader.LoadTextFile("class.dtd").Returns(info => new StringReader(dtd1));
 
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
+            var loader = new DtdLoader(textFileLoader, "");
+
             String dtdFileContents = loader.LoadDtd("class");
             Assert.AreEqual(dtd1 + Environment.NewLine, dtdFileContents);
-            mockControl.Verify();
         }
-
-
+        
         [Test]
         public void TestIncludeDtd()
         {
+            var textFileLoader = Substitute.For<ITextFileLoader>();
 
-            Mock mockControl = new DynamicMock(typeof (ITextFileLoader));
-            ITextFileLoader textFileLoader = (ITextFileLoader) mockControl.MockInstance;
+            textFileLoader.LoadTextFile("property.dtd").Returns(info => new StringReader(dtd2));
+            textFileLoader.LoadTextFile("class.dtd").Returns(info => new StringReader(dtd1));
 
-            DtdLoader loader = new DtdLoader(textFileLoader, "");
-
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] {"property.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] {"class.dtd"});
+            var loader = new DtdLoader(textFileLoader, "");
 
             String dtdFileContents = loader.LoadDtd("property");
             Assert.AreEqual(dtd2and1 + Environment.NewLine, dtdFileContents);
@@ -124,15 +120,12 @@ TestDtd3";
         [Test]
         public void TestIncludeDtdTwice()
         {
-            Mock mockControl = new DynamicMock(typeof (ITextFileLoader));
-            ITextFileLoader textFileLoader = (ITextFileLoader) mockControl.MockInstance;
+            var textFileLoader = Substitute.For<ITextFileLoader>();
+            var loader = new DtdLoader(textFileLoader, "");
 
-            DtdLoader loader = new DtdLoader(textFileLoader, "");
-
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd3), new object[] {"key.dtd"});
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd2), new object[] { "property.dtd" });
-            mockControl.ExpectAndReturn("LoadTextFile", new StringReader(dtd1), new object[] { "class.dtd" });
+            textFileLoader.LoadTextFile("key.dtd").Returns(info => new StringReader(dtd3));
+            textFileLoader.LoadTextFile("class.dtd").Returns(info => new StringReader(dtd1));
+            textFileLoader.LoadTextFile("property.dtd").Returns(info => new StringReader(dtd2));
 
             String dtdFileContents = loader.LoadDtd("key");
             Assert.AreEqual(dtd3processed + Environment.NewLine, dtdFileContents);

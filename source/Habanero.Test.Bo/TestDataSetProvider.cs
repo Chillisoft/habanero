@@ -27,7 +27,7 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using NMock;
+using NSubstitute;
 using NUnit.Framework;
 using Rhino.Mocks;
 
@@ -51,7 +51,6 @@ namespace Habanero.Test.BO
         protected IBusinessObject itsRelatedBo;
         protected IDataSetProvider _dataSetProvider;
 
-        protected Mock itsDatabaseConnectionMockControl;
         protected IDatabaseConnection itsConnection;
         protected const string _dataTableIdColumnName = "HABANERO_OBJECTID";
 
@@ -88,8 +87,7 @@ namespace Habanero.Test.BO
             OrderItem.LoadDefaultClassDef();
 
             TransactionCommitterStub committer = new TransactionCommitterStub();
-			itsDatabaseConnectionMockControl = new DynamicMock(typeof (IDatabaseConnection));
-			itsConnection = (IDatabaseConnection) itsDatabaseConnectionMockControl.MockInstance;
+            itsConnection = Substitute.For<IDatabaseConnection>();
             _collection = new BusinessObjectCollection<MyBO>(_classDef);
             //itsBo1 = _classDef.CreateNewBusinessObject(itsConnection);
             itsBo1 = _classDef.CreateNewBusinessObject();
@@ -110,7 +108,6 @@ namespace Habanero.Test.BO
             
             BOMapper mapper = new BOMapper( _collection.ClassDef.CreateNewBusinessObject());
             itsTable = _dataSetProvider.GetDataTable(mapper.GetUIDef().UIGrid);
-            itsDatabaseConnectionMockControl.Verify();
         }
 
         [TearDown]

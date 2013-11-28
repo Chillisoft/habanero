@@ -24,7 +24,7 @@ using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.DB;
-using NMock;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB
@@ -34,9 +34,7 @@ namespace Habanero.Test.DB
     {
         DBMigrator itsDbMigrator;
         IDatabaseConnection itsConn;
-        Mock itsConnMock;
         ISettings _itsSettings;
-        Mock itsSettingsMock;
 
         private string appName = GlobalRegistry.ApplicationName;
         private string appVersion = GlobalRegistry.ApplicationVersion;
@@ -53,15 +51,13 @@ namespace Habanero.Test.DB
             GlobalRegistry.Settings = settings;
             GlobalRegistry.UIExceptionNotifier = exNotifier;
 
-            itsConnMock = new DynamicMock(typeof(IDatabaseConnection));
-            itsConn = (IDatabaseConnection)itsConnMock.MockInstance;
+            itsConn = Substitute.For<IDatabaseConnection>();
             itsDbMigrator = new DBMigrator(itsConn);
             itsDbMigrator.AddMigration(1, "migration1;");
             itsDbMigrator.AddMigration(2, "migration2;");
             itsDbMigrator.AddMigration(3, "migration3;");
 
-            itsSettingsMock = new DynamicMock(typeof(ISettings));
-            _itsSettings = (ISettings)itsSettingsMock.MockInstance;
+            _itsSettings = Substitute.For<ISettings>();
         }
 
         [TearDown]
@@ -105,11 +101,9 @@ namespace Habanero.Test.DB
         public void TestMigrate()
         {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { new[] { new SqlStatement(itsConn, "migration2;") } });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
             itsDbMigrator.Migrate(1, 2);
-            itsConnMock.Verify();
-            itsSettingsMock.Verify();
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "2");
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration2;"));
         }
 
         [Test]
@@ -117,10 +111,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("1");
             DBMigrator eventMigrator = null;
             DBMigratorEventArgs eventArgs = null;
             itsDbMigrator.OnDbMigrationStarted += (s, e) =>
@@ -141,17 +132,17 @@ namespace Habanero.Test.DB
             Assert.AreEqual(itsDbMigrator, eventMigrator);
             Assert.IsNotNull(eventArgs);
             Assert.AreEqual(2, eventArgs.CurrentStep);
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "2");
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration2;"));
         }
+
 
         [Test]
         public void Event_WhenMigrationStartsAndNoMigrationRequired_OnMigrationStartedEventNotRaised()
         {
             //---------------Set up test pack-------------------
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("2");
             DBMigrator eventMigrator = null;
             DBMigratorEventArgs eventArgs = null;
             var onDbMigrationStartedEventCalled = false;
@@ -172,6 +163,7 @@ namespace Habanero.Test.DB
             Assert.IsFalse(onDbMigrationStartedEventCalled);
             Assert.IsNull(eventMigrator);
             Assert.IsNull(eventArgs);
+            _itsSettings.DidNotReceive().SetString(DBMigrator.DatabaseVersionSetting, Arg.Any<string>());
         }
         
         [Test]
@@ -179,10 +171,7 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("1");
             DBMigrator eventMigrator = null;
             DBMigratorEventArgs eventArgs = null;
             itsDbMigrator.OnDbMigrationCompleted += (s, e) =>
@@ -203,6 +192,8 @@ namespace Habanero.Test.DB
             Assert.AreEqual(itsDbMigrator, eventMigrator);
             Assert.IsNotNull(eventArgs);
             Assert.AreEqual(2, eventArgs.CurrentStep);
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "2");
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration2;"));
         }
 
         [Test]
@@ -210,11 +201,8 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
-            DBMigrator eventMigrator = null;
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("2");
+          DBMigrator eventMigrator = null;
             DBMigratorEventArgs eventArgs = null;
             var onDbMigrationCompletedCalled = false;
             itsDbMigrator.OnDbMigrationCompleted += (s, e) =>
@@ -235,6 +223,7 @@ namespace Habanero.Test.DB
             Assert.IsFalse(onDbMigrationCompletedCalled);
             Assert.IsNull(eventMigrator);
             Assert.IsNull(eventArgs);
+            _itsSettings.DidNotReceive().SetString(DBMigrator.DatabaseVersionSetting, Arg.Any<string>());
         }
 
         [Test]
@@ -242,20 +231,10 @@ namespace Habanero.Test.DB
         {
             //---------------Set up test pack-------------------
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
-
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
-            statements = new [] {new SqlStatement(itsConn, "migration3;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("1");
 
             var progressValues = new List<decimal>();
-            itsDbMigrator.OnDbMigrationProgress += (s, e) =>
-                {
-                    progressValues.Add(e.PercentageComplete);
-                };
+            itsDbMigrator.OnDbMigrationProgress += (s, e) => progressValues.Add(e.PercentageComplete);
             
             //---------------Assert Precondition----------------
             Assert.AreEqual(0, progressValues.Count());
@@ -265,14 +244,17 @@ namespace Habanero.Test.DB
             Assert.AreEqual(2, progressValues.Count());
             Assert.AreEqual(50, progressValues[0]);
             Assert.AreEqual(100, progressValues[1]);
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "2");
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "3");
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration2;"));
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration3;"));
         }
         
         [Test]
         public void TestGetCurrentVersion() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("2");
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
-            itsSettingsMock.Verify();
         }
         
         [Test]
@@ -302,28 +284,23 @@ namespace Habanero.Test.DB
         [Test]
         public void TestGetCurrentVersionGlobalSettings()
         {
-            itsSettingsMock.ExpectAndReturn("GetString", "2", new object[] { DBMigrator.DatabaseVersionSetting });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("2");
             GlobalRegistry.Settings = _itsSettings;            
             Assert.AreEqual(2, itsDbMigrator.CurrentVersion());
             GlobalRegistry.Settings = null;
-            itsSettingsMock.Verify();
         }        
         
         [Test]
         public void TestMigrateTo() {
             itsDbMigrator.SetSettingsStorer(_itsSettings);
-            itsSettingsMock.ExpectAndReturn("GetString", "1", new object[] { DBMigrator.DatabaseVersionSetting });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "2" });
-            itsSettingsMock.ExpectAndReturn("SetString", null, new object[] { DBMigrator.DatabaseVersionSetting, "3" });
-            var statements = new [] {new SqlStatement(itsConn, "migration2;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
-            statements = new [] {new SqlStatement(itsConn, "migration3;")};
-            itsConnMock.ExpectAndReturn("ExecuteSql", 0, new object[] { statements  });
+            _itsSettings.GetString(DBMigrator.DatabaseVersionSetting).Returns("1");
           
             itsDbMigrator.MigrateTo(3);
             
-            itsConnMock.Verify();
-            itsSettingsMock.Verify();
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "2");
+            _itsSettings.Received().SetString(DBMigrator.DatabaseVersionSetting, "3");
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration2;"));
+            itsConn.Received().ExecuteSql(new SqlStatement(itsConn, "migration3;"));
         }
         
         [Test]
@@ -333,7 +310,7 @@ namespace Habanero.Test.DB
 
         [Test]
         public void TestAddSqlStatement() {
-            SqlStatement statement = new SqlStatement(itsConn, "test");
+            var statement = new SqlStatement(itsConn, "test");
             itsDbMigrator.AddMigration(4, statement);
             Assert.AreEqual(statement, itsDbMigrator.GetMigration(4));
             

@@ -26,7 +26,7 @@ using Habanero.Base;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
-using NMock;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -42,7 +42,6 @@ namespace Habanero.Test.BO
         readonly Guid _guid2 = Guid.NewGuid();
         readonly Guid _guid3 = Guid.NewGuid();
         DataTable dt;
-        Mock dbConnMock;
         IDatabaseConnection conn;
         ISqlStatement statement;
 
@@ -71,13 +70,11 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
-            dbConnMock = new DynamicMock(typeof (IDatabaseConnection));
-            conn = (IDatabaseConnection) dbConnMock.MockInstance;
+            conn = Substitute.For<IDatabaseConnection>();
             statement = new SqlStatement(DatabaseConnection.CurrentConnection);
             statement.Statement.Append(Sql);
-            dbConnMock.ExpectAndReturn("LoadDataTable", dt, new object[] {statement, "", ""});
-            dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
-                                       new object[] {});
+            conn.LoadDataTable(statement, "", "").Returns(dt);
+            conn.GetConnection().Returns(DatabaseConnection.CurrentConnection.GetConnection());
         }
 
         [Test]
@@ -119,7 +116,6 @@ namespace Habanero.Test.BO
                 }
             }
             Assert.AreEqual("Test1", str);
-            dbConnMock.Verify();
         }
 
         private static string GuidToUpper(Guid guid)
@@ -137,7 +133,6 @@ namespace Habanero.Test.BO
             Dictionary<string, string> col = source.GetLookupList(conn);
             Dictionary<string, string> col2 = source.GetLookupList(conn);
             Assert.AreSame(col2, col);
-            dbConnMock.Verify();
         }
 
 
@@ -159,9 +154,6 @@ namespace Habanero.Test.BO
         [Test]
         public void TestLookupListTimeout()
         {
-            dbConnMock.ExpectAndReturn("LoadDataTable", dt, new object[] {statement, "", ""});
-            dbConnMock.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection(),
-                                       new object[] {});
             PropDef propDef = new PropDef("PropName", typeof(Guid), PropReadWriteRule.ReadWrite, null);
             DatabaseLookupList source = new DatabaseLookupList(Sql, 100, null, null, false);
             source.PropDef = propDef;
@@ -169,7 +161,6 @@ namespace Habanero.Test.BO
             Thread.Sleep(250);
             Dictionary<string, string> col2 = source.GetLookupList(conn);
             Assert.AreNotSame(col2, col);
-            dbConnMock.Verify();
         }
 
         [Test]
