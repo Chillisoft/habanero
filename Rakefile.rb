@@ -30,6 +30,7 @@ msbuild_settings = {
 
 #------------------------project settings------------------------
 $solution = 'source/Habanero.sln'
+$solutionNuget = '"source/Habanero.sln"'
 $major_version = ''
 $minor_version = ''
 $patch_version = ''
@@ -40,10 +41,10 @@ $nuget_publish_version = 'Trunk'
 #---------------------------------TASKS----------------------------------------
 
 desc "Runs the build task"
-task :default, [:major, :minor, :patch] => [:setupvars, :build_test]
+task :default, [:major, :minor, :patch] => [:updatesubmodules, :setupvars, :build_test]
 
 desc "Runs the build task and pushes to local"
-task :build_push, [:major, :minor, :patch, :apikey, :sourceurl] => [:setupvars, :build_test, :nugetpush]
+task :build_push, [:major, :minor, :patch, :apikey, :sourceurl] => [:updatesubmodules, :setupvars, :build_test, :nugetpush]
 
 desc "Runs the build task and pushes to local"
 task :build_push_nobuild, [:major, :minor, :patch, :apikey, :sourceurl] => [:setupvars, :nugetpush]
@@ -52,13 +53,13 @@ desc "Builds Habanero, including tests"
 task :build_test => [:build_only, :test]
 
 desc "Builds Habanero"
-task :build_only => [:restorepackages,:clean, :set_assembly_version, :msbuild, :copy_to_nuget]
+task :build_only, [:major, :minor, :patch, :apikey, :sourceurl] => [:updatesubmodules,:restorepackages,:clean, :set_assembly_version, :msbuild, :copy_to_nuget]
 
 desc "Builds Habanero, including running tests with dotcover then pushes to the local nuget server"
-task :build_with_coverage => [:build_only, :test_with_coverage]
+task :build_with_coverage, [:major, :minor, :patch, :apikey, :sourceurl] => [:build_only, :test_with_coverage]
 
 desc "Build with sonar (stats build)"
-task :build_with_sonar => [:build_only, :sonar]
+task :build_with_sonar, [:major, :minor, :patch, :apikey, :sourceurl] => [:build_only, :sonar]
 
 desc "Setup Variables"
 task :setupvars,:major ,:minor,:patch, :apikey, :sourceurl do |t, args|
@@ -75,14 +76,20 @@ task :setupvars,:major ,:minor,:patch, :apikey, :sourceurl do |t, args|
 	$nuget_sourceurl = "#{args[:sourceurl]}"
 	$app_version = "#{$major_version}.#{$minor_version}.#{$patch_version}.0"
 	puts cyan("Assembly Version #{$app_version}")
-	puts cyan("Nuegt key: #{$nuget_apikey} for: #{$nuget_sourceurl}")
+	puts cyan("Nuget key: #{$nuget_apikey} for: #{$nuget_sourceurl}")
 end
 
 desc "Restore Nuget Packages"
 task :restorepackages do
-	system 'lib\nuget.exe restore source\Habanero.sln'
+	system 'lib\nuget.exe restore #{$solutionNuget}'
 end
 
+desc "Update Submodules"
+task :updatesubmodules do
+	puts cyan("Updating Git Submodules")
+	system 'git submodule foreach git checkout master'
+	system 'git submodule foreach git pull'
+end
 #------------------------build habanero --------------------
 
 desc "Cleans build folders"
