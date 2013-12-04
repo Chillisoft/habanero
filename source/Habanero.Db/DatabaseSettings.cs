@@ -53,6 +53,7 @@ namespace Habanero.DB
         /// the table name to use to store the settings
         /// </summary>
         /// <param name="tableName">The table name in which to store settings</param>
+        /// <param name="databaseConnection"></param>
         public DatabaseSettings(string tableName, IDatabaseConnection databaseConnection)
             : this(databaseConnection)
         {

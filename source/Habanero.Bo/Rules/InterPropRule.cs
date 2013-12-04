@@ -82,6 +82,10 @@ namespace Habanero.BO.Rules
             ComparisonOp = comparisonOperator;
             RightProp = propRight;
         }
+        /// <summary>
+        /// Constructor that just sets the comparison operator.
+        /// </summary>
+        /// <param name="comparisonOperator"></param>
         protected InterPropRule( ComparisonOperator comparisonOperator)
         {
             ComparisonOp = comparisonOperator;

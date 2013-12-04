@@ -90,9 +90,14 @@ namespace Habanero.Base
         public string CreateSQL(ISqlFormatter sqlFormatter)
         {
             return CreateSQL(sqlFormatter, new Dictionary<string, string>());
-            
         }
 
+        /// <summary>
+        /// Creates the Sql that corresponds to this join
+        /// </summary>
+        /// <param name="sqlFormatter">The formatter used to construct the appropriate Sql</param>
+        /// <param name="aliases">The aliases to use for table names</param>
+        /// <returns>The sql statement.</returns>
         public string CreateSQL(ISqlFormatter sqlFormatter, IDictionary<string, string> aliases)
         {
             //if (Joins.Count == 0) return sqlFormatter.DelimitTable(EntityName);

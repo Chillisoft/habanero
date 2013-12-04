@@ -141,7 +141,6 @@ namespace Habanero.BO
 
         private IEnumerable<IBusinessObject> GetAllObjectsSnapshot()
         {
-            return AllObjects.Values;
             var values = AllObjects.Values;
             var valuesSnapshot = new IBusinessObject[values.Count];
             values.CopyTo(valuesSnapshot, 0);

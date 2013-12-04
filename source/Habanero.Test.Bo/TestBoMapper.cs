@@ -25,7 +25,6 @@ using Habanero.BO.ClassDefinition;
 using Habanero.BO.Exceptions;
 using Habanero.Test.Structure;
 using Habanero.Util;
-using NMock;
 using NUnit.Framework;
 using Rhino.Mocks;
 

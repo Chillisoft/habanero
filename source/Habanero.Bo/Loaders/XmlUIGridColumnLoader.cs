@@ -33,7 +33,7 @@ namespace Habanero.BO.Loaders
     /// </summary>
     public class XmlUIGridColumnLoader : XmlLoader
     {
-        protected static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(XmlUIGridColumnLoader));
+        private static readonly IHabaneroLogger Logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(XmlUIGridColumnLoader));
         private string _heading;
         private string _propertyName;
         private bool _editable;

@@ -227,13 +227,22 @@ namespace Habanero.BO.ClassDefinition
 
         #region Implementation of ISingleValueDef
 
+        ///<summary>
+        /// The display name for the property.
+        ///</summary>
         public string DisplayName
         {
             get { return StringUtilities.DelimitPascalCase(this.RelationshipName, " "); }
         }
 
+        ///<summary>
+        /// The description of the property.
+        ///</summary>
         public string Description { get; set; }
 
+        /// <summary>
+        /// The name of the property type assembly
+        /// </summary>
         public string PropertyTypeAssemblyName
         {
             get { return this.RelatedObjectAssemblyName; }
@@ -241,56 +250,87 @@ namespace Habanero.BO.ClassDefinition
         }
 
         /// <summary>
-        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef>"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
+        /// Returns a List of PropRules <see cref="IPropRule"/> for the Property Definition <see cref="IPropDef"/> or Single RelationshipDefinition <see cref="ISingleRelationshipDef"/>.
         /// </summary>
         public List<IPropRule> PropRules
         {
             get { return new List<IPropRule>(); }
         }
 
+        /// <summary>
+        /// Provides access to read and write the ILookupList object
+        /// in this definition
+        /// </summary>
         public ILookupList LookupList
         {
             get { return new NullLookupList(); }
             set { }
         }
 
+        /// <summary>
+        /// Returns the rule for how the property/single Relationship can be accessed. 
+        /// See the PropReadWriteRule enumeration (<see cref="PropReadWriteRule"/> for more detail.
+        /// </summary>
         public PropReadWriteRule ReadWriteRule { get; set; }
 
+        /// <summary>
+        /// The name of the property type
+        /// </summary>
         public string PropertyTypeName
         {
             get { return this.RelatedObjectClassName; }
             set { this.RelatedObjectAssemblyName = value; }
         }
 
+        /// <summary>
+        /// The type of the property, e.g. string
+        /// </summary>
         public Type PropertyType
         {
             get { return this.RelatedObjectClassType; }
             set { this.RelatedObjectClassType = value; }
         }
 
+        ///<summary>
+        /// Is this property compulsary or not
+        ///</summary>
         public bool Compulsory
         {
             get { return this.IsCompulsory; }
             set { _setAsCompulsory = value; }
         }
 
+        /// <summary>
+        /// The name of the property, e.g. surname
+        /// </summary>
         public string PropertyName
         {
             get { return this.RelationshipName; }
             set { this.RelationshipName = value; }
         }
 
+        ///<summary>
+        /// Returns the class definition that this property definition is owned by.
+        ///</summary>
         public IClassDef ClassDef
         {
             get { return this.OwningClassDef; }
             set { this.OwningClassDef = value; }
         }
 
+        ///<summary>
+        /// Returns the full display name for a property definition.
+        /// If there is a unit of measure then it is appended to the display name in brackets e.g. DisplayName (UOM).
+        /// If there is no display name then it will return the PascalCase Delimited property Name i.e. Display Name.
+        ///</summary>
         public string DisplayNameFull
         {
             get { return this.DisplayName; }
         }
 
+        ///<summary>
+        /// The name of the Class if this PropDef is associated with a ClassDef.
+        ///</summary>
         public string ClassName
         {
             get { return this.OwningClassName; }

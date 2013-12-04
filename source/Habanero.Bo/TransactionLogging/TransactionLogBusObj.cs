@@ -136,16 +136,29 @@ namespace Habanero.BO
         }
     }
 
-
+    /// <summary>
+    /// A Transaction logger factory that creates <see cref="NullTransactionLogger"/> objects which don't log anything.
+    /// </summary>
     public class TransactionLoggerFactoryNull : ITransactionLoggerFactory
     {
         #region Implementation of ITransactionLoggerFactory
 
+        /// <summary>
+        /// Creates a <see cref="NullTransactionLogger"/>
+        /// </summary>
+        /// <param name="bo">ignored</param>
+        /// <param name="tableName">ignored</param>
+        /// <returns></returns>
         public ITransactionLog GetLogger(BusinessObject bo, string tableName)
         {
             return new NullTransactionLogger();
         }
 
+        /// <summary>
+        /// Creates a <see cref="NullTransactionLogger"/>
+        /// </summary>
+        /// <param name="bo">ignored</param>
+        /// <returns></returns>
         public ITransactionLog GetLogger(BusinessObject bo)
         {
             return new NullTransactionLogger();
@@ -154,25 +167,46 @@ namespace Habanero.BO
         #endregion
     }
 
+    /// <summary>
+    /// A transaction logger that does nothing (ie it doesn't log anything)
+    /// </summary>
     public class NullTransactionLogger : ITransactionLog
     {
         #region Implementation of ITransactional
 
+        ///<summary>
+        /// This is the ID that uniquely identifies this item of the transaction.
+        /// This must be the same for the lifetime of the transaction object. 
+        /// This assumption is relied upon for certain optimisations in the Transaction Comitter.
+        ///</summary>
+        ///<returns>The ID that uniquely identifies this item of the transaction. In the case of business objects the object Id.
+        /// for non business objects that no natural id exists for the particular transactional item a guid that uniquely identifies 
+        /// transactional item should be generated. This is used by the transaction committer to ensure that the transactional item
+        /// is not added twice in error.</returns>
         public string TransactionID()
         {
             return "NullTransactionLoggerID" + Guid.NewGuid();
         }
 
+        ///<summary>
+        /// Does nothing
+        ///</summary>
         public void UpdateStateAsCommitted()
         {
             //Do nothing
         }
 
+        ///<summary>
+        /// Does nothing
+        ///</summary>
         public void UpdateAsRolledBack()
         {
             //Do nothing.
         }
 
+        ///<summary>
+        /// Returns an empty list
+        ///</summary>
         public IEnumerable<ISqlStatement> GetPersistSql()
         {
             return new List<ISqlStatement>();
@@ -182,10 +216,26 @@ namespace Habanero.BO
     }
 
 
+    /// <summary>
+    /// Defines methods that create <see cref="ITransactionLog"/> objects, which are log entries for a specific BO.
+    /// </summary>
     public interface ITransactionLoggerFactory
     {
+        /// <summary>
+        /// Creates a <see cref="ITransactionLog"/> with the provided table name. 
+        /// Note that for a db transaction log this will refer to the actual table name. For a 
+        /// file based transaction log this might refer to the file name.
+        /// </summary>
+        /// <param name="bo">The bo to log</param>
+        /// <param name="tableName">The table to log to</param>
+        /// <returns></returns>
         ITransactionLog GetLogger(BusinessObject bo, string tableName);
 
+        /// <summary>
+        /// Creates a <see cref="ITransactionLog"/> that will log the provided BO.
+        /// </summary>
+        /// <param name="bo"></param>
+        /// <returns></returns>
         ITransactionLog GetLogger(BusinessObject bo);
     }
 }

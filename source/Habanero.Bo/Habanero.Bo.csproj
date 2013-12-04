@@ -399,7 +399,6 @@
     <Compile Include="TransactionCommitter.cs" />
     <Compile Include="TransactionCommitterInMemory.cs" />
     <Compile Include="TransactionCommitterMultiSource.cs" />
-    <Compile Include="TransactionCommitterRemote.cs" />
     <Compile Include="TransactionLogging\TransactionLogBusObj.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,9 +36,12 @@ namespace Habanero.DB
         : TransactionalBusinessObject, ITransactionalDB
     {
         private readonly IDatabaseConnection _databaseConnection;
-        ///<summary>
-        ///</summary>
-        ///<param name="businessObject"></param>
+
+        /// <summary>
+        /// Constructor - creates a TransactionalBusinessObjectDB given a IBusinessObject and the DatabaseConnection
+        /// </summary>
+        /// <param name="businessObject"></param>
+        /// <param name="databaseConnection"></param>
         public TransactionalBusinessObjectDB(IBusinessObject businessObject, IDatabaseConnection databaseConnection) : base(businessObject)
         {
             _databaseConnection = databaseConnection;

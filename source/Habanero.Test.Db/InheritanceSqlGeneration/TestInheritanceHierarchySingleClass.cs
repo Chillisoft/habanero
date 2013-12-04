@@ -27,7 +27,6 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
-using NMock;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB.InheritanceSqlGeneration
@@ -440,10 +439,8 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestUpdateWhenOnlyOneLevelUpdates()
         {
-            IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
-            IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
-            FilledCircleInheritsCircleNoPK myCircle = new FilledCircleInheritsCircleNoPK();
-            TransactionCommitterStub committer = new TransactionCommitterStub();
+            var myCircle = new FilledCircleInheritsCircleNoPK();
+            var committer = new TransactionCommitterStub();
             committer.AddBusinessObject(myCircle);
             committer.CommitTransaction();
             myCircle.SetPropertyValue("Colour", 4);
@@ -451,7 +448,6 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             var myUpdateSql =
                 new UpdateStatementGenerator(myCircle, DatabaseConnection.CurrentConnection).Generate();
             Assert.AreEqual(1, myUpdateSql.Count());
-            connectionControl.Verify();
         }
 
 

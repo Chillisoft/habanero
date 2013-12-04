@@ -209,6 +209,9 @@ namespace Habanero.BO.ClassDefinition
             return ClassDef.ClassDefs.Contains(RelatedObjectAssemblyName, RelatedObjectClassNameWithTypeParameter);
         }
 
+        /// <summary>
+        /// The related class name including its type parameter (if any)
+        /// </summary>
         public string RelatedObjectClassNameWithTypeParameter
         {
             get
@@ -252,6 +255,12 @@ namespace Habanero.BO.ClassDefinition
         /// </summary>
         public DeleteParentAction DeleteParentAction { get; set; }
 
+        /// <summary>
+        /// Custom string to use when throwing an exception preventing deletion of an object
+        /// This is meant to be supplied for friendlier user interaction. You may put the placeholder
+        /// {0} into your custom message to have the .ToString() value of the BusinessObject placed
+        /// into your custom message.
+        /// </summary>
         public string PreventDeleteMessage { get; set; }
 
         ///<summary>

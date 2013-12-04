@@ -25,8 +25,15 @@ using Habanero.Base;
 
 namespace Habanero.DB
 {
+    /// <summary>
+    /// Interface that defines a method for creating an IDatabaseConnection
+    /// </summary>
     public interface IDatabaseConnectionCreator
     {
+        /// <summary>
+        /// Creates an <see cref="IDatabaseConnection"/>
+        /// </summary>
+        /// <returns></returns>
         IDatabaseConnection CreateConnection();
     }
 }

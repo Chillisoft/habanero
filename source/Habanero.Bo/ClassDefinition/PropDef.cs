@@ -51,7 +51,7 @@ namespace Habanero.BO.ClassDefinition
     /// </futureEnhancements>
     public class PropDef : IPropDef
     {
-        public static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(PropDef));
+        private static readonly IHabaneroLogger _logger = GlobalRegistry.LoggerFactory.GetLogger(typeof(PropDef));
         private string _propertyName;
         private string _description;
         private Type _propType;
@@ -939,7 +939,7 @@ namespace Habanero.BO.ClassDefinition
         }
 
         ///<summary>
-        /// returns the ClassName from the associated <see cref="IClassDef"
+        /// returns the ClassName from the associated <see cref="IClassDef"></see>
         ///</summary>
         ///<exception cref="NotImplementedException"></exception>
         public string ClassName

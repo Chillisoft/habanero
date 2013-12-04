@@ -606,6 +606,12 @@ namespace Habanero.DB
             }
         }
 
+        /// <summary>
+        /// Creates a IDbCommand using the IDbConnection given.  
+        /// Sets the timout for the command based on what you have set using <see cref="SetTimeoutPeriod"/>
+        /// </summary>
+        /// <param name="dbConnection">The connection to create the command with</param>
+        /// <returns>The newly created IDbCommand</returns>
         protected virtual IDbCommand CreateCommand(IDbConnection dbConnection)
         {
             var dbCommand = dbConnection.CreateCommand();
@@ -729,11 +735,24 @@ namespace Habanero.DB
             return ExecuteSql(new[] { sql });
         }
 
+        /// <summary>
+        /// Executes a stored proc with the params given.
+        /// </summary>
+        /// <param name="procName">The stored proc name</param>
+        /// <param name="params">The parameters to pass in</param>
+        /// <returns>A scalar result</returns>
         public int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params)
         {
             return ExecuteStoredProcNonQuery(procName, @params, _timeoutPeriod);
         }
 
+        /// <summary>
+        /// Executes a stored proc with the params given using the timeout length given.
+        /// </summary>
+        /// <param name="procName">The stored proc name</param>
+        /// <param name="params">The parameters to pass in</param>
+        /// <param name="timeout">The timeout in seconds</param>
+        /// <returns>A scalar result</returns>
         public int ExecuteStoredProcNonQuery(string procName, IEnumerable<Param> @params, int timeout)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(procName, "procName");
@@ -778,6 +797,11 @@ namespace Habanero.DB
             }
         }
 
+        /// <summary>
+        /// Executes a raw sql statement. BEWARE OF SQL INJECTION ATTACKS. Use for hardcoded sql only.
+        /// </summary>
+        /// <param name="sql">The sql statement to run as a scalar</param>
+        /// <returns>The scalar result</returns>
         public object ExecuteRawSqlScalar(string sql)
         {
             ArgumentValidationHelper.CheckArgumentNotNull(sql, "sql");

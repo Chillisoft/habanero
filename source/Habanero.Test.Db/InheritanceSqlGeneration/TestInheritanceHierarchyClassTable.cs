@@ -27,7 +27,6 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Test.BO;
-using NMock;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming
@@ -174,32 +173,14 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
         [Test]
         public void TestUpdateWhenOnlyOneLevelUpdates()
         {
-            IMock connectionControl = new DynamicMock(typeof (IDatabaseConnection));
-           // IDatabaseConnection connection = (IDatabaseConnection) connectionControl.MockInstance;
-            //connectionControl.ExpectAndReturn("LoadDataReader", null, new object[] {null});
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("GetConnection", DatabaseConnection.CurrentConnection.GetConnection());
-            //connectionControl.ExpectAndReturn("ExecuteSql", 3, new object[] { null, null });
-
             FilledCircle myCircle = new FilledCircle();
-//            myCircle.SetDatabaseConnection(connection);
             TransactionCommitterStub committer = new TransactionCommitterStub();
             committer.AddBusinessObject(myCircle);
             committer.CommitTransaction();
-            //myCircle.Save();
             myCircle.SetPropertyValue("Colour", 4);
 
             var myUpdateSql = new UpdateStatementGenerator(myCircle, DatabaseConnection.CurrentConnection).Generate();
             Assert.AreEqual(1, myUpdateSql.Count());
-            connectionControl.Verify();
         }
 
         [Test]

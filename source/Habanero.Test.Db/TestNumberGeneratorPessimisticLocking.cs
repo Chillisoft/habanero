@@ -33,7 +33,6 @@ namespace Habanero.Test.DB
     [TestFixture]
     public class TestNumberGeneratorPessimisticLocking
     {
-        private IBusinessObjectManager _businessObjectManagerBeforeFixture;
 // ReSharper disable InconsistentNaming
         [SetUp]
         public void SetupTest()
