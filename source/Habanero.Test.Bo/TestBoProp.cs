@@ -1365,6 +1365,38 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void Test_PropertyValueToDisplay_WhenDateTimeUtcNow_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            boProp.Value = dateTimeUtcNow;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object displayValue = boProp.PropertyValueToDisplay;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(displayValue);
+            Assert.AreNotSame(dateTimeUtcNow, displayValue);
+        }
+
+        [Test]
+        public void Test_Value_WhenDateTimeUtcNow_ShouldReturnResolvedValue()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = CreateTestPropDateTimePropDef(); ;
+            IBOProp boProp = propDef.CreateBOProp(true);
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            boProp.Value = dateTimeUtcNow;
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object value = boProp.Value;
+            //---------------Test Result -----------------------
+            Assert.IsNotNull(value);
+            Assert.AreNotSame(dateTimeUtcNow, value);
+        }
+
+        [Test]
         public void Test_InitialiseProp_ReturnsFalseIfPropValueNotChanged()
         {
             //---------------Set up test pack-------------------

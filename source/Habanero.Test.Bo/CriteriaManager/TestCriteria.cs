@@ -1016,12 +1016,12 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
-            DateTimeNow dateTimeToday = new DateTimeNow();
+            DateTimeNow dateTimeNow = new DateTimeNow();
             cp.DateOfBirth = DateTime.Today.AddDays(1);
             cp.Save();
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeNow);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
@@ -1036,11 +1036,50 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadDefaultClassDef();
             ContactPersonTestBO cp = new ContactPersonTestBO();
             cp.Surname = Guid.NewGuid().ToString("N");
-            DateTimeNow dateTimeToday = new DateTimeNow();
+            DateTimeNow dateTimeNow = new DateTimeNow();
             cp.DateOfBirth = DateTime.Today.AddDays(-1);
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
-            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeToday);
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeNow);
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        
+        [Test]
+        public void TestIsMatch_DateTimeUtcNow_GreaterThan()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            cp.DateOfBirth = DateTime.Today.AddDays(1);
+            cp.Save();
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeUtcNow);
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_DateTimeUtcNow_GreaterThan_NoMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            cp.DateOfBirth = DateTime.Today.AddDays(-1);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.GreaterThan, dateTimeUtcNow);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
@@ -2843,6 +2882,25 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        public void TestIsMatch_DateTimeUtcNow_Equals_NoMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            cp.DateOfBirth = DateTime.Today.AddDays(-1);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, dateTimeUtcNow);
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
         public void TestIsMatch_DateTimeToday_LessThan()
         {
             //---------------Set up test pack-------------------
@@ -2916,6 +2974,46 @@ namespace Habanero.Test.BO
             //---------------Assert PreConditions---------------            
             //---------------Execute Test ----------------------
             Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeNow);
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+        
+        [Test]
+        public void TestIsMatch_DateTimeUtcNow_LessThan()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            cp.DateOfBirth = DateTime.Today.AddDays(-1);
+            cp.Save();
+
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeUtcNow);
+            bool isMatch = criteria.IsMatch(cp);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isMatch, "The object should be a match since it matches the criteria given.");
+            //---------------Tear Down -------------------------          
+        }
+
+        [Test]
+        public void TestIsMatch_DateTimeUtcNow_LessThan_NoMatch()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            ContactPersonTestBO.LoadDefaultClassDef();
+            ContactPersonTestBO cp = new ContactPersonTestBO();
+            cp.Surname = Guid.NewGuid().ToString("N");
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            cp.DateOfBirth = DateTime.Today.AddDays(1);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.LessThan, dateTimeUtcNow);
             bool isMatch = criteria.IsMatch(cp);
             //---------------Test Result -----------------------
             Assert.IsFalse(isMatch, "The object should not be a match since it does not match the criteria given.");

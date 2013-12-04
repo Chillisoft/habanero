@@ -233,7 +233,7 @@ namespace Habanero.Util
 
             if (!(valueToParse is DateTime))
             {
-                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow)
+                if (valueToParse is DateTimeToday || valueToParse is DateTimeNow || valueToParse is DateTimeUtcNow)
                 {
                     returnValue = valueToParse;
                     return true;
@@ -262,6 +262,11 @@ namespace Habanero.Util
                     if (stringValueToConvertUpperCase == "NOW")
                     {
                         returnValue = new DateTimeNow();
+                        return true;
+                    }
+                    if (stringValueToConvertUpperCase == "UTCNOW")
+                    {
+                        returnValue = new DateTimeUtcNow();
                         return true;
                     }
                   

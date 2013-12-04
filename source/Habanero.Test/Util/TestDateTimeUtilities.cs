@@ -282,6 +282,20 @@ namespace Habanero.Test.Util
             Assert.IsNull(parsedValue);
         } 
         [Test]
+        public void Test_TryParseValue_WhenNull_ShouldRetTrueAndRetValueNull()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue(null, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsNull(parsedValue);
+        } 
+        [Test]
         public void Test_TryParseDate_WhenTodayString_ShouldRetTrueAndRetTodayValue()
         {
             //---------------Set up test pack-------------------
@@ -294,7 +308,22 @@ namespace Habanero.Test.Util
             //---------------Test Result -----------------------
             Assert.IsTrue(parsed);
             Assert.AreEqual(DateTime.Today, parsedValue);
-        } 
+        }
+        [Test]
+        public void Test_TryParseValue_WhenTodayString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("today", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf<DateTimeToday>(parsedValue);
+            Assert.AreEqual(DateTime.Today, ((DateTimeToday)parsedValue).ResolveToValue());
+        }
         [Test]
         public void Test_TryParseDate_WhenYesterdayString_ShouldRetTrueAndRetTodayValue()
         {
@@ -310,7 +339,23 @@ namespace Habanero.Test.Util
             Assert.AreEqual(DateTime.Today.AddDays(-1), parsedValue);
         } 
         [Test]
+        public void Test_TryParseValue_WhenYesterdayString_ShouldRetTrueAndRetTodayValue()
+        {
+            //---------------Set up test pack-------------------
+            
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("yesterday", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf<DateTimeToday>(parsedValue);
+            Assert.AreEqual(-1, ((DateTimeToday)parsedValue).OffSet);
+        } 
+        [Test]
         public void Test_TryParseValue_WhenTomorrowString_ShouldRetTrueAndRetTodayValue()
+
         {
             //---------------Set up test pack-------------------
             
@@ -339,6 +384,71 @@ namespace Habanero.Test.Util
             Assert.AreEqual(DateTime.Today.AddDays(1), parsedValue);
         }
 
+
+        [Test]
+        public void Test_TryParseValue_WhenNowString_ShouldRetTrueAndRetNowValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("now", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf<DateTimeNow>(parsedValue);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenNowString_ShouldRetTrueAndRetNowValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            var dateTimeBefore = DateTime.Now;
+            bool parsed = DateTimeUtilities.TryParseDate("now", out parsedValue);
+            var dateTimeAfter = DateTime.Now;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.GreaterOrEqual(parsedValue, dateTimeBefore);
+            Assert.LessOrEqual(parsedValue, dateTimeAfter);
+        }
+
+        [Test]
+        public void Test_TryParseValue_WhenUtcNowString_ShouldRetTrueAndRetUtcNowValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("utcnow", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf<DateTimeUtcNow>(parsedValue);
+        }
+        [Test]
+        public void Test_TryParseDate_WhenUtcNowString_ShouldRetTrueAndRetUtcNowValue()
+        {
+            //---------------Set up test pack-------------------
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            DateTime? parsedValue;
+            var dateTimeBefore = DateTime.UtcNow;
+            bool parsed = DateTimeUtilities.TryParseDate("utcnow", out parsedValue);
+            var dateTimeAfter = DateTime.UtcNow;
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.GreaterOrEqual(parsedValue, dateTimeBefore);
+            Assert.LessOrEqual(parsedValue, dateTimeAfter);
+        }
+
         [Test]
         public void Test_TryParseDate_WhenDateValue_ShouldRetTrueAndRetDateValue()
         {
@@ -361,6 +471,19 @@ namespace Habanero.Test.Util
             //---------------Execute Test ----------------------
             DateTime? parsedValue;
             bool parsed = DateTimeUtilities.TryParseDate("Invalid", out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(parsed);
+            Assert.IsNull(parsedValue);
+        }
+
+        [Test]
+        public void Test_TryParseValue_WhenNot_ShouldRetFalseAndNull()
+        {
+            //---------------Set up test pack-------------------
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parsed = DateTimeUtilities.TryParseValue("Invalid", out parsedValue);
             //---------------Test Result -----------------------
             Assert.IsFalse(parsed);
             Assert.IsNull(parsedValue);

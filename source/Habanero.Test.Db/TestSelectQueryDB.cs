@@ -263,6 +263,7 @@ namespace Habanero.Test.DB
             Assert.GreaterOrEqual(dateTimeBefore, dateTimeValue);
             Assert.LessOrEqual(dateTimeAfter, dateTimeValue);
         }
+
         [Test]
         public void TestCreateSqlStatement_WithCriteria_DateTimeNow()
         {
@@ -287,6 +288,29 @@ namespace Habanero.Test.DB
             Assert.LessOrEqual(dateTimeValue, dateTimeAfter);
         }
 
+        [Test]
+        public void TestCreateSqlStatement_WithCriteria_DateTimeUtcNow()
+        {
+            //---------------Set up test pack-------------------
+            IClassDef classDef = MyBO.LoadClassDefWithDateTime();
+            Criteria criteria = new Criteria("TestDateTime", Criteria.ComparisonOp.Equals, new DateTimeUtcNow());
+            ISelectQuery selectQuery = QueryBuilder.CreateSelectQuery(classDef, criteria);
+            SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
+            //---------------Assert PreConditions---------------            
+            //---------------Execute Test ----------------------
+            DateTime dateTimeBefore = DateTime.Today.ToUniversalTime();
+            ISqlStatement statement = query.CreateSqlStatement(_sqlFormatter);
+            DateTime dateTimeAfter = DateTime.Today.ToUniversalTime().AddDays(1);
+            //---------------Test Result -----------------------
+            string statementString = statement.Statement.ToString();
+            StringAssert.EndsWith("WHERE a1.[TestDateTime] = ?Param0", statementString);
+            Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
+            object value = statement.Parameters[0].Value;
+            Assert.IsInstanceOf(typeof(DateTime), value);
+            DateTime dateTimeValue = (DateTime)value;
+            Assert.GreaterOrEqual(dateTimeValue, dateTimeBefore);
+            Assert.LessOrEqual(dateTimeValue, dateTimeAfter);
+        }
 
         [Test]
         public void TestCreateSqlStatement_WithCriteria_TwoLevels()

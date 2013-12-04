@@ -129,6 +129,8 @@
     <Compile Include="Base\TestDateTimeNowConverter.cs" />
     <Compile Include="Base\TestDateTimeToday.cs" />
     <Compile Include="Base\TestDateTimeTodayConverter.cs" />
+    <Compile Include="Base\TestDateTimeUtcNow.cs" />
+    <Compile Include="Base\TestDateTimeUtcNowConverter.cs" />
     <Compile Include="Base\TestDelegatedExceptionNotifier.cs" />
     <Compile Include="Base\TestRecordingExceptionNotifier.cs" />
     <Compile Include="Base\Exceptions\TestExceptions.cs" />

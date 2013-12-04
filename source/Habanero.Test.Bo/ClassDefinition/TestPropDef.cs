@@ -491,6 +491,23 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeUtcNow()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeUtcNow, out convertedDateTimeValue);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf(typeof(DateTimeUtcNow), convertedDateTimeValue);
+            Assert.AreSame(dateTimeUtcNow, convertedDateTimeValue);
+        }
+
+        [Test]
         public void TestConvertValueToPropertyType_DateTimeAcceptsDateTimeToday()
         {
             //---------------Set up test pack-------------------
@@ -592,6 +609,42 @@ namespace Habanero.Test.BO.ClassDefinition
             Assert.IsTrue(parsed); 
             Assert.IsInstanceOf(typeof(DateTimeNow), convertedDateTimeValue);
             Assert.AreEqual(dateTimeToday.ToString(), convertedDateTimeValue.ToString());
+        }
+        
+        [Test]
+        public void TestConvertValueToPropertyType_NowStringToDateTimeUtcNow()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeString = "UtcNow";
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf(typeof (DateTimeUtcNow), convertedDateTimeValue);
+            Assert.AreEqual(dateTimeUtcNow.ToString(), convertedDateTimeValue.ToString());
+        }
+
+        [Test]
+        public void TestConvertValueToPropertyType_NowStringToDateTimeUtcNow_VariedCase()
+        {
+            //---------------Set up test pack-------------------
+            PropDef propDef = new PropDef("a", typeof (DateTime), PropReadWriteRule.ReadWrite, null);
+            const string dateTimeString = "utcNoW";
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+
+            //---------------Execute Test ----------------------
+            object convertedDateTimeValue;
+            bool parsed = propDef.TryParsePropValue(dateTimeString, out convertedDateTimeValue);
+
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parsed);
+            Assert.IsInstanceOf(typeof(DateTimeUtcNow), convertedDateTimeValue);
+            Assert.AreEqual(dateTimeUtcNow.ToString(), convertedDateTimeValue.ToString());
         }
 
         [Test]

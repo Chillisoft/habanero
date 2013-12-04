@@ -170,6 +170,20 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
+        public void Test_PropDef_ParsePropValue_FromDateTimeUtcNowObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeUtcNow dateTimeNow = new DateTimeUtcNow();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _propDef.TryParsePropValue(dateTimeNow, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreSame(dateTimeNow, parsedValue);
+        }
+
+        [Test]
         public void Test_PropDef_ParsePropValue_FromTodayString()
         {
             //---------------Set up test pack-------------------
@@ -408,6 +422,20 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
             Assert.AreSame(dateTimeNow, parsedValue);
+        }
+
+        [Test]
+        public void Test_DataMapper_ParsePropValue_FromDateTimeUtcNowObject()
+        {
+            //---------------Set up test pack-------------------
+            DateTimeUtcNow dateTimeUtcNow = new DateTimeUtcNow();
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            object parsedValue;
+            bool parseSucceed = _dataMapper.TryParsePropValue(dateTimeUtcNow, out parsedValue);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(parseSucceed);
+            Assert.AreSame(dateTimeUtcNow, parsedValue);
         }
 
         [Test]

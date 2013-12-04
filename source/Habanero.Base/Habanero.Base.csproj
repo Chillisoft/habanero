@@ -162,6 +162,8 @@
     <Compile Include="DateTimeNow.cs" />
     <Compile Include="DateTimeNowConverter.cs" />
     <Compile Include="DateTimeTodayConverter.cs" />
+    <Compile Include="DateTimeUtcNow.cs" />
+    <Compile Include="DateTimeUtcNowConverter.cs" />
     <Compile Include="DelegatedExceptionNotifier.cs" />
     <Compile Include="Encryption\Base64Sha1Hasher.cs" />
     <Compile Include="Encryption\Utf8Sha1Hasher.cs" />
