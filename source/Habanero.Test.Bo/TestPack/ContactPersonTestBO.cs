@@ -19,6 +19,8 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
@@ -1192,6 +1194,16 @@ namespace Habanero.Test.BO
             return contact;
         }
 
+        public static List<ContactPersonTestBO> CreateManySavedContactPersons(int numberOfItems)
+        {
+            var originalCps = new List<ContactPersonTestBO>();
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                originalCps.Add(CreateSavedContactPerson());
+            }
+            return originalCps;
+        }
+
         public static ContactPersonTestBO CreateUnsavedContactPerson()
         {
             return CreateUnsavedContactPerson(TestUtil.GetRandomString());
@@ -1332,6 +1344,5 @@ namespace Habanero.Test.BO
             myBO.FirstName = TestUtil.GetRandomString();
             return myBO;
         }
-
     }
 }

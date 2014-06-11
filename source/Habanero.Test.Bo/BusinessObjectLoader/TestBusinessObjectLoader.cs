@@ -22,8 +22,10 @@
 #endregion
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-
+using System.ComponentModel;
+using System.Linq;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -316,6 +318,82 @@ namespace Habanero.Test.BO.BusinessObjectLoader
 
             //---------------Test Result -----------------------
             Assert.AreSame(loadedCp, cp);
+        }
+
+        [Test]
+        public void THREADING_TestGetBusinessObject_SelectQuery_Untyped()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            var originalCps = ContactPersonTestBO.CreateManySavedContactPersons(100);
+
+            var correspondingLoadedBos = new Dictionary<ContactPersonTestBO, ConcurrentBag<ContactPersonTestBO>>();
+            var actions = new List<Action>();
+            foreach (var cp in originalCps)
+            {
+                var loadedBos = new ConcurrentBag<ContactPersonTestBO>();
+                actions.Add(CreateTrackedBOLoadActionUsingClassDef(cp, classDef, loadedBos));
+                correspondingLoadedBos.Add(cp, loadedBos);
+            }
+            //---------------Execute Test ----------------------
+            actions.AsParallel().ForAll(action => action());
+            //---------------Test Result -----------------------
+            var correspondingAsLoaded = SelectDifferentDictionaryValueAs(correspondingLoadedBos, pair => pair.Value.All(bo => bo == pair.Key));
+            var correspondingAsExpected = SelectDifferentDictionaryValueAs(correspondingLoadedBos, pair => true);
+            CollectionAssert.AreEquivalent(correspondingAsExpected, correspondingAsLoaded, "All loaded bos should match their original bos");
+        }
+
+        private static Action CreateTrackedBOLoadActionUsingClassDef(ContactPersonTestBO cp, IClassDef classDef, ConcurrentBag<ContactPersonTestBO> loadedBos)
+        {
+            SelectQuery query = CreateSelectQuery(cp);
+            var action = new Action(() =>
+            {
+                loadedBos.Add((ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, query));
+                loadedBos.Add((ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, query));
+                loadedBos.Add((ContactPersonTestBO) BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject(classDef, query));
+            });
+            return action;
+        }
+
+        private static Dictionary<TKey, TNewValue> SelectDifferentDictionaryValueAs<TKey, TValue, TNewValue>(
+            IEnumerable<KeyValuePair<TKey, TValue>> correspondingLoadedBos, Func<KeyValuePair<TKey, TValue>, TNewValue> newValueSelector)
+        {
+            return correspondingLoadedBos.ToDictionary(pair => pair.Key, newValueSelector);
+        }
+
+        [Test]
+        public void THREADING_TestGetBusinessObject_SelectQuery()
+        {
+            //---------------Set up test pack-------------------
+            var classDef = ContactPersonTestBO.LoadDefaultClassDef();
+            var originalCps = ContactPersonTestBO.CreateManySavedContactPersons(100);
+
+            var correspondingLoadedBos = new Dictionary<ContactPersonTestBO, ConcurrentBag<ContactPersonTestBO>>();
+            var actions = new List<Action>();
+            foreach (var cp in originalCps)
+            {
+                var loadedBos = new ConcurrentBag<ContactPersonTestBO>();
+                actions.Add(CreateTrackedBOLoadActionUsingType(cp, loadedBos));
+                correspondingLoadedBos.Add(cp, loadedBos);
+            }
+            //---------------Execute Test ----------------------
+            actions.AsParallel().ForAll(action => action());
+            //---------------Test Result -----------------------
+            var correspondingAsLoaded = SelectDifferentDictionaryValueAs(correspondingLoadedBos, pair => pair.Value.All(bo => bo == pair.Key));
+            var correspondingAsExpected = SelectDifferentDictionaryValueAs(correspondingLoadedBos, pair => true);
+            CollectionAssert.AreEquivalent(correspondingAsExpected, correspondingAsLoaded, "All loaded bos should match their original bos");
+        }
+
+        private static Action CreateTrackedBOLoadActionUsingType(ContactPersonTestBO cp, ConcurrentBag<ContactPersonTestBO> loadedBos)
+        {
+            SelectQuery query = CreateSelectQuery(cp);
+            var action = new Action(() =>
+            {
+                loadedBos.Add(BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query));
+                loadedBos.Add(BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query));
+                loadedBos.Add(BORegistry.DataAccessor.BusinessObjectLoader.GetBusinessObject<ContactPersonTestBO>(query));
+            });
+            return action;
         }
 
         [Test]
