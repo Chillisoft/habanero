@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using Habanero.Base;
@@ -47,8 +48,45 @@ namespace Habanero.DB
     public class BusinessObjectLoaderDB : BusinessObjectLoaderBase, IBusinessObjectLoader
     {
         private readonly IDatabaseConnection _databaseConnection;
-        private IDictionary<IClassDef, IBusinessObject> _tempObjectsByClassDef;
-        private IDictionary<Type, IBusinessObject> _tempObjectsByType;
+        private readonly ConcurrentDictionary<IClassDef, SingleItemStack<IBusinessObject>> _tempObjectsByClassDef;
+        private readonly ConcurrentDictionary<Type, SingleItemStack<IBusinessObject>> _tempObjectsByType;
+
+        /// <summary>
+        /// The Single Item Stack class operates just like a stack, but only retains the most recent item pushed.
+        /// As a result it's implementation is very fast and simple.
+        /// </summary>
+        /// <typeparam name="T">The type of the item to store.</typeparam>
+        private class SingleItemStack<T> where T : class
+        {
+            private readonly object _lock = new object();
+            private T _item;
+
+            /// <summary>
+            /// Return and remove the current item. Returns null if no item exists.
+            /// </summary>
+            /// <returns>The most recently pushed item if it hasn't been popped yet.</returns>
+            public T Pop()
+            {
+                lock (_lock)
+                {
+                    var item = _item;
+                    _item = null;
+                    return item;
+                }
+            }
+
+            /// <summary>
+            /// Sets the latest item, replacing any item that was pushed before.
+            /// </summary>
+            /// <param name="item">The item to push.</param>
+            public void Push(T item)
+            {
+                lock (_lock)
+                {
+                    _item = item;
+                }
+            }
+        }
 
         ///<summary>
         /// Creates a BusinessObjectLoaderDB. Because this is a loader the loads data from a Database, this constructor
@@ -58,8 +96,8 @@ namespace Habanero.DB
         public BusinessObjectLoaderDB(IDatabaseConnection databaseConnection)
         {
             _databaseConnection = databaseConnection;
-            _tempObjectsByClassDef = new Dictionary<IClassDef, IBusinessObject>();
-            _tempObjectsByType = new Dictionary<Type, IBusinessObject>();
+            _tempObjectsByClassDef = new ConcurrentDictionary<IClassDef, SingleItemStack<IBusinessObject>>();
+            _tempObjectsByType = new ConcurrentDictionary<Type, SingleItemStack<IBusinessObject>>();
         }
 
         /// <summary>
@@ -203,20 +241,22 @@ namespace Habanero.DB
         private T LoadBOFromReader<T>(IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading) 
                 where T : class, IBusinessObject, new()
         {
-            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
-            // is stored in a dictionary and reused as the object populated to perform a search on the business object
-            // manager.
+            var tempBoCache = _tempObjectsByType.GetOrAdd(typeof (T), type => new SingleItemStack<IBusinessObject>());
+            var tempBo = (T) tempBoCache.Pop() ?? CreateNewTempBo<T>();
 
-            var bo = GetTempBO<T>();
-
-            var loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
-            if (loadedBusinessObject == bo)
+            var loadedBusinessObject = GetLoadedBusinessObject(tempBo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject != tempBo)
             {
-                var tempObject = new T();
-                _tempObjectsByType[typeof(T)] = tempObject;
-                BORegistry.BusinessObjectManager.Remove(tempObject);
+                tempBoCache.Push(tempBo);
             }
             return (T)loadedBusinessObject;
+        }
+
+        private static T CreateNewTempBo<T>() where T : class, IBusinessObject, new()
+        {
+            var newTempBo = new T();
+            BORegistry.BusinessObjectManager.Remove(newTempBo);
+            return newTempBo;
         }
 
 
@@ -572,49 +612,30 @@ namespace Habanero.DB
 
        // ReSharper disable RedundantAssignment
 
-        private T GetTempBO<T>() where T : class, IBusinessObject, new()
-        {
-            T bo;
-            try
-            {
-                bo = (T) _tempObjectsByType[typeof(T)];
-            }
-            catch (KeyNotFoundException)
-            {
-                bo = new T();
-                BORegistry.BusinessObjectManager.Remove(bo);
-                _tempObjectsByType[typeof(T)] = bo;
-            }
-            return bo;
-        }
-
         private IBusinessObject LoadBOFromReader
             (IClassDef classDef, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
         {
-            // Peter: this code is here to improve performance.  It's a little messy, but essentially a "temp" object
-            // is stored in a dictionary and reused as the object populated to perform a search on the business object
-            // manager.
             objectUpdatedInLoading = false;
-            IBusinessObject bo;
-            try
-            {
-                bo = _tempObjectsByClassDef[classDef];
-            } catch (KeyNotFoundException)
-            {
-                bo = classDef.CreateNewBusinessObject();
-                BORegistry.BusinessObjectManager.Remove(bo);
-                _tempObjectsByClassDef[classDef] = bo;
-            }
+            var tempBoCache = _tempObjectsByClassDef.GetOrAdd(classDef, def => new SingleItemStack<IBusinessObject>());
+            var tempBo = tempBoCache.Pop() ?? CreateNewTempBo(classDef);
 
-            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(bo, dataReader, selectQuery, out objectUpdatedInLoading);
-            if (loadedBusinessObject == bo)
+            IBusinessObject loadedBusinessObject = GetLoadedBusinessObject(tempBo, dataReader, selectQuery, out objectUpdatedInLoading);
+            if (loadedBusinessObject != tempBo)
             {
-                var tempObject = classDef.CreateNewBusinessObject();
-                _tempObjectsByClassDef[classDef] = tempObject;
-                BORegistry.BusinessObjectManager.Remove(tempObject);
+                tempBoCache.Push(tempBo);
             }
             return loadedBusinessObject;
         }
+
+
+        private static IBusinessObject CreateNewTempBo(IClassDef classDef)
+        {
+            var newTempBo = classDef.CreateNewBusinessObject();
+            BORegistry.BusinessObjectManager.Remove(newTempBo);
+            return newTempBo;
+        }
+
+
         // ReSharper restore RedundantAssignment
         private IBusinessObject GetLoadedBusinessObject
             (IBusinessObject bo, IDataRecord dataReader, ISelectQuery selectQuery, out bool objectUpdatedInLoading)
