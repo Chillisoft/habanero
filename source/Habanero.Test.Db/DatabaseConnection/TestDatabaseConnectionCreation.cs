@@ -556,14 +556,12 @@ namespace Habanero.Test.DB
             Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
-            Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
-            Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
             Assert.AreEqual("FIRST", sqlFormatter.LimitClauseAtBeginning);
             Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
             Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
             Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
-//            StringAssert.Contains(sqlFormatter.LimitClauseAtBeginning, dbConn.GetLimitClauseForBeginning(1));
-//            StringAssert.Contains(sqlFormatter.LimitClauseAtEnd, dbConn.GetLimitClauseForEnd(1));
         }
 
         [Test]
@@ -582,14 +580,12 @@ namespace Habanero.Test.DB
             Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter sqlFormatter = (SqlFormatter)defaultSqlFormatter;
             Assert.IsNotNull(sqlFormatter);
-            Assert.AreEqual("", sqlFormatter.LeftFieldDelimiter);
-            Assert.AreEqual("", sqlFormatter.RightFieldDelimiter);
+            Assert.AreEqual("\"", sqlFormatter.LeftFieldDelimiter);
+            Assert.AreEqual("\"", sqlFormatter.RightFieldDelimiter);
             Assert.AreEqual("FIRST", sqlFormatter.LimitClauseAtBeginning);
             Assert.AreEqual("", sqlFormatter.LimitClauseAtEnd);
             Assert.AreEqual(sqlFormatter.LeftFieldDelimiter, dbConn.LeftFieldDelimiter);
             Assert.AreEqual(sqlFormatter.RightFieldDelimiter, dbConn.RightFieldDelimiter);
-//            StringAssert.Contains(sqlFormatter.LimitClauseAtBeginning, dbConn.GetLimitClauseForBeginning(1));
-//            StringAssert.Contains(sqlFormatter.LimitClauseAtEnd, dbConn.GetLimitClauseForEnd(1));
         }
 
         #endregion
