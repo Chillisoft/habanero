@@ -52,8 +52,8 @@ namespace Habanero.Test.DB
             //---------------Test Result -----------------------
             Assert.IsInstanceOf(typeof(SqlFormatter), defaultSqlFormatter);
             SqlFormatter formatter = (SqlFormatter)defaultSqlFormatter;
-            Assert.AreEqual("", formatter.LeftFieldDelimiter);
-            Assert.AreEqual("", formatter.RightFieldDelimiter);
+            Assert.AreEqual("\"", formatter.LeftFieldDelimiter);
+            Assert.AreEqual("\"", formatter.RightFieldDelimiter);
             Assert.AreEqual("FIRST", formatter.LimitClauseAtBeginning);
             Assert.AreEqual("", formatter.LimitClauseAtEnd);
 
