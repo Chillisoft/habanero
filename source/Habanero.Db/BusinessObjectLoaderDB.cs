@@ -522,8 +522,9 @@ namespace Habanero.DB
         {
             var selectQuery = QueryBuilder.CreateSelectCountQuery(classDef, criteria);
             var selectQueryDB = new SelectQueryDB(selectQuery, _databaseConnection);
+            // FIXME: this should come from the db
             var sqlFormatter = new SqlFormatter("", "", "", "");
-            var statement = selectQueryDB.CreateSqlStatement(sqlFormatter);
+            var statement = selectQueryDB.CreateSqlStatement(_databaseConnection.SqlFormatter);
             var totalNoOfRecords = 0;
             using (var dr = _databaseConnection.LoadDataReader(statement))
             {

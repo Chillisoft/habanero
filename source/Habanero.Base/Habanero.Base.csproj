@@ -170,12 +170,14 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Exceptions\InvalidDefinitionException.cs" />
     <Compile Include="Exceptions\RecordedExceptionsException.cs" />
+    <Compile Include="FunctionQueryField.cs" />
     <Compile Include="HabaneroBackgroundWorker.cs" />
     <Compile Include="IActionDispatcher.cs" />
     <Compile Include="IBusinessObjectLookupList.cs" />
     <Compile Include="IDatabaseLookupList.cs" />
     <Compile Include="Encryption\IHasher.cs" />
     <Compile Include="IQueryResultLoader.cs" />
+    <Compile Include="ISelfFormattingField.cs" />
     <Compile Include="ISupportsRSADecryption.cs" />
     <Compile Include="Logging\ConsoleLoggerFactory.cs" />
     <Compile Include="Logging\IHabaneroLogger.cs" />
@@ -367,6 +369,7 @@
     <Compile Include="Data\QueryResultSorter.cs" />
     <Compile Include="RethrowingExceptionNotifier.cs" />
     <Compile Include="Encryption\RSAPasswordCrypter.cs" />
+    <Compile Include="CountFunctionQueryField.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="SqlFormatter.cs" />
     <Compile Include="UIDefCol.cs" />

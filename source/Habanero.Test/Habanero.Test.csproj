@@ -83,6 +83,9 @@
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.6.1.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -154,6 +157,11 @@
     <Compile Include="ContactPersonCompositeKey.cs" />
     <Compile Include="EmailAddressAsCustomProperty.cs" />
     <Compile Include="EmailAddressConverter.cs" />
+    <Compile Include="FirebirdEmbeddedLibrariesForWindows.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FirebirdEmbeddedLibrariesForWindows.resx</DependentUpon>
+    </Compile>
     <Compile Include="FixtureEnvironment.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
@@ -173,7 +181,9 @@
     <Compile Include="Sample.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="TestAutoInc.cs" />
+    <Compile Include="TestCountFunctionQueryField.cs" />
     <Compile Include="TestHabaneroBackgroundWorker.cs" />
+    <Compile Include="TestFunctionQueryField.cs" />
     <Compile Include="TestResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -205,6 +215,15 @@
     <Content Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\fbembed.dll" />
+    <None Include="Resources\firebird.conf" />
+    <None Include="Resources\firebird.msg" />
+    <None Include="Resources\ib_util.dll" />
+    <None Include="Resources\icudt30.dll" />
+    <None Include="Resources\icuin30.dll" />
+    <None Include="Resources\icuuc30.dll" />
+    <None Include="Resources\msvcp80.dll" />
+    <None Include="Resources\msvcr80.dll" />
     <Content Include="TestResources\TestJpeg.jpg" />
     <Content Include="TestResources\TestJpeg2.jpg" />
     <Content Include="TestResources\TestJpeg3.jpg" />
@@ -212,6 +231,10 @@
     <Content Include="TestResources\TestText.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FirebirdEmbeddedLibrariesForWindows.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FirebirdEmbeddedLibrariesForWindows.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestResources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -261,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\aliases.conf" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -142,7 +142,6 @@ namespace Habanero.DB
             }
 
             return CreateSqlStatement(_databaseConnection.SqlFormatter);
-//            return CreateSqlStatement(new SqlFormatter(databaseConnection.LeftFieldDelimiter, databaseConnection.RightFieldDelimiter, databaseConnection.GetLimitClauseForBeginning()));
         }
 
         /// <summary>
@@ -245,7 +244,7 @@ namespace Habanero.DB
         {
             if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
             {
-                QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
+                var queryField = Fields[orderOrderCriteriaField.PropertyName];
                 return queryField.FieldName;
             }
             return orderOrderCriteriaField.FieldName;
@@ -268,11 +267,8 @@ namespace Habanero.DB
         
         private void AppendFields(StringBuilder builder)
         {
-            var fields = from field in _selectQuery.Fields.Values
-                            select String.Format("{0}{1}", 
-                                field.Source != null ? this.Aliases[field.Source.ToString()] + "." : "", 
-                                DelimitFieldName(field.FieldName));
-            builder.AppendFormat(String.Join(", ", fields.ToArray()));
+            var fieldsAsStrings = _selectQuery.Fields.Values.Select(f => f.GetFormattedStringWith(_sqlFormatter, Aliases));
+            builder.AppendFormat(String.Join(", ", fieldsAsStrings.ToArray()));
         }
 
 
@@ -335,7 +331,7 @@ namespace Habanero.DB
             {
                 if (Fields.ContainsKey(orderOrderCriteriaField.PropertyName))
                 {
-                    QueryField queryField = Fields[orderOrderCriteriaField.PropertyName];
+                    var queryField = Fields[orderOrderCriteriaField.PropertyName];
                     tableAndFieldName = String.Format("{0}{1}", queryField.Source != null ? this.Aliases[queryField.Source.ToString()] + "." : "", DelimitFieldName(queryField.FieldName)); 
                 } else
                 {
