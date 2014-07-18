@@ -18,7 +18,11 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System;
 using System.Data;
+using System.IO;
+using System.Linq;
 using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;
@@ -540,6 +544,9 @@ namespace Habanero.Test.DB
             //---------------Execute Test ----------------------
             DatabaseConnection conn =
                 new DatabaseConnectionFirebird("FirebirdSql.Data.FirebirdClient", "FirebirdSql.Data.FirebirdClient.FbConnection");
+
+            var tmpFile = Path.GetTempFileName();
+
             //---------------Test Result -----------------------
             Assert.AreEqual(IsolationLevel.RepeatableRead, conn.IsolationLevel);
         }

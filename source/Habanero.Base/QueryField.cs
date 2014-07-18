@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Collections.Generic;
 
 namespace Habanero.Base
 {
@@ -26,7 +27,7 @@ namespace Habanero.Base
     /// Represents a field used in a query. In a database context, this represents a field listed 
     /// in the SELECT clause of a sql statement
     /// </summary>
-    public class QueryField
+    public class QueryField: ISelfFormattingField
     {
         /// <summary>
         /// Creates a QueryField with the given property name, field name and source name
@@ -73,6 +74,20 @@ namespace Habanero.Base
             string propertyName = parts[parts.Length - 1];
             Source source = Base.Source.FromString(String.Join(".", parts, 0, parts.Length - 1));
             return new QueryField(propertyName, propertyName, source);
+        }
+
+
+        ///<summary>
+        /// Gets the formatted string for this field to be used in queries
+        ///</summary>
+        ///<param name="formatter">An ISqlFormatter to format with</param>
+        ///<param name="aliases">The dictionary of aliases within the context to be formatted for</param>
+        ///<returns>A string which can be used as part of a sql statement</returns>
+        public virtual string GetFormattedStringWith(ISqlFormatter formatter, IDictionary<string, string> aliases)
+        {
+            return String.Format("{0}{1}",
+                            Source != null ? aliases[Source.ToString()] + "." : "",
+                            formatter.DelimitField(FieldName));
         }
     }
 

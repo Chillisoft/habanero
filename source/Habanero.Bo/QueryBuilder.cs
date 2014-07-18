@@ -406,7 +406,8 @@ namespace Habanero.BO
             ISelectQuery selectQuery = CreateSelectQuery(classDef,criteria);
             selectQuery.Fields.Clear();
 
-            selectQuery.Fields.Add("count", QueryField.FromString("Count(*)"));
+            //selectQuery.Fields.Add("count", QueryField.FromString("Count(*)"));
+            selectQuery.Fields.Add("count", new CountFunctionQueryField());
             return selectQuery;
         }
     }

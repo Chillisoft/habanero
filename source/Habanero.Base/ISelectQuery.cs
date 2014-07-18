@@ -40,6 +40,7 @@ namespace Habanero.Base
         /// <summary>
         /// The fields to load from the data store.
         /// </summary>
+        //Dictionary<string, QueryField> Fields { get; }
         Dictionary<string, QueryField> Fields { get; }
 
         /// <summary>

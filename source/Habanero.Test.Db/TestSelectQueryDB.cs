@@ -867,7 +867,7 @@ namespace Habanero.Test.DB
             SelectQueryDB query = new SelectQueryDB(selectQuery, DatabaseConnection.CurrentConnection);
             ISqlStatement statement = query.CreateSqlStatement();
             //---------------Test Result -----------------------
-            Assert.AreEqual("SELECT Count(*) FROM MyBO a1", statement.Statement.ToString());
+            Assert.AreEqual("SELECT count(*) FROM MyBO a1", statement.Statement.ToString());
         }
 
         [Test]
@@ -886,7 +886,7 @@ namespace Habanero.Test.DB
             ISqlStatement statement = query.CreateSqlStatement(sqlFormatter);
             //---------------Test Result -----------------------
             string statementString = statement.Statement.ToString();
-            StringAssert.Contains("SELECT [Count(*)] FROM [MyBO] a1 WHERE ", statement.Statement.ToString());
+            StringAssert.Contains("SELECT count(*) FROM [MyBO] a1 WHERE ", statement.Statement.ToString());
             StringAssert.EndsWith("WHERE a1.[TestProp] = ?Param0", statementString);
             Assert.AreEqual("?Param0", statement.Parameters[0].ParameterName);
             Assert.AreEqual("test", statement.Parameters[0].Value);
