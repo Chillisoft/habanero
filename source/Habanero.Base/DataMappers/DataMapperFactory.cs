@@ -58,14 +58,18 @@ namespace Habanero.Base.DataMappers
         /// <returns></returns>
         public IDataMapper GetDataMapper(Type targetType)
         {
-            try
+            lock (this)
             {
-                return _dataMappers[targetType];
-            } catch (KeyNotFoundException)
-            {
-                var generalDataMapper = new GeneralDataMapper(targetType);
-                _dataMappers.Add(targetType, generalDataMapper);
-                return generalDataMapper;
+                try
+                {
+                    return _dataMappers[targetType];
+                }
+                catch (KeyNotFoundException)
+                {
+                    var generalDataMapper = new GeneralDataMapper(targetType);
+                    _dataMappers.Add(targetType, generalDataMapper);
+                    return generalDataMapper;
+                }
             }
         }
         /// <summary>
