@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
 
@@ -202,6 +203,27 @@ namespace Habanero.Test.Base.DataMappers
             factory.SetDataMapper(targetType, expectedDataMapper);
             //---------------Test Result -----------------------
             Assert.AreSame(expectedDataMapper, factory.GetDataMapper(targetType));
+        }
+
+        public enum TestEnum
+        {
+            One,
+            Two,
+            Three
+        }
+        [Test]
+        public void GetDataMapper_ShouldBeThreadSafeForNonStandardTypes()
+        {
+            //---------------Set up test pack-------------------
+            var enumType = typeof(TestEnum);
+            var sut = new DataMapperFactory();
+
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            Assert.DoesNotThrow(() => Parallel.For(0, 1000, i => sut.GetDataMapper(enumType) ));
+
+            //---------------Test Result -----------------------
         }
     }
 
