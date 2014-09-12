@@ -100,6 +100,7 @@ namespace Habanero.Test
                 return false;
             }
         }
+
         public string[] SetupTemporaryFirebirdDatabase()
         {
             var createdFiles = WriteOutFirebirdEmbeddedLibrariesToCurrentDirectory();

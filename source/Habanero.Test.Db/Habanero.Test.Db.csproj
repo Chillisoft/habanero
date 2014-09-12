@@ -69,7 +69,7 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -198,6 +198,7 @@
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_OptimisticLockingVersionNumberDB.cs" />
     <Compile Include="ConcurrencyControl\TestConcurrencyControl_PessimisticLockingDB.cs" />
     <Compile Include="DatabaseConnection\TestDatabaseConnectionSqlServerCe.cs" />
+    <Compile Include="FirebirdEmbeddedTestsBase.cs" />
     <Compile Include="InheritanceSqlGeneration\TestInheritanceBase.cs" />
     <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTable.cs" />
     <Compile Include="InheritanceSqlGeneration\TestInheritanceClassTableCopyID.cs" />
@@ -220,6 +221,8 @@
     <Compile Include="TestBOPropLookupList_DatabaseLookupList_Int.cs" />
     <Compile Include="TestBusinessObjectLoaderDB.cs" />
     <Compile Include="TestBusinessObjectLoaderDBWithInheritance.cs" />
+    <Compile Include="TestBusinessObjectLoaderDB_FirebirdEmbedded.cs" />
+    <Compile Include="TestManagedConnection.cs" />
     <Compile Include="TestQueryResultLoaderDb.cs" />
     <Compile Include="TestBusinessObjectLoader_GetBusinessObjectCollectionDB.cs" />
     <Compile Include="TestBusinessObjectLoader_RefreshCollectionDB.cs" />
@@ -286,6 +289,8 @@
     <Compile Include="TestTransactionLoggerDB.cs" />
     <Compile Include="TestTransactionLoggerFactory.cs" />
     <Compile Include="TestUpdateStatementGenerator.cs" />
+    <Compile Include="ConcurrencyTests\TestBOSave_Concurrency_FirebirdEmbedded.cs" />
+    <Compile Include="ConcurrencyTests\TestDatabaseConnection_Concurrency_FirebirdEmbedded.cs" />
     <Compile Include="TransactionCommitterStubDB.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -431,6 +436,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

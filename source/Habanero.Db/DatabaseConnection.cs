@@ -19,7 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -27,7 +26,6 @@ using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using Habanero.Util;
-using System.Linq;
 
 // Limiting the number of records for a Select
 // -------------------------------------------
@@ -69,7 +67,7 @@ namespace Habanero.DB
         private readonly string _assemblyName;
         private readonly string _className;
         private string _connectString;
-        private List<IDbConnection> _connections;
+        private List<ManagedConnection> _connections;
         private static IDatabaseConnection _currentDatabaseConnection;
         private static readonly IHabaneroLogger Log = GlobalRegistry.LoggerFactory.GetLogger("Habanero.DB.DatabaseConnection");
         private int _timeoutPeriod = -1;
@@ -84,7 +82,7 @@ namespace Habanero.DB
         /// </summary>
         protected DatabaseConnection()
         {
-            _connections = new List<IDbConnection>(5);
+            _connections = new List<ManagedConnection>(5);
             _sqlFormatter = new SqlFormatter("[", "]", "TOP", "");
         }
 
@@ -189,20 +187,23 @@ namespace Habanero.DB
             get { return _connectString; }
             set
             {
-                foreach (IDbConnection dbConnection in _connections)
+                lock (this)
                 {
-                    try
+                    foreach (IDbConnection dbConnection in _connections)
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        try
+                        {
+                            dbConnection.Close();
+                            dbConnection.Dispose();
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Log("Error closing and disposing connection", ex, LogCategory.Warn);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Log("Error closing and disposing connection", ex, LogCategory.Warn);
-                    }
+                    _connections = new List<ManagedConnection>(5);
+                    _connectString = value;
                 }
-                _connections = new List<IDbConnection>(5);
-                _connectString = value;
             }
         }
 
@@ -264,15 +265,16 @@ namespace Habanero.DB
                 {
                     // looks for closed connections for reading because open 
                     // connections could have readers still associated with them.
-                    foreach (IDbConnection dbConnection in _connections)
+                    foreach (var dbConnection in _connections)
                     {
-                        if (dbConnection.State != ConnectionState.Closed) continue;
+                        //if (dbConnection.State != ConnectionState.Closed) continue;
+                        if (!dbConnection.Available) continue;
                         dbConnection.Open();
                         return dbConnection;
                     }
                     var newDbConnection = this.NewConnection;
                     newDbConnection.Open();
-                    _connections.Add(newDbConnection);
+                    _connections.Add(new ManagedConnection(newDbConnection));
                     return newDbConnection;
                 }
             }
@@ -299,13 +301,14 @@ namespace Habanero.DB
                 {
                     foreach (var dbConnection in _connections)
                     {
-                        if (dbConnection.State == ConnectionState.Closed)
+                        //if (dbConnection.State == ConnectionState.Closed)
+                        if (dbConnection.Available)
                         {
                             return dbConnection;
                         }
                     }
                     var newDbConnection = this.NewConnection;
-                    _connections.Add(newDbConnection);
+                    _connections.Add(new ManagedConnection(newDbConnection));
                     return newDbConnection;
                 }
             }

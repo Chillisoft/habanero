@@ -156,6 +156,7 @@
     <Compile Include="IDatabaseConnectionCreator.cs" />
     <Compile Include="InsertSqlStatement.cs" />
     <Compile Include="InsertStatementGenerator.cs" />
+    <Compile Include="ManagedConnection.cs" />
     <Compile Include="ModifyStatementGenerator.cs" />
     <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />
     <Compile Include="Param.cs" />
