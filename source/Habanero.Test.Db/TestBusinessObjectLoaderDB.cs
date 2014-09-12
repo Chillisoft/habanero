@@ -19,7 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.IO;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.BO;
@@ -32,70 +31,6 @@ using NUnit.Framework;
 
 namespace Habanero.Test.DB
 {
-
-    [TestFixture]
-    public class TestBusinessObjectLoaderDB_FirebirdEmbedded
-    {
-        private string[] _filesToRemove;
-        private IBusinessObjectManager _originalBusinessObjectManager;
-
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
-        {
-            _filesToRemove = (new TestUsingDatabase()).SetupTemporaryFirebirdDatabase();
-        }
-
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
-        {
-            foreach (var f in _filesToRemove)
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch { }
-            }
-        }
-
-        [SetUp]
-        public void Setup()
-        {
-            FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
-            ClassDef.ClassDefs.Clear();
-            BORegistry.DataAccessor = new DataAccessorDB();
-            FixtureEnvironment.ClearBusinessObjectManager();
-            TestUtil.WaitForGC();
-            _originalBusinessObjectManager = BORegistry.BusinessObjectManager;
-        }
-
-        [TearDown]
-        public virtual void TearDown()
-        {
-            BORegistry.BusinessObjectManager = _originalBusinessObjectManager;
-        }
-
-        [Test]
-        public void Test_GetCount()
-        {
-            //---------------Set up test pack-------------------
-            ClassDef.ClassDefs.Clear();
-            IClassDef classDef = ContactPersonTestBO.LoadDefaultClassDef();
-            FixtureEnvironment.ClearBusinessObjectManager();
-            TestUtil.WaitForGC();
-            ContactPersonTestBO.CreateSavedContactPerson("aaaa", "aaa");
-            ContactPersonTestBO.CreateSavedContactPerson("bbbb", "bbb");
-            ContactPersonTestBO.CreateSavedContactPerson("cccc", "ccc");
-            //-------------Assert Preconditions -------------
-
-            //---------------Execute Test ----------------------
-            int count = BORegistry.DataAccessor.BusinessObjectLoader.GetCount(classDef, null);
-            //---------------Test Result -----------------------
-            Assert.AreEqual(3, count);
-        }
-
-    }
-
     [TestFixture]
     public class TestBusinessObjectLoaderDB : TestBusinessObjectLoader
     {
