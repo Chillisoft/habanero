@@ -65,12 +65,17 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Provides steps to carry out after execution of the statement
+        /// Carries out instructions after execution of the sql statement
         /// </summary>
-        internal override void DoAfterExecute(DatabaseConnection conn, IDbTransaction tran, IDbCommand command)
+        /// <param name="databaseConnection">The <see cref="DatabaseConnection"/> that executed the statement.</param>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> under which the <see cref="SqlStatement"/>'s command was run.</param>
+        /// <param name="command">The <see cref="IDbCommand"/> that was used to execute the <see cref="SqlStatement"/>.</param>
+        internal override void DoAfterExecute(DatabaseConnection databaseConnection, IDbTransaction transaction, IDbCommand command)
         {
-            if (_supportsAutoIncrementingFIELD != null && _tableName != null) {
-                _supportsAutoIncrementingFIELD.SetAutoIncrementingFieldValue(conn.GetLastAutoIncrementingID(_tableName, tran, command));
+            if (_supportsAutoIncrementingFIELD != null && _tableName != null)
+            {
+                var lastAutoIncrementingID = databaseConnection.GetLastAutoIncrementingID(_tableName, transaction, command);
+                _supportsAutoIncrementingFIELD.SetAutoIncrementingFieldValue(lastAutoIncrementingID);
             }
         }
 

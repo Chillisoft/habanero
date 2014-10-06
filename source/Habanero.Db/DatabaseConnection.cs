@@ -286,6 +286,30 @@ namespace Habanero.DB
                 throw;
             }
         }
+        
+        /// <summary>
+        /// Returns an open connection. If a <see cref="IDbTransaction"/> is provided then
+        /// the connection for the transaction is used and opened if necessary.
+        /// </summary>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> to use for the connection.</param>
+        /// <returns>An open <see cref="IDbConnection"/>.</returns>
+        protected internal IDbConnection GetOpenConnection(IDbTransaction transaction = null)
+        {
+            IDbConnection connection;
+            if (transaction != null)
+            {
+                connection = transaction.Connection;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+            }
+            else
+            {
+                connection = OpenConnection;
+            }
+            return connection;
+        }
 
         /// <summary>
         /// Returns the first closed connection available or returns a
@@ -378,10 +402,9 @@ namespace Habanero.DB
         public virtual IDataReader LoadDataReader(string selectSql)
         {
             if (selectSql == null) throw new ArgumentNullException("selectSql");
-            IDbConnection con = null;
             try
             {
-                con = GetOpenConnectionForReading();
+                var con = GetOpenConnectionForReading();
                 var cmd = CreateCommand(con);
                 cmd.CommandType = CommandType.Text;
                 cmd.CommandText = selectSql;
@@ -563,23 +586,8 @@ namespace Habanero.DB
             IDbConnection con = null;
             try
             {
-                IDbCommand cmd;
-                if (transaction != null)
-                {
-                    con = transaction.Connection;
-                    if (con.State != ConnectionState.Open)
-                    {
-                        con.Open();
-                    }
-
-                    cmd = CreateCommand(con);
-                    cmd.Transaction = transaction;
-                }
-                else
-                {
-                    con = OpenConnection;
-                    cmd = CreateCommand(con);
-                }
+                con = GetOpenConnection(transaction);
+                var cmd = CreateCommand(con, transaction);
                 cmd.CommandText = sql;
                 return cmd.ExecuteNonQuery();
             }
@@ -610,11 +618,11 @@ namespace Habanero.DB
         }
 
         /// <summary>
-        /// Creates a IDbCommand using the IDbConnection given.  
+        /// Creates an <see cref="IDbCommand"/> using the provided <see cref="IDbConnection"/>.
         /// Sets the timout for the command based on what you have set using <see cref="SetTimeoutPeriod"/>
         /// </summary>
         /// <param name="dbConnection">The connection to create the command with</param>
-        /// <returns>The newly created IDbCommand</returns>
+        /// <returns>The newly created <see cref="IDbCommand"/></returns>
         protected virtual IDbCommand CreateCommand(IDbConnection dbConnection)
         {
             var dbCommand = dbConnection.CreateCommand();
@@ -627,6 +635,23 @@ namespace Habanero.DB
                 Log.Log("Error setting command timeout period", ex, LogCategory.Warn);
             }
             return dbCommand;
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IDbCommand"/> using the provided <see cref="IDbConnection"/>.
+        /// The created command is subscribed to the provided <see cref="IDbTransaction"/>.
+        /// </summary>
+        /// <param name="connection">The connection to create the command with</param>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> to subscribe the command to.</param>
+        /// <returns>The newly created <see cref="IDbCommand"/></returns>
+        private IDbCommand CreateCommand(IDbConnection connection, IDbTransaction transaction)
+        {
+            var command = CreateCommand(connection);
+            if (transaction != null)
+            {
+                command.Transaction = transaction;
+            }
+            return command;
         }
 
 
@@ -654,46 +679,17 @@ namespace Habanero.DB
         /// </future>
         public virtual int ExecuteSql(IEnumerable<ISqlStatement> statements, IDbTransaction transaction)
         {
-            var inTransaction = false;
+            var inTransaction = transaction != null;
             ArgumentValidationHelper.CheckArgumentNotNull(statements, "statements");
             IDbConnection con = null;
             try
             {
-                IDbCommand cmd;
-                if (transaction != null)
+                con = GetOpenConnection(transaction);
+                if (transaction == null)
                 {
-                    inTransaction = true;
-                    con = transaction.Connection;
-                    if (con.State != ConnectionState.Open)
-                    {
-                        con.Open();
-                    }
-
-                    cmd = CreateCommand(con);
-                    cmd.Transaction = transaction;
+                    transaction = BeginTransaction(con);
                 }
-                else
-                {
-                    con = OpenConnection;
-                    cmd = CreateCommand(con);
-                    transaction = con.BeginTransaction();
-                    cmd.Transaction = transaction;
-                }
-                var totalRowsAffected = 0;
-                foreach (SqlStatement statement in statements)
-                {
-                    statement.SetupCommand(cmd);
-                    try
-                    {
-                    totalRowsAffected += cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new DatabaseWriteException
-                            ("There was an error executing the statement : " + Environment.NewLine + cmd.CommandText, ex);
-                    }
-                    statement.DoAfterExecute(this, transaction, cmd);
-                }
+                var totalRowsAffected = ExecuteSqlInternal(statements, con, transaction);
                 if (!inTransaction)
                 {
                     transaction.Commit();
@@ -725,6 +721,50 @@ namespace Habanero.DB
                     }
                 }
             }
+        }
+
+        private int ExecuteSqlInternal(IEnumerable<ISqlStatement> statements, IDbConnection openConnection, IDbTransaction transaction)
+        {
+            if (transaction == null) throw new ArgumentNullException("transaction");
+            var cmd = CreateCommand(openConnection, transaction);
+            var totalRowsAffected = 0;
+            foreach (SqlStatement statement in statements)
+            {
+                SetupCommand(statement, cmd, transaction);
+                try
+                {
+                    totalRowsAffected += cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw new DatabaseWriteException
+                        ("There was an error executing the statement : " + Environment.NewLine + cmd.CommandText, ex);
+                }
+                DoAfterExecute(statement, cmd, transaction);
+            }
+            return totalRowsAffected;
+        }
+
+        /// <summary>
+        /// Sets up an <see cref="IDbCommand"/> object with the provided statement.
+        /// </summary>
+        /// <param name="statement">The <see cref="ISqlStatement"/> to setup the command with.</param>
+        /// <param name="command">The <see cref="IDbCommand"/> to set up.</param>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> that the command runs under.</param>
+        protected virtual void SetupCommand(ISqlStatement statement, IDbCommand command, IDbTransaction transaction)
+        {
+            statement.SetupCommand(command);
+        }
+
+        /// <summary>
+        /// Executes the necessary after execute logic for a particular <see cref="SqlStatement"/>.
+        /// </summary>
+        /// <param name="statement">The <see cref="SqlStatement"/> for which the after execute logic must be run.</param>
+        /// <param name="command">The <see cref="IDbCommand"/> that was used to execute the <see cref="SqlStatement"/>.</param>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> under which the <see cref="SqlStatement"/>'s command was run.</param>
+        protected virtual void DoAfterExecute(SqlStatement statement, IDbCommand command, IDbTransaction transaction)
+        {
+            statement.DoAfterExecute(this, transaction, command);
         }
 
         /// <summary>

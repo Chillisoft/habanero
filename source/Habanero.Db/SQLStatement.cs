@@ -278,7 +278,10 @@ namespace Habanero.DB
         /// <summary>
         /// Carries out instructions after execution of the sql statement
         /// </summary>
-        internal virtual void DoAfterExecute(DatabaseConnection conn, IDbTransaction tran, IDbCommand command)
+        /// <param name="databaseConnection">The <see cref="DB.DatabaseConnection">DatabaseConnection</see> that executed the statement.</param>
+        /// <param name="transaction">The <see cref="IDbTransaction"/> under which the <see cref="SqlStatement"/>'s command was run.</param>
+        /// <param name="command">The <see cref="IDbCommand"/> that was used to execute the <see cref="SqlStatement"/>.</param>
+        internal virtual void DoAfterExecute(DatabaseConnection databaseConnection, IDbTransaction transaction, IDbCommand command)
         {
         }
 
