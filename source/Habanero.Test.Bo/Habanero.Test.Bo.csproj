@@ -155,6 +155,7 @@
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Events.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="TestBusinessObject_SqlServer.cs" />
     <Compile Include="TestQueryResultLoaderInMemory.cs" />
     <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TestDefClassFactory.cs" />
@@ -404,6 +405,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Habanero.Test\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

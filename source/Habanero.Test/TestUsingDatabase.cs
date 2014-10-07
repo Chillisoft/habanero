@@ -38,22 +38,20 @@ namespace Habanero.Test
             SetupDBDataAccessor();
         }
 
-        public static void SetupDBDataAccessor()
+        public static void SetupDBDataAccessor(string vendor = DatabaseConfig.MySql)
         {
             if (DatabaseConnection.CurrentConnection != null &&
-                DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
+                DatabaseConnection.CurrentConnection.GetType().Name.ToLower().Contains(vendor.ToLower()))
             {
                 if (!(BORegistry.DataAccessor is DataAccessorDB)) BORegistry.DataAccessor = new DataAccessorDB();
                 return;
             }
-            DatabaseConnection.CurrentConnection =
-                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-            DatabaseConnection.CurrentConnection.ConnectionString =
-                MyDBConnection.GetDatabaseConfig().GetConnectionString();
+            var databaseConfig = MyDBConnection.GetDatabaseConfig(vendor);
+            DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
             DatabaseConnection.CurrentConnection.GetConnection();
-
             BORegistry.DataAccessor = new DataAccessorDB();
         }
+
 
         public static void SetupDBOracleConnection()
         {

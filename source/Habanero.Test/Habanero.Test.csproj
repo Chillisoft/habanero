@@ -215,6 +215,9 @@
     <Content Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Resources\fbembed.dll" />
     <None Include="Resources\firebird.conf" />
     <None Include="Resources\firebird.msg" />

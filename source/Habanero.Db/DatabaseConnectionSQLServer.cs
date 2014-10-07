@@ -55,6 +55,11 @@ namespace Habanero.DB
         {
         }
 
+        protected override void SetupCommand(ISqlStatement statement, IDbCommand command, IDbTransaction transaction)
+        {
+            base.SetupCommand(statement, command, transaction);
+        }
+
         /// <summary>
         /// Gets the value of the last auto-incrementing number.  This called after doing an insert statement so that
         /// the inserted auto-number can be retrieved.  The table name, current IDbTransaction and IDbCommand are passed

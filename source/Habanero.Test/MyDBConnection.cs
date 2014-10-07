@@ -20,6 +20,8 @@
 #endregion
 using System;
 using System.Collections;
+using System.Configuration;
+using System.Reflection;
 using Habanero.DB;
 
 namespace Habanero.Test
@@ -34,8 +36,10 @@ namespace Habanero.Test
             return GetDatabaseConfig().GetConnectionString();
         }
 
-        public static DatabaseConfig GetDatabaseConfig()
+        public static DatabaseConfig GetDatabaseConfig(string vendor = DatabaseConfig.MySql)
         {
+            return DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
+            
             IDictionary settings = new Hashtable();
 
             settings.Add("vendor", DatabaseConfig.MySql);

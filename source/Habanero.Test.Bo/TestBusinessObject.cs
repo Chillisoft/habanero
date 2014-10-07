@@ -33,20 +33,24 @@ using Rhino.Mocks;
 // ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO
 {
-
     [TestFixture]
     public class TestBusinessObject_InMemory : TestBusinessObject
     {
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
-            BORegistry.DataAccessor = new DataAccessorInMemory();
+            SetupDataAccessor();
+        }
+
+        protected override void SetupDataAccessor()
+        {
+            FixtureEnvironment.SetupInMemoryDataAccessor();
         }
 
         [SetUp]
         public override void SetupTest()
         {
-            FixtureEnvironment.SetupInMemoryDataAccessor();
+            SetupDataAccessor();
             FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             ClassDef.ClassDefs.Clear();
@@ -171,6 +175,11 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public virtual void TestFixtureSetup()
         {
+            SetupDataAccessor();
+        }
+
+        protected virtual void SetupDataAccessor()
+        {
             TestUsingDatabase.SetupDBDataAccessor();
         }
 
@@ -183,8 +192,7 @@ namespace Habanero.Test.BO
         [SetUp]
         public virtual void SetupTest()
         {
-            TestUsingDatabase.SetupDBDataAccessor();
-            BORegistry.DataAccessor = new DataAccessorDB();
+            SetupDataAccessor();
             ClassDef.ClassDefs.Clear();
            // new Address();
         }
