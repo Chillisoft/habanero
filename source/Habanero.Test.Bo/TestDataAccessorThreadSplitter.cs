@@ -55,7 +55,11 @@ namespace Habanero.Test.BO
              var dataAccessorMain = new DataAccessorInMemory();
              var dataAccessor = new DataAccessorThreadSplitter(dataAccessorMain);
              var expectedDataAccessorForThread = new DataAccessorInMemory();
-             var thread = new Thread(() => dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread));
+             var thread = new Thread(() =>
+             {
+                 dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread);
+                 Thread.Sleep(100);
+             });
              thread.Start();
              //---------------Assert preconditions---------------
              Assert.AreSame(expectedDataAccessorForThread, dataAccessor.GetDataAccessorForThread(thread));
