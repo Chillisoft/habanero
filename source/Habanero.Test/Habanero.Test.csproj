@@ -74,6 +74,12 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentMigrator">
+      <HintPath>..\packages\FluentMigrator.1.3.0.0\lib\40\FluentMigrator.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentMigrator.Runner">
+      <HintPath>..\packages\FluentMigrator.Runner.1.3.0.0\lib\40\FluentMigrator.Runner.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -164,6 +170,10 @@
     </Compile>
     <Compile Include="FixtureEnvironment.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
+    <Compile Include="Migrations\Migration_1_InitialDataStructure.cs" />
+    <Compile Include="Migrations\Migration_2_InitialSampleData.cs" />
+    <Compile Include="Migrations\Migration_3_InitialStoredProcedures.cs" />
+    <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
     <Compile Include="OrderItem.cs" />
     <Compile Include="Engine.cs" />

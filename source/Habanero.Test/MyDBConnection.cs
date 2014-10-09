@@ -40,19 +40,13 @@ namespace Habanero.Test
 
         public static DatabaseConfig GetDatabaseConfig(string vendor = DefaultVendor)
         {
-            return DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
-            
-            IDictionary settings = new Hashtable();
-
-            settings.Add("vendor", DatabaseConfig.MySql);
-            settings.Add("server", "localhost");
-            settings.Add("database", "habanero_test_trunk");
-            settings.Add("username", "root");
-            settings.Add("password", "root");
-            settings.Add("port", "3306");
-
-            DatabaseConfig config = new DatabaseConfig(settings);
-            return config;
+            var databaseConfig = DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
+            if (databaseConfig.Vendor.ToUpper() == DatabaseConfig.MySql)
+            {
+                //Fix to prevent problems running tests with stored procedures
+                databaseConfig.Database = databaseConfig.Database.ToLower();
+            }
+            return databaseConfig;
         }
     }
 }

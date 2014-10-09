@@ -415,5 +415,16 @@ namespace Habanero.DB
                 return this.IsInMemoryDB();
             }
         }
+
+        protected internal DatabaseConfig Clone()
+        {
+            var databaseConfig = new DatabaseConfig(Vendor, Server, Database, UserName, Password, Port);
+            databaseConfig._passwordCrypter = _passwordCrypter;
+            databaseConfig.AssemblyName = AssemblyName;
+            databaseConfig.FullClassName = FullClassName;
+            databaseConfig.ConnectionStringFactoryAssemblyName = ConnectionStringFactoryAssemblyName;
+            databaseConfig.ConnectionStringFactoryClassName = ConnectionStringFactoryClassName;
+            return databaseConfig;
+        }
     }
 }
