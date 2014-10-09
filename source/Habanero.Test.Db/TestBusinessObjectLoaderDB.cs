@@ -163,7 +163,6 @@ namespace Habanero.Test.DB
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc autoInc = new TestAutoInc();
-            autoInc.TestAutoIncID = int.MaxValue;
             autoInc.Save();
 
             //---------------Execute Test ----------------------

@@ -29,6 +29,8 @@ namespace Habanero.DB
     /// </summary>
     public class DatabaseConnectionSqlServer : DatabaseConnection
     {
+        private const string _newIdentityParameterName = "newIdentity";
+
         /// <summary>
         /// Constructor to initialise the connection object with an
         /// assembly name and class name
@@ -37,8 +39,6 @@ namespace Habanero.DB
         /// <param name="className">The class name</param>
         public DatabaseConnectionSqlServer(string assemblyName, string className) : base(assemblyName, className)
         {
-            
-            
         }
 
         /// <summary>
@@ -58,6 +58,12 @@ namespace Habanero.DB
         protected override void SetupCommand(ISqlStatement statement, IDbCommand command, IDbTransaction transaction)
         {
             base.SetupCommand(statement, command, transaction);
+            var newParameter = command.CreateParameter();
+            newParameter.ParameterName = _newIdentityParameterName;
+            newParameter.DbType = DbType.Int64;
+            newParameter.Direction = ParameterDirection.Output;
+            command.Parameters.Add(newParameter);
+            command.CommandText += ";" + Environment.NewLine + "SELECT @newIdentity = SCOPE_IDENTITY();";
         }
 
         /// <summary>
@@ -71,13 +77,8 @@ namespace Habanero.DB
         /// <returns></returns>
         public override long GetLastAutoIncrementingID(string tableName, IDbTransaction tran, IDbCommand command)
         {
-            long id = 0;
-            using (IDataReader reader = LoadDataReader(String.Format("SELECT IDENT_CURRENT('{0}')", tableName))) {
-                if (reader.Read()) {
-                    id = Convert.ToInt64(reader.GetValue(0));
-                }
-            }
-            return id;
+            var identity = (IDbDataParameter) command.Parameters[_newIdentityParameterName];
+            return Convert.ToInt64(identity.Value);
         }
 
         /// <summary>

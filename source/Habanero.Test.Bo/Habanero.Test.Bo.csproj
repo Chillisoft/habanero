@@ -163,6 +163,8 @@
     <Compile Include="BusinessObjectCollection\TestBusinessObjectCollection_Events.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderInMemory.cs" />
     <Compile Include="BusinessObjectLoader\TestBusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="TestBusinessObject_Concurrency.cs" />
+    <Compile Include="TestBusinessObject_InMemory.cs" />
     <Compile Include="TestQueryResultLoaderInMemory.cs" />
     <Compile Include="ClassDefinition\TestClassDefHelper.cs" />
     <Compile Include="ClassDefinition\TestDefClassFactory.cs" />

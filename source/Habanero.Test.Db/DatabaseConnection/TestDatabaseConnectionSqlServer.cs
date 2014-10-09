@@ -62,8 +62,7 @@ namespace Habanero.Test.DB
 		public void Test_NoColumnName_DoesntError_SqlServer()
 		{
 			//---------------Set up test pack-------------------
-			//DatabaseConnection.CurrentConnection = new DatabaseConnectionSqlServer("System.Data", "System.Data.SqlClient.SqlConnection","server=localhost;database=habanero_test_trunk;user=sa;password=sa");
-			const string sql = "Select FirstName + ', ' + Surname from tbPersonTable";
+            const string sql = "Select LookupValue + ', ' + LookupValue from database_lookup_int";
 			var sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection, sql);
 
 			//---------------Execute Test ----------------------
