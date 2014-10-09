@@ -99,8 +99,7 @@ namespace Habanero.Test.Base
             //Assert.AreEqual("testfolder", app.ClassDefsPath);
             Assert.AreEqual(typeof(ConsoleExceptionNotifier), app.ExceptionNotifier.GetType());
             Assert.IsFalse(app.LoadClassDefs);
-            //Assert.AreEqual(typeof(DatabaseSettings), app.Settings.GetType());
-            Assert.IsNull(app.Settings);
+            Assert.AreEqual(typeof(DatabaseSettings), app.Settings.GetType());
 
             //Assert.AreEqual(typeof(DatabaseConfig), app.DatabaseConfig.GetType());
             //Assert.AreEqual(app.DefClassFactory);

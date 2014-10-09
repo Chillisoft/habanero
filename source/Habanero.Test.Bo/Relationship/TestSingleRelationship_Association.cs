@@ -113,10 +113,8 @@ namespace Habanero.Test.BO.Relationship
         public  virtual void Test_SetParent_PersistedChild_FindLoadLookupListError()
         {
             //---------------Set up test pack-------------------
-            DatabaseConnection.CurrentConnection =
-                                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetDatabaseConfig().GetConnectionString();
-            DatabaseConnection.CurrentConnection.GetConnection();
+            TestUsingDatabase.SetupDBDataAccessor();
+
             BORegistry.DataAccessor = new DataAccessorDB();
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation(); 
             GetAssociationRelationship(organisation);

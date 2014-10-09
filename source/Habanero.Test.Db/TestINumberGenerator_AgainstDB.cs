@@ -166,12 +166,13 @@ namespace Habanero.Test.DB
         private static void UpdateDatabaseLockAsExpired(string numberType, int lockDuration)
         {
             var sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
-            sqlStatement.Statement.Append("UPDATE `numbergenerator` SET ");
-            sqlStatement.Statement.Append(DatabaseConnection.CurrentConnection.SqlFormatter.DelimitField("DateTimeLocked"));
+            var sqlFormatter = DatabaseConnection.CurrentConnection.SqlFormatter;
+            sqlStatement.Statement.AppendFormat("UPDATE {0} SET ", sqlFormatter.DelimitTable("numbergenerator"));
+            sqlStatement.Statement.Append(sqlFormatter.DelimitField("DateTimeLocked"));
             sqlStatement.Statement.Append(" = ");
             sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1 * lockDuration - 1));
             sqlStatement.Statement.Append(" WHERE ");
-            sqlStatement.Statement.Append(DatabaseConnection.CurrentConnection.SqlFormatter.DelimitField("NumberType"));
+            sqlStatement.Statement.Append(sqlFormatter.DelimitField("NumberType"));
             sqlStatement.Statement.Append(" = ");
             sqlStatement.AddParameterToStatement(numberType);
             DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);

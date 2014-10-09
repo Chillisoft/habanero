@@ -560,16 +560,14 @@ namespace Habanero.Test.BO
         public void Test_GetBusinessObjectForProp_ID_WithDatabase()
         {
             ClassDef.ClassDefs.Clear();
-            DatabaseConnection.CurrentConnection =
-                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-            DatabaseConnection.CurrentConnection.ConnectionString = MyDBConnection.GetDatabaseConfig().GetConnectionString();
-            DatabaseConnection.CurrentConnection.GetConnection();
-            BORegistry.DataAccessor = new DataAccessorDB();
+            TestUsingDatabase.SetupDBDataAccessor();
+
             BOWithIntID.DeleteAllBOWithIntID();
             IClassDef autoIncClassDef = BOWithIntID.LoadClassDefWithIntID();
             IBusinessObject businessObject = GetBusinessObjectStub();
             BOPropLookupList boProp = (BOPropLookupList) businessObject.Props[_propDef_int.PropertyName];
             BOWithIntID bo1 = new BOWithIntID {TestField = "PropValue", IntID = 55};
+
             object expectedID = bo1.IntID;
             bo1.Save();
             //---------------Assert Precondition----------------

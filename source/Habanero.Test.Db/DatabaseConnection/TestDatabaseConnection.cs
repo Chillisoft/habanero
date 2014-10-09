@@ -48,12 +48,12 @@ namespace Habanero.Test.DB
 
             DatabaseConnection.CurrentConnection.ExecuteSql(sql);
 
-            int maxNum = 0;
+            long maxNum = 0;
             using (IDataReader reader = DatabaseConnection.CurrentConnection.LoadDataReader("select max(testautoincid) from testautoinc"))
             {
                 while (reader.Read())
                 {
-                    maxNum = reader.GetInt32(0);
+                    maxNum = reader.GetInt64(0);
                 }
             }
             Assert.AreEqual(maxNum, mockSupportsAutoIncrementingID.AutoValue);

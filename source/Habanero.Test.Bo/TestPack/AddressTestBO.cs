@@ -186,7 +186,19 @@ namespace Habanero.Test.BO
                       CONSTRAINT `FK_" +
                       cpAddressTableName + @"_1` FOREIGN KEY (`ContactPersonID`) REFERENCES `" + cpTableName +
                       @"` (`ContactPersonID`)
-                    ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+                    ) ENGINE=InnoDB";
+
+
+            var SQLSERVERsql = string.Format("CREATE TABLE [dbo].[{0}] " +
+                  "([AddressID] CHAR(38) NOT NULL, " +
+                  "[ContactPersonID] VARCHAR(255) NOT NULL CONSTRAINT [DF__ContactPersonID] DEFAULT '', " +
+                  "[AddressLine1] VARCHAR(255), " +
+                  "[AddressLine2] VARCHAR(255), " +
+                  "[AddressLine3] VARCHAR(255), " +
+                  "[AddressLine4] VARCHAR(255), " +
+                  "[OrganisationID] DATETIME, " +
+                  "PRIMARY KEY ([AddressID]));", cpAddressTableName);
+
             DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 

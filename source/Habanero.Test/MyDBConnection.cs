@@ -31,12 +31,14 @@ namespace Habanero.Test
     /// </summary>
     public class MyDBConnection
     {
+        public const string DefaultVendor = DatabaseConfig.MySql;
+
         public static String GetConnectionString()
         {
             return GetDatabaseConfig().GetConnectionString();
         }
 
-        public static DatabaseConfig GetDatabaseConfig(string vendor = DatabaseConfig.MySql)
+        public static DatabaseConfig GetDatabaseConfig(string vendor = DefaultVendor)
         {
             return DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
             

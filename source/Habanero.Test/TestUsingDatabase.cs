@@ -33,17 +33,17 @@ namespace Habanero.Test
     {
         protected static List<BusinessObject> _objectsToDelete = new List<BusinessObject>();
 
-        public void SetupDBConnection()
+        public void SetupDBConnection(string vendor = MyDBConnection.DefaultVendor)
         {
-            SetupDBDataAccessor();
+            SetupDBDataAccessor(vendor);
         }
 
-        public static void SetupDBDataAccessor(string vendor = DatabaseConfig.MySql)
+        public static void SetupDBDataAccessor(string vendor = MyDBConnection.DefaultVendor)
         {
             if (DatabaseConnection.CurrentConnection != null &&
                 DatabaseConnection.CurrentConnection.GetType().Name.ToLower().Contains(vendor.ToLower()))
             {
-                if (!(BORegistry.DataAccessor is DataAccessorDB)) BORegistry.DataAccessor = new DataAccessorDB();
+                BORegistry.DataAccessor = new DataAccessorDB();
                 return;
             }
             var databaseConfig = MyDBConnection.GetDatabaseConfig(vendor);

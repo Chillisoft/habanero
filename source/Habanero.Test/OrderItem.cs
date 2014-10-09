@@ -35,22 +35,35 @@ namespace Habanero.Test
 	{
 		public static void CreateTable()
 		{
-			string sqlCreate = "DROP TABLE IF EXISTS `orderitem`; " +
-							   "CREATE TABLE `orderitem` " +
+		    DropTable();
+		    string sqlCreate = "CREATE TABLE `orderitem` " +
 							   "(`OrderNumber` int(10) unsigned NOT NULL default '0', " +
 							   "`Product` varchar(100) NOT NULL default '', " +
 							   "PRIMARY KEY  (`OrderNumber`,`Product`)) " +
 							   "ENGINE=InnoDB DEFAULT CHARSET=utf8;;";
+            
 			DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlCreate);
 		}
 
-		public static void DropTable()
-		{
-			string sqlDrop = "DROP TABLE IF EXISTS `orderitem`;";
-			DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlDrop);
-		}
+	    private static bool TableExists(string tableName)
+	    {
+	        var sql = string.Format("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{0}'", tableName);
+	        var count = Convert.ToInt32(DatabaseConnection.CurrentConnection.ExecuteRawSqlScalar(sql));
+            return count > 0;
+	    }
 
-		public static IClassDef LoadDefaultClassDef()
+	    public static void DropTable()
+	    {
+	        var tableExists = TableExists("orderitem");
+	        if (tableExists)
+	        {
+	            var sqlFormatter = DatabaseConnection.CurrentConnection.SqlFormatter;
+	            string sqlDrop = "DROP TABLE IF EXISTS " + sqlFormatter.DelimitTable("orderitem");
+	            DatabaseConnection.CurrentConnection.ExecuteRawSql(sqlDrop);
+	        }
+	    }
+
+	    public static IClassDef LoadDefaultClassDef()
 		{
 			XmlClassLoader itsLoader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
 			IClassDef classDef = itsLoader.LoadClass(@"
