@@ -24,6 +24,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Test.Migrations;
 
 namespace Habanero.Test.BO
 {
@@ -171,35 +172,11 @@ namespace Habanero.Test.BO
             {
                 return;
             }
-            var sql = "CREATE TABLE `" + cpAddressTableName +
-                      @"` (
-                      `AddressID` char(38) NOT NULL DEFAULT '',
-                      `ContactPersonID` char(38) NOT NULL DEFAULT '',
-                      `AddressLine1` varchar(255) DEFAULT NULL,
-                      `AddressLine2` varchar(255) DEFAULT NULL,
-                      `AddressLine3` varchar(255) DEFAULT NULL,
-                      `AddressLine4` varchar(255) DEFAULT NULL,
-                      `OrganisationID` char(38) DEFAULT NULL,
-                      PRIMARY KEY (`AddressID`),
-                      KEY `FK_" +
-                      cpAddressTableName + @"_1` (`ContactPersonID`),
-                      CONSTRAINT `FK_" +
-                      cpAddressTableName + @"_1` FOREIGN KEY (`ContactPersonID`) REFERENCES `" + cpTableName +
-                      @"` (`ContactPersonID`)
-                    ) ENGINE=InnoDB";
 
+            var databaseConfig = MyDBConnection.GetDatabaseConfig();
+            var migrator = new Migrator(databaseConfig);
+            migrator.DirectMigrateUp(new Migration_Temp_ContactPersonAddress(cpAddressTableName, cpTableName));
 
-            var SQLSERVERsql = string.Format("CREATE TABLE [dbo].[{0}] " +
-                  "([AddressID] CHAR(38) NOT NULL, " +
-                  "[ContactPersonID] VARCHAR(255) NOT NULL CONSTRAINT [DF__ContactPersonID] DEFAULT '', " +
-                  "[AddressLine1] VARCHAR(255), " +
-                  "[AddressLine2] VARCHAR(255), " +
-                  "[AddressLine3] VARCHAR(255), " +
-                  "[AddressLine4] VARCHAR(255), " +
-                  "[OrganisationID] DATETIME, " +
-                  "PRIMARY KEY ([AddressID]));", cpAddressTableName);
-
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
         }
 
         public static void DropCpAddressTable(string cpAddressTableName)

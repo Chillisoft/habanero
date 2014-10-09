@@ -58,7 +58,7 @@ namespace Habanero.Test.BO
         public void SetupTestFixture()
         {
             this.SetupDBConnection();
-            OrderItem.CreateTable();
+            //OrderItem.CreateTable();
             FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             FixtureEnvironment.ClearBusinessObjectManager();
         }
@@ -66,7 +66,7 @@ namespace Habanero.Test.BO
         [TestFixtureTearDown]
         public void TearDownFixure()
         {
-            OrderItem.DropTable();
+            //OrderItem.DropTable();
         }
 
         [SetUp]

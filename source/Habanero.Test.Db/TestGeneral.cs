@@ -246,6 +246,7 @@ namespace Habanero.Test.DB
             ContactPerson myContact_1 = new ContactPerson();
 
             //Edit first object and save
+            myContact_1.FirstName = "My FirstName";
             myContact_1.Surname = "My Surname";
             myContact_1.SetPropertyValue("PK2Prop1", "PK2Prop1Value1" + TestUtil.GetRandomString());
             myContact_1.SetPropertyValue("PK2Prop2", "PK2Prop1Value2" + TestUtil.GetRandomString());

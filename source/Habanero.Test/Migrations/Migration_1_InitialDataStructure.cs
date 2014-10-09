@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentMigrator;
+using FluentMigrator.Builders.Create;
 
 namespace Habanero.Test.Migrations
 {
@@ -45,37 +46,13 @@ namespace Habanero.Test.Migrations
                   .WithColumn("ShapeID_field").AsFixedLengthAnsiString(38).Nullable()
                   .WithColumn("Colour").AsInt64().NotNullable().WithDefaultValue(0);
 
-            Create.Table("contact_person").InSchema("dbo")
-                  .WithColumn("ContactPersonID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
-                  .WithColumn("Surname_field").AsAnsiString(255).Nullable()
-                  .WithColumn("FirstName_field").AsAnsiString(255).Nullable()
-                  .WithColumn("EmailAddress").AsAnsiString(255).Nullable()
-                  .WithColumn("PhoneNumber").AsAnsiString(255).Nullable()
-                  .WithColumn("CellNumber").AsAnsiString(255).Nullable()
-                  .WithColumn("DateOfBirth").AsDateTime().Nullable()
-                  .WithColumn("DateLastUpdated").AsDateTime().Nullable()
-                  .WithColumn("UserLastUpdated").AsAnsiString(255).Nullable()
-                  .WithColumn("MachineLastUpdated").AsAnsiString(255).Nullable()
-                  .WithColumn("VersionNumber").AsInt32().Nullable()
-                  .WithColumn("PK2_Prop1").AsAnsiString(255).Nullable()
-                  .WithColumn("PK2_Prop2").AsAnsiString(255).Nullable()
-                  .WithColumn("PK3_Prop").AsAnsiString(255).Nullable()
-                  .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).Nullable()
-                  .WithColumn("UserLocked").AsAnsiString(45).Nullable()
-                  .WithColumn("DateTimeLocked").AsDateTime().Nullable()
-                  .WithColumn("MachineLocked").AsAnsiString(45).Nullable()
-                  .WithColumn("OperatingSystemUserLocked").AsAnsiString(45).Nullable()
-                  .WithColumn("Locked").AsInt16().Nullable()
-                  .WithColumn("IntegerProperty").AsInt32().Nullable();
+            Create.Table("organisation").InSchema("dbo")
+                  .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
+                  .WithColumn("Name").AsAnsiString(255).Nullable();
 
-            Create.Table("contact_person_address").InSchema("dbo")
-                  .WithColumn("AddressID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
-                  .WithColumn("ContactPersonID").AsFixedLengthAnsiString(38).NotNullable()
-                  .WithColumn("AddressLine1").AsAnsiString(255).Nullable()
-                  .WithColumn("AddressLine2").AsAnsiString(255).Nullable()
-                  .WithColumn("AddressLine3").AsAnsiString(255).Nullable()
-                  .WithColumn("AddressLine4").AsAnsiString(255).Nullable()
-                  .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).Nullable();
+            CreateContactPersonTable(this);
+
+            CreateContactPersonAddressTable(this);
 
             Create.Table("contactpersoncompositekey").InSchema("dbo")
                   .WithColumn("PK1_Prop1").AsAnsiString(50).Nullable()
@@ -132,9 +109,6 @@ namespace Habanero.Test.Migrations
                   .WithColumn("OperatingSystemUserLocked").AsAnsiString(45).Nullable()
                   .WithColumn("DateTimeLocked").AsDateTime().Nullable();
 
-            Create.Table("organisation").InSchema("dbo")
-                  .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
-                  .WithColumn("Name").AsAnsiString(255).Nullable();
 
             Create.Table("shape_table").InSchema("dbo")
                   .WithColumn("ShapeID_field").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey().WithDefaultValue("")
@@ -231,15 +205,7 @@ namespace Habanero.Test.Migrations
             Create.ForeignKey("FK_circle_concrete_1")
                   .FromTable("circle_concrete").InSchema("dbo").ForeignColumns("ShapeID_field")
                   .ToTable("shape_table").InSchema("dbo").PrimaryColumns("ShapeID_field");
-
-            Create.ForeignKey("FK_contact_person_1")
-                  .FromTable("contact_person").InSchema("dbo").ForeignColumns("OrganisationID")
-                  .ToTable("organisation").InSchema("dbo").PrimaryColumns("OrganisationID");
-
-            Create.ForeignKey("FK_contact_person_address_1")
-                  .FromTable("contact_person_address").InSchema("dbo").ForeignColumns("ContactPersonID")
-                  .ToTable("contact_person").InSchema("dbo").PrimaryColumns("ContactPersonID");
-
+            
             Create.ForeignKey("table_class_Engine_Car_FK")
                   .FromTable("table_class_engine").InSchema("dbo").ForeignColumns("field_Car_ID")
                   .ToTable("table_class_car").InSchema("dbo").PrimaryColumns("field_Car_ID");
@@ -282,18 +248,12 @@ namespace Habanero.Test.Migrations
             //      .WithOptions()
             //      .NonClustered();
 
-            //Create.Index("FK_contact_person_address_1")
-            //      .OnTable("contact_person_address").InSchema("dbo")
-            //      .OnColumn("ContactPersonID").Ascending()
-            //      .WithOptions()
-            //      .NonClustered();
-
             Create.Index("table_class_Car_Driver_FK")
                   .OnTable("table_class_car").InSchema("dbo")
                   .OnColumn("field_Driver_ID").Ascending()
                   .WithOptions()
                   .NonClustered();
-
+            
             //Create.Index("table_class_Engine_Car_FK")
             //      .OnTable("table_class_engine").InSchema("dbo")
             //      .OnColumn("field_Car_ID").Ascending()
@@ -313,6 +273,59 @@ namespace Habanero.Test.Migrations
             //      .NonClustered();
             #endregion
 
+        }
+
+        public static void CreateContactPersonTable(MigrationBase migrationBase, string tableName = "contact_person")
+        {
+            migrationBase.Create.Table(tableName).InSchema("dbo")
+                                .WithColumn("ContactPersonID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
+                                .WithColumn("Surname_field").AsAnsiString(255).Nullable()
+                                .WithColumn("FirstName_field").AsAnsiString(255).Nullable()
+                                .WithColumn("EmailAddress").AsAnsiString(255).Nullable()
+                                .WithColumn("PhoneNumber").AsAnsiString(255).Nullable()
+                                .WithColumn("CellNumber").AsAnsiString(255).Nullable()
+                                .WithColumn("DateOfBirth").AsDateTime().Nullable()
+                                .WithColumn("DateLastUpdated").AsDateTime().Nullable()
+                                .WithColumn("UserLastUpdated").AsAnsiString(255).Nullable()
+                                .WithColumn("MachineLastUpdated").AsAnsiString(255).Nullable()
+                                .WithColumn("VersionNumber").AsInt32().Nullable()
+                                .WithColumn("PK2_Prop1").AsAnsiString(255).Nullable()
+                                .WithColumn("PK2_Prop2").AsAnsiString(255).Nullable()
+                                .WithColumn("PK3_Prop").AsAnsiString(255).Nullable()
+                                .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).Nullable()
+                                .WithColumn("UserLocked").AsAnsiString(45).Nullable()
+                                .WithColumn("DateTimeLocked").AsDateTime().Nullable()
+                                .WithColumn("MachineLocked").AsAnsiString(45).Nullable()
+                                .WithColumn("OperatingSystemUserLocked").AsAnsiString(45).Nullable()
+                                .WithColumn("Locked").AsInt16().Nullable()
+                                .WithColumn("IntegerProperty").AsInt32().Nullable();
+
+            migrationBase.Create.ForeignKey("FK_" + tableName + "_1")
+                  .FromTable(tableName).InSchema("dbo").ForeignColumns("OrganisationID")
+                  .ToTable("organisation").InSchema("dbo").PrimaryColumns("OrganisationID");
+        }
+
+        public static void CreateContactPersonAddressTable(MigrationBase migrationBase, string tableName = "contact_person_address", string referencedContactPersonTableName = "contact_person")
+        {
+            migrationBase.Create.Table(tableName).InSchema("dbo")
+                         .WithColumn("AddressID").AsFixedLengthAnsiString(38).NotNullable().PrimaryKey()
+                         .WithColumn("ContactPersonID").AsFixedLengthAnsiString(38).NotNullable()
+                         .WithColumn("AddressLine1").AsAnsiString(255).Nullable()
+                         .WithColumn("AddressLine2").AsAnsiString(255).Nullable()
+                         .WithColumn("AddressLine3").AsAnsiString(255).Nullable()
+                         .WithColumn("AddressLine4").AsAnsiString(255).Nullable()
+                         .WithColumn("OrganisationID").AsFixedLengthAnsiString(38).Nullable();
+
+            migrationBase.Create.ForeignKey("FK_" + tableName + "_1")
+                  .FromTable(tableName).InSchema("dbo").ForeignColumns("ContactPersonID")
+                  .ToTable(referencedContactPersonTableName).InSchema("dbo").PrimaryColumns("ContactPersonID");
+
+            //Create.Index("FK_" + tableName + "_1")
+            //      .OnTable(tableName).InSchema("dbo")
+            //      .OnColumn("ContactPersonID").Ascending()
+            //      .WithOptions()
+            //      .NonClustered();
+            
         }
 
         public override void Down()

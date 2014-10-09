@@ -47,18 +47,43 @@ namespace Habanero.Test.DB.SqlGeneration
         }
 
         [Test]
-        public void TestDelimitedTableNameWithSpaces()
+        public void TestDelimitedTableNameWithSpaces_MySql()
         {
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
             bo.Save();
             ClassDef.ClassDefs[typeof(TestAutoInc)].TableName = "test autoinc";
             bo.TestField = TestUtil.GetRandomString();
-            UpdateStatementGenerator gen = new UpdateStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            var gen = CreateUpdateStatementGenerator(bo, DatabaseConfig.MySql);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
             var statementCol = gen.Generate();
+            //---------------Test Result -----------------------
             ISqlStatement statement = statementCol.First();
             StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
+        }
+
+        [Test]
+        public void TestDelimitedTableNameWithSpaces_SqlServer()
+        {
+            //---------------Set up test pack-------------------
+            ClassDef.ClassDefs.Clear();
+            TestAutoInc.LoadClassDefWithAutoIncrementingID();
+            TestAutoInc bo = new TestAutoInc();
+            bo.Save();
+            ClassDef.ClassDefs[typeof(TestAutoInc)].TableName = "test autoinc";
+            bo.TestField = TestUtil.GetRandomString();
+            var gen = CreateUpdateStatementGenerator(bo, DatabaseConfig.SqlServer);
+            //---------------Assert Precondition----------------
+
+            //---------------Execute Test ----------------------
+            var statementCol = gen.Generate();
+            //---------------Test Result -----------------------
+            ISqlStatement statement = statementCol.First();
+            StringAssert.Contains("[test autoinc]", statement.Statement.ToString());
         }
 
         [Test]
@@ -91,7 +116,7 @@ namespace Habanero.Test.DB.SqlGeneration
             singleRelationship.SetRelatedObject(organisationTestBO);
             IRelationship relationship = organisationTestBO.Relationships.GetMultiple<ContactPersonTestBO>("ContactPeople");
             //TransactionalSingleRelationship_Added tsr = new TransactionalSingleRelationship_Added(singleRelationship);
-            UpdateStatementGenerator generator = new UpdateStatementGenerator(contactPersonTestBO, DatabaseConnection.CurrentConnection);
+            var generator = CreateUpdateStatementGenerator(contactPersonTestBO, DatabaseConfig.MySql);
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------
@@ -102,6 +127,12 @@ namespace Habanero.Test.DB.SqlGeneration
             Assert.AreEqual("UPDATE `contact_person` SET `OrganisationID` = ?Param0 WHERE `ContactPersonID` = ?Param1", sqlStatements[0].Statement.ToString());
             Assert.AreEqual(organisationTestBO.OrganisationID.Value.ToString("B").ToUpper(), sqlStatements[0].Parameters[0].Value);
             Assert.AreEqual(contactPersonTestBO.ContactPersonID.ToString("B").ToUpper(), sqlStatements[0].Parameters[1].Value);           
+        }
+
+        private static UpdateStatementGenerator CreateUpdateStatementGenerator(IBusinessObject businessObject, string databaseVendor)
+        {
+            var databaseConnection = MyDBConnection.GetDatabaseConfig(databaseVendor).GetDatabaseConnection();
+            return new UpdateStatementGenerator(businessObject, databaseConnection);
         }
 
 
@@ -123,7 +154,7 @@ namespace Habanero.Test.DB.SqlGeneration
             SingleRelationship<ContactPersonCompositeKey> singleRelationship = car.Relationships.GetSingle<ContactPersonCompositeKey>("Driver");
             singleRelationship.SetRelatedObject(contactPerson);
             IRelationship relationship = contactPerson.Relationships.GetMultiple<Car>("Driver");
-            UpdateStatementGenerator generator = new UpdateStatementGenerator(car, DatabaseConnection.CurrentConnection);
+            var generator = CreateUpdateStatementGenerator(car, DatabaseConfig.MySql);
             //---------------Assert PreConditions--------------- 
 
             //---------------Execute Test ----------------------

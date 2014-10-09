@@ -4,10 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using FluentMigrator;
+using FluentMigrator.Infrastructure;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
+using FluentMigrator.Runner.Versioning;
+using FluentMigrator.VersionTableInfo;
 using Habanero.Base;
 using Habanero.DB;
 
@@ -24,6 +27,8 @@ namespace Habanero.Test.Migrations
                 {DatabaseConfig.MySql, "MySql"},
             };
 
+        private readonly DatabaseInitialiser _databaseInitialiser;
+
         public IMigrationProcessorFactory MigrationProcessorFactory { get; private set; }
         public TextWriterAnnouncer Announcer { get; private set; }
         public Assembly AssemblyContainingMigrations { get; private set; }
@@ -37,6 +42,7 @@ namespace Habanero.Test.Migrations
             AssemblyContainingMigrations = Assembly.GetExecutingAssembly();
             MigrationProcessorFactory = GetMigrationProcessorFactory(databaseConfig);
             Announcer = new TextWriterAnnouncer(s => System.Diagnostics.Debug.WriteLine(s));
+            _databaseInitialiser = new DatabaseInitialiser(databaseConfig);
         }
 
         private IMigrationProcessorFactory GetMigrationProcessorFactory(IDatabaseConfig databaseConfig)
@@ -74,26 +80,25 @@ namespace Habanero.Test.Migrations
                                        TransactionPerSession = true,
                                    };
 
-
             return new MigrationRunner(AssemblyContainingMigrations, migrationContext, processor);
         }
 
         private IMigrationProcessor GetMigrationProcessor()
         {
             var connectionString = _databaseConfig.GetConnectionString();
-            var options = new MigrationOptions {PreviewOnly = false, Timeout = 60};
+            var options = new Migrator.MigrationOptions {PreviewOnly = false, Timeout = 60};
             return MigrationProcessorFactory.Create(connectionString, Announcer, options);
         }
 
         public void EnsureDatabseExists()
         {
-            if (DatabaseExists())
+            if (_databaseInitialiser.DatabaseExists())
             {
                 if (TableExists("VersionInfo")) return;
-                if (TableExists("another_number_generator"))
+                if (TableExists("mybo"))
                 {
                     //This is a pre-generated test DB, so drop it and recreate it
-                    DropDatabase();
+                    _databaseInitialiser.DropDatabase();
                 }
                 else
                 {
@@ -102,7 +107,7 @@ namespace Habanero.Test.Migrations
                     throw new Exception(message);
                 }
             }
-            CreateDatabase();
+            _databaseInitialiser.CreateDatabase();
         }
 
         private bool TableExists(string tableName)
@@ -111,81 +116,53 @@ namespace Habanero.Test.Migrations
             return migrationProcessor.TableExists(null, tableName);
         }
 
-        private void CreateDatabase()
+        public void DirectMigrateUp(IMigration migration)
         {
-            var databaseConfig = GetMasterDatabaseConfig();
-            var databaseConnection = databaseConfig.GetDatabaseConnection();
-            var sql = GetCreateDatabaseSql();
-            databaseConnection.ExecuteRawSql(sql);
+            var runner = CreateMigrationRunner();
+            runner.VersionLoader = new NullVersionLoader();
+            runner.ApplyMigrationUp(new MigrationInfo(0, TransactionBehavior.Default, migration), true);
         }
 
-        private void DropDatabase()
+        public class NullVersionLoader : IVersionLoader
         {
-            var databaseConfig = GetMasterDatabaseConfig();
-            var databaseConnection = databaseConfig.GetDatabaseConnection();
-            var sql = GetDropDatabaseSql();
-            databaseConnection.ExecuteRawSql(sql);
-        }
-
-        private bool DatabaseExists()
-        {
-            var databaseConfig = GetMasterDatabaseConfig();
-            var databaseConnection = databaseConfig.GetDatabaseConnection();
-            var sql = GetDatabaseExistsSql();
-            var count = Convert.ToInt64(databaseConnection.ExecuteRawSqlScalar(sql));
-            return count > 0;
-        }
-
-        private string GetDatabaseExistsSql()
-        {
-            string template;
-            switch (_databaseConfig.Vendor.ToUpper())
+            public NullVersionLoader()
             {
-                case DatabaseConfig.MySql:
-                    template = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='{0}'";
-                    break;
-                default:
-                    template = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.DATABASES WHERE NAME='{0}'";
-                    break;
+                VersionInfo = new VersionInfo();
             }
-            return string.Format(template, _databaseConfig.Database);
-        }
 
-        private string GetCreateDatabaseSql()
-        {
-            string template;
-            switch (_databaseConfig.Vendor.ToUpper())
+            public void DeleteVersion(long version)
             {
-                case DatabaseConfig.MySql:
-                    template = "CREATE SCHEMA `{0}`";
-                    break;
-                default:
-                    template = "CREATE DATABASE [{0}]";
-                    break;
+                
             }
-            return string.Format(template, _databaseConfig.Database);
-        }
 
-        private string GetDropDatabaseSql()
-        {
-            string template;
-            switch (_databaseConfig.Vendor.ToUpper())
+            public IVersionTableMetaData GetVersionTableMetaData()
             {
-                case DatabaseConfig.MySql:
-                    template = "DROP SCHEMA `{0}`";
-                    break;
-                default:
-                    template = "DROP DATABASE [{0}]";
-                    break;
+                return new DefaultVersionTableMetaData();
             }
-            return string.Format(template, _databaseConfig.Database);
-        }
 
-        private DatabaseConfig GetMasterDatabaseConfig()
-        {
-            var databaseConfig = _databaseConfig.Clone();
-            databaseConfig.Database = "information_schema";
-            return databaseConfig;
+            public void LoadVersionInfo()
+            {
+            }
+
+            public void RemoveVersionTable()
+            {
+            }
+
+            public void UpdateVersionInfo(long version)
+            {
+            }
+
+            public void UpdateVersionInfo(long version, string description)
+            {
+            }
+
+            public bool AlreadyCreatedVersionSchema { get; private set; }
+            public bool AlreadyCreatedVersionTable { get; private set; }
+            public IMigrationRunner Runner { get; set; }
+            public IVersionInfo VersionInfo { get; set; }
+            public IVersionTableMetaData VersionTableMetaData { get; private set; }
         }
     }
+
+    
 }

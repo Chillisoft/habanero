@@ -26,6 +26,7 @@ using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
+using Habanero.Test.Migrations;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -1053,49 +1054,13 @@ namespace Habanero.Test.BO
                 return;
             }
 
-            var sql = "CREATE TABLE `" + tableName + @"` (
-                          `ContactPersonID` char(38) NOT NULL DEFAULT '',
-                          `Surname_field` varchar(255) DEFAULT NULL,
-                          `FirstName_field` varchar(255) DEFAULT NULL,
-                          `EmailAddress` varchar(255) DEFAULT NULL,
-                          `PhoneNumber` varchar(255) DEFAULT NULL,
-                          `CellNumber` varchar(255) DEFAULT NULL,
-                          `DateOfBirth` datetime DEFAULT NULL,
-                          `DateLastUpdated` datetime DEFAULT NULL,
-                          `UserLastUpdated` varchar(255) DEFAULT NULL,
-                          `MachineLastUpdated` varchar(255) DEFAULT NULL,
-                          `VersionNumber` int(11) DEFAULT NULL,
-                          `PK2_Prop1` varchar(255) DEFAULT NULL,
-                          `PK2_Prop2` varchar(255) DEFAULT NULL,
-                          `PK3_Prop` varchar(255) DEFAULT NULL,
-                          `OrganisationID` char(38) DEFAULT NULL,
-                          `UserLocked` varchar(45) DEFAULT NULL,
-                          `DateTimeLocked` datetime DEFAULT NULL,
-                          `MachineLocked` varchar(45) DEFAULT NULL,
-                          `OperatingSystemUserLocked` varchar(45) DEFAULT NULL,
-                          `Locked` tinyint(1) DEFAULT NULL,
-                          `IntegerProperty` int(11) DEFAULT NULL,
-                          PRIMARY KEY (`ContactPersonID`),
-                          UNIQUE KEY `Index_2` (`Surname_field`,`FirstName_field`),
-                          KEY `FK_" + tableName + @"_1` (`OrganisationID`),
-                          CONSTRAINT `FK_" + tableName + @"_1` FOREIGN KEY (`OrganisationID`) REFERENCES `organisation` (`OrganisationID`)
-                        ) ENGINE=InnoDB";
-
-
-
-            var SQLSERVERsql = string.Format("CREATE TABLE [dbo].[{0}] ([ContactPersonID] CHAR(38) NOT NULL," +
-            " [Surname_field] VARCHAR(255), [FirstName_field] VARCHAR(255), [EmailAddress] VARCHAR(255), " +
-            "[PhoneNumber] VARCHAR(255), [CellNumber] VARCHAR(255), [DateOfBirth] DATETIME, [DateLastUpdated] DATETIME," +
-            " [UserLastUpdated] VARCHAR(255), [MachineLastUpdated] VARCHAR(255), [VersionNumber] INT, [PK2_Prop1] VARCHAR(255)," +
-            " [PK2_Prop2] VARCHAR(255), [PK3_Prop] VARCHAR(255), [OrganisationID] CHAR(38), [UserLocked] VARCHAR(45), " +
-            "[DateTimeLocked] DATETIME, [MachineLocked] VARCHAR(45), [OperatingSystemUserLocked] VARCHAR(45), [Locked] SMALLINT," +
-            " [IntegerProperty] INT, PRIMARY KEY ([ContactPersonID]))", tableName);
-
-
-
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            var databaseConfig = MyDBConnection.GetDatabaseConfig();
+            var migrator = new Migrator(databaseConfig);
+            migrator.DirectMigrateUp(new Migration_Temp_ContactPerson(tableName));
 
         }
+        
+        
 
         public static void CreateSampleData()
         {

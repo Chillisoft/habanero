@@ -65,9 +65,10 @@ namespace Habanero.Test.DB.ConcurrencyControl
 
 		private static void UpdateDatabaseLockAsExpired(int lockDuration)
 		{
-			SqlStatement sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
-			sqlStatement.Statement.Append("UPDATE `contact_person` SET ");
-			sqlStatement.Statement.Append(DatabaseConnection.CurrentConnection.SqlFormatter.DelimitField("DateTimeLocked"));
+		    var sqlFormatter = DatabaseConnection.CurrentConnection.SqlFormatter;
+		    var sqlStatement = new SqlStatement(DatabaseConnection.CurrentConnection);
+		    sqlStatement.Statement.Append("UPDATE "+ sqlFormatter.DelimitTable("contact_person") + " SET ");
+		    sqlStatement.Statement.Append(sqlFormatter.DelimitField("DateTimeLocked"));
 			sqlStatement.Statement.Append(" = ");
 			sqlStatement.AddParameterToStatement(DateTime.Now.AddMinutes(-1*lockDuration - 1));
 			DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);

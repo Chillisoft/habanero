@@ -48,7 +48,8 @@ namespace Habanero.Test.DB.SqlGeneration
             DeleteStatementGenerator gen = new DeleteStatementGenerator(bo, DatabaseConnection.CurrentConnection);
             var statementCol = gen.Generate();
             ISqlStatement statement = statementCol.First();
-            StringAssert.Contains("`test autoinc`", statement.Statement.ToString());
+            var tableName = DatabaseConnection.CurrentConnection.SqlFormatter.DelimitTable("test autoinc");
+            StringAssert.Contains(tableName, statement.Statement.ToString());
         }
     }
 }

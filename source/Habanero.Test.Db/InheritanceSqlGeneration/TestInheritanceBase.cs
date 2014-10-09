@@ -48,10 +48,17 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             SetStrID();
             objCircle.SetPropertyValue("ShapeName", "MyShape");
             objCircle.SetPropertyValue("Radius", 10);
-            itsInsertSql =
-                new InsertStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            itsUpdateSql = new UpdateStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            itsDeleteSql = new DeleteStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
+
+            SetupGeneratedStatements();
+        }
+
+        private void SetupGeneratedStatements()
+        {
+            // Generate the Insert, Update and Delete statements using mysql DB so that we can test the exact strings.
+            var databaseConnection = MyDBConnection.GetDatabaseConfig(DatabaseConfig.MySql).GetDatabaseConnection();
+            itsInsertSql = new InsertStatementGenerator(objCircle, databaseConnection).Generate();
+            itsUpdateSql = new UpdateStatementGenerator(objCircle, databaseConnection).Generate();
+            itsDeleteSql = new DeleteStatementGenerator(objCircle, databaseConnection).Generate();
         }
 
         public void SetupTestWithoutPrimaryKey()
@@ -67,10 +74,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             SetStrID();
             objCircle.SetPropertyValue("ShapeName", "MyShape");
             objCircle.SetPropertyValue("Radius", 10);
-            itsInsertSql =
-                new InsertStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            itsUpdateSql = new UpdateStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
-            itsDeleteSql = new DeleteStatementGenerator(objCircle, DatabaseConnection.CurrentConnection).Generate();
+            SetupGeneratedStatements();
         }
 
         protected abstract void SetupInheritanceSpecifics();

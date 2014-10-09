@@ -170,9 +170,13 @@
     </Compile>
     <Compile Include="FixtureEnvironment.cs" />
     <Compile Include="ISampleUserInterfaceMapper.cs" />
+    <Compile Include="Migrations\DatabaseInitialiser.cs" />
     <Compile Include="Migrations\Migration_1_InitialDataStructure.cs" />
     <Compile Include="Migrations\Migration_2_InitialSampleData.cs" />
     <Compile Include="Migrations\Migration_3_InitialStoredProcedures.cs" />
+    <Compile Include="Migrations\Migration_4_CreateOrderItemTable.cs" />
+    <Compile Include="Migrations\Migration_Temp_ContactPerson.cs" />
+    <Compile Include="Migrations\Migration_Temp_ContactPersonAddress.cs" />
     <Compile Include="Migrations\Migrator.cs" />
     <Compile Include="MockExceptionNotifier.cs" />
     <Compile Include="OrderItem.cs" />

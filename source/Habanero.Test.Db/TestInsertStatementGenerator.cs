@@ -101,15 +101,18 @@ namespace Habanero.Test.DB.SqlGeneration
         }
 
         [Test]
-        public void TestInsertStatementExcludesAutoField()
+        public void TestInsertStatementExcludesAutoField_MySql()
         {
+            //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             TestAutoInc.LoadClassDefWithAutoIncrementingID();
             TestAutoInc bo = new TestAutoInc();
-            InsertStatementGenerator gen = new InsertStatementGenerator(bo, DatabaseConnection.CurrentConnection);
+            InsertStatementGenerator gen = CreateInsertStatementGenerator(bo, DatabaseConfig.MySql);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
             var statementCol = gen.Generate();
-            InsertSqlStatement statement = (InsertSqlStatement)statementCol.First();
-
+            //---------------Test Result -----------------------
+            var statement = statementCol.First();
             Assert.AreEqual("INSERT INTO `testautoinc` (`testfield`) VALUES (?Param0)", statement.Statement.ToString());
         }
 
@@ -198,17 +201,40 @@ namespace Habanero.Test.DB.SqlGeneration
             Assert.AreEqual("FilledCircleNoPrimaryKey", sqlStatement.Parameters[4].Value);
         }
 
-
         [Test]
-        public void TestInsertSql()
+        public void TestInsertSql_MySql()
         {
+            //---------------Set up test pack-------------------
             Shape shape = new Shape();
-            var insertSql = new InsertStatementGenerator(shape, DatabaseConnection.CurrentConnection).Generate();
-            var sqlStatements = insertSql.ToList();
-            Assert.AreEqual(1, sqlStatements.Count, "There should only be one insert statement.");
+            var insertStatementGenerator = CreateInsertStatementGenerator(shape, DatabaseConfig.MySql);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var insertSql = insertStatementGenerator.Generate().ToList();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, insertSql.Count(), "There should only be one insert statement.");
             Assert.AreEqual("INSERT INTO `Shape_table` (`ShapeID_field`, `ShapeName`) VALUES (?Param0, ?Param1)",
-                            sqlStatements[0].Statement.ToString(), "Insert Sql is being created incorrectly");
+                            insertSql.First().Statement.ToString(), "Insert Sql is being created incorrectly");
         }
 
+        [Test]
+        public void TestInsertSql_SqlServer()
+        {
+            //---------------Set up test pack-------------------
+            Shape shape = new Shape();
+            var insertStatementGenerator = CreateInsertStatementGenerator(shape, DatabaseConfig.SqlServer);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            var insertSql = insertStatementGenerator.Generate().ToList();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(1, insertSql.Count(), "There should only be one insert statement.");
+            Assert.AreEqual("INSERT INTO [Shape_table] ([ShapeID_field], [ShapeName]) VALUES (@Param0, @Param1)",
+                            insertSql.First().Statement.ToString(), "Insert Sql is being created incorrectly");
+        }
+
+        private static InsertStatementGenerator CreateInsertStatementGenerator(IBusinessObject shape, string databaseVendor)
+        {
+            var databaseConnection = MyDBConnection.GetDatabaseConfig(databaseVendor).GetDatabaseConnection();
+            return new InsertStatementGenerator(shape, databaseConnection);
+        }
     }
 }

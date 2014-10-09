@@ -45,10 +45,16 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql =
-                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            SetupGeneratedStatements();
+        }
+
+        private void SetupGeneratedStatements()
+        {
+            // Generate the Insert, Update and Delete statements using mysql DB so that we can test the exact strings.
+            var databaseConnection = MyDBConnection.GetDatabaseConfig(DatabaseConfig.MySql).GetDatabaseConnection();
+            _insertSql = new InsertStatementGenerator(_filledCircle, databaseConnection).Generate();
+            _updateSql = new UpdateStatementGenerator(_filledCircle, databaseConnection).Generate();
+            _deleteSql = new DeleteStatementGenerator(_filledCircle, databaseConnection).Generate();
         }
 
         private void ClearTables()
@@ -70,10 +76,7 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql =
-                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            SetupGeneratedStatements();
         }
 
         public void SetupTestForFilledCircleInheritsCircleNoPK()
@@ -87,28 +90,22 @@ namespace Habanero.Test.DB.InheritanceSqlGeneration
             _filledCircle.SetPropertyValue("Radius", 10);
             _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
 
-            _insertSql =
-                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
+            SetupGeneratedStatements();
         }
-/*
-        public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
-        {
-            this.SetupDBConnection();
-            ClearTables();
-            SetupInheritanceSpecifics();
-            _filledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
-            SetStrID();
-            _filledCircle.SetPropertyValue("Colour", 3);
-            _filledCircle.SetPropertyValue("Radius", 10);
-            _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
-
-            _insertSql =
-                new InsertStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _updateSql = new UpdateStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-            _deleteSql = new DeleteStatementGenerator(_filledCircle, DatabaseConnection.CurrentConnection).Generate();
-        }*/
+        /*
+                public void SetupTestForFilledCircleNoPrimaryKeyInheritsCircle()
+                {
+                    this.SetupDBConnection();
+                    ClearTables();
+                    SetupInheritanceSpecifics();
+                    _filledCircle = new FilledCircleNoPrimaryKeyInheritsCircle();
+                    SetStrID();
+                    _filledCircle.SetPropertyValue("Colour", 3);
+                    _filledCircle.SetPropertyValue("Radius", 10);
+                    _filledCircle.SetPropertyValue("ShapeName", "MyFilledCircle");
+        
+                    SetupGeneratedStatements();
+                }*/
 
         protected static Shape CreateSavedShape()
         {
