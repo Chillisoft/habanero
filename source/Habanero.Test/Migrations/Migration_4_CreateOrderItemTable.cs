@@ -11,6 +11,5 @@ namespace Habanero.Test.Migrations
                   .WithColumn("OrderNumber").AsInt64().NotNullable().WithDefaultValue(0).PrimaryKey()
                   .WithColumn("Product").AsAnsiString(100).NotNullable().WithDefaultValue("").PrimaryKey();
         }
-
     }
 }

@@ -58,12 +58,36 @@ namespace Habanero.DB
         protected override void SetupCommand(ISqlStatement statement, IDbCommand command, IDbTransaction transaction)
         {
             base.SetupCommand(statement, command, transaction);
+            //TODO mark 10 Oct 2014: Test this following code somehow...
+            var isAutoIncrementingInsert = IsAutoIncrementingInsertStatement(statement);
+            if (isAutoIncrementingInsert)
+            {
+                SetupCommandForAutoIncrement(command);
+            }
+        }
+
+        private static void SetupCommandForAutoIncrement(IDbCommand command)
+        {
+            var newParameter = CreateIdentityOutputParameter(command);
+            command.Parameters.Add(newParameter);
+            command.CommandText += ";" + Environment.NewLine
+                + string.Format("SELECT @{0} = SCOPE_IDENTITY();", _newIdentityParameterName);
+        }
+
+        private static IDbDataParameter CreateIdentityOutputParameter(IDbCommand command)
+        {
             var newParameter = command.CreateParameter();
             newParameter.ParameterName = _newIdentityParameterName;
             newParameter.DbType = DbType.Int64;
             newParameter.Direction = ParameterDirection.Output;
-            command.Parameters.Add(newParameter);
-            command.CommandText += ";" + Environment.NewLine + "SELECT @newIdentity = SCOPE_IDENTITY();";
+            return newParameter;
+        }
+
+        private static bool IsAutoIncrementingInsertStatement(ISqlStatement statement)
+        {
+            var insertSqlStatement = statement as InsertSqlStatement;
+            return insertSqlStatement != null &&
+                   insertSqlStatement.SupportsAutoIncrementingField != null;
         }
 
         /// <summary>
