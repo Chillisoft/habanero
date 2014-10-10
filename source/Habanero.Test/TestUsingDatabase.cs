@@ -36,25 +36,40 @@ namespace Habanero.Test
     {
         protected static List<BusinessObject> _objectsToDelete = new List<BusinessObject>();
 
-        public void SetupDBConnection(string vendor = MyDBConnection.DefaultVendor)
+        public void SetupDBConnection(string vendor = "")
         {
             SetupDBDataAccessor(vendor);
         }
 
-        public static void SetupDBDataAccessor(string vendor = MyDBConnection.DefaultVendor)
+        public static void SetupDBDataAccessor(string vendor = "")
         {
-            if (DatabaseConnection.CurrentConnection != null &&
-                DatabaseConnection.CurrentConnection.GetType().Name.ToLower().Contains(vendor.ToLower()))
-            {
-                BORegistry.DataAccessor = new DataAccessorDB();
-                return;
-            }
-            var databaseConfig = MyDBConnection.GetDatabaseConfig(vendor);
-            EnsureDatabaseMigrated(databaseConfig);
-            var databaseConnection = databaseConfig.GetDatabaseConnection();
-            DatabaseConnection.CurrentConnection = databaseConnection;
-            DatabaseConnection.CurrentConnection.GetConnection();
+            SetupDatabaseConnection(vendor);
             BORegistry.DataAccessor = new DataAccessorDB();
+        }
+
+        private static void SetupDatabaseConnection(string vendor)
+        {
+            var databaseConnection = CreateDatabaseConnection(vendor);
+            DatabaseConnection.CurrentConnection = databaseConnection;
+            TestConnection(databaseConnection);
+        }
+
+        private static void TestConnection(IDatabaseConnection databaseConnection)
+        {
+            databaseConnection.GetConnection();
+        }
+
+        public static IDatabaseConnection CreateDatabaseConnection(string vendor)
+        {
+            var databaseConfig = MyDBConnection.GetDatabaseConfig(vendor);
+            var currentDatabaseConnection = DatabaseConnection.CurrentConnection;
+            if (currentDatabaseConnection != null &&
+                currentDatabaseConnection.GetType().Name.ToLower().Contains(databaseConfig.Vendor.ToLower()))
+            {
+                return currentDatabaseConnection;
+            }
+            EnsureDatabaseMigrated(databaseConfig);
+            return databaseConfig.GetDatabaseConnection();
         }
 
         private static void EnsureDatabaseMigrated(DatabaseConfig databaseConfig)

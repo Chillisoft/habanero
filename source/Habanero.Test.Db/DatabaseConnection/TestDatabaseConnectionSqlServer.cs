@@ -30,22 +30,30 @@ namespace Habanero.Test.DB
 {
 	[TestFixture]
 	public class TestDatabaseConnectionSqlServer
-	{
-		private IDatabaseConnection _originalConnection;
+	{// ReSharper disable InconsistentNaming
 
-		[TestFixtureSetUp]
+	    private IDatabaseConnection _originalConnection;
+
+	    [TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{
 			_originalConnection = DatabaseConnection.CurrentConnection;
 			SetupSQLServerConnection();
 		}
-		[TestFixtureTearDown]
+
+	    private static void SetupSQLServerConnection()
+	    {
+	        var databaseConnection = TestUsingDatabase.CreateDatabaseConnection(DatabaseConfig.SqlServer);
+	        DatabaseConnection.CurrentConnection = databaseConnection;
+	    }
+
+	    [TestFixtureTearDown]
 		public void TestFixtureTearDown()
 		{
 			DatabaseConnection.CurrentConnection = _originalConnection;
 		}
-// ReSharper disable InconsistentNaming
-		[Test]
+
+	    [Test]
 		public void TestCreateParameterNameGenerator()
 		{
 			//---------------Set up test pack-------------------
@@ -57,8 +65,8 @@ namespace Habanero.Test.DB
 			Assert.AreEqual("@", generator.PrefixCharacter);
 			//---------------Tear Down -------------------------          
 		}
-		
-		[Test]
+
+	    [Test]
 		public void Test_NoColumnName_DoesntError_SqlServer()
 		{
 			//---------------Set up test pack-------------------
@@ -74,14 +82,7 @@ namespace Habanero.Test.DB
 			//---------------Tear Down -------------------------     
 		}
 
-		private static void SetupSQLServerConnection()
-		{
-			var databaseConfig = new DatabaseConfig("SqlServer", "localhost", "habanero_test_trunk", "sa", "sa", null);
-			//var databaseConfig = new DatabaseConfig("SqlServer", @"localhost\sqlexpress", "habanero_test_branch_2_6", "sa", "sa", null);
-			DatabaseConnection.CurrentConnection = databaseConfig.GetDatabaseConnection();
-		}
-
-		[Test]
+	    [Test]
 		public void PersistSQLparamaterValue_WhenByteArrayNull_WhenSQLServer_ShouldNotExist_FIXBUG1741()
 		{
 			//---------------Set up test pack-------------------

@@ -31,15 +31,14 @@ namespace Habanero.Test
     /// </summary>
     public class MyDBConnection
     {
-        public const string DefaultVendor = DatabaseConfig.MySql;
-
         public static String GetConnectionString()
         {
             return GetDatabaseConfig().GetConnectionString();
         }
 
-        public static DatabaseConfig GetDatabaseConfig(string vendor = DefaultVendor)
+        public static DatabaseConfig GetDatabaseConfig(string vendor = "")
         {
+            if (String.IsNullOrWhiteSpace(vendor)) vendor = DefaultTestsDbSuffix;
             var databaseConfig = DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
             if (databaseConfig.Vendor.ToUpper() == DatabaseConfig.MySql)
             {
@@ -47,6 +46,11 @@ namespace Habanero.Test
                 databaseConfig.Database = databaseConfig.Database.ToLower();
             }
             return databaseConfig;
+        }
+
+        private static string DefaultTestsDbSuffix
+        {
+            get { return ConfigurationManager.AppSettings["DefaultTestsDBSuffix"]; }
         }
     }
 }
