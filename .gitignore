@@ -72,7 +72,7 @@ nCrunchTemp_*
 #Sonar files
 .sonar
 
-# Installshield output folder 
+# Installshield output folder
 [Ee]xpress
 
 # DocProject is a documentation generator add-in
@@ -138,3 +138,4 @@ target/
 source/UpgradeLog2.htm
 Solution/UpgradeLog2.htm
 UpdatePackage
+/nugetArtifacts/
