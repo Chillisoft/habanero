@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F214D8D4-F00F-46E7-8167-86331E5398DB}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -276,8 +276,12 @@
     <None Include="Loaders\XSDs\ui.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Loaders\Dtds.resx" />
-    <EmbeddedResource Include="Loaders\Xsds.resx" />
+    <EmbeddedResource Include="Loaders\Dtds.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Loaders\Xsds.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
