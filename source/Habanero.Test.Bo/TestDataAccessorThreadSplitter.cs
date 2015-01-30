@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using Habanero.BO;
+﻿using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.BO;
 using NUnit.Framework;
 
 namespace Habanero.Test.BO
@@ -32,48 +26,57 @@ namespace Habanero.Test.BO
          public void Test_WithThread()
          {
              //---------------Set up test pack-------------------
+             const int BarrierTimeout = 10000;
              var dataAccessorMain = new DataAccessorInMemory();
              var dataAccessor = new DataAccessorThreadSplitter(dataAccessorMain);
              var expectedDataAccessorForThread = new DataAccessorInMemory();
-             var thread = new Thread(() =>
-                                         {
-                                             dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread);
-                                             Thread.Sleep(1000);
-                                         });
-             thread.Start();
-             Thread.Sleep(500);
-             //---------------Execute Test ----------------------
-             var dataAccessorForThread = dataAccessor.GetDataAccessorForThread(thread);
-             //---------------Test Result -----------------------
-             Assert.AreSame(expectedDataAccessorForThread, dataAccessorForThread);
+             using (var entryBarrier = new Barrier(2))
+             using (var exitBarrier = new Barrier(2))
+             {
+                 var thread = new Thread(() =>
+                 {
+                     dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread);
+                     entryBarrier.SignalAndWait(BarrierTimeout);
+                     exitBarrier.SignalAndWait(BarrierTimeout);
+                 });
+                 thread.Start();
+                 entryBarrier.SignalAndWait(BarrierTimeout);
+                 //---------------Execute Test ----------------------
+                 var dataAccessorForThread = dataAccessor.GetDataAccessorForThread(thread);
+                 exitBarrier.SignalAndWait(BarrierTimeout);
+                 //---------------Test Result -----------------------
+                 Assert.AreSame(expectedDataAccessorForThread, dataAccessorForThread);
+             }
          }
 
          [Test]
          public void Test_ClearDeadThreads()
          {
              //---------------Set up test pack-------------------
+             const int BarrierTimeout = 10000;
              var dataAccessorMain = new DataAccessorInMemory();
              var dataAccessor = new DataAccessorThreadSplitter(dataAccessorMain);
              var expectedDataAccessorForThread = new DataAccessorInMemory();
-             var thread = new Thread(() =>
+             using (var entryBarrier = new Barrier(2))
+             using (var exitBarrier = new Barrier(2))
              {
-                 dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread);
-                 Thread.Sleep(100);
-             });
-             thread.Start();
-             //---------------Assert preconditions---------------
-             Assert.AreSame(expectedDataAccessorForThread, dataAccessor.GetDataAccessorForThread(thread));
-             //---------------Execute Test ----------------------
-             thread.Join();
-             dataAccessor.ClearDeadThreads();
-             //---------------Test Result -----------------------
-             try
-             {
-                 Assert.IsNull(dataAccessor.GetDataAccessorForThread(thread));
-                 Assert.Fail("An exception should be thrown");
-             } catch (HabaneroDeveloperException ex)
-             {
-                 StringAssert.Contains("Data accessor for thread does not exist", ex.Message);
+                 var thread = new Thread(() =>
+                 {
+                     dataAccessor.AddDataAccessorForThread(expectedDataAccessorForThread);
+                     entryBarrier.SignalAndWait(BarrierTimeout);
+                     exitBarrier.SignalAndWait(BarrierTimeout);
+                 });
+                 thread.Start();
+                 entryBarrier.SignalAndWait(BarrierTimeout);
+                 //---------------Assert preconditions---------------
+                 Assert.AreSame(expectedDataAccessorForThread, dataAccessor.GetDataAccessorForThread(thread));
+                 //---------------Execute Test ----------------------
+                 exitBarrier.SignalAndWait(BarrierTimeout);
+                 thread.Join();
+                 dataAccessor.ClearDeadThreads();
+                 //---------------Test Result -----------------------
+                 var exception = Assert.Throws<HabaneroDeveloperException>(() => dataAccessor.GetDataAccessorForThread(thread));
+                 StringAssert.Contains("Data accessor for thread does not exist", exception.Message);
              }
          }
     }
