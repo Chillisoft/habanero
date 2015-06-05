@@ -3,7 +3,7 @@ require "./rake-tasks/init"
 #-----------------------------------SETTINGS-----------------------------------
 
 $binaries_baselocation = "bin"
-$nuget_baselocation = "nugetArtifacts/"
+$nuget_baselocation = "nugetArtifacts"
 $app_version = "9.9.9.999"
 
 #--------------------------------build settings--------------------------------
