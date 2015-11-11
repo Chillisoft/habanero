@@ -1,0 +1,10 @@
+$H2$: Section 1 – Overview:
+
+$H3$: Chapter 1
+
+Start with Simple Sample Application.
+
+-- Require Firestarter can generate a fully functional UI Layer.
+
+In this chapter we will cover a very simple sample application. This sample application is merely to demonstrate the power and speed of use of Habanero and Firestarter. In Section 2 to 4 a more realistic application will be developed.
+

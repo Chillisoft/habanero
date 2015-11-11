@@ -1,0 +1,86 @@
+	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdateBusinessObjectRowValues(Habanero.Base.IBusinessObject businessObject = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 171 + 0x17 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdatedHandler(object sender = Count = 1, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs<CytoMed.BO.AllowedRange>}) Line 310 + 0x15 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.FireBusinessObjectUpdated(CytoMed.BO.AllowedRange bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 392 + 0xd5 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.UpdatedEventHandler(object sender = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs}) Line 651 + 0xd bytes	C#
+ 	[External Code]	
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.FireUpdatedEvent() Line 1156 + 0x56 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.AfterLoad() Line 1031 + 0xa bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectLoaderBase.SetStatusAfterLoad(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 757 + 0x13 bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.PopulateBOFromReader(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, System.Data.IDataRecord dr = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 654 + 0xc bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.GetLoadedBusinessObject(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, System.Data.IDataRecord dataReader = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 610 + 0x1a bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.LoadBOFromReader(Habanero.Base.IClassDef classDef = {Habanero.BO.ClassDefinition.ClassDef}, System.Data.IDataRecord dataReader = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 575 + 0x14 bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.DoRefreshShared<CytoMed.BO.AllowedRange>(Habanero.Base.IBusinessObjectCollection collection = Count = 0) Line 312 + 0x4d bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.DoRefresh<CytoMed.BO.AllowedRange>(Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange> collection = Count = 0) Line 282 + 0x6c bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectLoaderBase.Refresh<CytoMed.BO.AllowedRange>(Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange> collection = Count = 0) Line 115 + 0xa0 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.Refresh() Line 722 + 0xee bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.LoadWithLimit(Habanero.Base.Criteria searchExpression = {AllowedRange.DrugID = '{c65baf6a-ac80-4dad-aa1d-980faf03ea42}'}, string orderByClause = "", int limit = -1) Line 807 + 0xd bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.Load(Habanero.Base.Criteria searchExpression = {AllowedRange.DrugID = '{c65baf6a-ac80-4dad-aa1d-980faf03ea42}'}, string orderByClause = "") Line 767 + 0x1a bytes	C#
+> 	CytoMed.BO.dll!CytoMed.BO.AllowedRange.AreCustomRulesValid(out string customRuleErrors = null) Line 29 + 0x21 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.AreCustomRulesValidInternal(out string customRuleErrors = null) Line 1248 + 0x18 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValid(out System.Collections.Generic.IList<Habanero.Base.IBOError> errors = Count = 0) Line 154 + 0x36 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValid(out string message = "") Line 118 + 0x10 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValidMessage.get() Line 183 + 0xf bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdateBusinessObjectRowValues(Habanero.Base.IBusinessObject businessObject = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 184 + 0x76 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdatedHandler(object sender = Count = 1, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs<CytoMed.BO.AllowedRange>}) Line 310 + 0x15 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.FireBusinessObjectUpdated(CytoMed.BO.AllowedRange bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 392 + 0xd5 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.UpdatedEventHandler(object sender = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs}) Line 651 + 0xd bytes	C#
+ 	[External Code]	
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.FireUpdatedEvent() Line 1156 + 0x56 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.AfterLoad() Line 1031 + 0xa bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectLoaderBase.SetStatusAfterLoad(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 757 + 0x13 bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.PopulateBOFromReader(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, System.Data.IDataRecord dr = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 654 + 0xc bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.GetLoadedBusinessObject(Habanero.Base.IBusinessObject bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, System.Data.IDataRecord dataReader = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 610 + 0x1a bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.LoadBOFromReader(Habanero.Base.IClassDef classDef = {Habanero.BO.ClassDefinition.ClassDef}, System.Data.IDataRecord dataReader = {MySql.Data.MySqlClient.MySqlDataReader}, Habanero.Base.ISelectQuery selectQuery = {Habanero.DB.SelectQueryDB}) Line 575 + 0x14 bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.DoRefreshShared<CytoMed.BO.AllowedRange>(Habanero.Base.IBusinessObjectCollection collection = Count = 0) Line 312 + 0x4d bytes	C#
+ 	Habanero.DB.dll!Habanero.DB.BusinessObjectLoaderDB.DoRefresh<CytoMed.BO.AllowedRange>(Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange> collection = Count = 0) Line 282 + 0x6c bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectLoaderBase.Refresh<CytoMed.BO.AllowedRange>(Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange> collection = Count = 0) Line 115 + 0xa0 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.Refresh() Line 722 + 0xee bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.LoadWithLimit(Habanero.Base.Criteria searchExpression = {AllowedRange.DrugID = '{c65baf6a-ac80-4dad-aa1d-980faf03ea42}'}, string orderByClause = "", int limit = -1) Line 807 + 0xd bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.Load(Habanero.Base.Criteria searchExpression = {AllowedRange.DrugID = '{c65baf6a-ac80-4dad-aa1d-980faf03ea42}'}, string orderByClause = "") Line 767 + 0x1a bytes	C#
+> 	CytoMed.BO.dll!CytoMed.BO.AllowedRange.AreCustomRulesValid(out string customRuleErrors = null) Line 29 + 0x21 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.AreCustomRulesValidInternal(out string customRuleErrors = null) Line 1248 + 0x18 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValid(out System.Collections.Generic.IList<Habanero.Base.IBOError> errors = Count = 0) Line 154 + 0x36 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValid(out string message = "") Line 118 + 0x10 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BOStatus.IsValidMessage.get() Line 183 + 0xf bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdateBusinessObjectRowValues(Habanero.Base.IBusinessObject businessObject = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 184 + 0x76 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.DataSetProvider.UpdatedHandler(object sender = Count = 1, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs<CytoMed.BO.AllowedRange>}) Line 310 + 0x15 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.FireBusinessObjectUpdated(CytoMed.BO.AllowedRange bo = {029dbdca-2f91-49c1-89b4-e2b0664e44db}) Line 392 + 0xd5 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObjectCollection<CytoMed.BO.AllowedRange>.UpdatedEventHandler(object sender = {029dbdca-2f91-49c1-89b4-e2b0664e44db}, Habanero.Base.BOEventArgs e = {Habanero.Base.BOEventArgs}) Line 651 + 0xd bytes	C#
+ 	[External Code]	
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.FireUpdatedEvent() Line 1156 + 0x56 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.AfterSave() Line 1512 + 0xa bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.UpdateStateAsPersisted() Line 1061 + 0x19 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.TransactionalBusinessObject.UpdateStateAsCommitted() Line 106 + 0x20 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.TransactionCommitter.UpdateTransactionsAsCommited() Line 465 + 0x23 bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.TransactionCommitter.Commit() Line 432 + 0xc bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.TransactionCommitter.CommitTransaction() Line 152 + 0xa bytes	C#
+ 	Habanero.BO.dll!Habanero.BO.BusinessObject.Save() Line 942 + 0x28 bytes	C#
+ 	CytoMed.UI.dll!CytoMed.UI.DrugEditorForm.OkButton_click(object sender = {Text = "Ok"}, System.EventArgs e = {X = 44 Y = 12 Button = Left}) Line 129 + 0x20 bytes	C#
+ 	[External Code]	
+ 	CytoMed.UI.dll!CytoMed.UI.DrugEditor.EditObject(Habanero.Base.IBusinessObject obj = {dffasdf (mg)}, string uiDefName = "default", Habanero.Base.PostObjectEditDelegate postEditAction = {Method = {Void <Buttons_AddClicked>b__0(Habanero.Base.IBusinessObject, Boolean)}}) Line 27 + 0x23 bytes	C#
+ 	Habanero.UI.Win.dll!Habanero.UI.Win.ReadOnlyGridControlWin.Buttons_AddClicked(object sender = {Habanero.UI.Win.ReadOnlyGridButtonsControlWin, BorderStyle: System.Windows.Forms.BorderStyle.None}, System.EventArgs e = {System.EventArgs}) Line 534 + 0xd5 bytes	C#
+ 	Habanero.UI.Win.dll!Habanero.UI.Win.ReadOnlyGridButtonsControlWin..ctor.AnonymousMethod() Line 59 + 0x80 bytes	C#
+ 	[External Code]	
+ 	CytoMed.exe!CytoMed.Program.Main() Line 54 + 0x2e bytes	C#
+
+
+Caused by this code ( '>>' this is where the loop is being created ):::
+
+        protected override bool AreCustomRulesValid(out string customRuleErrors)
+        {
+            Criteria criteria = new Criteria("DrugID",Criteria.ComparisonOp.Equals,DrugID);
+            QueryBuilder.PrepareCriteria(ClassDef.Get<AllowedRange>(), criteria);
+            BusinessObjectCollection<AllowedRange> ranges = new BusinessObjectCollection<AllowedRange>();
+>>          ranges.Load(criteria,"");
+            foreach (AllowedRange range in ranges)
+            {
+                if (range == this) continue;
+                if (range.AgeGroupID==AgeGroupID)
+                {
+                    customRuleErrors = "The Age Group  \"" + AgeGroup.AgeGroupName + "\" is already defined for this Drug.";
+                    return false;
+                }
+            }
+            return base.AreCustomRulesValid(out customRuleErrors);
+        }
+

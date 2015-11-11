@@ -1,0 +1,14 @@
+- Habanero DLLs
+- Habanero XMLs (comment files)
+- log4net.dll
+- any other dependents for core build
+
+Under Class Definitions:
+- the html containing the class definitions
+
+Under Class Diagrams:
+- the htmls containing the images
+- the images showing the class diagrams (visio's save as image)
+- NOTE: I don't see the point in these so I'm not including them,
+     they're hard to update
+- if used, there's also a welcome_page.html that can be useful

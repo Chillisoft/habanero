@@ -1,0 +1,84 @@
+$TITLE$: C Sharp Enterprise Zone
+
+$H1$: Introduction
+
+This book covers Enterprise application architecture, design and development using C#. The Habanero framework is referenced throughout the book as a sample of an application framework that implements a solution to the common problems experienced in Enterprise applications. In its broadest sense Enterprise applications create, store and manage information in Enterprises. In simple terms an enterprise application is not an operating system, a compiler an mp3 player, or a game. Enterprise applications are applications used in the running of a business where the information is stored in a structred manner over a long period of time (usually Relational databases). The information is usually shared between multiple users and is frequently used in geographically distributed locations.  Examples are Customer Order Management, Procurement, Asset Management, Financial, Planning scheduling, logistical and supply chain management.
+
+Habanero is a framework for developing Enterprise applications. In essence Habanero solves the problems common to developing and maintaining enterprise applications.
+
+This book is structured so that it can be used by junior developers as well as senior developers. The book assumes you have a reasonable knowledge of object oriented programming and practices, C#, DotNet and database management systems. The book also assumes that you have some knowledge of Enterprise application development. It is impossible for one book to cover in sufficient depth all the topics relating to the development of an enterprise application. We have therefore referenced other books, articles etc for those who are interested or require more detail. Having said this we will cover all the relevant topics in sufficient detail to provide the reader with the knowledge required to develop robust scalable enterprise applications while dodging the common mistakes.
+
+This book covers all aspects of Enterprise application development including User interface development, Domain modelling, business rule implementation, object relational mapping and reporting.
+
+$PICKLE$: The Habanero application development framework
+
+Habanero has been developed over eight years and adapted to various technologies and development platforms. The architecture was developed by a company that specialises in Custom application development. Due to the nature of this business the applications had to be robust, easily extendable, easily deployed, secure, scalable from a single user to thousands of users, easily maintainable by any developer in the company or developers in the customer’s company. The framework had to be easily used while retaining extensibility, since developer skills ranged from young graduates to seasoned professionals and project sizes ranged from 2 weeks for a single developer to 3 years with a large team of developers.
+
+As an additional advantage, this framework and access to its accumulated knowledge is available to Dot Net developers as free open source, allowing developers to review, study and contribute to it.
+
+$PICKLE$: Firestarter
+
+Firestarter is an application modelling and code generation tool. To maximise productivity and eliminate repetitive tasks Chillisoft developed Firestarter. This tool allows you to reverse engineer an existing database into an object model as well as to generate your classes, properties, relationships, CRUD user interfaces, business rules and basic unit tests. Firestarter is included for free with Habanero.
+
+$H2$: Why this book
+
+As the Habanero development community has continued to grow, it has become clear that there is a need to provide a more extensive guide to the use of Habanero. We have therefore developed a full length book to provide developers with additional information not only on how to use Habanero and Firestarter but also on the common problems and solutions related to the development of Enterprise applications. This book will form the ideal guide book for developers new to Habanero and Enterprise applications or to developers with previous Habanero or Enterprise application experience.
+
+$H2$: Layout of the book
+
+This can be used in many ways.
+
+To help you determine how to read this book we have divided readers into two extremes. Most likely you will fit somewhere in between these: 
+
+1. A developer who wants to know how to use Habanero framework to develop an application.
+2. A developer who wants to understand why and how the framework was developed, how to extend it and or how to use the concepts to develop their enterprise applications.
+
+We understand that the readers of this book and the users of Habanero are busy. We have therefore tried in every way to ensure that the book can be used to provide immediate benefit at each stage. Since software developers learn best by example we have included extensive examples as well as a worked example that will be developed throughout the various sections of the book.
+
+$H3$: Section 1 - Overview
+
+This section provides the generation of a sample application using habanero and introduces all the principles required for developing enterprise applications. We would suggest that all readers read these chapters.
+
+Chapter 1 covers the use of Habanero and Firestarter (an application code generator specialised for Habanero). This is very brief and used merely to give the reader a quick overview of the Framework.
+
+Chapter 2 covers the principles and practices of Enterprise application development. This chapter will touch on all the concepts that will be covered in the remaining chapters of the book.
+
+$H3$: Section 2 – Business Logic Layer
+ 
+This section covers the development of the Business logic layer of an enterprise application, also called the domain model. The domain model involves a group of objects that model the area of the business that your system is implementing. The domain model in the simplest case closely resembles the relational database model but in more complex business scenarios can be significantly different. The domain model provides the layer where you model the domain behavior, data, validation and object relationships. One of the important functions of this layer is to hide the database, so this section will not discuss any database and object persistence issues. Object persistence will be addressed in Section 4.
+
+Each chapter in the section starts with a brief introduction to the topic. This is followed by an example of how to model this using Firestarter and Habanero and how to use this in an application. A developer merely wanting to use Habanero can stop at this point and move onto the next chapter. $TODO{ICON for each section}$
+The chapter will then delve into the more advanced features of Habanero and Enterprise applications including how Habanero implements these features, the design decisions behind the implementation and where relevant a discussion of why these decisions were made when compared to alternates. 
+
+Finally the chapter move onto how these features of Habanero can be extended to deal exceptional situations and requirements.
+
+$H3$: Section 3 - Presentation
+
+This section covers the development of the Presentation layer. The Presentation layer covers user interfaces for capturing, searching, manipulating, reporting on and viewing objects. The technologies covered here include, ASP, C# and Visual WebGui (an AJAX framework for web development). $REVIEW{The reporting tool preferred is Active reports.}$
+
+$H3$: Section 4 - Data Access
+
+This section covers the development of the Data layer i.e. the mapping of business objects to a data store. This section includes persisting objects to XML, memory caches, object data stores and relational databases. Since most enterprise applications persist their data to relational databases, a large part of this section revolves around persisting objects in a relational database (using object relational mapping).
+The structure of these chapters is the same as section 2 and should be used in the same manner.
+
+$H3$: Section 5 - Miscelaneous
+In addition to the presentation of Domain objects in a user interface, our business objects also may need to be available to other applications e.g via webservices. In this section we will show various solutions for these.
+
+$H2$: Notes
+
+$REVIEW{
+This book has been written by
+* Eric Savage
+* Peter Wiles
+* Brett Powell
+* Soriya Das
+* Hagashen Painintheass
+* Sherwin AnotherPain
+* Mark Whitfeld
+* Stuart Wiener
+
+This book is provided free for use to the Habanero community under Creative Commons
+If you wish to contribute then please post errata suggestions etc to …….
+If you find this book useful and wish to make a financial contribution then please contribute to …. A charity for the orphans of AIDS.
+}$
+
