@@ -38,8 +38,9 @@ namespace Habanero.Test
 
         public static DatabaseConfig GetDatabaseConfig(string vendor = "")
         {
-            if (String.IsNullOrWhiteSpace(vendor)) vendor = DefaultTestsDbSuffix;
-            var databaseConfig = DatabaseConfig.ReadFromConfigFile("DatabaseConfig_" + vendor.ToUpper());
+            if (string.IsNullOrWhiteSpace(vendor)) vendor = DefaultTestsDbSuffix;
+            var suffix = string.IsNullOrWhiteSpace(vendor) ? string.Empty : "_" + vendor.ToUpper();
+            var databaseConfig = DatabaseConfig.ReadFromConfigFile("DatabaseConfig" + suffix);
             if (databaseConfig.Vendor.ToUpper() == DatabaseConfig.MySql)
             {
                 //Fix to prevent problems running tests with stored procedures

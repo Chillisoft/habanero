@@ -117,12 +117,14 @@ desc "Runs the tests"
 nunit :test do |nunit|
     puts cyan("Running tests")
     nunit.assemblies testassemblies
+    nunit.parameters = [ "--process=Separate" ]
 end
 
 desc "Runs the tests with dotcover"
 dotcover :test_with_coverage do |dc|
     puts cyan("Running tests with dotcover")
     dc.assemblies testassemblies
+    dc.nunitoptions = [ "--process=Separate" ]
     dc.filters "+:module=*;class=*;function=*"
 end
 
