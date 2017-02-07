@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3184EA1C-6416-4232-AA39-545F3E79A585}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.DB</RootNamespace>
+    <AssemblyName>Habanero.DB</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BusinessObjectLoaderDB.cs" />
+    <Compile Include="ConcurrencyControl\OptimisticLockingVersionNumberDB.cs" />
+    <Compile Include="ConcurrencyControl\PessimisticLockingDB.cs" />
+    <Compile Include="ConnectionStringAccess2007Factory.cs" />
+    <Compile Include="ConnectionStringAccessFactory.cs" />
+    <Compile Include="ConnectionStringFactory.cs" />
+    <Compile Include="ConnectionStringFirebirdEmbeddedFactory.cs" />
+    <Compile Include="ConnectionStringFirebirdFactory.cs" />
+    <Compile Include="ConnectionStringMySQLFactory.cs" />
+    <Compile Include="ConnectionStringOracleFactory.cs" />
+    <Compile Include="ConnectionStringPostgreSqlFactory.cs" />
+    <Compile Include="ConnectionStringSQLiteFactory.cs" />
+    <Compile Include="ConnectionStringSQLServerCeFactory.cs" />
+    <Compile Include="ConnectionStringSQLServerFactory.cs" />
+    <Compile Include="CriteriaDB.cs" />
+    <Compile Include="DataAccessorDB.cs" />
+    <Compile Include="Database.cs" />
+    <Compile Include="DatabaseConfig.cs" />
+    <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="DatabaseConnectionAccess.cs" />
+    <Compile Include="DatabaseConnectionAccess2007.cs" />
+    <Compile Include="DatabaseConnectionException.cs" />
+    <Compile Include="DatabaseConnectionFactory.cs" />
+    <Compile Include="DatabaseConnectionFirebird.cs" />
+    <Compile Include="DatabaseConnectionMySQL.cs" />
+    <Compile Include="DatabaseConnectionOracle.cs" />
+    <Compile Include="DatabaseConnectionPostgreSql.cs" />
+    <Compile Include="DatabaseConnectionSQLite.cs" />
+    <Compile Include="DatabaseConnectionSQLServer.cs" />
+    <Compile Include="DatabaseConnectionSQLServerCe.cs" />
+    <Compile Include="DatabaseLookupList.cs" />
+    <Compile Include="DatabaseNumberGenerator.cs" />
+    <Compile Include="DatabaseReadException.cs" />
+    <Compile Include="DatabaseSettings.cs" />
+    <Compile Include="DatabaseWriteException.cs" />
+    <Compile Include="DbMigrator.cs" />
+    <Compile Include="DBMigratorEventArgs.cs" />
+    <Compile Include="DeleteStatementGenerator.cs" />
+    <Compile Include="IDatabaseConnectionCreator.cs" />
+    <Compile Include="InsertSqlStatement.cs" />
+    <Compile Include="InsertStatementGenerator.cs" />
+    <Compile Include="ManagedConnection.cs" />
+    <Compile Include="ModifyStatementGenerator.cs" />
+    <Compile Include="NumberGenerator\NumberGeneratorPessimisticLocking.cs" />
+    <Compile Include="Param.cs" />
+    <Compile Include="ParameterNameGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryResultLoaderDb.cs" />
+    <Compile Include="SelectQueryDB.cs" />
+    <Compile Include="SourceDB.cs" />
+    <Compile Include="SqlFormatterForAccess.cs" />
+    <Compile Include="SqlFormatterForSqlServerCe.cs" />
+    <Compile Include="SQLStatement.cs" />
+    <Compile Include="SqlStatementBuilder.cs" />
+    <Compile Include="SqlStatementException.cs" />
+    <Compile Include="StatementGeneratorUtils.cs" />
+    <Compile Include="TransactionalBusinessObjectDB.cs" />
+    <Compile Include="TransactionalSingleRelationship_Added_DB.cs" />
+    <Compile Include="TransactionalSingleRelationship_Removed_DB.cs" />
+    <Compile Include="TransactionCommitterDB.cs" />
+    <Compile Include="TransactionLogTable.cs" />
+    <Compile Include="UpdateStatementGenerator.cs" />
+    <Compile Include="XmlDatabaseConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{407b8f2e-dcea-4eae-a183-b3417e889846}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Habanero.Bo\Habanero.BO.csproj">
+      <Project>{2a1f1c26-c940-4684-bf9b-59b40edcffff}</Project>
+      <Name>Habanero.BO</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
