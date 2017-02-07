@@ -1,0 +1,8 @@
+<!ELEMENT trigger EMPTY>
+<!ATTLIST trigger
+	triggeredBy NMTOKEN #IMPLIED
+	conditionValue CDATA #IMPLIED
+	action NMTOKEN #REQUIRED
+	value CDATA #IMPLIED
+  target NMTOKEN #IMPLIED
+>

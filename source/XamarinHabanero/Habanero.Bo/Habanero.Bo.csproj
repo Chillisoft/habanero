@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2A1F1C26-C940-4684-BF9B-59B40EDCFFFF}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Habanero.Bo</RootNamespace>
+    <AssemblyName>Habanero.Bo</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BOError.cs" />
+    <Compile Include="BOHelper.cs" />
+    <Compile Include="BOKey.cs" />
+    <Compile Include="BOMapper.cs" />
+    <Compile Include="BOObjectID.cs" />
+    <Compile Include="BOPrimaryKey.cs" />
+    <Compile Include="BOProp.cs" />
+    <Compile Include="BOPropCol.cs" />
+    <Compile Include="BOPropertyMapper.cs" />
+    <Compile Include="BOPropLookupList.cs" />
+    <Compile Include="BOPropMapperFactory.cs" />
+    <Compile Include="BORegistry.cs" />
+    <Compile Include="BORelationshipMapper.cs" />
+    <Compile Include="BOStatus.cs" />
+    <Compile Include="Broker.cs" />
+    <Compile Include="BusinessObject.cs" />
+    <Compile Include="BusinessObjectCollection.cs" />
+    <Compile Include="BusinessObjectLastUpdatePropertiesLog.cs" />
+    <Compile Include="BusinessObjectLoaderBase.cs" />
+    <Compile Include="BusinessObjectLoaderInMemory.cs" />
+    <Compile Include="BusinessObjectLoaderMultiSource.cs" />
+    <Compile Include="BusinessObjectLookupList.cs" />
+    <Compile Include="BusinessObjectXmlReader.cs" />
+    <Compile Include="BusinessObjectXmlWriter.cs" />
+    <Compile Include="ClassDefinition\ClassDef.cs" />
+    <Compile Include="ClassDefinition\ClassDefHelper.cs" />
+    <Compile Include="ClassDefinition\ClassDefValidator.cs" />
+    <Compile Include="ClassDefinition\DefClassFactory.cs" />
+    <Compile Include="ClassDefinition\FilterDef.cs" />
+    <Compile Include="ClassDefinition\FilterPropertyDef.cs" />
+    <Compile Include="ClassDefinition\IDefClassFactory.cs" />
+    <Compile Include="ClassDefinition\KeyDef.cs" />
+    <Compile Include="ClassDefinition\MultipleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\PrimaryKeyDef.cs" />
+    <Compile Include="ClassDefinition\PropDef.cs" />
+    <Compile Include="ClassDefinition\PropDefCol.cs" />
+    <Compile Include="ClassDefinition\RelationshipDef.cs" />
+    <Compile Include="ClassDefinition\RelationshipDefCol.cs" />
+    <Compile Include="ClassDefinition\RelKeyDef.cs" />
+    <Compile Include="ClassDefinition\RelPropDef.cs" />
+    <Compile Include="ClassDefinition\SingleRelationshipDef.cs" />
+    <Compile Include="ClassDefinition\SuperClassDef.cs" />
+    <Compile Include="ClassDefinition\UIDef.cs" />
+    <Compile Include="ClassDefinition\UIForm.cs" />
+    <Compile Include="ClassDefinition\UIFormColumn.cs" />
+    <Compile Include="ClassDefinition\UIFormField.cs" />
+    <Compile Include="ClassDefinition\UIFormGrid.cs" />
+    <Compile Include="ClassDefinition\UIFormTab.cs" />
+    <Compile Include="ClassDefinition\UIGrid.cs" />
+    <Compile Include="ClassDefinition\UIGridColumn.cs" />
+    <Compile Include="Comparer\DateTimeComparer.cs" />
+    <Compile Include="Comparer\DoubleComparer.cs" />
+    <Compile Include="Comparer\GuidComparer.cs" />
+    <Compile Include="Comparer\IntComparer.cs" />
+    <Compile Include="Comparer\PropertyComparer.cs" />
+    <Compile Include="Comparer\ReflectedPropertyComparer.cs" />
+    <Compile Include="Comparer\SingleComparer.cs" />
+    <Compile Include="Comparer\StringComparer.cs" />
+    <Compile Include="Comparer\TimeSpanComparer.cs" />
+    <Compile Include="CriteriaManager\Expression.cs" />
+    <Compile Include="CriteriaManager\Parameter.cs" />
+    <Compile Include="CriteriaManager\PropDefParameterSQLInfo.cs" />
+    <Compile Include="CriteriaManager\SqlOperator.cs" />
+    <Compile Include="DataAccessorInMemory.cs" />
+    <Compile Include="DataAccessorMultiSource.cs" />
+    <Compile Include="DataAccessorThreadSplitter.cs" />
+    <Compile Include="DataSetProvider.cs" />
+    <Compile Include="DataStoreInMemory.cs" />
+    <Compile Include="DataStoreInMemoryBinaryReader.cs" />
+    <Compile Include="DataStoreInMemoryBinaryWriter.cs" />
+    <Compile Include="DataStoreInMemoryXmlReader.cs" />
+    <Compile Include="DataStoreInMemoryXmlWriter.cs" />
+    <Compile Include="DeleteHelper.cs" />
+    <Compile Include="EditableDataSetProvider.cs" />
+    <Compile Include="ExceptionHelper.cs" />
+    <Compile Include="Exceptions\BOPropReadException.cs" />
+    <Compile Include="Exceptions\BOPropWriteException.cs" />
+    <Compile Include="Exceptions\BusinessObjectException.cs" />
+    <Compile Include="Exceptions\BusinessObjectNotFoundException.cs" />
+    <Compile Include="Exceptions\BusinessObjectReferentialIntegrityException.cs" />
+    <Compile Include="Exceptions\BusObjBeginEditConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjDeleteConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjDeleteException.cs" />
+    <Compile Include="Exceptions\BusObjDuplicateConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjectConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjectInAnInvalidStateException.cs" />
+    <Compile Include="Exceptions\BusObjEditableException.cs" />
+    <Compile Include="Exceptions\BusObjOptimisticConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjPersistException.cs" />
+    <Compile Include="Exceptions\BusObjPessimisticConcurrencyControlException.cs" />
+    <Compile Include="Exceptions\BusObjReadException.cs" />
+    <Compile Include="Exceptions\BusObjUserConcurrencyControlExceptionBase.cs" />
+    <Compile Include="Exceptions\EditingException.cs" />
+    <Compile Include="Exceptions\InvalidPropertyValueException.cs" />
+    <Compile Include="Exceptions\RelationshipNotFoundException.cs" />
+    <Compile Include="IBusinessObjectCollectionLoader.cs" />
+    <Compile Include="IBusinessObjectLoader.cs" />
+    <Compile Include="IDataAccessor.cs" />
+    <Compile Include="IDataSetProvider.cs" />
+    <Compile Include="IPropRuleComparable.cs" />
+    <Compile Include="Loaders\ClassDefsXmlValidator.cs" />
+    <Compile Include="Loaders\DtdLoader.cs" />
+    <Compile Include="Loaders\Dtds.Designer.cs" />
+    <Compile Include="Loaders\IClassDefsLoader.cs" />
+    <Compile Include="Loaders\XmlBusinessObjectLookupListLoader.cs" />
+    <Compile Include="Loaders\XmlClassDefsLoader.cs" />
+    <Compile Include="Loaders\XmlClassLoader.cs" />
+    <Compile Include="Loaders\XmlDatabaseLookupListLoader.cs" />
+    <Compile Include="Loaders\XmlFilterLoader.cs" />
+    <Compile Include="Loaders\XmlKeyLoader.cs" />
+    <Compile Include="Loaders\XmlLoader.cs" />
+    <Compile Include="Loaders\XmlLookupListLoader.cs" />
+    <Compile Include="Loaders\XmlPrimaryKeyLoader.cs" />
+    <Compile Include="Loaders\XmlPropertyLoader.cs" />
+    <Compile Include="Loaders\XmlRelationshipLoader.cs" />
+    <Compile Include="Loaders\XmlRuleLoader.cs" />
+    <Compile Include="Loaders\XmlSimpleLookupListLoader.cs" />
+    <Compile Include="Loaders\XmlSuperClassLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormColumnLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormFieldLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormLoader.cs" />
+    <Compile Include="Loaders\XmlUIFormTabLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridColumnLoader.cs" />
+    <Compile Include="Loaders\XmlUIGridLoader.cs" />
+    <Compile Include="Loaders\XmlUILoader.cs" />
+    <Compile Include="Loaders\XmlValidationResult.cs" />
+    <Compile Include="Loaders\Xsds.Designer.cs" />
+    <Compile Include="MultipleRelationship.cs" />
+    <Compile Include="NullBOPropertyMapper.cs" />
+    <Compile Include="NullLookupList.cs" />
+    <Compile Include="NumberGenerator\NumberGenerator.cs" />
+    <Compile Include="ObjectFactory.cs" />
+    <Compile Include="ObjectManager\BusinessObjectManager.cs" />
+    <Compile Include="ObjectManager\BusinessObjectManagerNull.cs" />
+    <Compile Include="ObjectManager\IBusinessObjectManager.cs" />
+    <Compile Include="ObjectTreeXmlReader.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyLink.cs" />
+    <Compile Include="PropRuleBase.cs" />
+    <Compile Include="PropRuleDate.cs" />
+    <Compile Include="PropRuleDecimal.cs" />
+    <Compile Include="PropRuleDouble.cs" />
+    <Compile Include="PropRuleInteger.cs" />
+    <Compile Include="PropRuleIntegerBase.cs" />
+    <Compile Include="PropRuleLong.cs" />
+    <Compile Include="PropRuleShort.cs" />
+    <Compile Include="PropRuleSingle.cs" />
+    <Compile Include="PropRuleString.cs" />
+    <Compile Include="QueryBuilder.cs" />
+    <Compile Include="QueryResultLoaderInMemory.cs" />
+    <Compile Include="ReadOnlyDataSetProvider.cs" />
+    <Compile Include="ReflectionPropertyMapper.cs" />
+    <Compile Include="RelatedBusinessObjectCollection.cs" />
+    <Compile Include="Relationship.cs" />
+    <Compile Include="RelationshipCol.cs" />
+    <Compile Include="RelationshipObjectInitialiser.cs" />
+    <Compile Include="RelKey.cs" />
+    <Compile Include="RelProp.cs" />
+    <Compile Include="Rules\InterPropRule.cs" />
+    <Compile Include="SelectQuery.cs" />
+    <Compile Include="SimpleLookupList.cs" />
+    <Compile Include="SingleRelationship.cs" />
+    <Compile Include="SupportsAutoIncrementingFieldBO.cs" />
+    <Compile Include="TransactionalBusinessObject.cs" />
+    <Compile Include="TransactionalBusinessObjectInMemory.cs" />
+    <Compile Include="TransactionalSingleRelationship.cs" />
+    <Compile Include="TransactionCommitter.cs" />
+    <Compile Include="TransactionCommitterInMemory.cs" />
+    <Compile Include="TransactionCommitterMultiSource.cs" />
+    <Compile Include="TransactionLogging\TransactionLogBusObj.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
+      <Project>{407b8f2e-dcea-4eae-a183-b3417e889846}</Project>
+      <Name>Habanero.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="CriteriaManager\CriteriaManagerBinaryTree.vsd" />
+    <None Include="key.snk" />
+    <None Include="Loaders\DTDs\businessObjectLookupList.dtd" />
+    <None Include="Loaders\DTDs\class.dtd" />
+    <None Include="Loaders\DTDs\classes.dtd" />
+    <None Include="Loaders\DTDs\classes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Loaders\DTDs\column.dtd" />
+    <None Include="Loaders\DTDs\columnLayout.dtd" />
+    <None Include="Loaders\DTDs\databaseLookupList.dtd" />
+    <None Include="Loaders\DTDs\field.dtd" />
+    <None Include="Loaders\DTDs\filter.dtd" />
+    <None Include="Loaders\DTDs\form.dtd" />
+    <None Include="Loaders\DTDs\formGrid.dtd" />
+    <None Include="Loaders\DTDs\grid.dtd" />
+    <None Include="Loaders\DTDs\GridPropertyCollection.dtd" />
+    <None Include="Loaders\DTDs\key.dtd" />
+    <None Include="Loaders\DTDs\parameter.dtd" />
+    <None Include="Loaders\DTDs\primaryKey.dtd" />
+    <None Include="Loaders\DTDs\Prop.dtd" />
+    <None Include="Loaders\DTDs\property.dtd" />
+    <None Include="Loaders\DTDs\relationship.dtd" />
+    <None Include="Loaders\DTDs\Rule.dtd" />
+    <None Include="Loaders\DTDs\simpleLookupList.dtd" />
+    <None Include="Loaders\DTDs\superClass.dtd" />
+    <None Include="Loaders\DTDs\tab.dtd" />
+    <None Include="Loaders\DTDs\trigger.dtd" />
+    <None Include="Loaders\DTDs\ui.dtd" />
+    <None Include="Loaders\DTDs\ui.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Loaders\DTDs\UIFormGrid.dtd" />
+    <None Include="Loaders\XSDs\classes.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Loaders\XSDs\ui.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Loaders\Dtds.resx" />
+    <EmbeddedResource Include="Loaders\Xsds.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

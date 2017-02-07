@@ -1,0 +1,9 @@
+<!ELEMENT superClass EMPTY>
+<!ATTLIST superClass
+		class NMTOKEN #REQUIRED
+		assembly NMTOKEN #REQUIRED
+		orMapping ( ClassTableInheritance | SingleTableInheritance | ConcreteTableInheritance ) "ClassTableInheritance"
+    id CDATA #IMPLIED
+    discriminator CDATA #IMPLIED
+    typeParameter NMTOKEN #IMPLIED
+>

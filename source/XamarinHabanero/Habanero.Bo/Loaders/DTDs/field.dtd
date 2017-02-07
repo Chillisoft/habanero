@@ -1,0 +1,15 @@
+#include parameter.dtd
+#include trigger.dtd
+<!ELEMENT field (parameter*, trigger*)>
+<!ATTLIST field
+	label CDATA #IMPLIED
+	property NMTOKEN #REQUIRED
+	type CDATA #IMPLIED
+	assembly CDATA #IMPLIED
+	mapperType NMTOKEN #IMPLIED
+  mapperAssembly CDATA #IMPLIED
+  editable ( true | false ) "true"
+	toolTipText CDATA #IMPLIED
+  layout (Label | GroupBox) "Label"
+  showAsCompulsory (true | false) "false"
+>

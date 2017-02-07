@@ -1,0 +1,17 @@
+#include key.dtd
+#include primaryKey.dtd
+#include property.dtd
+#include relationship.dtd
+#include superClass.dtd
+#include ui.dtd
+<!ELEMENT class (superClass?, property*, key*, primaryKey?, relationship*, ui*)>
+<!ATTLIST class
+		name NMTOKEN #REQUIRED
+		assembly NMTOKEN #REQUIRED
+		table CDATA #IMPLIED
+		displayName CDATA #IMPLIED
+    typeParameter CDATA #IMPLIED
+    moduleName CDATA #IMPLIED
+  classID CDATA #IMPLIED
+>
+
