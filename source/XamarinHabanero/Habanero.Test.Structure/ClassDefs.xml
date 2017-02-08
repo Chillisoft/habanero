@@ -1,0 +1,114 @@
+﻿<classes>
+  <class name="Car" assembly="Habanero.Test.Structure" table="table_class_Car" displayName="Car">
+    <superClass class="Vehicle" assembly="Habanero.Test.Structure" id="CarID" />
+    <property name="CarID" type="Guid" databaseField="field_Car_ID" />
+    <property name="RegistrationNo" databaseField="field_Registration_No" />
+    <property name="Length" type="Double" databaseField="field_Length" />
+    <property name="IsConvertible" type="Boolean" databaseField="field_Is_Convertible" />
+    <property name="DriverID" type="Guid" databaseField="field_Driver_ID" />
+    <primaryKey>
+      <prop name="CarID" />
+    </primaryKey>
+    <relationship name="Driver" type="single" relatedClass="Person" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="DriverID" relatedProperty="PersonID" />
+    </relationship>
+  </class>
+  <class name="Engine" assembly="Habanero.Test.Structure" table="table_class_Engine" displayName="Engine">
+    <superClass class="Part" assembly="Habanero.Test.Structure" id="EngineID" />
+    <property name="EngineID" type="Guid" databaseField="field_Engine_ID" compulsory="true" />
+    <property name="EngineNo" databaseField="field_Engine_No" />
+    <property name="DateManufactured" type="DateTime" databaseField="field_Date_Manufactured" />
+    <property name="HorsePower" type="Int32" databaseField="field_Horse_Power" />
+    <property name="FuelInjected" type="Boolean" databaseField="field_Fuel_Injected" />
+    <property name="CarID" type="Guid" databaseField="field_Car_ID" />
+    <primaryKey>
+      <prop name="EngineID" />
+    </primaryKey>
+    <relationship name="Car" type="single" relatedClass="Car" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="CarID" relatedProperty="CarID" />
+    </relationship>
+  </class>
+  <class name="Entity" assembly="Habanero.Test.Structure" table="table_Entity" displayName="Entity">
+    <property name="EntityID" type="Guid" databaseField="field_Entity_ID" compulsory="true" />
+    <property name="EntityType" databaseField="field_Entity_Type" />
+    <primaryKey>
+      <prop name="EntityID" />
+    </primaryKey>
+  </class>
+  <class name="LegalEntity" assembly="Habanero.Test.Structure" table="table_class_LegalEntity" displayName="Legal Entity">
+    <superClass class="Entity" assembly="Habanero.Test.Structure" id="LegalEntityID" />
+    <property name="LegalEntityID" type="Guid" databaseField="field_Legal_Entity_ID" />
+    <property name="LegalEntityType" databaseField="field_Legal_Entity_Type" />
+    <primaryKey>
+      <prop name="LegalEntityID" />
+    </primaryKey>
+    <relationship name="VehiclesOwned" type="multiple" relatedClass="Vehicle" reverseRelationship="Owner" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="LegalEntityID" relatedProperty="OwnerID" />
+    </relationship>
+  </class>
+  <class name="Organisation" assembly="Habanero.Test.Structure" table="table_class_Organisation" displayName="Organisation">
+    <superClass class="LegalEntity" assembly="Habanero.Test.Structure" id="OrganisationID" />
+    <property name="Name" databaseField="field_Name" />
+    <property name="DateFormed" databaseField="field_Date_Formed" />
+    <property name="OrganisationID" type="Guid" databaseField="field_Organisation_ID" compulsory="true" />
+    <primaryKey>
+      <prop name="OrganisationID" />
+    </primaryKey>
+    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisationPerson" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="OrganisationID" relatedProperty="OrganisatiionID" />
+    </relationship>
+  </class>
+  <class name="OrganisationPerson" assembly="Habanero.Test.Structure" table="table_class_OrganisationPerson" displayName="Organisation Person">
+    <property name="OrganisatiionID" type="Guid" databaseField="field_Organisatiion_ID" />
+    <property name="PersonID" type="Guid" databaseField="field_Person_ID" />
+    <property name="Relationship" databaseField="field_Relationship" />
+    <primaryKey isObjectID="false">
+      <prop name="OrganisatiionID" />
+      <prop name="PersonID" />
+    </primaryKey>
+    <relationship name="Organisation" type="single" relatedClass="Organisation" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="OrganisatiionID" relatedProperty="OrganisationID" />
+    </relationship>
+    <relationship name="Person" type="single" relatedClass="Person" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="PersonID" relatedProperty="PersonID" />
+    </relationship>
+  </class>
+  <class name="Part" assembly="Habanero.Test.Structure" table="table_class_Part" displayName="Part">
+    <superClass class="Entity" assembly="Habanero.Test.Structure" id="PartID" />
+    <property name="PartID" type="Guid" databaseField="field_Part_ID" compulsory="true" />
+    <property name="ModelNo" databaseField="field_Model_No" />
+    <property name="PartType" databaseField="field_Part_Type" />
+    <primaryKey>
+      <prop name="PartID" />
+    </primaryKey>
+  </class>
+  <class name="Person" assembly="Habanero.Test.Structure" table="table_class_Person" displayName="Person">
+    <superClass class="LegalEntity" assembly="Habanero.Test.Structure" id="PersonID" />
+    <property name="IDNumber" databaseField="field_ID_Number" />
+    <property name="FirstName" databaseField="field_First_Name" />
+    <property name="LastName" databaseField="field_Last_Name" />
+    <property name="PersonID" type="Guid" databaseField="field_Person_ID" compulsory="true" />
+    <primaryKey>
+      <prop name="PersonID" />
+    </primaryKey>
+    <relationship name="CarsDriven" type="multiple" relatedClass="Car" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="PersonID" relatedProperty="DriverID" />
+    </relationship>
+    <relationship name="OrganisationPerson" type="multiple" relatedClass="OrganisationPerson" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="PersonID" relatedProperty="PersonID" />
+    </relationship>
+  </class>
+  <class name="Vehicle" assembly="Habanero.Test.Structure" table="table_class_Vehicle" displayName="Vehicle">
+    <superClass class="Entity" assembly="Habanero.Test.Structure" id="VehicleID" />
+    <property name="VehicleID" type="Guid" databaseField="field_Vehicle_ID" />
+    <property name="VehicleType" databaseField="field_Vehicle_Type" />
+    <property name="DateAssembled" type="DateTime" databaseField="field_Date_Assembled" />
+    <property name="OwnerID" type="Guid" databaseField="field_Owner_ID" />
+    <primaryKey>
+      <prop name="VehicleID" />
+    </primaryKey>
+    <relationship name="Owner" type="single" relatedClass="LegalEntity" reverseRelationship="VehiclesOwned" relatedAssembly="Habanero.Test.Structure">
+      <relatedProperty property="OwnerID" relatedProperty="LegalEntityID" />
+    </relationship>
+  </class>
+</classes>

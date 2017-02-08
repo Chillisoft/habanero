@@ -197,6 +197,13 @@
     <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\fbembed.dll" />
+    <Content Include="Resources\ib_util.dll" />
+    <Content Include="Resources\icudt30.dll" />
+    <Content Include="Resources\icuin30.dll" />
+    <Content Include="Resources\icuuc30.dll" />
+    <Content Include="Resources\msvcp80.dll" />
+    <Content Include="Resources\msvcr80.dll" />
     <Content Include="TestResources\TestJpeg.jpg" />
     <Content Include="TestResources\TestJpeg2.jpg" />
     <Content Include="TestResources\TestJpeg3.jpg" />
@@ -207,15 +214,16 @@
     <None Include="App.config" />
     <None Include="key.snk" />
     <None Include="packages.config" />
+    <None Include="Resources\aliases.conf" />
+    <None Include="Resources\firebird.conf" />
+    <None Include="Resources\firebird.msg" />
     <None Include="TestResources\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FirebirdEmbeddedLibrariesForWindows.resx" />
     <EmbeddedResource Include="TestResources.resx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{407b8f2e-dcea-4eae-a183-b3417e889846}</Project>
