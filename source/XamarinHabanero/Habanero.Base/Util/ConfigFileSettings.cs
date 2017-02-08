@@ -21,8 +21,7 @@
 using System;
 using System.Globalization;
 using Habanero.Base;
-using PCLAppConfig;
-using PCLAppConfig.Infrastructure;
+using Habanero.Base.Util;
 
 namespace Habanero.Util
 {

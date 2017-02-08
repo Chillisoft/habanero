@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Configuration;
 using System.Reflection;
+using Habanero.Base.Util;
 using Habanero.DB;
 
 namespace Habanero.Test

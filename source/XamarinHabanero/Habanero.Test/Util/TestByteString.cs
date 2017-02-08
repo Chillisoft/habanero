@@ -23,7 +23,6 @@ using System.Collections;
 using System.Data;
 using System.Linq;
 using Habanero.Base;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;

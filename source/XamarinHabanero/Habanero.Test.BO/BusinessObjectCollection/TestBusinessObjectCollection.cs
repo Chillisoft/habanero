@@ -22,13 +22,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
 using Habanero.Util;
 using NUnit.Framework;
+
 // ReSharper disable InconsistentNaming
 namespace Habanero.Test.BO.BusinessObjectCollection
 {
@@ -53,6 +56,8 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
             SetupDBConnection();
         }
 
@@ -66,34 +71,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         }
 
         private bool _addedEventFired;
-
-/*        public class MyDatabaseConnectionStub : DatabaseConnection
-        {
-            public MyDatabaseConnectionStub() : base("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection")
-            {
-            }
-
-            public override string LeftFieldDelimiter
-            {
-                get { return ""; }
-            }
-
-            public override string RightFieldDelimiter
-            {
-                get { return ""; }
-            }
-
-            [Obsolete("please use the SqlFormatter directly")]
-            public override string GetLimitClauseForBeginning(int limit)
-            {
-                return "TOP " + limit;
-            }
-
-            public override IParameterNameGenerator CreateParameterNameGenerator() {
-                return new ParameterNameGenerator("?");
-            }
-        }*/
-
 
         //Load a collection from the database.
         // Create a new business object.

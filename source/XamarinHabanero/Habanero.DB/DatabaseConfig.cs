@@ -21,10 +21,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Security.Cryptography;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.Util;
 
 namespace Habanero.DB
@@ -322,8 +322,7 @@ namespace Habanero.DB
         ///<returns>Returns a DatabaseConfig object</returns>
         public static DatabaseConfig ReadFromConfigFile(string configSectionName)
         {
-            //return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
-            throw new NotImplementedException();
+            return new DatabaseConfig((IDictionary) ConfigurationManager.GetSection(configSectionName));
         }
 
         /// <summary>
