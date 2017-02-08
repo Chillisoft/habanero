@@ -222,7 +222,6 @@
     <Compile Include="TestBusinessObjectXmlWriter.cs" />
     <Compile Include="TestBusinessObject_Concurrency.cs" />
     <Compile Include="TestBusinessObject_InMemory.cs" />
-    <Compile Include="TestBusObjectManager.cs" />
     <Compile Include="TestDataAccessorMultiSource.cs" />
     <Compile Include="TestDataAccessorThreadSplitter.cs" />
     <Compile Include="TestDatabaseLookupList.cs" />
