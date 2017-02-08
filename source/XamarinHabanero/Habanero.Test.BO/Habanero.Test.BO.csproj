@@ -55,6 +55,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -182,7 +183,6 @@
     <Compile Include="Relationship\TestSingleRelationship_Association.cs" />
     <Compile Include="Relationship\TestSingleRelationship_Composition.cs" />
     <Compile Include="Relationship\TestTransactionalSingleRelationship.cs" />
-    <Compile Include="Relationship\TestUnrefRelationshipDef.cs" />
     <Compile Include="Security\TestBOPropAuthorisation.cs" />
     <Compile Include="Security\TestBusinessObjectAuthorisation.cs" />
     <Compile Include="TestBOError.cs" />
@@ -211,7 +211,6 @@
     <Compile Include="TestBusinessObjectInheritance.cs" />
     <Compile Include="TestBusinessObjectLastUpdatePropertiesLog.cs" />
     <Compile Include="TestBusinessObjectLoaderDB.cs" />
-    <Compile Include="TestBusinessObjectLoaderMem.cs" />
     <Compile Include="TestBusinessObjectLookupList.cs" />
     <Compile Include="TestBusinessObjectManager.cs" />
     <Compile Include="TestBusinessObjectManagerNull.cs" />

@@ -19,6 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Drawing;
 using System.Linq.Expressions;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
@@ -1181,8 +1182,8 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
+            cp.SetPropertyValue("Image", new Bitmap(10, 10));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new Bitmap(20, 20));
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
