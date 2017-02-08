@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Drawing;
+using System.Net.Mime;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
 
@@ -59,7 +60,7 @@ namespace Habanero.Test.Base.DataMappers
         public void TryParsePropValue_ShouldSetReturnValueSame_WhenValueToParseIsAlreadyCorrectType_ForReferenceType()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new GeneralDataMapper(typeof (Image));
+            var dataMapper = new GeneralDataMapper(typeof (MediaTypeNames.Image));
             Image valueToParse = new Bitmap(200, 200);
             object returnValue;
             //---------------Execute Test ----------------------

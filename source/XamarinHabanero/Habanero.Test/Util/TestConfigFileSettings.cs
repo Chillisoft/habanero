@@ -18,9 +18,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
 using System;
-using System.Configuration;
-using System.Globalization;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -30,49 +29,10 @@ namespace Habanero.Test.Util
     public class TestConfigFileSettings
     {
         [Test]
-        public void TestConstructor_ConfigurationSpecified()
-        {
-            //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //---------------Assert Preconditions --------------
-
-            //---------------Execute Test ----------------------
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            //---------------Test Result -----------------------
-        }
-
-        [Test]
-        public void TestConstructor_FailsWithNullConfiguration()
-        {
-            //---------------Set up test pack-------------------
-
-            //---------------Assert Preconditions --------------
-
-            //---------------Execute Test ----------------------
-            Exception exception = null;
-            try
-            {
-                ConfigFileSettings configFileSettings = new ConfigFileSettings(null);
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-            //---------------Test Result -----------------------
-            Assert.IsNotNull(exception, "Error Expected");
-            Assert.IsInstanceOf(typeof(ArgumentNullException), exception);
-            ArgumentNullException argumentNullException = (ArgumentNullException) exception;
-            Assert.AreEqual("configuration", argumentNullException.ParamName);
-        }
-
-        //---------------- Testing Strings -----------------------------------
-        
-        [Test]
         public void TestGetString_SettingDNE()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
@@ -96,13 +56,9 @@ namespace Habanero.Test.Util
         public void TestGetString()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             string settingValue = TestUtil.GetRandomString();
-            configuration.AppSettings.Settings.Add(settingName, settingValue);
-            //---------------Assert Preconditions --------------
-
             //---------------Execute Test ----------------------
             string returnedSettingValue = configFileSettings.GetString(settingName);
             //---------------Test Result -----------------------
@@ -113,8 +69,7 @@ namespace Habanero.Test.Util
         public void TestGetString_WithDate()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -137,47 +92,17 @@ namespace Habanero.Test.Util
         public void TestSetString_AddsSetting()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.GetRandomString();
-            string settingValue = TestUtil.GetRandomString();
-            //---------------Assert Preconditions --------------
-
+            var configFileSettings = new ConfigFileSettings();
             //---------------Execute Test ----------------------
-            configFileSettings.SetString(settingName, settingValue);
             //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, configurationElement.Value);
+            Assert.Throws<NotImplementedException>(() => configFileSettings.SetString("foo", "bar"));
         }
-
-        [Test]
-        public void TestSetString_UpdatesSetting()
-        {
-            //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.GetRandomString();
-            string settingValue = TestUtil.GetRandomString();
-            configuration.AppSettings.Settings.Add(settingName, "");
-            //---------------Assert Preconditions --------------
-
-            //---------------Execute Test ----------------------
-            configFileSettings.SetString(settingName, settingValue);
-            //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, configurationElement.Value);
-        }
-
-        //---------------- Testing Decimals -----------------------------------
 
         [Test]
         public void TestGetDecimal_SettingDNE()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             //---------------Assert Preconditions --------------
 
@@ -201,13 +126,9 @@ namespace Habanero.Test.Util
         public void TestGetDecimal()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             decimal settingValue = GetRandomDecimal();
-            configuration.AppSettings.Settings.Add(settingName, Convert.ToString(settingValue, CultureInfo.InvariantCulture.NumberFormat));
-            //---------------Assert Preconditions --------------
-
             //---------------Execute Test ----------------------
             decimal returnedSettingValue = configFileSettings.GetDecimal(settingName);
             //---------------Test Result -----------------------
@@ -217,15 +138,14 @@ namespace Habanero.Test.Util
         private static decimal GetRandomDecimal()
         {
             Random random = new Random();
-            return (decimal) random.NextDouble() * random.Next(100);
+            return (decimal)random.NextDouble() * random.Next(100);
         }
 
         [Test]
         public void TestGetDecimal_WithDate()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
@@ -248,49 +168,20 @@ namespace Habanero.Test.Util
         public void TestSetDecimal_AddsSetting()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.GetRandomString();
-            decimal settingValue = GetRandomDecimal();
-            //---------------Assert Preconditions --------------
-
+            var configFileSettings = new ConfigFileSettings();
+            var settingName = TestUtil.GetRandomString();
+            var settingValue = GetRandomDecimal();
             //---------------Execute Test ----------------------
-            configFileSettings.SetDecimal(settingName, settingValue);
             //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, Convert.ToDecimal(configurationElement.Value, CultureInfo.InvariantCulture.NumberFormat));
+            Assert.Throws<NotImplementedException>(() => configFileSettings.SetDecimal(settingName, settingValue));
         }
-
-        [Test]
-        public void TestSetDecimal_UpdatesSetting()
-        {
-            //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.GetRandomString();
-            decimal settingValue = GetRandomDecimal();
-            configuration.AppSettings.Settings.Add(settingName, Convert.ToString(0, CultureInfo.InvariantCulture.NumberFormat));
-            //---------------Assert Preconditions --------------
-
-            //---------------Execute Test ----------------------
-            configFileSettings.SetDecimal(settingName, settingValue);
-            //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, Convert.ToDecimal(configurationElement.Value, CultureInfo.InvariantCulture.NumberFormat));
-        }
-
-        //---------------- Testing Booleans -----------------------------------
 
         [Test]
         public void TestGetBoolean_SettingDNE()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
-            //---------------Assert Preconditions --------------
 
             //---------------Execute Test ----------------------
             Exception exception = null;
@@ -312,13 +203,9 @@ namespace Habanero.Test.Util
         public void TestGetBoolean()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
-            configuration.AppSettings.Settings.Add(settingName, Convert.ToString(settingValue, CultureInfo.InvariantCulture.NumberFormat));
-            //---------------Assert Preconditions --------------
-
             //---------------Execute Test ----------------------
             bool returnedSettingValue = configFileSettings.GetBoolean(settingName);
             //---------------Test Result -----------------------
@@ -327,44 +214,19 @@ namespace Habanero.Test.Util
 
         private static bool GetRandomBoolean()
         {
-            return Convert.ToBoolean(new Random().Next(0,1));
+            return Convert.ToBoolean(new Random().Next(0, 1));
         }
 
         [Test]
         public void TestSetBoolean_AddsSetting()
         {
             //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
+            ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
-            //---------------Assert Preconditions --------------
-
             //---------------Execute Test ----------------------
-            configFileSettings.SetBoolean(settingName, settingValue);
             //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, Convert.ToBoolean(configurationElement.Value));
-        }
-
-        [Test]
-        public void TestSetBoolean_UpdatesSetting()
-        {
-            //---------------Set up test pack-------------------
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            ConfigFileSettings configFileSettings = new ConfigFileSettings(configuration);
-            string settingName = TestUtil.GetRandomString();
-            bool settingValue = GetRandomBoolean();
-            configuration.AppSettings.Settings.Add(settingName, Convert.ToString(true));
-            //---------------Assert Preconditions --------------
-
-            //---------------Execute Test ----------------------
-            configFileSettings.SetBoolean(settingName, settingValue);
-            //---------------Test Result -----------------------
-            KeyValueConfigurationElement configurationElement = configuration.AppSettings.Settings[settingName];
-            Assert.IsNotNull(configurationElement, "Setting should have been created");
-            Assert.AreEqual(settingValue, Convert.ToBoolean(configurationElement.Value));
+            Assert.Throws<NotImplementedException>(() => configFileSettings.SetBoolean(settingName, settingValue));
         }
     }
 }

@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Habanero.Base.DataMappers;
@@ -109,7 +110,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var factory = new DataMapperFactory();
-            var targetType = typeof(Image);
+            var targetType = typeof(MediaTypeNames.Image);
             //---------------Execute Test ----------------------
             var dataMapper = factory.GetDataMapper(targetType);
             //---------------Test Result -----------------------
@@ -157,7 +158,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var factory = new DataMapperFactory();
-            var targetType = typeof(Image);
+            var targetType = typeof(MediaTypeNames.Image);
             var expectedDataMapper = factory.GetDataMapper(targetType);
             //---------------Execute Test ----------------------
             var dataMapper = factory.GetDataMapper(targetType);
@@ -197,7 +198,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var factory = new DataMapperFactory();
-            var targetType = typeof(Image);
+            var targetType = typeof(MediaTypeNames.Image);
             var expectedDataMapper = new GuidDataMapper();
             //---------------Execute Test ----------------------
             factory.SetDataMapper(targetType, expectedDataMapper);

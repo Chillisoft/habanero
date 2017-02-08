@@ -18,13 +18,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using System;
-using System.Drawing.Imaging;
-using System.IO;
-using Habanero.Base;
+
 using Habanero.Base.DataMappers;
-using Habanero.BO;
-using Habanero.BO.ClassDefinition;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -74,8 +69,8 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
             Assert.IsInstanceOf(typeof(System.Drawing.Bitmap), parsedValue);
-            Assert.AreEqual(img.Width, ((System.Drawing.Bitmap) parsedValue).Width);
-            Assert.AreEqual(img.Height, ((System.Drawing.Bitmap) parsedValue).Height);
+            Assert.AreEqual(img.Width, ((System.Drawing.Bitmap)parsedValue).Width);
+            Assert.AreEqual(img.Height, ((System.Drawing.Bitmap)parsedValue).Height);
         }
 
         [Test]
@@ -106,7 +101,7 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsFalse(parsedSucceed);
         }
-        
+
         [Test]
         public void ConvertValueToString_FromBitmap()
         {
@@ -118,6 +113,6 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.AreNotEqual("System.Drawing.Bitmap", strValue);
         }
-     
+
     }
 }

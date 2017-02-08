@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.BO", "XamarinHaban
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.DB", "XamarinHabanero\Habanero.DB\Habanero.DB.csproj", "{3184EA1C-6416-4232-AA39-545F3E79A585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "XamarinHabanero\Habanero.Test.BO\Habanero.Test.BO.csproj", "{18BFF674-C0EC-49E9-AE97-3149F0898AAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Console", "XamarinHabanero\Habanero.Console\Habanero.Console.csproj", "{9E817015-3B0E-4997-8D39-EB1B25307ECC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "XamarinHabanero\Habanero.Test\Habanero.Test.csproj", "{E74797EB-6D41-4037-AC6B-69FA58017DDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "XamarinHabanero\Habanero.Test\Habanero.Test.csproj", "{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,22 +45,22 @@ Global
 		{3184EA1C-6416-4232-AA39-545F3E79A585}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3184EA1C-6416-4232-AA39-545F3E79A585}.Release|x86.ActiveCfg = Release|Any CPU
 		{3184EA1C-6416-4232-AA39-545F3E79A585}.Release|x86.Build.0 = Release|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Debug|x86.Build.0 = Debug|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Release|x86.ActiveCfg = Release|Any CPU
-		{18BFF674-C0EC-49E9-AE97-3149F0898AAF}.Release|x86.Build.0 = Release|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Debug|x86.Build.0 = Debug|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Release|x86.ActiveCfg = Release|Any CPU
-		{E74797EB-6D41-4037-AC6B-69FA58017DDB}.Release|x86.Build.0 = Release|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Debug|x86.Build.0 = Debug|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|x86.Build.0 = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|x86.Build.0 = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -38,7 +38,7 @@ namespace Habanero.Test.Base.Logging
         public void Test_Construct_WithContextName_ShouldSetUpContextName()
         {
             //---------------Set up test pack-------------------
-            var contextName = TestUtil.GetRandomString();   
+            var contextName = TestUtil.GetRandomString();
             //---------------Assert Precondition----------------
 
             //---------------Execute Test ----------------------
@@ -162,7 +162,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Debug(message));
             //---------------Execute Test ----------------------
-            logger.Log(message,LogCategory.Debug);
+            logger.Log(message, LogCategory.Debug);
             //---------------Test Result -----------------------
             log.AssertWasCalled(log1 => log1.Debug(message));
         }
@@ -177,7 +177,7 @@ namespace Habanero.Test.Base.Logging
             //---------------Assert Precondition----------------
             log.AssertWasNotCalled(log1 => log1.Error(message));
             //---------------Execute Test ----------------------
-            logger.Log(message,LogCategory.Exception);
+            logger.Log(message, LogCategory.Exception);
             //---------------Test Result -----------------------
             log.AssertWasCalled(log1 => log1.Error(message));
         }
@@ -210,211 +210,211 @@ namespace Habanero.Test.Base.Logging
             logger.Log(message, LogCategory.Info);
             //---------------Test Result -----------------------
             log.AssertWasCalled(log1 => log1.Info(message));
-		}
+        }
 
 
 
 
 
-		[Test]
-		public void Test_Log_WithMessageAndLogCategoryIsDebug_AndNotEnabled_ShouldNotLogMessage_Debug()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			log.Stub(log2 => log2.IsDebugEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			var message = TestUtil.GetRandomString();
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.Debug(message));
-			//---------------Execute Test ----------------------
-			logger.Log(message, LogCategory.Debug);
-			//---------------Test Result -----------------------
-			log.AssertWasNotCalled(log1 => log1.Debug(message));
-		}
+        [Test]
+        public void Test_Log_WithMessageAndLogCategoryIsDebug_AndNotEnabled_ShouldNotLogMessage_Debug()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            log.Stub(log2 => log2.IsDebugEnabled).Return(false);
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            var message = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.Debug(message));
+            //---------------Execute Test ----------------------
+            logger.Log(message, LogCategory.Debug);
+            //---------------Test Result -----------------------
+            log.AssertWasNotCalled(log1 => log1.Debug(message));
+        }
 
-		[Test]
-		public void Test_Log_WithMessageAndLogCategoryIsException_AndNotEnabled_ShouldNotLogMessage_Error()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			log.Stub(log2 => log2.IsErrorEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			var message = TestUtil.GetRandomString();
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.Error(message));
-			//---------------Execute Test ----------------------
-			logger.Log(message, LogCategory.Exception);
-			//---------------Test Result -----------------------
-			log.AssertWasNotCalled(log1 => log1.Error(message));
-		}
+        [Test]
+        public void Test_Log_WithMessageAndLogCategoryIsException_AndNotEnabled_ShouldNotLogMessage_Error()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            log.Stub(log2 => log2.IsErrorEnabled).Return(false);
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            var message = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.Error(message));
+            //---------------Execute Test ----------------------
+            logger.Log(message, LogCategory.Exception);
+            //---------------Test Result -----------------------
+            log.AssertWasNotCalled(log1 => log1.Error(message));
+        }
 
-		[Test]
-		public void Test_Log_WithMessageAndLogCategoryIsWarn_AndNotEnabled_ShouldNotLogMessage_Warning()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			log.Stub(log2 => log2.IsWarnEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			var message = TestUtil.GetRandomString();
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.Warn(message));
-			//---------------Execute Test ----------------------
-			logger.Log(message, LogCategory.Warn);
-			//---------------Test Result -----------------------
-			log.AssertWasNotCalled(log1 => log1.Warn(message));
-		}
+        [Test]
+        public void Test_Log_WithMessageAndLogCategoryIsWarn_AndNotEnabled_ShouldNotLogMessage_Warning()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            log.Stub(log2 => log2.IsWarnEnabled).Return(false);
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            var message = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.Warn(message));
+            //---------------Execute Test ----------------------
+            logger.Log(message, LogCategory.Warn);
+            //---------------Test Result -----------------------
+            log.AssertWasNotCalled(log1 => log1.Warn(message));
+        }
 
-		[Test]
-		public void Test_Log_WithMessageAndLogCategoryIsInfo_AndNotEnabled_ShouldNotLogMessage_Info()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			log.Stub(log2 => log2.IsInfoEnabled).Return(false);
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			var message = TestUtil.GetRandomString();
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.Info(message));
-			//---------------Execute Test ----------------------
-			logger.Log(message, LogCategory.Info);
-			//---------------Test Result -----------------------
-			log.AssertWasNotCalled(log1 => log1.Info(message));
-		}
+        [Test]
+        public void Test_Log_WithMessageAndLogCategoryIsInfo_AndNotEnabled_ShouldNotLogMessage_Info()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            log.Stub(log2 => log2.IsInfoEnabled).Return(false);
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            var message = TestUtil.GetRandomString();
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.Info(message));
+            //---------------Execute Test ----------------------
+            logger.Log(message, LogCategory.Info);
+            //---------------Test Result -----------------------
+            log.AssertWasNotCalled(log1 => log1.Info(message));
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsDebug_AndIsTrue_ShouldReturnTrue_Debug()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsDebugEnabled).Return(true);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Debug);
-			//---------------Test Result -----------------------
-			Assert.IsTrue(isLogging);
-			log.AssertWasCalled(log1 => log1.IsDebugEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsDebug_AndIsTrue_ShouldReturnTrue_Debug()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsDebugEnabled).Return(true);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Debug);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isLogging);
+            log.AssertWasCalled(log1 => log1.IsDebugEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsException_AndIsTrue_ShouldReturnTrue_Error()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsErrorEnabled).Return(true);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Exception);
-			//---------------Test Result -----------------------
-			Assert.IsTrue(isLogging);
-			log.AssertWasCalled(log1 => log1.IsErrorEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsException_AndIsTrue_ShouldReturnTrue_Error()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsErrorEnabled).Return(true);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Exception);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isLogging);
+            log.AssertWasCalled(log1 => log1.IsErrorEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsWarn_AndIsTrue_ShouldReturnTrue_Warning()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsWarnEnabled).Return(true);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Warn);
-			//---------------Test Result -----------------------
-			Assert.IsTrue(isLogging);
-			log.AssertWasCalled(log1 => log1.IsWarnEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsWarn_AndIsTrue_ShouldReturnTrue_Warning()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsWarnEnabled).Return(true);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Warn);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isLogging);
+            log.AssertWasCalled(log1 => log1.IsWarnEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsInfo_AndIsTrue_ShouldReturnTrue_Info()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsInfoEnabled).Return(true);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Info);
-			//---------------Test Result -----------------------
-			Assert.IsTrue(isLogging);
-			log.AssertWasCalled(log1 => log1.IsInfoEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsInfo_AndIsTrue_ShouldReturnTrue_Info()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsInfoEnabled).Return(true);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Info);
+            //---------------Test Result -----------------------
+            Assert.IsTrue(isLogging);
+            log.AssertWasCalled(log1 => log1.IsInfoEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsDebug_AndIsFalse_ShouldReturnFalse_Debug()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsDebugEnabled).Return(false);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Debug);
-			//---------------Test Result -----------------------
-			Assert.IsFalse(isLogging);
-			log.AssertWasCalled(log1 => log1.IsDebugEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsDebug_AndIsFalse_ShouldReturnFalse_Debug()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsDebugEnabled).Return(false);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsDebugEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Debug);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isLogging);
+            log.AssertWasCalled(log1 => log1.IsDebugEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsException_AndIsFalse_ShouldReturnFalse_Error()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsErrorEnabled).Return(false);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Exception);
-			//---------------Test Result -----------------------
-			Assert.IsFalse(isLogging);
-			log.AssertWasCalled(log1 => log1.IsErrorEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsException_AndIsFalse_ShouldReturnFalse_Error()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsErrorEnabled).Return(false);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsErrorEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Exception);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isLogging);
+            log.AssertWasCalled(log1 => log1.IsErrorEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsWarn_AndIsFalse_ShouldReturnFalse_Warning()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsWarnEnabled).Return(false);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Warn);
-			//---------------Test Result -----------------------
-			Assert.IsFalse(isLogging);
-			log.AssertWasCalled(log1 => log1.IsWarnEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsWarn_AndIsFalse_ShouldReturnFalse_Warning()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsWarnEnabled).Return(false);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsWarnEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Warn);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isLogging);
+            log.AssertWasCalled(log1 => log1.IsWarnEnabled);
+        }
 
-		[Test]
-		public void Test_IsLogging_WhenLogCategoryIsInfo_AndIsFalse_ShouldReturnFalse_Info()
-		{
-			//---------------Set up test pack-------------------
-			var log = GetBasicMockLog();
-			IHabaneroLogger logger = new Log4NetLoggerSpy(log);
-			log.Stub(log2 => log2.IsInfoEnabled).Return(false);
-			//---------------Assert Precondition----------------
-			log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
-			//---------------Execute Test ----------------------
-			var isLogging = logger.IsLogging(LogCategory.Info);
-			//---------------Test Result -----------------------
-			Assert.IsFalse(isLogging);
-			log.AssertWasCalled(log1 => log1.IsInfoEnabled);
-		}
+        [Test]
+        public void Test_IsLogging_WhenLogCategoryIsInfo_AndIsFalse_ShouldReturnFalse_Info()
+        {
+            //---------------Set up test pack-------------------
+            var log = GetBasicMockLog();
+            IHabaneroLogger logger = new Log4NetLoggerSpy(log);
+            log.Stub(log2 => log2.IsInfoEnabled).Return(false);
+            //---------------Assert Precondition----------------
+            log.AssertWasNotCalled(log1 => log1.IsInfoEnabled);
+            //---------------Execute Test ----------------------
+            var isLogging = logger.IsLogging(LogCategory.Info);
+            //---------------Test Result -----------------------
+            Assert.IsFalse(isLogging);
+            log.AssertWasCalled(log1 => log1.IsInfoEnabled);
+        }
 
-    	private static ILog GetBasicMockLog()
-    	{
-    		return MockRepository.GenerateStub<ILog>();
-    	}
+        private static ILog GetBasicMockLog()
+        {
+            return MockRepository.GenerateStub<ILog>();
+        }
 
 
-    	private static ILog GetMockLog()
+        private static ILog GetMockLog()
         {
             var log = MockRepository.GenerateStub<ILog>();
             log.Stub(log2 => log2.IsInfoEnabled).Return(true);
@@ -425,16 +425,6 @@ namespace Habanero.Test.Base.Logging
             return log;
         }
     }
-
-   
-
-   
-/*    public enum LogPriority
-    {
-        High, Low, Medium, None
-    }*/
-
-   
 
     internal class Log4NetLoggerSpy : Log4NetLogger
     {

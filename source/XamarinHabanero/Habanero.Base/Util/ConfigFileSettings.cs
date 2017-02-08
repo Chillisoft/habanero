@@ -20,8 +20,9 @@
 #endregion
 using System;
 using System.Globalization;
-using Android.Content.Res;
 using Habanero.Base;
+using PCLAppConfig;
+using PCLAppConfig.Infrastructure;
 
 namespace Habanero.Util
 {
@@ -30,27 +31,6 @@ namespace Habanero.Util
     /// </summary>
     public class ConfigFileSettings : ISettings
     {
-        private readonly Configuration _configuration;
-
-        /// <summary>
-        /// Initialises a new settings store with the default Exe config settings storer.
-        /// </summary>
-        public ConfigFileSettings()
-        {
-            _configuration = new Configuration();
-            //_configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        }
-
-        ///<summary>
-        /// Initialises a new settings store with the specified config settings storer.
-        ///</summary>
-        ///<param name="configuration">The Configuration to use to store the settings.</param>
-        public ConfigFileSettings(Configuration configuration)
-        {
-            if (configuration == null) throw new ArgumentNullException("configuration");
-            _configuration = configuration;
-        }
-
         ///<summary>
         /// Returns whether the setting exists or not.
         ///</summary>
@@ -58,8 +38,7 @@ namespace Habanero.Util
         ///<returns>Returns whether the setting exists or not</returns>
         public bool HasSetting(string settingName)
         {
-            //return GetSettingConfigurationElement(settingName) != null;
-            throw new NotImplementedException();
+            return ConfigurationManager.AppSettings[settingName] != null;
         }
 
         /// <summary>
@@ -147,12 +126,13 @@ namespace Habanero.Util
 
         private string GetSettingValue(string settingName)
         {
+            return ConfigurationManager.AppSettings[settingName];
+
             //KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
             //if (configurationElement == null)
             //    throw new InvalidOperationException(
             //        string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
             //return configurationElement.Value;
-            throw new NotImplementedException();
         }
 
         private void SetSettingValue(string settingName, string settingValue)
@@ -167,12 +147,8 @@ namespace Habanero.Util
             //    configurationElement.Value = settingValue;
             //}
             //_configuration.Save(ConfigurationSaveMode.Modified);
-            throw new NotImplementedException();
+            throw new NotImplementedException("Disabled in Xamarin Port!");
         }
 
-        //private KeyValueConfigurationElement GetSettingConfigurationElement(string settingName)
-        //{
-        //    return _configuration.AppSettings.Settings[settingName];
-        //}
     }
 }
