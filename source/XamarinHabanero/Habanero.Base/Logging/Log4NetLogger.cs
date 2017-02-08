@@ -41,9 +41,8 @@ namespace Habanero.Base.Logging
 		///<param name="contextName"></param>
 		public Log4NetLogger(string contextName)
 		{
-            //_contextName = contextName;
-            //_log = LogManager.GetLogger(contextName);
-            throw new NotImplementedException();
+            _contextName = contextName;
+            _log = LogManager.GetLogger(contextName);
         }
 
 		///<summary>

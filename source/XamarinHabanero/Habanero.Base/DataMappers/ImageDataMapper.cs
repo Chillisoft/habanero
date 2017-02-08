@@ -20,8 +20,6 @@
 #endregion
 using System;
 using System.IO;
-using Android.Media;
-using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {

@@ -34,18 +34,18 @@ namespace Habanero.Base.Logging
         ///</summary>
         public Log4NetLoggerFactory()
         {
-            //try
-            //{
-            //    XmlConfigurator.ConfigureAndWatch()
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new XmlException("There was an error reading the XML configuration file. " +
-            //                           "Log4Net could not load its configuration file, " +
-            //                           "if you are using Log4Net as your logger then please .  See the " +
-            //                           "Habanero tutorial for example usage or see official " +
-            //                           "documentation on configuration files if the error is not resolved.", ex);
-            //}
+            try
+            {
+                XmlConfigurator.Configure();
+            }
+            catch (Exception ex)
+            {
+                throw new XmlException("There was an error reading the XML configuration file. " +
+                                       "Log4Net could not load its configuration file, " +
+                                       "if you are using Log4Net as your logger then please .  See the " +
+                                       "Habanero tutorial for example usage or see official " +
+                                       "documentation on configuration files if the error is not resolved.", ex);
+            }
             throw new NotImplementedException();
         }
 

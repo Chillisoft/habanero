@@ -60,7 +60,7 @@ namespace Habanero.Test.Base.DataMappers
         public void TryParsePropValue_ShouldSetReturnValueSame_WhenValueToParseIsAlreadyCorrectType_ForReferenceType()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new GeneralDataMapper(typeof (MediaTypeNames.Image));
+            var dataMapper = new GeneralDataMapper(typeof (Image));
             Image valueToParse = new Bitmap(200, 200);
             object returnValue;
             //---------------Execute Test ----------------------
