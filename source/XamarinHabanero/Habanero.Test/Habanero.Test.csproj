@@ -70,6 +70,9 @@
     <Reference Include="System.Xml">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v1.0\System.Xml.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v1.0\System.Xml.Linq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
@@ -202,7 +205,9 @@
     <EmbeddedResource Include="FirebirdEmbeddedLibrariesForWindows.resx" />
     <EmbeddedResource Include="TestResources.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{407b8f2e-dcea-4eae-a183-b3417e889846}</Project>

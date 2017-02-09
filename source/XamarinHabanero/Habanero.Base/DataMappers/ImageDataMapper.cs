@@ -19,7 +19,10 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
 {
@@ -40,26 +43,25 @@ namespace Habanero.Base.DataMappers
         /// parse the valueToParse.</returns>
         public override bool TryParsePropValue(object valueToParse, out object returnValue)
         {
-            //if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
-            //if (valueToParse is Image)
-            //{
-            //    returnValue = valueToParse;
-            //    return true;
-            //} 
-            //if (valueToParse is byte[])
-            //{
-            //    returnValue = SerialisationUtilities.ByteArrayToObject((byte[])valueToParse);
-            //    return true;
-            //}
-            //if (valueToParse is String)
-            //{
-            //    var bytes = Convert.FromBase64String((string) valueToParse);
-            //    returnValue = new Bitmap(new MemoryStream(bytes));
-            //    return true;
-            //}
-            //returnValue = null;
-            //return false;
-            throw new NotImplementedException();
+            if (base.TryParsePropValue(valueToParse, out returnValue)) return true;
+            if (valueToParse is Image)
+            {
+                returnValue = valueToParse;
+                return true;
+            }
+            if (valueToParse is byte[])
+            {
+                returnValue = SerialisationUtilities.ByteArrayToObject((byte[])valueToParse);
+                return true;
+            }
+            if (valueToParse is String)
+            {
+                var bytes = Convert.FromBase64String((string)valueToParse);
+                returnValue = new Bitmap(new MemoryStream(bytes));
+                return true;
+            }
+            returnValue = null;
+            return false;
         }
 
         /// <summary>
@@ -68,16 +70,15 @@ namespace Habanero.Base.DataMappers
         ///  </summary><param name="value">The value to be converted</param><returns>The converted string.</returns>
         public override string ConvertValueToString(object value)
         {
-            //if (value is Image)
-            //{
-            //    var image = (Image) value;
-            //    var stream = new MemoryStream();
-            //    image.Save(stream, ImageFormat.Jpeg);
-            //    var bytes = stream.ToArray();
-            //    return Convert.ToBase64String(bytes);
-            //}
-            //return Convert.ToString(value);
-            throw new NotImplementedException();
+            if (value is Image)
+            {
+                var image = (Image)value;
+                var stream = new MemoryStream();
+                image.Save(stream, ImageFormat.Jpeg);
+                var bytes = stream.ToArray();
+                return Convert.ToBase64String(bytes);
+            }
+            return Convert.ToString(value);
         }
     }
 }

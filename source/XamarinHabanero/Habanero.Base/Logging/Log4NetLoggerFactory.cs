@@ -46,7 +46,6 @@ namespace Habanero.Base.Logging
                                        "Habanero tutorial for example usage or see official " +
                                        "documentation on configuration files if the error is not resolved.", ex);
             }
-            throw new NotImplementedException();
         }
 
         ///<summary>

@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.DB", "XamarinHaban
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Console", "XamarinHabanero\Habanero.Console\Habanero.Console.csproj", "{9E817015-3B0E-4997-8D39-EB1B25307ECC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Xamarin.Test", "XamarinHabanero\Habanero.Xamarin.Test\Habanero.Xamarin.Test.csproj", "{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "XamarinHabanero\Habanero.Test\Habanero.Test.csproj", "{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,14 +53,14 @@ Global
 		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|x86.ActiveCfg = Release|Any CPU
 		{9E817015-3B0E-4997-8D39-EB1B25307ECC}.Release|x86.Build.0 = Release|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Debug|x86.Build.0 = Debug|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Release|x86.ActiveCfg = Release|Any CPU
-		{D910FD38-7F60-4507-BAC1-BCC4FC52A4C2}.Release|x86.Build.0 = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Debug|x86.Build.0 = Debug|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
