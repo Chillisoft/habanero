@@ -292,11 +292,18 @@
       <Project>{cfa9ceac-09d8-4c29-8e10-52c5160a409f}</Project>
       <Name>Habanero.Test.Structure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
+      <Project>{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}</Project>
+      <Name>Habanero.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Habanero.Test\App.config">
       <Link>App.config</Link>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

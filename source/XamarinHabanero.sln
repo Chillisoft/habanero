@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Console", "Xamarin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test", "XamarinHabanero\Habanero.Test\Habanero.Test.csproj", "{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.BO", "XamarinHabanero\Habanero.Test.BO\Habanero.Test.BO.csproj", "{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.DB", "XamarinHabanero\Habanero.Test.DB\Habanero.Test.DB.csproj", "{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Habanero.Test.Structure", "XamarinHabanero\Habanero.Test.Structure\Habanero.Test.Structure.csproj", "{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +67,30 @@ Global
 		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.ActiveCfg = Release|Any CPU
 		{91F1E27D-31C5-4FBD-A8F2-CE33FA314CF4}.Release|x86.Build.0 = Release|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}.Release|x86.Build.0 = Release|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Debug|x86.Build.0 = Debug|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Release|x86.ActiveCfg = Release|Any CPU
+		{363BEA0D-CA15-413E-ADF2-E2B9B5AC907B}.Release|x86.Build.0 = Release|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Debug|x86.Build.0 = Debug|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Release|x86.ActiveCfg = Release|Any CPU
+		{CFA9CEAC-09D8-4C29-8E10-52C5160A409F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
