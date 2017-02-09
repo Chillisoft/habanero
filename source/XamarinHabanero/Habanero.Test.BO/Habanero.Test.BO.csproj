@@ -292,10 +292,6 @@
       <Project>{cfa9ceac-09d8-4c29-8e10-52c5160a409f}</Project>
       <Name>Habanero.Test.Structure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
-      <Project>{91f1e27d-31c5-4fbd-a8f2-ce33fa314cf4}</Project>
-      <Name>Habanero.Test</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Habanero.Test\App.config">

@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Net.Mime;
 
 namespace Habanero.Base.DataMappers
@@ -47,7 +48,7 @@ namespace Habanero.Base.DataMappers
             _dataMappers.Add(typeof(bool), new BoolDataMapper());
             _dataMappers.Add(typeof(int), new IntDataMapper());
             _dataMappers.Add(typeof(long), new LongDataMapper());
-            _dataMappers.Add(typeof(MediaTypeNames.Image), new ImageDataMapper());
+            _dataMappers.Add(typeof(Image), new ImageDataMapper());
             _dataMappers.Add(typeof(byte[]), new ByteArrayDataMapper());
             _dataMappers.Add(typeof(TimeSpan), new TimeSpanDataMapper());
         }

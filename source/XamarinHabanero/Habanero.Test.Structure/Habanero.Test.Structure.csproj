@@ -83,10 +83,6 @@
       <Project>{3184ea1c-6416-4232-aa39-545f3e79a585}</Project>
       <Name>Habanero.DB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Habanero.Test\Habanero.Test.csproj">
-      <Project>{91f1e27d-31c5-4fbd-a8f2-ce33fa314cf4}</Project>
-      <Name>Habanero.Test</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />

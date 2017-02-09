@@ -19,7 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using Android.Media;
+using System.Drawing;
 
 namespace Habanero.Util
 {

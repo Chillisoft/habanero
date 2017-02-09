@@ -18,8 +18,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System.Drawing;
 using System.Resources;
-using Android.Media;
 using Habanero.Util;
 using NUnit.Framework;
 

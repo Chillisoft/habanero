@@ -31,3 +31,4 @@ using Android.App;
 
 [assembly: InternalsVisibleTo("Habanero.Test.BO")]
 [assembly: InternalsVisibleTo("Habanero.Test")]
+[assembly: InternalsVisibleTo("Habanero.Xamarin.Test")]
