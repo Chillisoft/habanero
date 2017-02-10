@@ -110,7 +110,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var factory = new DataMapperFactory();
-            var targetType = typeof(MediaTypeNames.Image);
+            var targetType = typeof(Image);
             //---------------Execute Test ----------------------
             var dataMapper = factory.GetDataMapper(targetType);
             //---------------Test Result -----------------------

@@ -22,7 +22,10 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
@@ -45,7 +48,9 @@ namespace Habanero.Test.Util
 	    [TestFixtureSetUp]
 	    public void SetupFixture()
 	    {
-	        TestUsingDatabase.SetupDBDataAccessor();
+	        var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             var loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _classDef =
@@ -63,6 +68,7 @@ namespace Habanero.Test.Util
             ClassDef.ClassDefs.Add(_classDef);
 
 	    }
+
 		[Test]
 		public void TestLoadingConstructor()
 		{
@@ -176,46 +182,49 @@ namespace Habanero.Test.Util
 			Assert.AreEqual("test", bo.GetPropertyValue("TestProp").ToString());
 		}
 
-		[Test]
-		public void TestPersistSqlParameterValue()
-		{
-			TestUsingDatabase.SetupDBOracleConnection();
-			IBusinessObject bo = _classDef.CreateNewBusinessObject();
-			bo.SetPropertyValue("TestProp", "test");
-			var sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
-			ISqlStatement sqlStatement = sqlCol.First();
-			IList parameters = sqlStatement.Parameters;
-			IDbDataParameter byteStringParam = (IDbDataParameter)parameters[2];
-			Assert.IsTrue(byteStringParam.Value is byte[], "Should be a byte array");
-			byte[] paramValue = (byte[])byteStringParam.Value;
-			Assert.AreEqual(paramValue.Length, itsByteArrSpelling_test.Length);
-			Assert.AreEqual(paramValue[0], itsByteArrSpelling_test[0]);
-			Assert.AreEqual(paramValue[1], itsByteArrSpelling_test[1]);
-			Assert.AreEqual(paramValue[2], itsByteArrSpelling_test[2]);
-			Assert.AreEqual(paramValue[3], itsByteArrSpelling_test[3]);
-			Assert.AreEqual(paramValue[4], itsByteArrSpelling_test[4]);
-			Assert.AreEqual(paramValue[5], itsByteArrSpelling_test[5]);
-			Assert.AreEqual(paramValue[6], itsByteArrSpelling_test[6]);
-			Assert.AreEqual(paramValue[7], itsByteArrSpelling_test[7]);
-		}
+        [Test]
+        [Ignore("Xamarin InMemory Only")]
+        public void TestPersistSqlParameterValue()
+        {
+            TestUsingDatabase.SetupDBOracleConnection();
+            IBusinessObject bo = _classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("TestProp", "test");
+            var sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
+            ISqlStatement sqlStatement = sqlCol.First();
+            IList parameters = sqlStatement.Parameters;
+            IDbDataParameter byteStringParam = (IDbDataParameter)parameters[2];
+            Assert.IsTrue(byteStringParam.Value is byte[], "Should be a byte array");
+            byte[] paramValue = (byte[])byteStringParam.Value;
+            Assert.AreEqual(paramValue.Length, itsByteArrSpelling_test.Length);
+            Assert.AreEqual(paramValue[0], itsByteArrSpelling_test[0]);
+            Assert.AreEqual(paramValue[1], itsByteArrSpelling_test[1]);
+            Assert.AreEqual(paramValue[2], itsByteArrSpelling_test[2]);
+            Assert.AreEqual(paramValue[3], itsByteArrSpelling_test[3]);
+            Assert.AreEqual(paramValue[4], itsByteArrSpelling_test[4]);
+            Assert.AreEqual(paramValue[5], itsByteArrSpelling_test[5]);
+            Assert.AreEqual(paramValue[6], itsByteArrSpelling_test[6]);
+            Assert.AreEqual(paramValue[7], itsByteArrSpelling_test[7]);
+        }
 
-		[Test]
-		public void PersistSQLparamaterValue_WhenByteArrayNull_WhenMySQL_ShouldNotExist_FIXBUG1741()
-		{
-			//---------------Set up test pack-------------------
-			TestUsingDatabase.SetupDBDataAccessor();
-			var bo = _classDef.CreateNewBusinessObject();
-			bo.SetPropertyValue("ByteArrayProp", null);
-			//---------------Assert Precondition----------------
+        [Test]
+        [Ignore("Xamarin InMemory Only")]
+        public void PersistSQLparamaterValue_WhenByteArrayNull_WhenMySQL_ShouldNotExist_FIXBUG1741()
+        {
+            //---------------Set up test pack-------------------
+            TestUsingDatabase.SetupDBDataAccessor();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            var bo = _classDef.CreateNewBusinessObject();
+            bo.SetPropertyValue("ByteArrayProp", null);
+            //---------------Assert Precondition----------------
 
-			//---------------Execute Test ----------------------
-			var sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
-			var sqlStatement = sqlCol.First();
-			//IList parameters = sqlStatement.Parameters;
+            //---------------Execute Test ----------------------
+            var sqlCol = new TransactionalBusinessObjectDB(bo, DatabaseConnection.CurrentConnection).GetPersistSql();
+            var sqlStatement = sqlCol.First();
+            //IList parameters = sqlStatement.Parameters;
 
-			DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
-			//---------------Test Result -----------------------
-			Assert.Pass("If it got here then it is OK");
-		}
-	}
+            DatabaseConnection.CurrentConnection.ExecuteSql(sqlStatement);
+            //---------------Test Result -----------------------
+            Assert.Pass("If it got here then it is OK");
+        }
+    }
 }

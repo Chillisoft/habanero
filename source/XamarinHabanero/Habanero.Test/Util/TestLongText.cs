@@ -22,9 +22,12 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Habanero.Base;
 using Habanero.Base.DataMappers;
+using Habanero.Base.Util;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
 using Habanero.DB;
@@ -44,7 +47,9 @@ namespace Habanero.Test.Util
         [TestFixtureSetUp]
         public void SetupFixture()
         {
-            TestUsingDatabase.SetupDBDataAccessor();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             ClassDef.ClassDefs.Clear();
             XmlClassLoader loader = new XmlClassLoader(new DtdLoader(), new DefClassFactory());
             _itsClassDef = loader.LoadClass
@@ -225,6 +230,7 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        [Ignore("Xamarin InMemory Only")]
         public void TestPersistSqlParameterType()
         {
             TestUsingDatabase.SetupDBOracleConnection();

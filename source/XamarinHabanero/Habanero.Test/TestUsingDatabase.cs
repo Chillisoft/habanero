@@ -24,11 +24,9 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using FluentMigrator.Infrastructure;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.DB;
-using Habanero.Test.Migrations;
 
 namespace Habanero.Test
 {
@@ -68,17 +66,9 @@ namespace Habanero.Test
             {
                 return currentDatabaseConnection;
             }
-            EnsureDatabaseMigrated(databaseConfig);
+
             return databaseConfig.GetDatabaseConnection();
         }
-
-        private static void EnsureDatabaseMigrated(DatabaseConfig databaseConfig)
-        {
-            var migrator = new Migrator(databaseConfig);
-            migrator.EnsureDatabseExists();    
-            migrator.MigrateToLatest();
-        }
-        
 
         public static void SetupDBOracleConnection()
         {

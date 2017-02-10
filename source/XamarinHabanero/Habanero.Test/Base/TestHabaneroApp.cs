@@ -18,7 +18,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.Console;
 using Habanero.DB;
@@ -88,6 +91,9 @@ namespace Habanero.Test.Base
         [Test]
         public void TestConsoleStartup()
         {
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
             HabaneroAppConsole app = new HabaneroAppConsole("testapp", "v1");
             app.LoadClassDefs = false;
             app.Startup();

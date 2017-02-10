@@ -24,7 +24,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using FluentMigrator.Infrastructure;
 using Habanero.BO;
 using Habanero.Base;
 using Habanero.DB;
