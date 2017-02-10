@@ -38,6 +38,7 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        [Ignore("Xamarin port - Image not PCL Compliant")]
         public void TestTwoWayConversion()
         {
             Image image = (Image)_resourceManager.GetObject("TestJpeg");

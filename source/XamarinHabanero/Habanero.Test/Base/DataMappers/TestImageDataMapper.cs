@@ -46,6 +46,7 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_WorksForImage()
         {
             //---------------Set up test pack-------------------
@@ -60,19 +61,8 @@ namespace Habanero.Test.Base.DataMappers
             Assert.AreSame(valueToParse, parsedValue);
         }
 
-        private static Image LoadBitmapForTest(string name)
-        {
-            var asm = Assembly.GetExecutingAssembly();
-            var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
-
-            using (var stream = asm.GetManifestResourceStream(path))
-            {
-                var foo = Image.FromStream(stream);
-                return foo;
-            }
-        }
-
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ConvertsStringToImage()
         {
             //---------------Set up test pack-------------------
@@ -90,6 +80,7 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ConvertsByteArrayToImage()
         {
             //---------------Set up test pack-------------------
@@ -119,6 +110,7 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void ConvertValueToString_FromBitmap()
         {
             //---------------Set up test pack-------------------
@@ -130,5 +122,16 @@ namespace Habanero.Test.Base.DataMappers
             Assert.AreNotEqual("System.Drawing.Bitmap", strValue);
         }
 
+        private static Image LoadBitmapForTest(string name)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
+
+            using (var stream = asm.GetManifestResourceStream(path))
+            {
+                var foo = Bitmap.FromStream(stream);
+                return foo;
+            }
+        }
     }
 }

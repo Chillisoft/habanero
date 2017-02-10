@@ -185,6 +185,8 @@
     <Compile Include="Util\TestXmlDocumentValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BitmapResources\sample.bmp" />
+    <EmbeddedResource Include="BitmapResources\sample2.bmp" />
     <Content Include="Resources\fbembed.dll" />
     <Content Include="Resources\ib_util.dll" />
     <Content Include="Resources\icudt30.dll" />

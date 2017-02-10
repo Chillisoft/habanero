@@ -1179,6 +1179,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_LessThan_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1318,6 +1319,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_LessThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1456,6 +1458,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_GreaterThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1914,6 +1917,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_Like_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -2305,6 +2309,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_NotLike_Incomparable()
         {
             //---------------Set up test pack-------------------

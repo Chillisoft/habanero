@@ -58,6 +58,7 @@ namespace Habanero.Test.Base.DataMappers
         }      
         
         [Test]
+        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ShouldSetReturnValueSame_WhenValueToParseIsAlreadyCorrectType_ForReferenceType()
         {
             //---------------Set up test pack-------------------
