@@ -1317,8 +1317,8 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new System.Drawing.Bitmap(20, 20));
+            cp.SetPropertyValue("Image", new Bitmap(10, 10));
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new Bitmap(20, 20));
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            

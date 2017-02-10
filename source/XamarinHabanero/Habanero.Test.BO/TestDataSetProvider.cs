@@ -22,7 +22,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -57,7 +59,10 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            this.SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             //OrderItem.CreateTable();
             FixtureEnvironment.ResetBORegistryBusinessObjectManager();
             FixtureEnvironment.ClearBusinessObjectManager();

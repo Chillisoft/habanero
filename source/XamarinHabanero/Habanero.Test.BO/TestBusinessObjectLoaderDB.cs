@@ -19,8 +19,10 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Exceptions;
@@ -42,7 +44,6 @@ namespace Habanero.Test.DB
         public override void SetupTest()
         {
             FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
-            base.SetupTest();
             ContactPersonTestBO.DeleteAllContactPeople();
         }
 
@@ -52,15 +53,13 @@ namespace Habanero.Test.DB
             Car.DeleteAllCars();
         }
 
-        public TestBusinessObjectLoaderDB()
-        {
-            new TestUsingDatabase().SetupDBConnection();
-        }
-
         [TestFixtureSetUp]
         public virtual void SetupDatabaseConnection()
         {
-            new TestUsingDatabase().SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         protected override void SetupDataAccessor()

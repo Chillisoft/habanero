@@ -21,8 +21,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.DB;
@@ -44,6 +46,7 @@ namespace Habanero.Test.BO
         {
             //Runs every time that any testmethod is executed
             //base.SetupTest();
+            
             ClassDef.ClassDefs.Clear();
            // new Address();
             FixtureEnvironment.ResetBORegistryBusinessObjectManager();
@@ -60,18 +63,16 @@ namespace Habanero.Test.BO
             BOTestUtils.DropNewContactPersonAndAddressTables();
         }
 
-        protected static void SetupDataAccessor()
-        {
-            BORegistry.DataAccessor = new DataAccessorDB();
-        }
-
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
             //Code that is executed before any test is run in this class. If multiple tests
             // are executed then it will still only be called once.
-            SetupDataAccessor();
-            new TestUsingDatabase().SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+            
         }
 
         private void CreateContactPersonTable(string tableNameExtension)

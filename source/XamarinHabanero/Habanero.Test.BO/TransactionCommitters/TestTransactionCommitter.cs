@@ -20,7 +20,9 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Exceptions;
@@ -47,12 +49,14 @@ namespace Habanero.Test.BO.TransactionCommitters
         {
             //runs every time any testmethod is complete
         }
+
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            SetupDBConnection();
-            //Code that is executed before any test is run in this class. If multiple tests
-            // are executed then it will still only be called once.
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
         #endregion
 

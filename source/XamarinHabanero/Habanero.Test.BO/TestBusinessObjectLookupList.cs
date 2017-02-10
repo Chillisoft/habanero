@@ -22,9 +22,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -45,10 +47,14 @@ namespace Habanero.Test.BO
         {
             return guid.ToString();//("B").ToUpperInvariant();
         }
+
         [TestFixtureSetUp]
         public void SetupTestFixture()
         {
-            SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
             FixtureEnvironment.SetupNewIsolatedBusinessObjectManager();
         }
 

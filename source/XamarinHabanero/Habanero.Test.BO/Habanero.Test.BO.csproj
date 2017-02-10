@@ -214,7 +214,6 @@
     <Compile Include="TestBusinessObject_InMemory.cs" />
     <Compile Include="TestDataAccessorMultiSource.cs" />
     <Compile Include="TestDataAccessorThreadSplitter.cs" />
-    <Compile Include="TestDatabaseLookupList.cs" />
     <Compile Include="TestDataSetProvider.cs" />
     <Compile Include="TestDataStoreInMemory.cs" />
     <Compile Include="TestDataStoreInMemoryBinaryWriter.cs" />

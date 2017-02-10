@@ -20,8 +20,10 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Exceptions;
@@ -43,14 +45,12 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public virtual void TestFixtureSetup()
         {
-            SetupDataAccessor();
-        }
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
 
-        protected virtual void SetupDataAccessor()
-        {
-            TestUsingDatabase.SetupDBDataAccessor();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
-
+        
         [TearDown]
         public void TearDown()
         {
@@ -60,7 +60,6 @@ namespace Habanero.Test.BO
         [SetUp]
         public virtual void SetupTest()
         {
-            SetupDataAccessor();
             ClassDef.ClassDefs.Clear();
            // new Address();
         }

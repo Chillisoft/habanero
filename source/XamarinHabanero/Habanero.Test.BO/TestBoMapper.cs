@@ -19,7 +19,9 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Exceptions;
@@ -48,8 +50,11 @@ namespace Habanero.Test.BO
 		[TestFixtureSetUp]
 		public void SetupTestFixture()
 		{
-			this.SetupDBConnection();
-		}
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+        }
 
 		[Test]
 // ReSharper disable InconsistentNaming

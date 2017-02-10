@@ -19,7 +19,10 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
+using Habanero.BO;
 using Habanero.BO.CriteriaManager;
 using Habanero.DB;
 using NUnit.Framework;
@@ -37,7 +40,10 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            this.SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         private static SqlStatement CreateSqlStatement()

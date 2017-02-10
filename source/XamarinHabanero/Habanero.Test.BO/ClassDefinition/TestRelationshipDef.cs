@@ -19,8 +19,10 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
+using System.Reflection;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
@@ -41,7 +43,10 @@ namespace Habanero.Test.BO.ClassDefinition
         [TestFixtureSetUp]
         public void init()
         {
-            this.SetupDBConnection();
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
 
             mMockBo = new MockBO();
             mPropDefCol = mMockBo.PropDefCol;

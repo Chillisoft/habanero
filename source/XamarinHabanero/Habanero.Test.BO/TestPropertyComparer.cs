@@ -18,7 +18,10 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
+using System.Reflection;
 using Habanero.Base;
+using Habanero.Base.Util;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
@@ -33,8 +36,13 @@ namespace Habanero.Test.BO
         [SetUp]
         public void SetupTest()
         {
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
+
+            BORegistry.DataAccessor = new DataAccessorInMemory();
+
             ClassDef.ClassDefs.Clear();
-            SetupDBConnection();
+            
         }
 
         [Test]

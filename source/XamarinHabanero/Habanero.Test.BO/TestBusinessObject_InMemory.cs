@@ -1,3 +1,6 @@
+using System.Reflection;
+using Habanero.Base.Util;
+using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Test.Structure;
 using NUnit.Framework;
@@ -10,25 +13,22 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public override void TestFixtureSetup()
         {
-            SetupDataAccessor();
-        }
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
 
-        protected override void SetupDataAccessor()
-        {
-            FixtureEnvironment.SetupInMemoryDataAccessor();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
-
+        
         [SetUp]
         public override void SetupTest()
         {
-            SetupDataAccessor();
+            
             FixtureEnvironment.ClearBusinessObjectManager();
             TestUtil.WaitForGC();
             ClassDef.ClassDefs.Clear();
             //new Address();
         }
-
-
+        
         [Test]
         public void Test_ToString_WhenHasObjectID_ShouldReturnObjectIDToString()
         {
