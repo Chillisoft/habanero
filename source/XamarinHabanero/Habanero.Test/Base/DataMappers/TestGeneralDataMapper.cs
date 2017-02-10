@@ -19,10 +19,11 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Drawing;
-using System.Net.Mime;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
 
 namespace Habanero.Test.Base.DataMappers
 {
@@ -61,7 +62,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var dataMapper = new GeneralDataMapper(typeof (Image));
-            Image valueToParse = new Bitmap(200, 200);
+            var valueToParse = LoadBitmapForTest("sample.bmp");
             object returnValue;
             //---------------Execute Test ----------------------
             var result = dataMapper.TryParsePropValue(valueToParse, out returnValue);
@@ -151,6 +152,18 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsTrue(result);
             Assert.AreEqual(expectedValue, parsedValue);
+        }
+
+        private static Image LoadBitmapForTest(string name)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
+
+            using (var stream = asm.GetManifestResourceStream(path))
+            {
+                var foo = Image.FromStream(stream);
+                return foo;
+            }
         }
     }
 }

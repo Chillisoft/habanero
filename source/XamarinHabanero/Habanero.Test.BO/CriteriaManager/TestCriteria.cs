@@ -20,9 +20,12 @@
 #endregion
 using System;
 using System.Drawing;
-using System.Linq.Expressions;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Xml.Linq;
 using Habanero.Base;
-using Habanero.Base.Exceptions;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
@@ -1182,8 +1185,12 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, new System.Drawing.Bitmap(20, 20));
+
+            var testImage = LoadBitmapForTest("sample.bmp");
+            var testImage2 = LoadBitmapForTest("sample2.bmp");
+
+            cp.SetPropertyValue("Image", testImage);
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, testImage2);
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
@@ -1317,8 +1324,12 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, new Bitmap(20, 20));
+
+            var testImage = LoadBitmapForTest("sample.bmp");
+            var testImage2 = LoadBitmapForTest("sample2.bmp");
+
+            cp.SetPropertyValue("Image", testImage);
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, testImage2);
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
@@ -1451,8 +1462,11 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, new System.Drawing.Bitmap(20, 20));
+            var testImage = LoadBitmapForTest("sample.bmp");
+            var testImage2 = LoadBitmapForTest("sample2.bmp");
+
+            cp.SetPropertyValue("Image", testImage);
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, testImage2);
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             //---------------Assert PreConditions---------------            
@@ -1906,8 +1920,12 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, new System.Drawing.Bitmap(20, 20));
+
+            var testImage = LoadBitmapForTest("sample.bmp");
+            var testImage2 = LoadBitmapForTest("sample2.bmp");
+
+            cp.SetPropertyValue("Image", testImage);
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, testImage2);
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
 
@@ -2293,8 +2311,12 @@ namespace Habanero.Test.BO
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            cp.SetPropertyValue("Image", new System.Drawing.Bitmap(10, 10));
-            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, new System.Drawing.Bitmap(20, 20));
+
+            var testImage = LoadBitmapForTest("sample.bmp");
+            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            
+            cp.SetPropertyValue("Image", testImage);
+            Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, testImage2);
             cp.Surname = TestUtil.GetRandomString();
             cp.Save();
             
@@ -2312,6 +2334,19 @@ namespace Habanero.Test.BO
                 StringAssert.Contains("does not implement IComparable and cannot be matched", ex.Message);
             }
         }
+
+        private static Image LoadBitmapForTest(string name)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
+
+            using (var stream = asm.GetManifestResourceStream(path))
+            {
+                var foo = Image.FromStream(stream);
+                return foo;
+            }
+        }
+
         [Test]
         public void Test_ToString_LeafCriteria_String_NotLike()
         {

@@ -57,7 +57,7 @@ namespace Habanero.Base.DataMappers
             if (valueToParse is String)
             {
                 var bytes = Convert.FromBase64String((string)valueToParse);
-                returnValue = new Bitmap(new MemoryStream(bytes));
+                returnValue = Image.FromStream(new MemoryStream(bytes));
                 return true;
             }
             returnValue = null;

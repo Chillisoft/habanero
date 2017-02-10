@@ -19,6 +19,9 @@
 // ---------------------------------------------------------------------------------
 #endregion
 
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using Habanero.Base.DataMappers;
 using Habanero.Util;
 using NUnit.Framework;
@@ -41,12 +44,13 @@ namespace Habanero.Test.Base.DataMappers
             Assert.IsTrue(parseSucceed);
             Assert.IsNull(parsedValue);
         }
+
         [Test]
         public void TryParsePropValue_WorksForImage()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var valueToParse = new System.Drawing.Bitmap(100, 100);
+            var valueToParse = LoadBitmapForTest("sample.bmp");
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
@@ -56,21 +60,33 @@ namespace Habanero.Test.Base.DataMappers
             Assert.AreSame(valueToParse, parsedValue);
         }
 
+        private static Image LoadBitmapForTest(string name)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
+
+            using (var stream = asm.GetManifestResourceStream(path))
+            {
+                var foo = Image.FromStream(stream);
+                return foo;
+            }
+        }
+
         [Test]
         public void TryParsePropValue_ConvertsStringToImage()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = new System.Drawing.Bitmap(100, 100);
+            var img = LoadBitmapForTest("sample.bmp");
             var valueToParse = dataMapper.ConvertValueToString(img);
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
-            Assert.IsInstanceOf(typeof(System.Drawing.Bitmap), parsedValue);
-            Assert.AreEqual(img.Width, ((System.Drawing.Bitmap)parsedValue).Width);
-            Assert.AreEqual(img.Height, ((System.Drawing.Bitmap)parsedValue).Height);
+            Assert.IsInstanceOf(typeof(Bitmap), parsedValue);
+            Assert.AreEqual(img.Width, ((Bitmap)parsedValue).Width);
+            Assert.AreEqual(img.Height, ((Bitmap)parsedValue).Height);
         }
 
         [Test]
@@ -78,16 +94,16 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = new System.Drawing.Bitmap(100, 100);
+            var img = LoadBitmapForTest("sample.bmp");
             var valueToParse = SerialisationUtilities.ObjectToByteArray(img);
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
-            Assert.IsInstanceOf(typeof(System.Drawing.Bitmap), parsedValue);
-            Assert.AreEqual(img.Width, ((System.Drawing.Bitmap)parsedValue).Width);
-            Assert.AreEqual(img.Height, ((System.Drawing.Bitmap)parsedValue).Height);
+            Assert.IsInstanceOf(typeof(Bitmap), parsedValue);
+            Assert.AreEqual(img.Width, ((Bitmap)parsedValue).Width);
+            Assert.AreEqual(img.Height, ((Bitmap)parsedValue).Height);
         }
 
         [Test]
@@ -107,7 +123,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = new System.Drawing.Bitmap(100, 100);
+            var img = LoadBitmapForTest("sample.bmp");
             //---------------Execute Test ----------------------
             string strValue = dataMapper.ConvertValueToString(img);
             //---------------Test Result -----------------------

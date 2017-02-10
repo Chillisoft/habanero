@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 using System.Linq;
+using System.Reflection;
+using Habanero.Base.Util;
+using Habanero.BO;
 
 namespace Habanero.Test.BO
 {
@@ -16,12 +19,10 @@ namespace Habanero.Test.BO
         [TestFixtureSetUp]
         public void TestFixtureSetup()
         {
-            SetupDataAccessor();
-        }
+            var asm = Assembly.GetExecutingAssembly();
+            ConfigurationManager.Initialise(asm);
 
-        private void SetupDataAccessor()
-        {
-            TestUsingDatabase.SetupDBDataAccessor();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         [Test]
