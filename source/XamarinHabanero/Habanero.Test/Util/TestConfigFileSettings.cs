@@ -20,6 +20,8 @@
 #endregion
 
 using System;
+using System.Globalization;
+using Habanero.Base.Util;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -59,6 +61,7 @@ namespace Habanero.Test.Util
             ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             string settingValue = TestUtil.GetRandomString();
+            ConfigurationManager.AppSettings[settingName] = settingValue;
             //---------------Execute Test ----------------------
             string returnedSettingValue = configFileSettings.GetString(settingName);
             //---------------Test Result -----------------------
@@ -104,8 +107,7 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
-            //---------------Assert Preconditions --------------
-
+            
             //---------------Execute Test ----------------------
             Exception exception = null;
             try
@@ -129,7 +131,7 @@ namespace Habanero.Test.Util
             ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             decimal settingValue = GetRandomDecimal();
-            //---------------Execute Test ----------------------
+            ConfigurationManager.AppSettings[settingName] = settingValue.ToString(CultureInfo.InvariantCulture);
             decimal returnedSettingValue = configFileSettings.GetDecimal(settingName);
             //---------------Test Result -----------------------
             Assert.AreEqual(settingValue, returnedSettingValue);
@@ -182,7 +184,6 @@ namespace Habanero.Test.Util
             //---------------Set up test pack-------------------
             ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
-
             //---------------Execute Test ----------------------
             Exception exception = null;
             try
@@ -206,6 +207,7 @@ namespace Habanero.Test.Util
             ConfigFileSettings configFileSettings = new ConfigFileSettings();
             string settingName = TestUtil.GetRandomString();
             bool settingValue = GetRandomBoolean();
+            ConfigurationManager.AppSettings[settingName] = settingValue.ToString(CultureInfo.InvariantCulture);
             //---------------Execute Test ----------------------
             bool returnedSettingValue = configFileSettings.GetBoolean(settingName);
             //---------------Test Result -----------------------

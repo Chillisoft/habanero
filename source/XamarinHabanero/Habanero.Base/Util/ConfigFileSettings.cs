@@ -125,13 +125,11 @@ namespace Habanero.Util
 
         private string GetSettingValue(string settingName)
         {
-            return ConfigurationManager.AppSettings[settingName];
-
-            //KeyValueConfigurationElement configurationElement = GetSettingConfigurationElement(settingName);
-            //if (configurationElement == null)
-            //    throw new InvalidOperationException(
-            //        string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
-            //return configurationElement.Value;
+            var configurationElement = ConfigurationManager.AppSettings[settingName];
+            if (configurationElement == null)
+                throw new InvalidOperationException(
+                    string.Format("The key '{0}' does not exist in the appSettings configuration section.", settingName));
+            return configurationElement;
         }
 
         private void SetSettingValue(string settingName, string settingValue)
