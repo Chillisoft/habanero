@@ -50,11 +50,11 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         [SetUp]
         public virtual void SetupTest()
         {
-            lock (_threadingIssue)
-            {
+            //lock (_threadingIssue)
+            //{
                 // wait for lock to avoid threading problems
                 ClassDef.ClassDefs.Clear();
-            }
+            //}
 
             SetupDataAccessor();
             FixtureEnvironment.ClearBusinessObjectManager();
