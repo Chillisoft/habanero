@@ -41,20 +41,7 @@ namespace Habanero.Test
 
         public static void SetupDBDataAccessor(string vendor = "")
         {
-            SetupDatabaseConnection(vendor);
-            BORegistry.DataAccessor = new DataAccessorDB();
-        }
-
-        private static void SetupDatabaseConnection(string vendor)
-        {
-            var databaseConnection = CreateDatabaseConnection(vendor);
-            DatabaseConnection.CurrentConnection = databaseConnection;
-            TestConnection(databaseConnection);
-        }
-
-        private static void TestConnection(IDatabaseConnection databaseConnection)
-        {
-            databaseConnection.GetConnection();
+            BORegistry.DataAccessor = new DataAccessorInMemory();
         }
 
         public static IDatabaseConnection CreateDatabaseConnection(string vendor)

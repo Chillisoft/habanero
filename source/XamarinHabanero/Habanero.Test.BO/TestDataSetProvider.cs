@@ -78,7 +78,6 @@ namespace Habanero.Test.BO
         public void SetupTest()
         {
             GlobalRegistry.UIExceptionNotifier = new RethrowingExceptionNotifier();
-            this.SetupDBConnection();
             ClassDef.ClassDefs.Clear();
             //new Address();
         }
@@ -195,6 +194,7 @@ namespace Habanero.Test.BO
             Assert.IsFalse(dataSetProvider.RegisterForBusinessObjectPropertyUpdatedEvents);
 
         }
+
         [Test]
         public void TestCorrectNumberOfRows()
         {
@@ -202,12 +202,6 @@ namespace Habanero.Test.BO
             Assert.AreEqual(2, itsTable.Rows.Count);
         }
 
-        //        [Test]
-        //        public void TestCorrectNumberOfColumns()
-        //        {
-        //            SetupTestData();
-        //            Assert.AreEqual(3, itsTable.Columns.Count);
-        //        }
         protected static BusinessObjectCollection<MyBO> CreateCollectionWith_4_Objects()
         {
             MyBO cp = new MyBO { TestProp = "b" };
@@ -217,6 +211,8 @@ namespace Habanero.Test.BO
             BusinessObjectCollection<MyBO> col = new BusinessObjectCollection<MyBO> { { cp, cp2, cp3, cp4 } };
             return col;
         }
+
+        // Xamarin Port?
         //        [Test]
         //        public void Test_UpdateBusinessObjectUpdatesRow()
         //        {

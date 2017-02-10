@@ -78,37 +78,6 @@ namespace Habanero.Test.BO.Relationship
             Assert.AreSame(contactPerson, relationship.GetRelatedObject());
         }
 
-//        public void SetupDBConnection()
-//        {
-//            if (DatabaseConnection.CurrentConnection != null &&
-//                DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionMySql))
-//            {
-//                return;
-//            }
-//            DatabaseConnection.CurrentConnection =
-//                new DatabaseConnectionMySql("MySql.Data", "MySql.Data.MySqlClient.MySqlConnection");
-//            DatabaseConnection.CurrentConnection.ConnectionString =
-//                MyDBConnection.GetDatabaseConfig().GetConnectionString();
-//            DatabaseConnection.CurrentConnection.GetConnection();
-//
-//            BORegistry.DataAccessor = new DataAccessorDB();
-//        }
-//
-//        public void SetupDBOracleConnection()
-//        {
-//            if (DatabaseConnection.CurrentConnection != null &&
-//                DatabaseConnection.CurrentConnection.GetType() == typeof(DatabaseConnectionOracle))
-//            {
-//                return;
-//            }
-//            DatabaseConnection.CurrentConnection =
-//                new DatabaseConnectionOracle("System.Data.OracleClient", "System.Data.OracleClient.OracleConnection");
-//            ConnectionStringOracleFactory oracleConnectionString = new ConnectionStringOracleFactory();
-//            string connStr = oracleConnectionString.GetConnectionString("core1", "XE", "system", "system", "1521");
-//            DatabaseConnection.CurrentConnection.ConnectionString = connStr;
-//            DatabaseConnection.CurrentConnection.GetConnection();
-//            BORegistry.DataAccessor = new DataAccessorDB();
-//        }
         [Test]
         public  virtual void Test_SetParent_PersistedChild_FindLoadLookupListError()
         {
