@@ -61,7 +61,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestAcceptance_GenerateFirstNumber_SeedZero()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestAcceptance_GenerateFirstNumber_SeedZero()
 		{
 			//---------------Clean Up --------------------------
 			//Create an entry in the number generator table for entry type to seed.
@@ -83,7 +84,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestAcceptance_GenerateFirstNumber_SeedZero_WithNoLoadedClassDefs()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestAcceptance_GenerateFirstNumber_SeedZero_WithNoLoadedClassDefs()
 		{
 			//---------------Clean Up --------------------------
 			//Create an entry in the number generator table for entry type to seed.
@@ -102,8 +104,10 @@ namespace Habanero.Test.BO
 			Assert.AreEqual(1, nextNum);
 			//---------------Tear Down -------------------------  
 		}
+
 		[Test]
-		public void TestAcceptance_GenerateFirstNumber_NoSeed()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestAcceptance_GenerateFirstNumber_NoSeed()
 		{
 			//Delete entry from database for the number type.
 			BOSequenceNumber.LoadNumberGenClassDef();
@@ -121,7 +125,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestAcceptance_GenerateFirstNumber_SeedNonZero()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestAcceptance_GenerateFirstNumber_SeedNonZero()
 		{
 			//---------------Set up test pack-------------------
 			//Create an entry in the number generator table for entry type to seed with seed = 100.
@@ -141,6 +146,7 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
 		public void TestAcceptance_GenerateSecondNumber_IncrementFirstNumber()
 		{
 			//---------------Set up test pack-------------------
@@ -242,7 +248,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
 		{
 			//---------------Set up test pack-------------------
 			CleanupNumberGenerator();
@@ -258,7 +265,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestSetSequenceNumber()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestSetSequenceNumber()
 		{
 			//---------------Set up test pack-------------------
 			BOSequenceNumber.LoadNumberGenClassDef();
@@ -275,7 +283,8 @@ namespace Habanero.Test.BO
 		}
 
 		[Test]
-		public void TestDifferentTableName()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestDifferentTableName()
 		{
 			//---------------Set up test pack-------------------
 			//Delete entry from database for the number type.
@@ -296,7 +305,8 @@ namespace Habanero.Test.BO
 
 
 		[Test]
-		public void TestDifferentTableNameGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
+        [Ignore("Required active Connection - Not Xamarin Safe")]
+        public void TestDifferentTableNameGetSecondNumber_FromSeperateNumberGeneratorInstance_AfterUpdate()
 		{
 			//---------------Clean Up --------------------------
 			BOSequenceNumber.LoadNumberGenClassDef("another_number_generator");

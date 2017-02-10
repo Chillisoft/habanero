@@ -743,7 +743,7 @@ namespace Habanero.Test.BO.Relationship
             ClassDef.ClassDefs.Clear();
             ClassDef.ClassDefs.Add(new XmlClassDefsLoader(BOBroker.GetClassDefsXml(), new DtdLoader(), new DefClassFactory()).LoadClassDefs());
 
-            Habanero.Test.Structure.Person person = new Person();
+            Person person = new Person();
             person.LastName = "bob";
             Vehicle vehicle = new Vehicle();
             vehicle.DateAssembled = DateTime.Now;

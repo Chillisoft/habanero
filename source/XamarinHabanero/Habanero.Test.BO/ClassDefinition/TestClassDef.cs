@@ -632,6 +632,7 @@ namespace Habanero.Test.BO.ClassDefinition
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestProtectedSets()
         {
             FakeClassDef classDef = new FakeClassDef();

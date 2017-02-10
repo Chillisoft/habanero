@@ -1775,8 +1775,7 @@ namespace Habanero.Test
 
 		public static void DeleteAllMyBos()
 		{
-			string sql = "DELETE FROM mybo";
-			DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+			
 		}
 
 		public void AddBusinessRule(IBusinessObjectRule businessObjectRuleStub)

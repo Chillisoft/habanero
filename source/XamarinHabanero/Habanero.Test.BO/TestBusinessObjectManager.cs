@@ -1593,6 +1593,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void Test3LayerLoadRelated()
         {
             //---------------Set up test pack-------------------

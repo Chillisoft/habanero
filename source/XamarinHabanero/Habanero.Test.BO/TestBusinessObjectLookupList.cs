@@ -714,6 +714,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void Test_CreateDisplayValueDictionary_Sorted()
         {
             //--------------- Set up test pack ------------------
@@ -741,6 +742,7 @@ namespace Habanero.Test.BO
         } 
         
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void Test_CreateDisplayValueDictionary_NoSort()
         {
             //--------------- Set up test pack ------------------
@@ -767,7 +769,9 @@ namespace Habanero.Test.BO
             Assert.IsTrue(dictionary.ContainsValue(myBO2.ID.ToString()));
             Assert.IsTrue(dictionary.ContainsValue(myBO3.ID.ToString()));
         }        
+
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void Test_CreateDisplayValueDictionary_WhenToStringIsNull_ShouldNotRaiseError()
         {
             //--------------- Set up test pack ------------------

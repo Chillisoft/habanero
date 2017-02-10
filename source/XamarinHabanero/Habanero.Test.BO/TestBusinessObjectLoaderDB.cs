@@ -99,6 +99,7 @@ namespace Habanero.Test.DB
         #endregion
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObjectByIDInt_ByCriteriaObject()
         {
             //---------------Set up test pack-------------------
@@ -118,6 +119,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObjectByIDInt_ByCriteriaString()
         {
             //---------------Set up test pack-------------------
@@ -137,6 +139,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObjectByIDInt_CriteriaString_Untyped()
         {
             //---------------Set up test pack-------------------
@@ -156,6 +159,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObjectByIDIntSavenewAutoIncNumber()
         {
             //---------------Set up test pack-------------------
@@ -283,6 +287,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObject_MultipleCriteria()
         {
             //---------------Set up test pack-------------------
@@ -315,6 +320,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObject_MultipleCriteria_CriteriaString()
         {
             //---------------Set up test pack-------------------
@@ -347,6 +353,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObject_MultipleCriteria_CriteriaString_Untyped()
         {
             //---------------Set up test pack-------------------
@@ -380,6 +387,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetBusinessObject_SelectQuery_Fresh()
         {
             //---------------Set up test pack-------------------
@@ -419,6 +427,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestLoadFromDatabaseAlwaysLoadsSameObject()
         {
             //---------------Set up test pack-------------------
@@ -463,6 +472,7 @@ namespace Habanero.Test.DB
         /// Note_: This behaviour is configurable using a strategy TestDontGetTheFreshestObject_Strategy test 
         /// </summary>
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetTheFreshestObject_Strategy()
         {
             //------------------------------Setup Test----------------------------
@@ -509,6 +519,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestLoadedObjectIsAddedToObjectManager()
         {
             //---------------Set up test pack-------------------
@@ -637,10 +648,9 @@ namespace Habanero.Test.DB
             Assert.IsTrue(updatedEventFired);
         }
 
-
-
-
+        
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestBoLoader_RefreshBusinessObjectDeletedByAnotherUser()
         {
             //-------------Setup Test Pack------------------

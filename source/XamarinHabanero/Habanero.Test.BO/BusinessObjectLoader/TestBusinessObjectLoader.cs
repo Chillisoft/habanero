@@ -831,7 +831,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         //    ContactPersonTestBO contact = new ContactPersonTestBO();
         //    contact.Surname = surname;
         //    contact.FirstName = firstName;
-        //    contact.Save();
+        //    contact.Save();TestGetRelatedBusinessObjectCollection_LoadedViaRelationship
         //    return contact;
         //}
 

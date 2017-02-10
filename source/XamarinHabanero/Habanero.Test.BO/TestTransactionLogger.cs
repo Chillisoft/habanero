@@ -78,10 +78,7 @@ namespace Habanero.Test.BO
             // i.e. the transaction log object was not added to the transaction.
             Assert.AreEqual(1, tc.ExecutedTransactions.Count);
         }
-
-      
-
-
+        
         private static ContactPersonTransactionLogging CreateUnsavedContactPersonTransactionLogging()
         {
             ContactPersonTransactionLogging cp = new ContactPersonTransactionLogging();
@@ -91,6 +88,7 @@ namespace Habanero.Test.BO
 
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestAcceptanceTransactionLog_DB_NewContactPerson()
         {
             //Test that the transaction log 
@@ -122,6 +120,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestAcceptanceTransactionLog_DB_EditContactPerson()
         {
             //Test that the transaction log 
@@ -151,6 +150,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestAcceptanceTransactionLog_DB_DeleteContactPerson()
         {
             //---------------Set up test pack-------------------
@@ -230,6 +230,7 @@ namespace Habanero.Test.BO
 
         //LoadClassDef_SurnameAlternateKey
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestAcceptanceTransactionLog_SaveMultipleTimes()
         {
             //---------------Cleanup databse ------------------
@@ -269,6 +270,7 @@ namespace Habanero.Test.BO
 
         //Moved from tester class
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestDirtyXml()
         {
             ContactPersonTransactionLogging myContact_1 = new ContactPersonTransactionLogging();

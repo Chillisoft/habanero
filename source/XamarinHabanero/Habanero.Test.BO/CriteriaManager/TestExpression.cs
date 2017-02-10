@@ -71,6 +71,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionNoTableName()
         {
             IExpression exp =
@@ -87,6 +88,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionWithTableName()
         {
             IExpression exp =
@@ -101,6 +103,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionWithTableNameNoFieldSeparators()
         {
             IExpression exp =
@@ -114,6 +117,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionWithInvertedCommas()
         {
             IExpression exp =
@@ -136,6 +140,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionWithInOperator()
         {
             IExpression exp =
@@ -148,6 +153,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseExpressionTree()
         {
             IExpression exp =
@@ -168,6 +174,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestCreateDatabaseIsNull()
         {
             IExpression exp =
@@ -206,6 +213,7 @@ namespace Habanero.Test.BO
         //}
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestExpressionParsingSql()
         {
             IExpression exp = Expression.CreateExpression("Field1 = 'test' and Field2 = 'test2' or Field2 = 'test2'");
@@ -218,6 +226,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestExpressionParsingSqlSingleParameter()
         {
             IExpression exp = Expression.CreateExpression("Field1 = 'test'");
@@ -228,6 +237,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestParameterSqlInfo()
         {
             IParameterSqlInfo paramSql1 =
@@ -241,6 +251,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestParameterSqlInfoWithMoreThanOne()
         {
             IParameterSqlInfo paramSql1 =
@@ -258,6 +269,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestOrInBracketsWithAndOutsideBrackets()
         {
             IExpression exp = Expression.CreateExpression("param1 = 'test' AND (param2 = 3 or param2 = 4)");
@@ -343,7 +355,9 @@ namespace Habanero.Test.BO
             Assert.IsNotNull(parameterValueAsObject);
             Assert.AreEqual(DateTimeToday.Value.AddDays(1), parameterValueAsObject);
         }
+
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestGetSqlStringWithNoParameters()
         {
             Parameter param = new Parameter("prop", "table", "field", "=", "value", ParameterType.String);
@@ -351,6 +365,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestSqlExpressionString()
         {
             SqlStatement statement = CreateSqlStatement();

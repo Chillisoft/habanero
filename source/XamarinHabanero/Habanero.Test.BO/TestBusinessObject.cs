@@ -623,6 +623,7 @@ namespace Habanero.Test.BO
         }
 
         [Test]
+        [Ignore("Required active Connection - Not Xamarin Safe")]
         public void TestApplyEditResetsPreviousValues()
         {
             //---------------Set up test pack-------------------

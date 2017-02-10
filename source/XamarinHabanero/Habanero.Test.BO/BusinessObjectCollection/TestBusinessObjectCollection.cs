@@ -415,7 +415,6 @@ namespace Habanero.Test.BO.BusinessObjectCollection
         public void Test_RefreshCollectionDoesNotRefreshDirtyOject()
         {
             //---------------Set up test pack-------------------
-            BORegistry.DataAccessor = new DataAccessorDB();
             ContactPersonTestBO.LoadDefaultClassDef();
             BusinessObjectCollection<ContactPersonTestBO> col = new BusinessObjectCollection<ContactPersonTestBO>();
             

@@ -993,71 +993,25 @@ namespace Habanero.Test.BO
 
         public static void DeleteAllContactPeople()
         {
-            if (BORegistry.DataAccessor is DataAccessorInMemory)
-            {
-                return;
-            }
-            if(BORegistry.DataAccessor is DataAccessorMultiSource)
-            {
-                return;
-            }
-            string sql = "DELETE FROM contact_person_address";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-            sql = "DELETE FROM Contact_Person";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            return;
         }
 
 
         public static void DeleteAllContactPeople(string contactPersonTableName)
         {
-            if (BORegistry.DataAccessor is DataAccessorInMemory)
-            {
-                return;
-            }
-            if (BORegistry.DataAccessor is DataAccessorMultiSource)
-            {
-                return;
-            }
-            string sql = "DELETE FROM contact_person_address";
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-            sql = "DELETE FROM " + contactPersonTableName;
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            return;
         }
 
         public static void DropContactPersonTable(string contactPersonTableName)
         {
-            if (BORegistry.DataAccessor is DataAccessorInMemory)
-            {
-                return;
-            }
-            if (BORegistry.DataAccessor is DataAccessorMultiSource)
-            {
-                return;
-            }
-            //string sql = "DELETE FROM contact_person_address";
-            //DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
-
-            var sqlFormatter = DatabaseConnection.CurrentConnection.SqlFormatter;
-            var sql = "DROP TABLE " + sqlFormatter.DelimitTable(contactPersonTableName);
-
-            DatabaseConnection.CurrentConnection.ExecuteRawSql(sql);
+            return;
         }
 
         public static void CreateContactPersonTable(string tableName)
         {
-            if (BORegistry.DataAccessor is DataAccessorInMemory)
-            {
-                return;
-            }
-            if (BORegistry.DataAccessor is DataAccessorMultiSource)
-            {
-                return;
-            }
-
+            return;
         }
         
-        
-
         public static void CreateSampleData()
         {
             ClassDef.ClassDefs.Clear();
