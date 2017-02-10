@@ -150,6 +150,10 @@
       <Project>{3184ea1c-6416-4232-aa39-545f3e79a585}</Project>
       <Name>Habanero.DB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Habanero.Test.BO\Habanero.Test.BO.csproj">
+      <Project>{DB8EC953-3A36-46E1-BDF8-C3D30F2A9104}</Project>
+      <Name>Habanero.Test.BO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Test.Structure\Habanero.Test.Structure.csproj">
       <Project>{cfa9ceac-09d8-4c29-8e10-52c5160a409f}</Project>
       <Name>Habanero.Test.Structure</Name>
