@@ -83,8 +83,7 @@ namespace Habanero.Test.BO.Relationship
         {
             //---------------Set up test pack-------------------
             TestUsingDatabase.SetupDBDataAccessor();
-
-            BORegistry.DataAccessor = new DataAccessorDB();
+            
             OrganisationTestBO organisation = OrganisationTestBO.CreateSavedOrganisation(); 
             GetAssociationRelationship(organisation);
             ContactPersonTestBO contactPerson = ContactPersonTestBO.CreateSavedContactPerson();
