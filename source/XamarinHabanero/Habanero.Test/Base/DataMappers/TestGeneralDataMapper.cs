@@ -18,12 +18,14 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
+
 using System;
+using System.Collections.Generic;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using Android.Media;
 
 namespace Habanero.Test.Base.DataMappers
 {
@@ -58,12 +60,11 @@ namespace Habanero.Test.Base.DataMappers
         }      
         
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ShouldSetReturnValueSame_WhenValueToParseIsAlreadyCorrectType_ForReferenceType()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new GeneralDataMapper(typeof (Image));
-            var valueToParse = LoadBitmapForTest("sample.bmp");
+            var valueToParse = LoadImageForTest("TestJpeg.jpg");
             object returnValue;
             //---------------Execute Test ----------------------
             var result = dataMapper.TryParsePropValue(valueToParse, out returnValue);
@@ -155,15 +156,21 @@ namespace Habanero.Test.Base.DataMappers
             Assert.AreEqual(expectedValue, parsedValue);
         }
 
-        private static Image LoadBitmapForTest(string name)
+        private static Image LoadImageForTest(string name)
         {
             var asm = Assembly.GetExecutingAssembly();
             var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
 
             using (var stream = asm.GetManifestResourceStream(path))
             {
-                var foo = Image.FromStream(stream);
-                return foo;
+                var bytes = new List<byte>();
+                byte toRead = 0;
+                while ((toRead = (byte)stream.ReadByte()) != -1)
+                {
+                    bytes.Add(toRead);
+                }
+                var result = (Image)Image.FromArray(bytes.ToArray());
+                return result;
             }
         }
     }

@@ -19,9 +19,11 @@
 // ---------------------------------------------------------------------------------
 #endregion
 
-using System.Drawing;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Android.Graphics;
+using Android.Media;
 using Habanero.Base.DataMappers;
 using Habanero.Util;
 using NUnit.Framework;
@@ -46,12 +48,11 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_WorksForImage()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var valueToParse = LoadBitmapForTest("sample.bmp");
+            var valueToParse = LoadImageForTest("TestJpeg.jpg");
             object parsedValue;
             //---------------Execute Test ----------------------
             var parseSucceed = dataMapper.TryParsePropValue(valueToParse, out parsedValue);
@@ -62,12 +63,11 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ConvertsStringToImage()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = LoadBitmapForTest("sample.bmp");
+            var img = LoadImageForTest("TestJpeg.jpg");
             var valueToParse = dataMapper.ConvertValueToString(img);
             object parsedValue;
             //---------------Execute Test ----------------------
@@ -75,17 +75,16 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
             Assert.IsInstanceOf(typeof(Bitmap), parsedValue);
-            Assert.AreEqual(img.Width, ((Bitmap)parsedValue).Width);
-            Assert.AreEqual(img.Height, ((Bitmap)parsedValue).Height);
+            Assert.AreEqual(img.Width, ((Bitmap) parsedValue).Width);
+            Assert.AreEqual(img.Height, ((Bitmap) parsedValue).Height);
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TryParsePropValue_ConvertsByteArrayToImage()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = LoadBitmapForTest("sample.bmp");
+            var img = LoadImageForTest("TestJpeg.jpg");
             var valueToParse = SerialisationUtilities.ObjectToByteArray(img);
             object parsedValue;
             //---------------Execute Test ----------------------
@@ -93,8 +92,8 @@ namespace Habanero.Test.Base.DataMappers
             //---------------Test Result -----------------------
             Assert.IsTrue(parseSucceed);
             Assert.IsInstanceOf(typeof(Bitmap), parsedValue);
-            Assert.AreEqual(img.Width, ((Bitmap)parsedValue).Width);
-            Assert.AreEqual(img.Height, ((Bitmap)parsedValue).Height);
+            Assert.AreEqual(img.Width, ((Bitmap) parsedValue).Width);
+            Assert.AreEqual(img.Height, ((Bitmap) parsedValue).Height);
         }
 
         [Test]
@@ -110,27 +109,32 @@ namespace Habanero.Test.Base.DataMappers
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void ConvertValueToString_FromBitmap()
         {
             //---------------Set up test pack-------------------
             var dataMapper = new ImageDataMapper();
-            var img = LoadBitmapForTest("sample.bmp");
+            var img = LoadImageForTest("TestJpeg.jpg");
             //---------------Execute Test ----------------------
             string strValue = dataMapper.ConvertValueToString(img);
             //---------------Test Result -----------------------
             Assert.AreNotEqual("System.Drawing.Bitmap", strValue);
         }
 
-        private static Image LoadBitmapForTest(string name)
+        private static Image LoadImageForTest(string name)
         {
             var asm = Assembly.GetExecutingAssembly();
             var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
 
             using (var stream = asm.GetManifestResourceStream(path))
             {
-                var foo = Bitmap.FromStream(stream);
-                return foo;
+                var bytes = new List<byte>();
+                byte toRead = 0;
+                while ((toRead = (byte) stream.ReadByte()) != -1)
+                {
+                    bytes.Add(toRead);
+                }
+                var result = (Image) Image.FromArray(bytes.ToArray());
+                return result;
             }
         }
     }

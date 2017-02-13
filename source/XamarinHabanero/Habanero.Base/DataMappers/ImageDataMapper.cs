@@ -19,9 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+using Android.Media;
 using Habanero.Util;
 
 namespace Habanero.Base.DataMappers
@@ -57,7 +55,7 @@ namespace Habanero.Base.DataMappers
             if (valueToParse is String)
             {
                 var bytes = Convert.FromBase64String((string)valueToParse);
-                returnValue = Image.FromStream(new MemoryStream(bytes));
+                returnValue = Image.FromArray(bytes);
                 return true;
             }
             returnValue = null;
@@ -73,9 +71,7 @@ namespace Habanero.Base.DataMappers
             if (value is Image)
             {
                 var image = (Image)value;
-                var stream = new MemoryStream();
-                image.Save(stream, ImageFormat.Jpeg);
-                var bytes = stream.ToArray();
+                var bytes = image.ToArray<byte>();
                 return Convert.ToBase64String(bytes);
             }
             return Convert.ToString(value);

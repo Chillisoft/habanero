@@ -20,8 +20,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Net.Mime;
+using Android.Media;
 
 namespace Habanero.Base.DataMappers
 {

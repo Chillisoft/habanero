@@ -19,8 +19,8 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Drawing;
 using System.Resources;
+using Android.Media;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -38,7 +38,6 @@ namespace Habanero.Test.Util
         }
 
         [Test]
-        [Ignore("Xamarin port - Image not PCL Compliant")]
         public void TestTwoWayConversion()
         {
             Image image = (Image)_resourceManager.GetObject("TestJpeg");

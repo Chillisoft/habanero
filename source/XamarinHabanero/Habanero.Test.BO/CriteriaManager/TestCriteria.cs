@@ -19,16 +19,14 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Xml.Linq;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
+using Android.Media;
 
 namespace Habanero.Test.BO
 {
@@ -1179,7 +1177,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_LessThan_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1187,8 +1184,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
-            var testImage = LoadBitmapForTest("sample.bmp");
-            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            var testImage = LoadImageForTest("TestJpeg.jpg");
+            var testImage2 = LoadImageForTest("TestJpeg2.jpg");
 
             cp.SetPropertyValue("Image", testImage);
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThan, testImage2);
@@ -1319,7 +1316,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_LessThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1327,8 +1323,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
-            var testImage = LoadBitmapForTest("sample.bmp");
-            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            var testImage = LoadImageForTest("TestJpeg.jpg");
+            var testImage2 = LoadImageForTest("TestJpeg2.jpg");
 
             cp.SetPropertyValue("Image", testImage);
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.LessThanEqual, testImage2);
@@ -1458,15 +1454,14 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_GreaterThanEqual_Incomparable()
         {
             //---------------Set up test pack-------------------
             ClassDef.ClassDefs.Clear();
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
-            var testImage = LoadBitmapForTest("sample.bmp");
-            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            var testImage = LoadImageForTest("TestJpeg.jpg");
+            var testImage2 = LoadImageForTest("TestJpeg2.jpg");
 
             cp.SetPropertyValue("Image", testImage);
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.GreaterThanEqual, testImage2);
@@ -1917,7 +1912,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_Like_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -1925,8 +1919,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
-            var testImage = LoadBitmapForTest("sample.bmp");
-            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            var testImage = LoadImageForTest("TestJpeg.jpg");
+            var testImage2 = LoadImageForTest("TestJpeg2.jpg");
 
             cp.SetPropertyValue("Image", testImage);
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.Like, testImage2);
@@ -2309,7 +2303,6 @@ namespace Habanero.Test.BO
         }
 
         [Test]
-        [Ignore("Xamarin port - Bitmap not PCL Compliant")]
         public void TestIsMatch_NotLike_Incomparable()
         {
             //---------------Set up test pack-------------------
@@ -2317,8 +2310,8 @@ namespace Habanero.Test.BO
             ContactPersonTestBO.LoadClassDefWithImageProperty();
             ContactPersonTestBO cp = new ContactPersonTestBO();
 
-            var testImage = LoadBitmapForTest("sample.bmp");
-            var testImage2 = LoadBitmapForTest("sample2.bmp");
+            var testImage = LoadImageForTest("TestJpeg.jpg");
+            var testImage2 = LoadImageForTest("TestJpeg2.jpg");
             
             cp.SetPropertyValue("Image", testImage);
             Criteria nameCriteria = new Criteria("Image", Criteria.ComparisonOp.NotLike, testImage2);
@@ -2340,15 +2333,21 @@ namespace Habanero.Test.BO
             }
         }
 
-        private static Image LoadBitmapForTest(string name)
+        private static Image LoadImageForTest(string name)
         {
             var asm = Assembly.GetExecutingAssembly();
             var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
 
             using (var stream = asm.GetManifestResourceStream(path))
             {
-                var foo = Image.FromStream(stream);
-                return foo;
+                var bytes = new List<byte>();
+                var toRead = 0;
+                while ((toRead = stream.ReadByte()) != -1)
+                {
+                    bytes.Add((byte)toRead);
+                }
+                var result = (Image) Image.FromArray(bytes.ToArray());
+                return result;
             }
         }
 
@@ -2724,28 +2723,6 @@ namespace Habanero.Test.BO
         }
 
         #endregion
-
-
-        [Test, Ignore("some tests not yet implemented")]
-        public void TestOtherOperators()
-        {
-            //---------------Set up test pack-------------------
-            
-            //---------------Assert Precondition----------------
-
-            //---------------Execute Test ----------------------
-            Assert.Fail("Todo");
-            //Todo:  
-            //                
-            //
-            //            Test using objects and enums TestCriteria
-            //test parsing from strings. TestCriteriaParser
-            //col.Load(New Criteria("Surname" , Op.Equals, "Powell") TestbusinessObjectCollection
-            //col.Load("Surname = Powell"); //Test what happens if we parse using an unsupported operator
-            //test for value is null
-            //---------------Test Result -----------------------
-
-        }
 
         [Test]
         public void Test_Create_WhenPropNameNull_ShouldThrowError()
