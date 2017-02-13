@@ -18,14 +18,12 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using System;
+
 using System.Linq;
-using System.Threading;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.Base;
 using Habanero.DB;
-using Habanero.Test.BO;
 using Habanero.Test.Structure;
 using NUnit.Framework;
 

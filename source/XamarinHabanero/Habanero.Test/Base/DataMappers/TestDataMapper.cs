@@ -20,7 +20,6 @@
 #endregion
 using System;
 using Habanero.Base.DataMappers;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Base.DataMappers

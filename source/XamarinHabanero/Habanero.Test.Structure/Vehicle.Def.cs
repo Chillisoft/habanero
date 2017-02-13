@@ -18,16 +18,12 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using Habanero.Base;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO.Loaders;
 
 namespace Habanero.Test.Structure
 {
     using System;
-    using Habanero.BO;
-    
-    
+
+
     public partial class Vehicle : Entity
     {
         

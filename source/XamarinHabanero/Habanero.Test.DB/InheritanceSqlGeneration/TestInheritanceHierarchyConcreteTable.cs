@@ -24,7 +24,6 @@ using System.Globalization;
 using System.Linq;
 using Habanero.Base;
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using NUnit.Framework;
 
 namespace Habanero.Test.DB.InheritanceSqlGeneration

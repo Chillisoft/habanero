@@ -18,9 +18,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using Habanero.BO;
+
 using Habanero.BO.ClassDefinition;
-using Habanero.DB;
 using Habanero.Test.BO;
 using Habanero.Test.BO.BusinessObjectCollection;
 using NUnit.Framework;

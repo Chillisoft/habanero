@@ -21,7 +21,6 @@
 using System;
 using Habanero.Base;
 using Habanero.Base.DataMappers;
-using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using NUnit.Framework;
 

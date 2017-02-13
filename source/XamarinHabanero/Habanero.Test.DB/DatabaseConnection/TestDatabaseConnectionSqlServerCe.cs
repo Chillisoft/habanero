@@ -21,12 +21,8 @@
 using System;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security.Policy;
 using Habanero.Base;
-using Habanero.BO.ClassDefinition;
-using Habanero.BO.Loaders;
 using Habanero.DB;
 using NUnit.Framework;
 

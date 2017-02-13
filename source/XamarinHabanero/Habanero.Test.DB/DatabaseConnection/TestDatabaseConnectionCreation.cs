@@ -19,10 +19,8 @@
 // ---------------------------------------------------------------------------------
 #endregion
 
-using System;
 using System.Data;
 using System.IO;
-using System.Linq;
 using Habanero.Base;
 using Habanero.DB;
 using NUnit.Framework;

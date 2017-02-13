@@ -1,5 +1,4 @@
-﻿using System;
-using Habanero.Base;
+﻿using Habanero.Base;
 
 namespace Habanero.DB
 {

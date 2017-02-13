@@ -19,7 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.ComponentModel;
 using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;

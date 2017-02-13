@@ -18,9 +18,8 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using Habanero.Base;
+
 using Habanero.BO;
-using Habanero.DB;
 using NUnit.Framework;
 using Rhino.Mocks;
 

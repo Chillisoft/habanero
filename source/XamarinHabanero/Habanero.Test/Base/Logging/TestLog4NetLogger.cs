@@ -19,12 +19,9 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.Xml;
-using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;
 using log4net;
-using log4net.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
 

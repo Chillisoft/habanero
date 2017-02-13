@@ -21,9 +21,8 @@
 namespace Habanero.Test.Structure
 {
     using System;
-    using Habanero.BO;
-    
-    
+
+
     public partial class Part : Entity
     {
         

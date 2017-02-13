@@ -19,9 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 
-using System.Drawing;
-using System.Resources;
-using Habanero.Util;
 using NUnit.Framework;
 
 namespace Habanero.Test.Util

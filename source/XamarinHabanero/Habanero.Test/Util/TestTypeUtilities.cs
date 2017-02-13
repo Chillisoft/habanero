@@ -19,8 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using System.ComponentModel;
-using Habanero.Base;
 using Habanero.Util;
 using NUnit.Framework;
 

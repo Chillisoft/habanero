@@ -18,7 +18,7 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using System.Security.Cryptography;
+
 using Habanero.Base;
 using NUnit.Framework;
 

@@ -26,11 +26,9 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using Habanero.Base;
-using Habanero.Base.DataMappers;
 using Habanero.Base.Exceptions;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Comparer;
-using Habanero.BO.CriteriaManager;
 using Habanero.Util;
 
 namespace Habanero.BO

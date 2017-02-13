@@ -26,8 +26,6 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Threading;
-using System.Xml;
-using System.Xml.Schema;
 using Habanero.Base;
 using Habanero.Base.Exceptions;
 using Habanero.Base.Logging;

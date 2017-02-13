@@ -20,7 +20,6 @@
 #endregion
 using System;
 using System.IO;
-using System.Net;
 using System.Threading;
 using Habanero.Base;
 using Habanero.BO;

@@ -28,5 +28,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
+[assembly: InternalsVisibleTo("Xamarin.Habanero.Test.BO")]
 [assembly: InternalsVisibleTo("Habanero.Test.BO")]
 [assembly: InternalsVisibleTo("Habanero.Test")]

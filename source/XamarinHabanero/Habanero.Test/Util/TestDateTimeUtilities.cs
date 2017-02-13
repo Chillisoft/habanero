@@ -20,8 +20,6 @@
 #endregion
 using System;
 using Habanero.Base;
-using Habanero.Base.Util;
-using Habanero.Test.Base;
 using Habanero.Util;
 using NUnit.Framework;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentMigrator;
-using FluentMigrator.Builders.Create;
 
 namespace Habanero.Test.Migrations
 {

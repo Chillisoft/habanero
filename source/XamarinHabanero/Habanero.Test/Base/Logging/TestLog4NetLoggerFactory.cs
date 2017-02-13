@@ -18,12 +18,9 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using System;
-using System.Reflection;
-using Habanero.Base;
+
 using Habanero.Base.Logging;
 using NUnit.Framework;
-using Rhino.Mocks;
 
 // ReSharper disable InconsistentNaming
 namespace Habanero.Test.Base.Logging

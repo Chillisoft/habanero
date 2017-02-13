@@ -23,7 +23,6 @@ using Habanero.Base;
 using Habanero.BO;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.DB;
 
 namespace Habanero.Test
 {

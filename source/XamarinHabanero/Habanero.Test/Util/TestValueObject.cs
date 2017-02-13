@@ -18,16 +18,11 @@
 //      along with the Habanero framework.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------------------
 #endregion
-using System;
-using System.Collections;
-using System.Data;
-using System.Text;
+
 using Habanero.Base;
 using Habanero.Base.DataMappers;
 using Habanero.BO.ClassDefinition;
 using Habanero.BO.Loaders;
-using Habanero.DB;
-using Habanero.Util;
 using NUnit.Framework;
 
 // ReSharper disable InconsistentNaming

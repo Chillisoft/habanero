@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Android.App;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -32,4 +31,4 @@ using Android.App;
 [assembly: InternalsVisibleTo("Habanero.Test.DB")]
 [assembly: InternalsVisibleTo("Habanero.Test.BO")]
 [assembly: InternalsVisibleTo("Habanero.Test")]
-[assembly: InternalsVisibleTo("Habanero.Xamarin.Test")]
+[assembly: InternalsVisibleTo("Xamarin.Habanero.Test.BO")]
