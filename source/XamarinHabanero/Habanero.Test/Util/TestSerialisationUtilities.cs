@@ -20,7 +20,7 @@
 #endregion
 using System;
 using System.Resources;
-using Android.Media;
+using Android.Graphics;
 using Habanero.Util;
 using NUnit.Framework;
 
@@ -41,7 +41,7 @@ namespace Habanero.Test.Util
         [Ignore("Xamarin Port - Needs to be in NUnitLite Test Project")]
         public void TestTwoWayConversion()
         {
-            Image image = (Image)_resourceManager.GetObject("TestJpeg");
+            Bitmap image = (Bitmap)_resourceManager.GetObject("TestJpeg");
 
             byte[] bytesOut = SerialisationUtilities.ObjectToByteArray(image);
             Object objectOut = SerialisationUtilities.ByteArrayToObject(bytesOut);

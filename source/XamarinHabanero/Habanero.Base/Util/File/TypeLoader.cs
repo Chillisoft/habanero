@@ -23,7 +23,7 @@ using System.Data;
 using System.IO;
 //using System.Linq;
 using System.Reflection;
-using Android.Media;
+using Android.Graphics;
 using Habanero.Base.Exceptions;
 using Java.Util;
 
@@ -61,9 +61,9 @@ namespace Habanero.Util
                 } else if (assemblyName == "System")
                 {
                     classAssembly = typeof(String).Assembly;
-                } else if (assemblyName == "System.Drawing")
+                } else if (assemblyName == "Android.Graphics")
                 {
-                    classAssembly = typeof(Image).Assembly;
+                    classAssembly = typeof(Bitmap).Assembly;
                 } else if (assemblyName == "System.Data")
                 {
                     classAssembly = typeof (DataSet).Assembly;

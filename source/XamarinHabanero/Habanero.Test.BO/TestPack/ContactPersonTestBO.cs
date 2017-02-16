@@ -645,7 +645,7 @@ namespace Habanero.Test.BO
 					<property  name=""Surname"" databaseField=""Surname_field"" compulsory=""true"" />
                     <property  name=""FirstName"" databaseField=""FirstName_field"" />
 					<property  name=""DateOfBirth"" type=""DateTime"" />
-                    <property  name=""Image"" type=""Android.Media.Image"" assembly=""Mono.Android"" />
+                    <property  name=""Image"" type=""Android.Graphics.Bitmap"" assembly=""Mono.Android"" />
 					<primaryKey>
 						<prop name=""ContactPersonID"" />
 					</primaryKey>

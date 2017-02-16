@@ -19,7 +19,7 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using Android.Media;
+using Android.Graphics;
 
 namespace Habanero.Util
 {
@@ -36,7 +36,7 @@ namespace Habanero.Util
         /// <param name="fullImage">The image to replicate</param>
         /// <param name="newHeight">The new height to scale to</param>
         /// <returns>Returns a thumbnail Image</returns>
-        public Image CreateThumbnail(Image fullImage, int newHeight)
+        public Bitmap CreateThumbnail(Bitmap fullImage, int newHeight)
         {
             //Image.GetThumbnailImageAbort myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
             //int newWidth;

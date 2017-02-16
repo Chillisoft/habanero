@@ -21,7 +21,7 @@
 using System;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Android.Media;
+using Android.Graphics;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
 
@@ -107,7 +107,7 @@ namespace Habanero.Test.Base.DataMappers
         {
             //---------------Set up test pack-------------------
             var factory = new DataMapperFactory();
-            var targetType = typeof(Image);
+            var targetType = typeof(Bitmap);
             //---------------Execute Test ----------------------
             var dataMapper = factory.GetDataMapper(targetType);
             //---------------Test Result -----------------------

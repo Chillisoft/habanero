@@ -20,7 +20,7 @@
 #endregion
 using System;
 using System.Globalization;
-using Android.Media;
+using Android.Graphics;
 using Habanero.Base.DataMappers;
 using Habanero.Util;
 
@@ -147,7 +147,7 @@ namespace Habanero.Base
             {
                 return (bool)objValue ? 1 : 0;
             }
-            if (objValue is Image)
+            if (objValue is Bitmap)
             {
                 return SerialisationUtilities.ObjectToByteArray(objValue);
             }

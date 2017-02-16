@@ -20,13 +20,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using Habanero.Base.DataMappers;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
 using Android.Graphics;
-using Android.Media;
 
 namespace Habanero.Test.Base.DataMappers
 {
