@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Java.Interop, Version=0.1.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v1.0\Java.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
       <HintPath>..\..\packages\log4net.1.2.10\lib\1.1\log4net.dll</HintPath>
       <Private>True</Private>
@@ -70,14 +74,11 @@
     <Compile Include="DatabaseConfigExtensions.cs" />
     <Compile Include="DataMappers\BoolDataMapper.cs" />
     <Compile Include="DataMappers\ByteArrayDataMapper.cs" />
-    <Compile Include="DataMappers\DataMapper.cs" />
     <Compile Include="DataMappers\DataMapperFactory.cs" />
     <Compile Include="DataMappers\DateTimeDataMapper.cs" />
     <Compile Include="DataMappers\GeneralDataMapper.cs" />
     <Compile Include="DataMappers\GuidDataMapper.cs" />
-    <Compile Include="DataMappers\IDataMapper.cs" />
     <Compile Include="DataMappers\IDataMapperFactory.cs" />
-    <Compile Include="DataMappers\ImageDataMapper.cs" />
     <Compile Include="DataMappers\IntDataMapper.cs" />
     <Compile Include="DataMappers\LongDataMapper.cs" />
     <Compile Include="DataMappers\StringDataMapper.cs" />
@@ -269,6 +270,12 @@
     <None Include="app.config" />
     <None Include="key.snk" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base.Image\Habanero.Base.DataMapper.csproj">
+      <Project>{558358b2-e87e-46c7-80ae-da375ae86251}</Project>
+      <Name>Habanero.Base.DataMapper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

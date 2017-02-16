@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Java.Interop" />
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -220,6 +221,10 @@
     <Compile Include="TransactionLogging\TransactionLogBusObj.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Habanero.Base.Image\Habanero.Base.DataMapper.csproj">
+      <Project>{558358b2-e87e-46c7-80ae-da375ae86251}</Project>
+      <Name>Habanero.Base.DataMapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Habanero.Base\Habanero.Base.csproj">
       <Project>{407b8f2e-dcea-4eae-a183-b3417e889846}</Project>
       <Name>Habanero.Base</Name>

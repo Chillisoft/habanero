@@ -2676,7 +2676,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
             ContactPersonTestBO.CreateSavedContactPerson();
             //            Criteria criteria = new Criteria("DateOfBirth", Criteria.ComparisonOp.Equals, now);
             string criteria = string.Format
-                ("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.Value.ToString("B"));
+                ("Organisation.OrganisationID = '{0}'", organisation.OrganisationID.ToString("B"));
 
             //---------------Execute Test ----------------------
             BusinessObjectCollection<ContactPersonTestBO> col =

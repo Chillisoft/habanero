@@ -217,7 +217,7 @@ namespace Habanero.Test.BO
         {
             //---------------Set up test pack-------------------
             OrganisationTestBO.LoadDefaultClassDef_WithSingleRelationship();
-            OrganisationTestBO bo = new OrganisationTestBO {OrganisationID = null};
+            OrganisationTestBO bo = new OrganisationTestBO {OrganisationID = Guid.Empty};
             BusinessObjectCollection<OrganisationTestBO> collectionBO =
                 new BusinessObjectCollection<OrganisationTestBO> {bo};
             //---------------Assert Precondition----------------
