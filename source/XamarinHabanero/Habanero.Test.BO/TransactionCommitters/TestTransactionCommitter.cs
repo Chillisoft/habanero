@@ -35,8 +35,6 @@ namespace Habanero.Test.BO.TransactionCommitters
     [TestFixture]
     public class TestTransactionCommitter : TestUsingDatabase
     {
-        #region Setup/Teardown
-
         [SetUp]
         public void SetupTest()
         {
@@ -58,7 +56,6 @@ namespace Habanero.Test.BO.TransactionCommitters
 
             BORegistry.DataAccessor = new DataAccessorInMemory();
         }
-        #endregion
 
         private const string _customRuleErrorMessage = "Broken Rule";
 

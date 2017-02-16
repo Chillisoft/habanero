@@ -25,6 +25,7 @@ using Habanero.Base.DataMappers;
 using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
+using Android.Graphics;
 using Android.Media;
 
 namespace Habanero.Test.Base.DataMappers
@@ -60,10 +61,11 @@ namespace Habanero.Test.Base.DataMappers
         }      
         
         [Test]
+        [Ignore("Xamarin Port - Needs to be in NUnitLite Test Project")]
         public void TryParsePropValue_ShouldSetReturnValueSame_WhenValueToParseIsAlreadyCorrectType_ForReferenceType()
         {
             //---------------Set up test pack-------------------
-            var dataMapper = new GeneralDataMapper(typeof (Image));
+            var dataMapper = new GeneralDataMapper(typeof (Bitmap));
             var valueToParse = LoadImageForTest("TestJpeg.jpg");
             object returnValue;
             //---------------Execute Test ----------------------
@@ -156,20 +158,14 @@ namespace Habanero.Test.Base.DataMappers
             Assert.AreEqual(expectedValue, parsedValue);
         }
 
-        private static Image LoadImageForTest(string name)
+        private static Bitmap LoadImageForTest(string name)
         {
             var asm = Assembly.GetExecutingAssembly();
             var path = asm.GetManifestResourceNames().FirstOrDefault(x => x.Contains(name));
 
             using (var stream = asm.GetManifestResourceStream(path))
             {
-                var bytes = new List<byte>();
-                byte toRead = 0;
-                while ((toRead = (byte)stream.ReadByte()) != -1)
-                {
-                    bytes.Add(toRead);
-                }
-                var result = (Image)Image.FromArray(bytes.ToArray());
+                var result = BitmapFactory.DecodeStream(stream);
                 return result;
             }
         }

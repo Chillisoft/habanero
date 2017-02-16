@@ -38,6 +38,7 @@ namespace Habanero.Test.Util
         }
 
         [Test]
+        [Ignore("Xamarin Port - Needs to be in NUnitLite Test Project")]
         public void TestTwoWayConversion()
         {
             Image image = (Image)_resourceManager.GetObject("TestJpeg");
