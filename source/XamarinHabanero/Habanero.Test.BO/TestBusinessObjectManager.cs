@@ -1382,9 +1382,6 @@ namespace Habanero.Test.BO
             Assert.AreSame(loadedCP, boMan[id.ObjectID]);
         }
 
-        // ReSharper restore RedundantAssignment
-
-        // ReSharper disable RedundantAssignment
         //Test load via multiple relationship loads into boMan.
         [Test]
         public void Test_LoadObject_MulitpleRelationship_UpdatedObjectMan_Generic()

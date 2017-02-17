@@ -31,7 +31,7 @@ namespace Habanero.Test.BO.Loaders
     /// Summary description for TestXmlUIPropertyLoader.
     /// </summary>
     [TestFixture]
-    [Ignore("Xamarin Port")]
+    [Ignore("Xamarin Port - UI Elements Not Needed")]
     public class TestXmlUIGridColumnLoader
     {
         private XmlUIGridColumnLoader loader;

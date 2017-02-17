@@ -25,7 +25,7 @@ using NUnit.Framework;
 namespace Habanero.Test.BO.ClassDefinition
 {
     [TestFixture]
-    [Ignore("Xamarin Port")]
+    [Ignore("Xamarin Port - UI Elements Not Needed")]
     public class TestUIFormField
     {
 //        [SetUp]

@@ -557,6 +557,7 @@ namespace Habanero.Test.BO
             Assert.AreEqual(expectedSurname, myBO.GetPropertyValueToDisplay("TestProp2"), "This is the ToString of the related object");
         }
 
+        //Xamarain - Threading issue as to why this fails
         [Test]
         public void TestBOLookupListWithString()
         {

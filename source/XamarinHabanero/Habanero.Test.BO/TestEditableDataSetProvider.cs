@@ -29,7 +29,7 @@ namespace Habanero.Test.BO
     /// Summary description for TestEditableDataSetProvider.
     /// </summary>
     [TestFixture]
-    [Ignore("Xamarin Port")]
+    [Ignore("Xamarin Port - UI Elements Not Needed")]
     public class TestEditableDataSetProvider : TestDataSetProvider
     {
 //        protected override IDataSetProvider CreateDataSetProvider(IBusinessObjectCollection col)
