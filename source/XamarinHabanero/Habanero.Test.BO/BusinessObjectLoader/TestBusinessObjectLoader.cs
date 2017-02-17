@@ -318,6 +318,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void THREADING_TestGetBusinessObject_SelectQuery_Untyped()
         {
             //---------------Set up test pack-------------------
@@ -359,6 +360,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void THREADING_TestGetBusinessObject_SelectQuery()
         {
             //---------------Set up test pack-------------------
@@ -582,6 +584,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void TestTryLoadDeletedObject_RaiseError()
         {
             try
@@ -607,6 +610,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void TestTryLoadDeletedObject_RaiseError_Untyped()
         {
             try
@@ -710,6 +714,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void TestGetBusinessObject_CriteriaString_Typed()
         {
             //---------------Set up test pack-------------------
@@ -868,6 +873,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void TestGetRelatedBusinessObjectCollection_Generic()
         {
             //---------------Set up test pack-------------------
@@ -1154,6 +1160,7 @@ namespace Habanero.Test.BO.BusinessObjectLoader
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void Test_GetCount()
         {
             //---------------Set up test pack-------------------

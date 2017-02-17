@@ -461,6 +461,7 @@ namespace Habanero.Test.BO.TransactionCommitters
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         //This Acceptance Test has a corresponding unit test on the CheckDuplicateIdentifier method in TestTransactionalBusinessObject
         public void Test_Commit_WhenTransactionCommitterHasAddedBOWithSameUniqueKeyAsMarkedForDeleteBO_WhenDeletedBONotInTransaction_ShouldThrowDuplicateError()
         {

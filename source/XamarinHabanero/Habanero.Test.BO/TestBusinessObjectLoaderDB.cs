@@ -585,6 +585,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void Test_Refresh_AfterLoadIsCalled_IfObjectUpdatedInLoading()
         {
             //---------------Set up test pack---------------------
@@ -617,6 +618,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void Test_Refresh_UpdatedEventIsFired_IfObjectUpdatedInLoading()
         {
             //---------------Set up test pack---------------------
@@ -679,6 +681,7 @@ namespace Habanero.Test.DB
         }
 
         [Test]
+        [Ignore("Xamaring Port - DB Specific")]
         public void Test_Refresh_WithDuplicateObjectsInPersistedCollection_ShouldThrowHabaneroDeveloperException()
         {
             //---------------Set up test pack-------------------
