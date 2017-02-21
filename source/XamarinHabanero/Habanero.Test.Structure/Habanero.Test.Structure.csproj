@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BOBroker.cs" />
+    <Compile Include="Testability\BODefaultValueRegistry.cs" />
+    <Compile Include="Testability\BOFactory.cs" />
+    <Compile Include="Testability\BOPropValueGeneratorRegistry.cs" />
+    <Compile Include="Testability\BOTestFactory.cs" />
     <Compile Include="Car.cs" />
     <Compile Include="Car.Def.cs" />
     <Compile Include="Engine.cs" />
@@ -66,6 +70,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomValueGen.cs" />
     <Compile Include="SetupDatabase.cs" />
+    <Compile Include="Testability\BOTestFactoryGeneric.cs" />
+    <Compile Include="Testability\BOTestFactoryRegistry.cs" />
+    <Compile Include="Testability\IBOFactory.cs" />
+    <Compile Include="Testability\IValidValueGeneratorNumeric.cs" />
+    <Compile Include="Testability\ValidValidGeneratorByteArray.cs" />
+    <Compile Include="Testability\ValidValueGenerator.cs" />
+    <Compile Include="Testability\ValidValueGeneratorBool.cs" />
+    <Compile Include="Testability\ValidValueGeneratorDate.cs" />
+    <Compile Include="Testability\ValidValueGeneratorDecimal.cs" />
+    <Compile Include="Testability\ValidValueGeneratorDouble.cs" />
+    <Compile Include="Testability\ValidValueGeneratorEnum.cs" />
+    <Compile Include="Testability\ValidValueGeneratorGuid.cs" />
+    <Compile Include="Testability\ValidValueGeneratorInt.cs" />
+    <Compile Include="Testability\ValidValueGeneratorLookupList.cs" />
+    <Compile Include="Testability\ValidValueGeneratorRegistry.cs" />
+    <Compile Include="Testability\ValidValueGeneratorString.cs" />
     <Compile Include="TestSetupDatabase.cs" />
     <Compile Include="Vehicle.cs" />
     <Compile Include="Vehicle.Def.cs" />
