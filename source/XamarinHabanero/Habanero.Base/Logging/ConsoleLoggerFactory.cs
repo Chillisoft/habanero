@@ -120,7 +120,7 @@ namespace Habanero.Base.Logging
 
         /// <summary>
         /// Creates a single log entry for with the appropriate exception message.
-        /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
+        /// Although this is an interface and you can implement it as you wish for <see cref="CrossSimpleLogger"/>
         /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
         /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
         /// </summary>
@@ -133,7 +133,7 @@ namespace Habanero.Base.Logging
 
         /// <summary>
         /// Creates a single log entry for with the appropriate exception message and message.
-        /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
+        /// Although this is an interface and you can implement it as you wish for <see cref="CrossSimpleLogger"/>
         /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
         /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
         /// </summary>

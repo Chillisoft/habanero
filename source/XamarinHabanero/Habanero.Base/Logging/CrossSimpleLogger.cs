@@ -20,39 +20,35 @@
 #endregion
 using System;
 using Habanero.Base.Exceptions;
-using log4net;
+using Plugin.SimpleLogger;
+using Plugin.SimpleLogger.Abstractions;
 
 namespace Habanero.Base.Logging
 {
 	///<summary>
 	/// The Log4Net adapter.
 	///</summary>
-	public class Log4NetLogger : IHabaneroLogger
+	public class CrossSimpleLogger : IHabaneroLogger
 	{
 		private readonly string _contextName;
-        /// <summary>
-        /// The underlying log4net logger.
-        /// </summary>
-		protected ILog _log;
 
 		///<summary>
 		/// Constructs the Logger with the appropriate context
 		///</summary>
 		///<param name="contextName"></param>
-		public Log4NetLogger(string contextName)
+		public CrossSimpleLogger(string contextName)
 		{
             _contextName = contextName;
-            _log = LogManager.GetLogger(contextName);
+            Plugin.SimpleLogger.CrossSimpleLogger.Current.Configure("habanero.base.log",5,200,LogLevel.All);
         }
 
 		///<summary>
 		/// Constructs the Logger with the appropriate contextType
 		///</summary>
 		///<param name="contextType">The Type of object this context is for.</param>
-		public Log4NetLogger(Type contextType)
+		public CrossSimpleLogger(Type contextType)
 		{
-			_log = LogManager.GetLogger(contextType);
-			_contextName = _log.Logger.Name;
+			_contextName = "NA";
 		}
 
 		///<summary>
@@ -75,22 +71,22 @@ namespace Habanero.Base.Logging
 			switch (logCategory)
 			{
 				case LogCategory.Fatal:
-					_log.Fatal(message);
+					Plugin.SimpleLogger.CrossSimpleLogger.Current.Warning("FATAL : " +message);
 					break;
 				case LogCategory.Exception:
-					_log.Error(message);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, new Exception("Filler for CrossSimpleLogger"));
 					break;
 				case LogCategory.Debug:
-					_log.Debug(message);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Debug(message);
 					break;
 				case LogCategory.Warn:
-					_log.Warn(message);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Warning(message);
 					break;
                 case LogCategory.Error:
-                    _log.Error(message);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, new Exception("Filler for CrossSimpleLogger"));
                     break;
 				default:
-					_log.Info(message);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Info(message);
 					break;
 			}
 		}
@@ -106,23 +102,11 @@ namespace Habanero.Base.Logging
 			this.Log("", exception);
 		}
 
-	    /// <summary>
-	    /// Creates a single log entry for with the appropriate exception message and message.
-	    /// Although this is an interface and you can implement it as you wish for <see cref="Log4NetLogger"/>
-	    /// We log an entry with <see cref="LogCategory.Exception"/> unless the exception inherits from
-	    /// <see cref="UserException"/> in which case we log this with the <see cref="LogCategory.Info"/>
-	    /// </summary>
-	    /// <param name="message">The additional log message to be logged with the exception</param>
-	    /// <param name="exception"></param>
 	    public void Log(string message, Exception exception)
 		{
-			if (exception is UserException)
-			{
-				if (_log.IsInfoEnabled) _log.Info(message, exception);
-				return;
-			}
-			if (_log.IsErrorEnabled) _log.Error(message, exception);           
-		}
+            Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
+
+        }
 
 	    /// <summary>
 	    /// Creates a single log entry for with appropriate exception message and message with the specified LogCategory.
@@ -136,19 +120,19 @@ namespace Habanero.Base.Logging
 			switch (logCategory)
 			{
 				case LogCategory.Fatal:
-					_log.Fatal(message, exception);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 					break;
 				case LogCategory.Exception:
-					_log.Error(message, exception);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 					break;
 				case LogCategory.Debug:
-					_log.Debug(message, exception);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 					break;
 				case LogCategory.Warn:
-					_log.Warn(message, exception);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 					break;
 				default:
-					_log.Info(message, exception);
+                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 					break;
 			}       
 		}
@@ -159,20 +143,8 @@ namespace Habanero.Base.Logging
 	    ///<param name="logCategory">The <see cref="LogCategory"/> for which to check if logging is enabled or not.</param>
 	    ///<returns>true if the specified <see cref="LogCategory"/> messages will be logged, otherwise false.</returns>
 	    public bool IsLogging(LogCategory logCategory)
-		{
-			switch (logCategory)
-			{
-				case LogCategory.Fatal:
-					return _log.IsFatalEnabled;
-				case LogCategory.Exception:
-					return _log.IsErrorEnabled;
-				case LogCategory.Debug:
-					return _log.IsDebugEnabled;
-				case LogCategory.Warn:
-					return _log.IsWarnEnabled;
-				default:
-					return _log.IsInfoEnabled;
-			}       
-		}
+	    {
+	        return true;
+	    }
 	}
 }
