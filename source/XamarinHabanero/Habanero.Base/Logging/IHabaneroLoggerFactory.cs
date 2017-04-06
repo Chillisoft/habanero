@@ -29,7 +29,7 @@ namespace Habanero.Base.Logging
         ///<summary>
         /// Creates the Appropriate <see cref="IHabaneroLogger"/>
         /// based on the LoggerFactory you have implemented.
-        /// By Default Habanero uses the <see cref="Log4NetLoggerFactory"/>.
+        /// By Default Habanero uses the <see cref="CrossSimpleLoggerFactory"/>.
         /// You can change the logger factor by changing your the BootStrapper code when
         /// Your Application starts up or by creating your own <see cref="HabaneroApp"/>
         /// and overriding the <see cref="HabaneroApp.SetupLogging"/> or by calling

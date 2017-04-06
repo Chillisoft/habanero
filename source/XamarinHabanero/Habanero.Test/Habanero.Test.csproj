@@ -41,10 +41,6 @@
     <Reference Include="Java.Interop">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v1.0\Java.Interop.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Mono.Android">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v7.0\Mono.Android.dll</HintPath>
     </Reference>
@@ -97,8 +93,6 @@
     <Compile Include="Base\Encryption\TestRSAPasswordCrypter.cs" />
     <Compile Include="Base\Encryption\TestUtf8Sha1Hasher.cs" />
     <Compile Include="Base\Exceptions\TestExceptions.cs" />
-    <Compile Include="Base\Logging\TestLog4NetLogger.cs" />
-    <Compile Include="Base\Logging\TestLog4NetLoggerFactory.cs" />
     <Compile Include="Base\TestDateRange.cs" />
     <Compile Include="Base\TestDateRangeOptionsConverter.cs" />
     <Compile Include="Base\TestDateTimeNow.cs" />

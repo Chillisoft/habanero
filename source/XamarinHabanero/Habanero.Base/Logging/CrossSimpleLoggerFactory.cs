@@ -24,7 +24,7 @@ using System.Xml;
 namespace Habanero.Base.Logging
 {
 
-    public class Log4NetLoggerFactory : IHabaneroLoggerFactory
+    public class CrossSimpleLoggerFactory : IHabaneroLoggerFactory
     {
         public IHabaneroLogger GetLogger(string contextName)
         {

@@ -122,7 +122,7 @@ namespace Habanero.Base
         {
             try
             {
-                GlobalRegistry.LoggerFactory = new Log4NetLoggerFactory();
+                GlobalRegistry.LoggerFactory = new CrossSimpleLoggerFactory();
             }
             catch (Exception ex) {
                 throw new XmlException("There was an error reading the XML configuration file. " +

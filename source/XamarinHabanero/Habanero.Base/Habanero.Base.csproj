@@ -224,7 +224,7 @@
     <Compile Include="Logging\IHabaneroLogger.cs" />
     <Compile Include="Logging\IHabaneroLoggerFactory.cs" />
     <Compile Include="Logging\CrossSimpleLogger.cs" />
-    <Compile Include="Logging\Log4NetLoggerFactory.cs" />
+    <Compile Include="Logging\CrossSimpleLoggerFactory.cs" />
     <Compile Include="Logging\LogCategory.cs" />
     <Compile Include="NullProgressIndicator.cs" />
     <Compile Include="NullSecurityController.cs" />
