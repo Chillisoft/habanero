@@ -41,6 +41,14 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Plugin.SimpleLogger, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.SimpleLogger.1.0.3\lib\MonoAndroid10\Plugin.SimpleLogger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.SimpleLogger.Abstractions, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.SimpleLogger.1.0.3\lib\MonoAndroid10\Plugin.SimpleLogger.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
