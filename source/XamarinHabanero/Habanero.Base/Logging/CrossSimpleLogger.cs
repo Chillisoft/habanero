@@ -19,9 +19,6 @@
 // ---------------------------------------------------------------------------------
 #endregion
 using System;
-using Habanero.Base.Exceptions;
-using Plugin.SimpleLogger;
-using Plugin.SimpleLogger.Abstractions;
 
 namespace Habanero.Base.Logging
 {
@@ -39,7 +36,6 @@ namespace Habanero.Base.Logging
 		public CrossSimpleLogger(string contextName)
 		{
             _contextName = contextName;
-            Plugin.SimpleLogger.CrossSimpleLogger.Current.Configure("habanero.base.log",5,200,LogLevel.All);
         }
 
 		///<summary>
@@ -67,28 +63,7 @@ namespace Habanero.Base.Logging
 		///<param name="logCategory"></param>
 		public void Log(string message, LogCategory logCategory)
 		{
-			if (!IsLogging(logCategory)) return;
-			switch (logCategory)
-			{
-				case LogCategory.Fatal:
-					Plugin.SimpleLogger.CrossSimpleLogger.Current.Warning("FATAL : " +message);
-					break;
-				case LogCategory.Exception:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, new Exception("Filler for CrossSimpleLogger"));
-					break;
-				case LogCategory.Debug:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Debug(message);
-					break;
-				case LogCategory.Warn:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Warning(message);
-					break;
-                case LogCategory.Error:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, new Exception("Filler for CrossSimpleLogger"));
-                    break;
-				default:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Info(message);
-					break;
-			}
+
 		}
 
 		/// <summary>
@@ -104,7 +79,6 @@ namespace Habanero.Base.Logging
 
 	    public void Log(string message, Exception exception)
 		{
-            Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
 
         }
 
@@ -116,25 +90,7 @@ namespace Habanero.Base.Logging
 	    /// <param name="logCategory">The specified LogCategory</param>
 	    public void Log(string message, Exception exception, LogCategory logCategory)
 		{
-			if (!IsLogging(logCategory)) return;
-			switch (logCategory)
-			{
-				case LogCategory.Fatal:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
-					break;
-				case LogCategory.Exception:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
-					break;
-				case LogCategory.Debug:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
-					break;
-				case LogCategory.Warn:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
-					break;
-				default:
-                    Plugin.SimpleLogger.CrossSimpleLogger.Current.Error(message, exception);
-					break;
-			}       
+       
 		}
 
 	    ///<summary>
