@@ -139,3 +139,5 @@ source/UpgradeLog2.htm
 Solution/UpgradeLog2.htm
 UpdatePackage
 /nugetArtifacts/
+
+.vs/
